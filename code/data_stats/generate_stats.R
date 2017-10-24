@@ -46,9 +46,11 @@ rp1 <- ggplot(data = subset(x = rat_sepsis_data_long_form, subset = `time point`
   theme(axis.text.x = element_text(angle = 90))
 ggsave(plot = rp1, filename = "rat_meas0_metab_conc_vs_survival.png", path = out_dir, width = 17, height = 17)
 
-##Rat, metabolites vs tissue type, first measurement only
-p <- ggplot(data = subset(x = rat_sepsis_data_long_form, subset = `time point` == "6h"), mapping = aes(x = group, y = value)) +
+##Rat, metabolites vs tissue type, first measurement only, no control samples
+rp2 <- ggplot(data = subset(x = rat_sepsis_data_long_form, subset = `time point` == "6h" & group != "control"), mapping = aes(x = material, y = value)) +
   facet_wrap(facets = ~ variable, nrow = 17, ncol = 16) +
   geom_boxplot(outlier.size = 0.5) + 
   xlab("scaled concentration") +
-  theme_bw()
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90))
+ggsave(plot = rp2, filename = "rat_meas0_noncontrol_metab_conc_vs_tissue_type.png", path = out_dir, width = 17, height = 17)
