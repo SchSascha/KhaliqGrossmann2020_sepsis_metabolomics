@@ -36,3 +36,47 @@ max_norm <- function(x, subset = 1:ncol(data)){
   x_max_norm[, subset] <- t(t(x_max_norm[, subset]) / colMaxs(as.matrix(x_max_norm[, subset]), na.rm = TRUE))
   return(x_max_norm)
 }
+
+#' Compute the [true/false]-[positive/negative]-rate given a prediction and reference from a binary classification task
+#'
+#' @param pred predicted class, coded in [-1, 1], but really any [<=0, >0] counts
+#' @param ref true class, see pred for info
+#'
+#' @return a list with elements "tpr", "tnr", "fpr" and "fnr"
+#' @export
+#'
+#' @examples
+ml.npr <- function(pred, ref){
+  res <- list()
+  res[["tpr"]] <- sum(pred > 0 & ref > 0)/sum(ref > 0)
+  res[["tnr"]] <- sum(pred <= 0 & ref <= 0)/sum(ref <= 0)
+  res[["fpr"]] <- sum(pred > 0 & ref <= 0)/sum(ref <= 0)
+  res[["fnr"]] <- sum(pred <= 0 & ref > 0)/sum(ref > 0)
+  return(res)
+}
+
+#' Generate folds for stratified cross-validation in a binary classification scenario
+#'
+#' @param num_folds number of folds
+#' @param class class membership, numerical coding in [<=0, >0]
+#'
+#' @return vectors of indices combined in a list
+#' @export
+#'
+#' @examples
+ml.split.folds.strat <- function(num_folds, class){
+  pos_idx <- class > 0
+  neg_idx <- class <= 0
+  pos_sample <- sample(x = which(pos_idx), size = sum(pos_idx), replace = FALSE)
+  neg_sample <- sample(x = which(neg_idx), size = sum(neg_idx), replace = FALSE)
+  pos_sample_from <- ceiling(length(pos_sample)*(1:num_folds)/num_folds)
+  pos_sample_to <- ceiling(length(pos_sample)*(0:(num_folds-1))/num_folds)+1
+  neg_sample_from <- ceiling(length(neg_sample)*(1:num_folds)/num_folds)
+  neg_sample_to <- ceiling(length(neg_sample)*(0:(num_folds-1))/num_folds)+1
+  res <- list()
+  for (fold in 1:num_folds){
+    res[[fold]] <- c(pos_sample[pos_sample_from[fold]:pos_sample_to[fold]],
+                     neg_sample[neg_sample_from[fold]:neg_sample_to[fold]])
+  }
+  return(res)
+}
