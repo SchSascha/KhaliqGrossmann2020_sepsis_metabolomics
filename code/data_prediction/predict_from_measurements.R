@@ -11,11 +11,14 @@ library(kernlab)
 source("../function_definitions.R")
 
 #Set path
-out_dir <- "../../results/data_stats"
+out_dir <- "../../results"
+out_dir_stats <- "../../results/data_stats"
 
 #Make sure paths exist
 if (!dir.exists(out_dir))
   dir.create(out_dir)
+if (!dir.exists(out_dir_stats))
+  dir.create(out_dir_stats)
 
 #Import data
 ##Import clinical data
