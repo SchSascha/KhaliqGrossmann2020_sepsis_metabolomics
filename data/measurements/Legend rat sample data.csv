@@ -1,0 +1,260 @@
+	name	group	unit
+C0	Carnitine 	aclycarnitine	µM
+C10	Decanoylcarnitine	aclycarnitine	µM
+C10:1	Decenoylcarnitine	aclycarnitine	µM
+C10:2	Decadienylcarnitine	aclycarnitine	µM
+C12	Dodecanoylcarnitine	aclycarnitine	µM
+C12-DC	Dodecenoylcarnitine	aclycarnitine	µM
+C12:1	Dodecanedioylcarnitine	aclycarnitine	µM
+C14	Tetradecanoylcarnitine	aclycarnitine	µM
+C14:1	Tetradecenoylcarnitine	aclycarnitine	µM
+C14:1-OH	Hydroxytetradecenoylcarnitine	aclycarnitine	µM
+C14:2	Tetradecadienylcarnitine	aclycarnitine	µM
+C14:2-OH	Hydroxytetradecadienylcarnitine	aclycarnitine	µM
+C16	Hexadecanoylcarnitine	aclycarnitine	µM
+C16-OH	Hexadecenoylcarnitine	aclycarnitine	µM
+C16:1	Hydroxyhexadecenoylcarnitine	aclycarnitine	µM
+C16:1-OH	Hexadecadienylcarnitine	aclycarnitine	µM
+C16:2	Hydroxyhexadecadienylcarnitine	aclycarnitine	µM
+C16:2-OH	Hydroxyhexadecanoylcarnitine	aclycarnitine	µM
+C18	Octadecanoylcarnitine	aclycarnitine	µM
+C18:1	Octadecenoylcarnitine	aclycarnitine	µM
+C18:1-OH	Hydroxyoctadecenoylcarnitine	aclycarnitine	µM
+C18:2	Octadecadienylcarnitine	aclycarnitine	µM
+C2	Acetylcarnitine	aclycarnitine	µM
+C3	Propionylcarnitine	aclycarnitine	µM
+C5-OH (C3-DC-M)	Hydroxyvalerylcarnitine (Methylmalonylcarnitine)	aclycarnitine	µM
+C3-OH	Hydroxypropionylcarnitine	aclycarnitine	µM
+C3:1	Propenoylcarnitine	aclycarnitine	µM
+C4	Butyrylcarnitine	aclycarnitine	µM
+C3-DC (C4-OH)	Hydroxybutyrylcarnitine	aclycarnitine	µM
+C4:1	Butenylcarnitine	aclycarnitine	µM
+C5	Valerylcarnitine	aclycarnitine	µM
+C5-DC (C6-OH)	Glutarylcarnitine (Hydroxyhexanoylcarnitine)	aclycarnitine	µM
+C5-M-DC	Methylglutarylcarnitine	aclycarnitine	µM
+C5:1	Tiglylcarnitine	aclycarnitine	µM
+C5:1-DC	Glutaconylcarnitine	aclycarnitine	µM
+C6 (C4:1-DC)	Hexanoylcarnitine (Fumarylcarnitine)	aclycarnitine	µM
+C6:1	Hexenoylcarnitine	aclycarnitine	µM
+C7-DC	Pimelylcarnitine	aclycarnitine	µM
+C8	Octanoylcarnitine	aclycarnitine	µM
+C9	Nonaylcarnitine	aclycarnitine	µM
+Ala	Alanine	amino acid	µM
+Arg	Arginine	amino acid	µM
+Asn	Asparagine	amino acid	µM
+Asp	Aspartate	amino acid	µM
+Cit	Citrulline	amino acid	µM
+Gln	Glutamine	amino acid	µM
+Glu	Glutamate	amino acid	µM
+Gly	Glycine	amino acid	µM
+His	Histidine	amino acid	µM
+Ile	Isoleucine	amino acid	µM
+Leu	Leucine	amino acid	µM
+Lys	Lysine	amino acid	µM
+Met	Methionine	amino acid	µM
+Orn	Ornithine	amino acid	µM
+Phe	Phenylalanine	amino acid	µM
+Pro	Proline	amino acid	µM
+Ser	Serine	amino acid	µM
+Thr	Threonine	amino acid	µM
+Trp	Tryptophan	amino acid	µM
+Tyr	Tyrosine	amino acid	µM
+Val	Valine	amino acid	µM
+Ac-Orn	Acetylornithine	biogenic amine	µM
+ADMA	Asymmetric dimethylarginine	biogenic amine	µM
+alpha-AAA	alpha-Aminoadipic acid	biogenic amine	µM
+c4-OH-Pro	cis-4-Hydroxyproline	biogenic amine	µM
+Carnosine	Carnosine	biogenic amine	µM
+Creatinine	Creatinine	biogenic amine	µM
+DOPA	Dihydroxyphenylalanine	biogenic amine	µM
+Dopamine	Dopamine	biogenic amine	µM
+Histamine	Histamine	biogenic amine	µM
+Kynurenine	Kynurenine	biogenic amine	µM
+Met-SO	Methioninesulfoxide	biogenic amine	µM
+Nitro-Tyr	Nitrotyrosine	biogenic amine	µM
+PEA	Phenylethylamine	biogenic amine	µM
+Putrescine	Putrescine	biogenic amine	µM
+SDMA	Symmetric dimethylarginine	biogenic amine	µM
+Serotonin	Serotonin	biogenic amine	µM
+Spermidine	Spermidine	biogenic amine	µM
+Spermine	Spermine	biogenic amine	µM
+t4-OH-Pro	trans-4-Hydroxyproline	biogenic amine	µM
+Taurine	Taurine	biogenic amine	µM
+total DMA	Total dimethylarginine	biogenic amine	µM
+lysoPC a C14:0	lysoPhosphatidylcholine acyl C14:0	lysophosphatidylcholine	µM
+lysoPC a C16:0	lysoPhosphatidylcholine acyl C16:0	lysophosphatidylcholine	µM
+lysoPC a C16:1	lysoPhosphatidylcholine acyl C16:1	lysophosphatidylcholine	µM
+lysoPC a C17:0	lysoPhosphatidylcholine acyl C17:0	lysophosphatidylcholine	µM
+lysoPC a C18:0	lysoPhosphatidylcholine acyl C18:0	lysophosphatidylcholine	µM
+lysoPC a C18:1	lysoPhosphatidylcholine acyl C18:1	lysophosphatidylcholine	µM
+lysoPC a C18:2	lysoPhosphatidylcholine acyl C18:2	lysophosphatidylcholine	µM
+lysoPC a C20:3	lysoPhosphatidylcholine acyl C20:3	lysophosphatidylcholine	µM
+lysoPC a C20:4	lysoPhosphatidylcholine acyl C20:4	lysophosphatidylcholine	µM
+lysoPC a C24:0	lysoPhosphatidylcholine acyl C24:0	lysophosphatidylcholine	µM
+lysoPC a C26:0	lysoPhosphatidylcholine acyl C26:0	lysophosphatidylcholine	µM
+lysoPC a C26:1	lysoPhosphatidylcholine acyl C26:1	lysophosphatidylcholine	µM
+lysoPC a C28:0	lysoPhosphatidylcholine acyl C28:0	lysophosphatidylcholine	µM
+lysoPC a C28:1	lysoPhosphatidylcholine acyl C28:1	lysophosphatidylcholine	µM
+PC aa C24:0	Phosphatidylcholine diacyl C24:0	phosphatidylcholine	µM
+PC aa C26:0	Phosphatidylcholine diacyl C26:0	phosphatidylcholine	µM
+PC aa C28:1	Phosphatidylcholine diacyl C28:1	phosphatidylcholine	µM
+PC aa C30:0	Phosphatidylcholine diacyl C30:0	phosphatidylcholine	µM
+PC aa C30:2	Phosphatidylcholine diacyl C30:2	phosphatidylcholine	µM
+PC aa C32:0	Phosphatidylcholine diacyl C32:0	phosphatidylcholine	µM
+PC aa C32:1	Phosphatidylcholine diacyl C32:1	phosphatidylcholine	µM
+PC aa C32:2	Phosphatidylcholine diacyl C32:2	phosphatidylcholine	µM
+PC aa C32:3	Phosphatidylcholine diacyl C32:3	phosphatidylcholine	µM
+PC aa C34:1	Phosphatidylcholine diacyl C34:1	phosphatidylcholine	µM
+PC aa C34:2	Phosphatidylcholine diacyl C34:2	phosphatidylcholine	µM
+PC aa C34:3	Phosphatidylcholine diacyl C34:3	phosphatidylcholine	µM
+PC aa C34:4	Phosphatidylcholine diacyl C34:4	phosphatidylcholine	µM
+PC aa C36:0	Phosphatidylcholine diacyl C36:0	phosphatidylcholine	µM
+PC aa C36:1	Phosphatidylcholine diacyl C36:1	phosphatidylcholine	µM
+PC aa C36:2	Phosphatidylcholine diacyl C36:2	phosphatidylcholine	µM
+PC aa C36:3	Phosphatidylcholine diacyl C36:3	phosphatidylcholine	µM
+PC aa C36:4	Phosphatidylcholine diacyl C36:4	phosphatidylcholine	µM
+PC aa C36:5	Phosphatidylcholine diacyl C36:5	phosphatidylcholine	µM
+PC aa C36:6	Phosphatidylcholine diacyl C36:6	phosphatidylcholine	µM
+PC aa C38:0	Phosphatidylcholine diacyl C38:0	phosphatidylcholine	µM
+PC aa C38:1	Phosphatidylcholine diacyl C38:1	phosphatidylcholine	µM
+PC aa C38:3	Phosphatidylcholine diacyl C38:3	phosphatidylcholine	µM
+PC aa C38:4	Phosphatidylcholine diacyl C38:4	phosphatidylcholine	µM
+PC aa C38:5	Phosphatidylcholine diacyl C38:5	phosphatidylcholine	µM
+PC aa C38:6	Phosphatidylcholine diacyl C38:6	phosphatidylcholine	µM
+PC aa C40:1	Phosphatidylcholine diacyl C40:1	phosphatidylcholine	µM
+PC aa C40:2	Phosphatidylcholine diacyl C40:2	phosphatidylcholine	µM
+PC aa C40:3	Phosphatidylcholine diacyl C40:3	phosphatidylcholine	µM
+PC aa C40:4	Phosphatidylcholine diacyl C40:4	phosphatidylcholine	µM
+PC aa C40:5	Phosphatidylcholine diacyl C40:5	phosphatidylcholine	µM
+PC aa C40:6	Phosphatidylcholine diacyl C40:6	phosphatidylcholine	µM
+PC aa C42:0	Phosphatidylcholine diacyl C42:0	phosphatidylcholine	µM
+PC aa C42:1	Phosphatidylcholine diacyl C42:1	phosphatidylcholine	µM
+PC aa C42:2	Phosphatidylcholine diacyl C42:2	phosphatidylcholine	µM
+PC aa C42:4	Phosphatidylcholine diacyl C42:4	phosphatidylcholine	µM
+PC aa C42:5	Phosphatidylcholine diacyl C42:5	phosphatidylcholine	µM
+PC aa C42:6	Phosphatidylcholine diacyl C42:6	phosphatidylcholine	µM
+PC ae C30:0	Phosphatidylcholine acyl-alkyl C30:0	phosphatidylcholine	µM
+PC ae C30:1	Phosphatidylcholine acyl-alkyl C30:1	phosphatidylcholine	µM
+PC ae C30:2	Phosphatidylcholine acyl-alkyl C30:2	phosphatidylcholine	µM
+PC ae C32:1	Phosphatidylcholine acyl-alkyl C32:1	phosphatidylcholine	µM
+PC ae C32:2	Phosphatidylcholine acyl-alkyl C32:2	phosphatidylcholine	µM
+PC ae C34:0	Phosphatidylcholine acyl-alkyl C34:0	phosphatidylcholine	µM
+PC ae C34:1	Phosphatidylcholine acyl-alkyl C34:1	phosphatidylcholine	µM
+PC ae C34:2	Phosphatidylcholine acyl-alkyl C34:2	phosphatidylcholine	µM
+PC ae C34:3	Phosphatidylcholine acyl-alkyl C34:3	phosphatidylcholine	µM
+PC ae C36:0	Phosphatidylcholine acyl-alkyl C36:0	phosphatidylcholine	µM
+PC ae C36:1	Phosphatidylcholine acyl-alkyl C36:1	phosphatidylcholine	µM
+PC ae C36:2	Phosphatidylcholine acyl-alkyl C36:2	phosphatidylcholine	µM
+PC ae C36:3	Phosphatidylcholine acyl-alkyl C36:3	phosphatidylcholine	µM
+PC ae C36:4	Phosphatidylcholine acyl-alkyl C36:4	phosphatidylcholine	µM
+PC ae C36:5	Phosphatidylcholine acyl-alkyl C36:5	phosphatidylcholine	µM
+PC ae C38:0	Phosphatidylcholine acyl-alkyl C38:0	phosphatidylcholine	µM
+PC ae C38:1	Phosphatidylcholine acyl-alkyl C38:1	phosphatidylcholine	µM
+PC ae C38:2	Phosphatidylcholine acyl-alkyl C38:2	phosphatidylcholine	µM
+PC ae C38:3	Phosphatidylcholine acyl-alkyl C38:3	phosphatidylcholine	µM
+PC ae C38:4	Phosphatidylcholine acyl-alkyl C38:4	phosphatidylcholine	µM
+PC ae C38:5	Phosphatidylcholine acyl-alkyl C38:5	phosphatidylcholine	µM
+PC ae C38:6	Phosphatidylcholine acyl-alkyl C38:6	phosphatidylcholine	µM
+PC ae C40:1	Phosphatidylcholine acyl-alkyl C40:1	phosphatidylcholine	µM
+PC ae C40:2	Phosphatidylcholine acyl-alkyl C40:2	phosphatidylcholine	µM
+PC ae C40:3	Phosphatidylcholine acyl-alkyl C40:3	phosphatidylcholine	µM
+PC ae C40:4	Phosphatidylcholine acyl-alkyl C40:4	phosphatidylcholine	µM
+PC ae C40:5	Phosphatidylcholine acyl-alkyl C40:5	phosphatidylcholine	µM
+PC ae C40:6	Phosphatidylcholine acyl-alkyl C40:6	phosphatidylcholine	µM
+PC ae C42:0	Phosphatidylcholine acyl-alkyl C42:0	phosphatidylcholine	µM
+PC ae C42:1	Phosphatidylcholine acyl-alkyl C42:1	phosphatidylcholine	µM
+PC ae C42:2	Phosphatidylcholine acyl-alkyl C42:2	phosphatidylcholine	µM
+PC ae C42:3	Phosphatidylcholine acyl-alkyl C42:3	phosphatidylcholine	µM
+PC ae C42:4	Phosphatidylcholine acyl-alkyl C42:4	phosphatidylcholine	µM
+PC ae C42:5	Phosphatidylcholine acyl-alkyl C42:5	phosphatidylcholine	µM
+PC ae C44:3	Phosphatidylcholine acyl-alkyl C44:3	phosphatidylcholine	µM
+PC ae C44:4	Phosphatidylcholine acyl-alkyl C44:4	phosphatidylcholine	µM
+PC ae C44:5	Phosphatidylcholine acyl-alkyl C44:5	phosphatidylcholine	µM
+PC ae C44:6	Phosphatidylcholine acyl-alkyl C44:6	phosphatidylcholine	µM
+SM (OH) C14:1	Hydroxysphingomyeline C14:1	sphingolipid	µM
+SM (OH) C16:1	Hydroxysphingomyeline C16:1	sphingolipid	µM
+SM (OH) C22:1	Hydroxysphingomyeline C22:1	sphingolipid	µM
+SM (OH) C22:2	Hydroxysphingomyeline C22:2	sphingolipid	µM
+SM (OH) C24:1	Hydroxysphingomyeline C24:1	sphingolipid	µM
+SM C16:0	Sphingomyeline C16:0	sphingolipid	µM
+SM C16:1	Sphingomyeline C16:1	sphingolipid	µM
+SM C18:0	Sphingomyeline C18:0	sphingolipid	µM
+SM C18:1	Sphingomyeline C18:1	sphingolipid	µM
+SM C20:2	Sphingomyeline C20:2	sphingolipid	µM
+SM C22:3	Sphingomyeline C22:3	sphingolipid	µM
+SM C24:0	Sphingomyeline C24:0	sphingolipid	µM
+SM C24:1	Sphingomyeline C24:1	sphingolipid	µM
+SM C26:0	Sphingomyeline C26:0	sphingolipid	µM
+SM C26:1	Sphingomyeline C26:1	sphingolipid	µM
+H1	Sum of Hexoses (90% glucose)	sugar	µM
+TCA	Taurocholic acid	bile acid	µM
+GCA	Glycocholic acid	bile acid	µM
+GCDCA	Glycochenodeoxycholic acid	bile acid	µM
+TCDCA	Taurochenodeoxycholic acid	bile acid	µM
+TLCA	Taurolithocholic acid	bile acid	µM
+GLCA	Glycolithocholic acid	bile acid	µM
+TDCA	Taurodeoxycholic acid	bile acid	µM
+GDCA	Glycodeoxycholic acid	bile acid	µM
+CA	Cholic acid	bile acid	µM
+CDCA	Chenodeoxycholic acid	bile acid	µM
+UDCA	Ursodeoxycholic acid	bile acid	µM
+DCA	Deoxycholic acid	bile acid	µM
+TUDCA	Tauroursodeoxycholic acid	bile acid	µM
+GUDCA	Glycoursodeoxycholic acid	bile acid	µM
+LCA	Lithocholic acid	bile acid	µM
+HR	heart rate		beats/min
+SV	stroke volume		ml
+CO	cardiac output		ml/min
+EF	ejection fraction		%
+Resp Rate	respiratory rate		breaths/min
+Temperature			°C
+pH			
+pCO2	partial pressure of carbon dioxide		kPa
+pO2	partial pressure of oxygen		kPa
+Hb	Haemoglobin		g/dl
+SaO2	oxygen saturations		%
+K	potassium		mmol/l
+Na	sodium		mmol/l
+Cl	chloride		mmol/l
+Glucose			mmol/l
+Lactate			mmol/l
+BE	Base Excess		mmol/l
+HCO3	Hydrogencarbonat 		mmol/l
+Albumin			
+AST	Aspartate Aminotransferase		
+ALP	Alkaline phosphatase		
+ALT	Alanine transaminase		
+Insulin			
+Ghrelin			
+Leptin			
+Glucagon			pg/ml
+Tot Cholesterol			
+HDL	High-density lipoprotein		mmol/l
+LDL/VLDL	Low-density lipoprotein/Very-low-density lipoprotein		mmol/l
+Triglycerides			mmol/l
+Cardiac Troponin			pg/ml
+BNP	B-type natriuretic peptide		pg/ml
+Acetoacetate			µmol/l
+3-HB	3-Hydroxybutyrate		µmol/l
+Ca	Calcium		
+Urea			
+Creatinine			
+Cystatin C			
+GH	growth hormone		
+ACTH	Adrenocorticotropic hormone		
+Corticosterone			
+TSH	Thyroid-stimulating hormone		
+T3	triiodothyronine		
+T4	thyroxine		
+Prolactin			
+Vasopressin			
+Oxytocin			
+Adrenaline			pg/ml
+Noradrenaline			pg/ml
+Aldosterone			
+DHEA	Dehydroepiandrosterone		
+17b-Estradiol			
+Testosterone			
+Progesterone			
+IL6	interleukin-6		ng/ml
+IL10	interleukin-10		ng/ml
