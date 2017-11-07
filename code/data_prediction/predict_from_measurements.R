@@ -36,6 +36,8 @@ human_sepsis_data_ml$Survival <- as.numeric(as.factor(human_sepsis_data_ml$Survi
 colnames(human_sepsis_data_ml) <- make.names(colnames(human_sepsis_data_ml))
 ###Impute missing values
 human_sepsis_data_ml <- missRanger(human_sepsis_data_ml, pmm.k = 3, num.trees = 100)
+###Reduce data set to Day < x
+human_sepsis_data_ml <- subset(human_sepsis_data_ml, subset = human_sepsis_data$Day < 1)
 {#The following block greatly increases SVM performance and greatly decreases RF performance
 ###Scale values
 #human_sepsis_data_ml[, -1] <- scale(human_sepsis_data_ml[, -1])
@@ -82,16 +84,16 @@ print("Most important variables according to Random Forest internal ranking:")
 rg <- ranger(data = human_sepsis_data_ml, dependent.variable.name = "Survival", num.trees = 1500, write.forest = T, save.memory = F, classification = TRUE, importance = "permutation")
 print(sort(rg$variable.importance, decreasing = TRUE)[1:10])
 var_importance <- rg$variable.importance
-print("Random Forest validation on set of first day measurements when learnt on non-first day measurements:")
-rg <- ranger(data = human_sepsis_data_ml[human_sepsis_data$Day > 0, ], dependent.variable.name = "Survival", num.trees = 1500, write.forest = T, save.memory = F, classification = TRUE, importance = "permutation")
-print(t(ml.npr(predict(rg, human_sepsis_data_ml[human_sepsis_data$Day == 0, ])$predictions, human_sepsis_data_ml$Survival[human_sepsis_data$Day == 0])))
-print("Random Forest validation on set of non-first day measurements when learnt on first day measurements:")
-rg <- ranger(data = human_sepsis_data_ml[human_sepsis_data$Day == 0, ], dependent.variable.name = "Survival", num.trees = 1500, write.forest = T, save.memory = F, classification = TRUE, importance = "permutation")
-print(t(ml.npr(predict(rg, human_sepsis_data_ml[human_sepsis_data$Day > 0, ])$predictions, human_sepsis_data_ml$Survival[human_sepsis_data$Day > 0])))
+# print("Random Forest validation on set of first day measurements when learnt on non-first day measurements:")
+# rg <- ranger(data = human_sepsis_data_ml[human_sepsis_data$Day > 0, ], dependent.variable.name = "Survival", num.trees = 1500, write.forest = T, save.memory = F, classification = TRUE, importance = "permutation")
+# print(t(ml.npr(predict(rg, human_sepsis_data_ml[human_sepsis_data$Day == 0, ])$predictions, human_sepsis_data_ml$Survival[human_sepsis_data$Day == 0])))
+# print("Random Forest validation on set of non-first day measurements when learnt on first day measurements:")
+# rg <- ranger(data = human_sepsis_data_ml[human_sepsis_data$Day == 0, ], dependent.variable.name = "Survival", num.trees = 1500, write.forest = T, save.memory = F, classification = TRUE, importance = "permutation")
+# print(t(ml.npr(predict(rg, human_sepsis_data_ml[human_sepsis_data$Day > 0, ])$predictions, human_sepsis_data_ml$Survival[human_sepsis_data$Day > 0])))
 
 ###Reduce data set to important variables
 human_sepsis_data_ml_red <- human_sepsis_data_ml
-human_sepsis_data_ml[, which(var_importance < quantile(x = var_importance, p = c(0.25))) + 1] <- NULL
+human_sepsis_data_ml_red[, which(var_importance < quantile(x = var_importance, p = c(0.95))) + 1] <- NULL
 v.rg.npr <- list()
 v.ks.npr <- list()
 v.lm.npr <- list()

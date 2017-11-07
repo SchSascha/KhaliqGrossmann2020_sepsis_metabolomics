@@ -6,6 +6,18 @@
 #' @examples
 get_human_sepsis_data <- function(){
   data <- read.csv(file = "../../data/measurements/Summary human sample data.csv", header = TRUE, sep = "\t", stringsAsFactors = FALSE, dec = ",", check.names = FALSE)
+  data <- data[, -(which(colSds(as.matrix(data[, -1:-5])) == 0) + 5)] #remove columns with fixed values
+  return(data)
+}
+
+#' Read the legend to the clinical data set on sepsis cases. The legend has two group assignments of different coarseness.
+#'
+#' @return data.frame, first column stores the column names in the measurement data table, second the fine grained grouping, third the coarse grained grouping
+#' @export
+#'
+#' @examples
+get_human_sepsis_legend <- function(){
+  data <- read.csv(file = "../../data/measurements/Legend human sample data.csv", header = TRUE, sep = "\t", stringsAsFactors = FALSE, dec = ",", check.names = FALSE)
   return(data)
 }
 
@@ -19,6 +31,17 @@ get_rat_sepsis_data <- function(){
   data <- read.csv(file = "../../data/measurements/Summary rat sample data.csv", header = TRUE, sep = "\t", stringsAsFactors = FALSE, dec = ",", check.names = FALSE, blank.lines.skip = TRUE, strip.white = TRUE)
   data <- data[rowSums(is.na(data[,-1:-4])) < ncol(data) - 4, ] #Strip rows without any non-NA value
   data$BE <- data$BE - min(data$BE, na.rm = TRUE)
+  return(data)
+}
+
+#' Read the legend to the clinical data set on sepsis and controls in rat. The legend has two group assignments of different coarseness.
+#'
+#' @return data.frame, first column stores the column names in the measurement data table, second the fine grained grouping, third the coarse grained grouping
+#' @export
+#'
+#' @examples
+get_rat_sepsis_legend <- function(){
+  data <- read.csv(file = "../../data/measurements/Legend rat sample data.csv", header = TRUE, sep = "\t", stringsAsFactors = FALSE, dec = ",", check.names = FALSE)
   return(data)
 }
 
