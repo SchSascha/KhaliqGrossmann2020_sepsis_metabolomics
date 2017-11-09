@@ -35,88 +35,133 @@ human_sepsis_data_ml$Survival <- as.numeric(as.factor(human_sepsis_data_ml$Survi
 #human_sepsis_data_ml$`CAP / FP` <- as.factor(human_sepsis_data$`CAP / FP`)
 colnames(human_sepsis_data_ml) <- make.names(colnames(human_sepsis_data_ml))
 ###Impute missing values
-human_sepsis_data_ml <- missRanger(human_sepsis_data_ml, pmm.k = 3, num.trees = 100)
-###Reduce data set to Day < x
-human_sepsis_data_ml <- subset(human_sepsis_data_ml, subset = human_sepsis_data$Day < 1)
-{#The following block greatly increases SVM performance and greatly decreases RF performance
+human_sepsis_data_ml_full <- missRanger(human_sepsis_data_ml, pmm.k = 3, num.trees = 100)
 ###Scale values
-#human_sepsis_data_ml[, -1] <- scale(human_sepsis_data_ml[, -1])
-###Build gram matrix
-#num_data <- as.matrix(human_sepsis_data_ml[,-1])
-#num_data <- num_data[, !colAnyNAs(num_data)]
-#g_num_data <- kernelMatrix(kernel = vanilladot(), x = num_data, y = num_data)
-###Supplant original data with gram matrix
-#human_sepsis_data_ml <- cbind(data.frame(Survival = human_sepsis_data_ml$Survival), g_num_data)
-}
-###Test performance with cross-validation
-fml <- Survival ~ .
-num_folds <- 5
-v.rg.npr <- list()
-v.ks.npr <- list()
-v.lm.npr <- list()
-yPredRG <- rep(0, nrow(human_sepsis_data_ml))
-yPredKS <- rep(0, nrow(human_sepsis_data_ml))
-yPredLM <- rep(0, nrow(human_sepsis_data_ml))
-fold_set <- ml.split.folds.strat(num_folds = num_folds, class = human_sepsis_data_ml$Survival)
-for (fold in 1:num_folds){
-  fold_learn_set <- human_sepsis_data_ml[-fold_set[[fold]],]
-  rgCV <- ranger(data = fold_learn_set, dependent.variable.name = "Survival", num.trees = 500, write.forest = T, save.memory = F, classification = TRUE)
-  #ksCV <- ksvm(fml, fold_learn_set, type = "C-svc", kernel = "vanilladot")
-  ksCV <- ksvm(fml, fold_learn_set, type = "C-svc", kernel = "rbfdot", kpar = "automatic", C = 10)
-  lmCV <- lm(formula = fml, data = fold_learn_set)
-  v.rg.npr[[fold]] <- ml.npr(predict(rgCV, human_sepsis_data_ml[fold_set[[fold]],])$predictions, human_sepsis_data_ml$Survival[fold_set[[fold]]])
-  v.ks.npr[[fold]] <- ml.npr(predict(ksCV, human_sepsis_data_ml[fold_set[[fold]],]), human_sepsis_data_ml$Survival[fold_set[[fold]]])
-  v.lm.npr[[fold]] <- ml.npr(predict(lmCV, human_sepsis_data_ml[fold_set[[fold]],]), human_sepsis_data_ml$Survival[fold_set[[fold]]])
-  yPredRG[fold_set[[fold]]] <- predict(rgCV, human_sepsis_data_ml[fold_set[[fold]],])$predictions
-  yPredKS[fold_set[[fold]]] <- predict(ksCV, human_sepsis_data_ml[fold_set[[fold]],])
-  yPredLM[fold_set[[fold]]] <- predict(lmCV, human_sepsis_data_ml[fold_set[[fold]],])
-}
-print("Classifier performance:")
-print("Random Forest")
-print(colMeans(rbindlist(v.rg.npr)))
-print("C-SVM")
-print(colMeans(rbindlist(v.ks.npr)))
-print("Linear Model")
-print(colMeans(rbindlist(v.lm.npr)))
+human_sepsis_data_ml[, -1] <- scale(human_sepsis_data_ml[, -1])
+##Set up iteration
+num_repeats <- 6
+day_tab <- table(human_sepsis_data$Day)
+day_set <- rep(as.numeric(names(day_tab)), each = num_repeats)
+rg.npr.repeat.df <- data.frame(day = day_set, tpr = 0, tnr = 0, fpr = 0, fnr = 0)
+ks.npr.repeat.df <- data.frame(day = day_set, tpr = 0, tnr = 0, fpr = 0, fnr = 0)
+lm.npr.repeat.df <- data.frame(day = day_set, tpr = 0, tnr = 0, fpr = 0, fnr = 0)
+rg.red.npr.repeat.df <- data.frame(day = day_set, tpr = 0, tnr = 0, fpr = 0, fnr = 0)
+ks.red.npr.repeat.df <- data.frame(day = day_set, tpr = 0, tnr = 0, fpr = 0, fnr = 0)
+lm.red.npr.repeat.df <- data.frame(day = day_set, tpr = 0, tnr = 0, fpr = 0, fnr = 0)
+for (d in seq_along(day_set)){
+  ###Reduce data set to Day <= x
+  human_sepsis_data_ml <- subset(human_sepsis_data_ml_full, subset = human_sepsis_data$Day <= day_set[d])
+  #The following block greatly increases SVM performance and greatly decreases RF performance
+  {
+  ###Build gram matrix
+  #num_data <- as.matrix(human_sepsis_data_ml[,-1])
+  #num_data <- num_data[, !colAnyNAs(num_data)]
+  #g_num_data <- kernelMatrix(kernel = vanilladot(), x = num_data, y = num_data)
+  ###Supplant original data with gram matrix
+  #human_sepsis_data_ml <- cbind(data.frame(Survival = human_sepsis_data_ml$Survival), g_num_data)
+  }
+  ###Test performance with cross-validation
+  fml <- Survival ~ .
+  num_folds <- 5
+  v.rg.npr <- list()
+  v.ks.npr <- list()
+  v.lm.npr <- list()
+  yPredRG <- rep(0, nrow(human_sepsis_data_ml))
+  yPredKS <- rep(0, nrow(human_sepsis_data_ml))
+  yPredLM <- rep(0, nrow(human_sepsis_data_ml))
+  fold_set <- ml.split.folds.strat(num_folds = num_folds, class = human_sepsis_data_ml$Survival)
+  for (fold in 1:num_folds){
+    fold_learn_set <- human_sepsis_data_ml[-fold_set[[fold]],]
+    rgCV <- ranger(data = fold_learn_set, dependent.variable.name = "Survival", num.trees = 500, write.forest = T, save.memory = F, classification = TRUE)
+    #ksCV <- ksvm(fml, fold_learn_set, type = "C-svc", kernel = "vanilladot")
+    ksCV <- ksvm(fml, fold_learn_set, type = "C-svc", kernel = "rbfdot", kpar = "automatic", C = 10)
+    lmCV <- lm(formula = fml, data = fold_learn_set)
+    v.rg.npr[[fold]] <- ml.npr(predict(rgCV, human_sepsis_data_ml[fold_set[[fold]],])$predictions, human_sepsis_data_ml$Survival[fold_set[[fold]]])
+    v.ks.npr[[fold]] <- ml.npr(predict(ksCV, human_sepsis_data_ml[fold_set[[fold]],]), human_sepsis_data_ml$Survival[fold_set[[fold]]])
+    v.lm.npr[[fold]] <- ml.npr(predict(lmCV, human_sepsis_data_ml[fold_set[[fold]],]), human_sepsis_data_ml$Survival[fold_set[[fold]]])
+    yPredRG[fold_set[[fold]]] <- predict(rgCV, human_sepsis_data_ml[fold_set[[fold]],])$predictions
+    yPredKS[fold_set[[fold]]] <- predict(ksCV, human_sepsis_data_ml[fold_set[[fold]],])
+    yPredLM[fold_set[[fold]]] <- predict(lmCV, human_sepsis_data_ml[fold_set[[fold]],])
+  }
+  # print("Classifier performance:")
+  # print("Random Forest")
+  # print(colMeans(rbindlist(v.rg.npr)))
+  # print("C-SVM")
+  # print(colMeans(rbindlist(v.ks.npr)))
+  # print("Linear Model")
+  # print(colMeans(rbindlist(v.lm.npr)))
+  rg.npr.repeat.df[d,-1] <- colMeans(rbindlist(v.rg.npr))
+  ks.npr.repeat.df[d,-1] <- colMeans(rbindlist(v.ks.npr))
+  lm.npr.repeat.df[d,-1] <- colMeans(rbindlist(v.lm.npr))
 
-###Get variable importance and validate on special data subsets
-print("Most important variables according to Random Forest internal ranking:")
-rg <- ranger(data = human_sepsis_data_ml, dependent.variable.name = "Survival", num.trees = 1500, write.forest = T, save.memory = F, classification = TRUE, importance = "permutation")
-print(sort(rg$variable.importance, decreasing = TRUE)[1:10])
-var_importance <- rg$variable.importance
-# print("Random Forest validation on set of first day measurements when learnt on non-first day measurements:")
-# rg <- ranger(data = human_sepsis_data_ml[human_sepsis_data$Day > 0, ], dependent.variable.name = "Survival", num.trees = 1500, write.forest = T, save.memory = F, classification = TRUE, importance = "permutation")
-# print(t(ml.npr(predict(rg, human_sepsis_data_ml[human_sepsis_data$Day == 0, ])$predictions, human_sepsis_data_ml$Survival[human_sepsis_data$Day == 0])))
-# print("Random Forest validation on set of non-first day measurements when learnt on first day measurements:")
-# rg <- ranger(data = human_sepsis_data_ml[human_sepsis_data$Day == 0, ], dependent.variable.name = "Survival", num.trees = 1500, write.forest = T, save.memory = F, classification = TRUE, importance = "permutation")
-# print(t(ml.npr(predict(rg, human_sepsis_data_ml[human_sepsis_data$Day > 0, ])$predictions, human_sepsis_data_ml$Survival[human_sepsis_data$Day > 0])))
-
-###Reduce data set to important variables
-human_sepsis_data_ml_red <- human_sepsis_data_ml
-human_sepsis_data_ml_red[, which(var_importance < quantile(x = var_importance, p = c(0.95))) + 1] <- NULL
-v.rg.npr <- list()
-v.ks.npr <- list()
-v.lm.npr <- list()
-yPredRG <- rep(0, nrow(human_sepsis_data_ml_red))
-yPredKS <- rep(0, nrow(human_sepsis_data_ml_red))
-yPredLM <- rep(0, nrow(human_sepsis_data_ml_red))
-for (fold in 1:num_folds){
-  fold_learn_set <- human_sepsis_data_ml_red[-fold_set[[fold]],]
-  rgCV <- ranger(data = fold_learn_set, dependent.variable.name = "Survival", num.trees = 500, write.forest = T, save.memory = F, classification = TRUE)
-  #ksCV <- ksvm(fml, fold_learn_set, type = "C-svc", kernel = "vanilladot")
-  ksCV <- ksvm(fml, fold_learn_set, type = "C-svc", kernel = "rbfdot", kpar = "automatic", C = 10)
-  lmCV <- lm(formula = fml, data = fold_learn_set)
-  v.rg.npr[[fold]] <- ml.npr(predict(rgCV, human_sepsis_data_ml_red[fold_set[[fold]],])$predictions, human_sepsis_data_ml_red$Survival[fold_set[[fold]]])
-  v.ks.npr[[fold]] <- ml.npr(predict(ksCV, human_sepsis_data_ml_red[fold_set[[fold]],]), human_sepsis_data_ml_red$Survival[fold_set[[fold]]])
-  v.lm.npr[[fold]] <- ml.npr(predict(lmCV, human_sepsis_data_ml_red[fold_set[[fold]],]), human_sepsis_data_ml_red$Survival[fold_set[[fold]]])
-  yPredRG[fold_set[[fold]]] <- predict(rgCV, human_sepsis_data_ml_red[fold_set[[fold]],])$predictions
-  yPredKS[fold_set[[fold]]] <- predict(ksCV, human_sepsis_data_ml_red[fold_set[[fold]],])
-  yPredLM[fold_set[[fold]]] <- predict(lmCV, human_sepsis_data_ml_red[fold_set[[fold]],])
+  ###Get variable importance and validate on special data subsets
+  #print("Most important variables according to Random Forest internal ranking:")
+  rg <- ranger(data = human_sepsis_data_ml, dependent.variable.name = "Survival", num.trees = 1500, write.forest = T, save.memory = F, classification = TRUE, importance = "permutation")
+  #print(sort(rg$variable.importance, decreasing = TRUE)[1:10])
+  var_importance <- rg$variable.importance
+  # print("Random Forest validation on set of first day measurements when learnt on non-first day measurements:")
+  # rg <- ranger(data = human_sepsis_data_ml[human_sepsis_data$Day > 0, ], dependent.variable.name = "Survival", num.trees = 1500, write.forest = T, save.memory = F, classification = TRUE, importance = "permutation")
+  # print(t(ml.npr(predict(rg, human_sepsis_data_ml[human_sepsis_data$Day == 0, ])$predictions, human_sepsis_data_ml$Survival[human_sepsis_data$Day == 0])))
+  # print("Random Forest validation on set of non-first day measurements when learnt on first day measurements:")
+  # rg <- ranger(data = human_sepsis_data_ml[human_sepsis_data$Day == 0, ], dependent.variable.name = "Survival", num.trees = 1500, write.forest = T, save.memory = F, classification = TRUE, importance = "permutation")
+  # print(t(ml.npr(predict(rg, human_sepsis_data_ml[human_sepsis_data$Day > 0, ])$predictions, human_sepsis_data_ml$Survival[human_sepsis_data$Day > 0])))
+  
+  ###Reduce data set to important variables
+  human_sepsis_data_ml_red <- human_sepsis_data_ml
+  human_sepsis_data_ml_red[, which(var_importance < quantile(x = var_importance, p = c(0.95))) + 1] <- NULL
+  v.rg.npr <- list()
+  v.ks.npr <- list()
+  v.lm.npr <- list()
+  yPredRG <- rep(0, nrow(human_sepsis_data_ml_red))
+  yPredKS <- rep(0, nrow(human_sepsis_data_ml_red))
+  yPredLM <- rep(0, nrow(human_sepsis_data_ml_red))
+  for (fold in 1:num_folds){
+    fold_learn_set <- human_sepsis_data_ml_red[-fold_set[[fold]],]
+    rgCV <- ranger(data = fold_learn_set, dependent.variable.name = "Survival", num.trees = 500, write.forest = T, save.memory = F, classification = TRUE)
+    #ksCV <- ksvm(fml, fold_learn_set, type = "C-svc", kernel = "vanilladot")
+    ksCV <- ksvm(fml, fold_learn_set, type = "C-svc", kernel = "rbfdot", kpar = "automatic", C = 10)
+    lmCV <- lm(formula = fml, data = fold_learn_set)
+    v.rg.npr[[fold]] <- ml.npr(predict(rgCV, human_sepsis_data_ml_red[fold_set[[fold]],])$predictions, human_sepsis_data_ml_red$Survival[fold_set[[fold]]])
+    v.ks.npr[[fold]] <- ml.npr(predict(ksCV, human_sepsis_data_ml_red[fold_set[[fold]],]), human_sepsis_data_ml_red$Survival[fold_set[[fold]]])
+    v.lm.npr[[fold]] <- ml.npr(predict(lmCV, human_sepsis_data_ml_red[fold_set[[fold]],]), human_sepsis_data_ml_red$Survival[fold_set[[fold]]])
+    yPredRG[fold_set[[fold]]] <- predict(rgCV, human_sepsis_data_ml_red[fold_set[[fold]],])$predictions
+    yPredKS[fold_set[[fold]]] <- predict(ksCV, human_sepsis_data_ml_red[fold_set[[fold]],])
+    yPredLM[fold_set[[fold]]] <- predict(lmCV, human_sepsis_data_ml_red[fold_set[[fold]],])
+  }
+  # print("Classifier performance on data set of important variables:")
+  # print("Random Forest")
+  # print(colMeans(rbindlist(v.rg.npr)))
+  # print("C-SVM")
+  # print(colMeans(rbindlist(v.ks.npr)))
+  # print("Linear Model")
+  # print(colMeans(rbindlist(v.lm.npr)))
+  rg.red.npr.repeat.df[d,-1] <- colMeans(rbindlist(v.rg.npr))
+  ks.red.npr.repeat.df[d,-1] <- colMeans(rbindlist(v.ks.npr))
+  lm.red.npr.repeat.df[d,-1] <- colMeans(rbindlist(v.lm.npr))
 }
-print("Classifier performance on data set of important variables:")
-print("Random Forest")
-print(colMeans(rbindlist(v.rg.npr)))
-print("C-SVM")
-print(colMeans(rbindlist(v.ks.npr)))
-print("Linear Model")
-print(colMeans(rbindlist(v.lm.npr)))
+
+rg.npr.repeat.df$Method <- "RF"
+ks.npr.repeat.df$Method <- "SVM"
+lm.npr.repeat.df$Method <- "LM"
+rg.red.npr.repeat.df$Method <- "RF"
+ks.red.npr.repeat.df$Method <- "SVM"
+lm.red.npr.repeat.df$Method <- "LM"
+
+perf_by_day_data <- melt(rbindlist(list(rg.npr.repeat.df, ks.npr.repeat.df, lm.npr.repeat.df)), id.vars = c("day", "Method"))
+perf_red_by_day_data <- melt(rbindlist(list(rg.red.npr.repeat.df, ks.red.npr.repeat.df, lm.red.npr.repeat.df)), id.vars = c("day", "Method"))
+
+##Remove redundancy
+perf_by_day_data <- subset(perf_by_day_data, subset = variable %in% c("fpr", "fnr"))
+perf_red_by_day_data <- subset(perf_red_by_day_data, subset = variable %in% c("fpr", "fnr"))
+
+#Combine for nice plot
+perf_by_day_data$dimensions <- "All variables"
+perf_red_by_day_data$dimensions <- "Important variables"
+perf_data <- rbind(perf_by_day_data, perf_red_by_day_data)
+
+perf_by_day_plot <- ggplot(perf_data, aes(x = day, y = value, color = Method)) +
+  stat_summary(fun.ymin = "min", fun.ymax = "max", fun.y = "mean", geom = "line") +
+  stat_summary(fun.ymin = "min", fun.ymax = "max", fun.y = "mean") +
+  facet_grid(variable ~ dimensions) +
+  theme_bw()
+plot(perf_by_day_plot)
