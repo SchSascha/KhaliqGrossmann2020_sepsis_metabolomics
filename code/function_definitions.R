@@ -133,3 +133,49 @@ ml.split.folds.quasistrat <- function(num_folds, class, non_strat_class){
   
   return(res)
 }
+
+#' Report p values for differences between survivors and non-survivors for each metabolite at each day seperately.
+#' Only days with at least 3 samples are analysed. For testing we employ the U-test (wilcoxon rank sum test) and the two-sample t-test.
+#'
+#' @param data The human metabolome time series data set
+#' @param corr_fdr Correct the p-values for FDR (default: TRUE)
+#'
+#' @return a list with members day_sig_u_diff and day_sig_t_diff. These are data.frames of p-values from U-test and t-test respectively.
+#' @export
+#'
+#' @examples
+human_sig_diffs_along_days <- function(data, corr_fdr = TRUE){
+  day_survival_tab <- table(data[c("Day", "Survival")])
+  ##Keep days with large enough sample count
+  day_survival_tab <- day_survival_tab[rowMins(day_survival_tab) >= 3,]
+  ##Get significant differences for each day
+  day_sig_u_diff <- data.frame(Day = as.numeric(rownames(day_survival_tab)), matrix(0, nrow = nrow(day_survival_tab), ncol = ncol(data)-5))
+  colnames(day_sig_u_diff)[-1] <- colnames(data)[-1:-5]
+  day_sig_t_diff <- day_sig_u_diff
+  non_short_stay_pats <- unique(subset(data, Day >= 0, Patient))[[1]]
+  for (d in seq_along(day_sig_u_diff$Day)){
+    #Reduce to significant differences
+    day <- day_sig_u_diff$Day[d]
+    for (n in seq_along(day_sig_u_diff[1,-1:-5])){
+      g1 <- subset(data, subset = Survival == "S" & Day == day & Patient %in% non_short_stay_pats, select = n + 5)
+      g2 <- subset(data, subset = Survival == "NS" & Day == day & Patient %in% non_short_stay_pats, select = n + 5)
+      g1 <- na.omit(g1)[[1]]
+      g2 <- na.omit(g2)[[1]]
+      if (length(g1) > 1 && length(g2) > 1 && length(table(g1)) > 1 && length(table(g2)) > 1){
+        u_res <- wilcox.test(x = g1, y = g2)
+        day_sig_u_diff[d, n + 1] <- u_res$p.value
+        t_res <- t.test(x = g1, y = g2, var.equal = FALSE)
+        day_sig_t_diff[d, n + 1] <- t_res$p.value
+      }
+      else{
+        day_sig_u_diff[d, n + 1] <- NA
+        day_sig_t_diff[d, n + 1] <- NA
+      }
+    }
+  }
+  if (corr_fdr){
+    day_sig_u_diff[,-1] <- apply(day_sig_u_diff[,-1], c(1), p.adjust, method = "fdr")
+    day_sig_t_diff[,-1] <- apply(day_sig_t_diff[,-1], c(1), p.adjust, method = "fdr")
+  }
+  res <- list(day_sig_u_diff = day_sig_u_diff, day_sig_t_diff = day_sig_t_diff)
+}
