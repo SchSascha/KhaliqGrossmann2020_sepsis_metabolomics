@@ -103,3 +103,33 @@ ml.split.folds.strat <- function(num_folds, class){
   }
   return(res)
 }
+
+#' Generate folds for stratified cross-validation in a binary classification scenario, but fully seperate the second class set into learn and test set
+#'
+#' @param num_folds number of folds
+#' @param class class membership, numerical coding in [<=0, >0]
+#' @param non_strat_class class membership, for full seperation of classes
+#'
+#' @return
+#' @export
+#'
+#' @examples
+ml.split.folds.quasistrat <- function(num_folds, class, non_strat_class){
+  non_strat_order <- order(table(non_strat_class))
+  pos_idx <- class > 0
+  neg_idx <- class <= 0
+  pos_sample <- sample(x = which(pos_idx), size = sum(pos_idx), replace = FALSE)
+  neg_sample <- sample(x = which(neg_idx), size = sum(neg_idx), replace = FALSE)
+  pos_sample_from <- ceiling(length(pos_sample)*(1:num_folds)/num_folds)
+  pos_sample_to <- ceiling(length(pos_sample)*(0:(num_folds-1))/num_folds)+1
+  neg_sample_from <- ceiling(length(neg_sample)*(1:num_folds)/num_folds)
+  neg_sample_to <- ceiling(length(neg_sample)*(0:(num_folds-1))/num_folds)+1
+  res <- list()
+  for (fold in 1:num_folds){
+    res[[fold]] <- c(pos_sample[pos_sample_from[fold]:pos_sample_to[fold]],
+                     neg_sample[neg_sample_from[fold]:neg_sample_to[fold]])
+  }
+  #Exchange samples between test and learn sets to satisfy seperation
+  
+  return(res)
+}

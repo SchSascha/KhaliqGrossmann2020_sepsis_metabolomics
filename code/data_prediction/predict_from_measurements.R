@@ -32,15 +32,22 @@ rat_sepsis_data <- get_rat_sepsis_data()
 ###Build data set
 human_sepsis_data_ml <- subset(x = human_sepsis_data, select = c(4,6:ncol(human_sepsis_data)))
 human_sepsis_data_ml$Survival <- as.numeric(as.factor(human_sepsis_data_ml$Survival)) - 1 #Dependent variable transformation
+###Strip phenomenological variables
+strip_start <- which(colnames(human_sepsis_data_ml) == "Urea")
+human_sepsis_data_ml <- human_sepsis_data_ml[,-strip_start:-ncol(human_sepsis_data_ml)]
+###No, stip metabolic variables
+#human_sepsis_data_ml <- human_sepsis_data_ml[,c(1,strip_start:ncol(human_sepsis_data_ml))]
+data_ml_subset <- apply(human_sepsis_data_ml, 1, function(x){ sum(!is.na(x)) > length(x) - 9})
+human_sepsis_data_ml <- human_sepsis_data_ml[data_ml_subset,]
 #human_sepsis_data_ml$`CAP / FP` <- as.factor(human_sepsis_data$`CAP / FP`)
 colnames(human_sepsis_data_ml) <- make.names(colnames(human_sepsis_data_ml))
 ###Impute missing values
 human_sepsis_data_ml_full <- missRanger(human_sepsis_data_ml, pmm.k = 3, num.trees = 100)
 ###Scale values
-human_sepsis_data_ml[, -1] <- scale(human_sepsis_data_ml[, -1])
+human_sepsis_data_ml_full[, -1] <- scale(human_sepsis_data_ml_full[, -1])
 ##Set up iteration
 num_repeats <- 6
-day_tab <- table(human_sepsis_data$Day)
+day_tab <- table(human_sepsis_data$Day[data_ml_subset])
 day_set <- rep(as.numeric(names(day_tab)), each = num_repeats)
 rg.npr.repeat.df <- data.frame(day = day_set, tpr = 0, tnr = 0, fpr = 0, fnr = 0)
 ks.npr.repeat.df <- data.frame(day = day_set, tpr = 0, tnr = 0, fpr = 0, fnr = 0)
@@ -50,7 +57,7 @@ ks.red.npr.repeat.df <- data.frame(day = day_set, tpr = 0, tnr = 0, fpr = 0, fnr
 lm.red.npr.repeat.df <- data.frame(day = day_set, tpr = 0, tnr = 0, fpr = 0, fnr = 0)
 for (d in seq_along(day_set)){
   ###Reduce data set to Day <= x
-  human_sepsis_data_ml <- subset(human_sepsis_data_ml_full, subset = human_sepsis_data$Day <= day_set[d])
+  human_sepsis_data_ml <- subset(human_sepsis_data_ml_full, subset = human_sepsis_data$Day[data_ml_subset] <= day_set[d])
   #The following block greatly increases SVM performance and greatly decreases RF performance
   {
   ###Build gram matrix
@@ -99,6 +106,7 @@ for (d in seq_along(day_set)){
   rg <- ranger(data = human_sepsis_data_ml, dependent.variable.name = "Survival", num.trees = 1500, write.forest = T, save.memory = F, classification = TRUE, importance = "permutation")
   #print(sort(rg$variable.importance, decreasing = TRUE)[1:10])
   var_importance <- rg$variable.importance
+  print(names(var_importance)[which(var_importance > quantile(x = var_importance, p = c(0.95))) + 1])
   # print("Random Forest validation on set of first day measurements when learnt on non-first day measurements:")
   # rg <- ranger(data = human_sepsis_data_ml[human_sepsis_data$Day > 0, ], dependent.variable.name = "Survival", num.trees = 1500, write.forest = T, save.memory = F, classification = TRUE, importance = "permutation")
   # print(t(ml.npr(predict(rg, human_sepsis_data_ml[human_sepsis_data$Day == 0, ])$predictions, human_sepsis_data_ml$Survival[human_sepsis_data$Day == 0])))
@@ -108,7 +116,7 @@ for (d in seq_along(day_set)){
   
   ###Reduce data set to important variables
   human_sepsis_data_ml_red <- human_sepsis_data_ml
-  human_sepsis_data_ml_red[, which(var_importance < quantile(x = var_importance, p = c(0.95))) + 1] <- NULL
+  human_sepsis_data_ml_red[, which(var_importance < quantile(x = var_importance, p = c(0.75))) + 1] <- NULL
   v.rg.npr <- list()
   v.ks.npr <- list()
   v.lm.npr <- list()
