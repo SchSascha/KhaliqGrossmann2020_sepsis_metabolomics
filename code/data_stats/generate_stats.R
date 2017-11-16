@@ -59,7 +59,6 @@ for (n in tanova_day_set){
   tanova_patient_set <- intersect(tanova_patient_set, full_tanova_data$Patient[full_tanova_data$Day == n])
 }
 full_tanova_data <- subset(full_tanova_data, Patient %in% tanova_patient_set & Day %in% tanova_day_set)
-full_tanova_data <- full_tanova_data[order(full_tanova_data$Patient),]
 full_tanova_data <- full_tanova_data[order(full_tanova_data$Survival),]
 t_data <- t(scale(full_tanova_data[,-1:-5]))
 f1 <- as.numeric(as.factor(full_tanova_data$Survival))
@@ -90,29 +89,54 @@ human_sepsis_data_normal$Patient <- as.factor(human_sepsis_data_normal$Patient)
 human_sepsis_data_normal$Day <- as.factor(human_sepsis_data_normal$Day)
 ##Group metabolites
 coarse_group_list <- human_sepsis_legend[human_sepsis_legend[,1] %in% colnames(human_sepsis_data[,-1:-5]), 3]
-human_sepsis_data_normal_coarse_grouped <- cbind(human_sepsis_data[,1:5], matrix(0, nrow = nrow(human_sepsis_data_normal), ncol=length(unique(coarse_group_list))))
-colnames(human_sepsis_data_normal_coarse_grouped)[-1:-5] <- unique(coarse_group_list)
-human_sepsis_data_normal_coarse_grouped$Patient <- as.factor(human_sepsis_data_normal_coarse_grouped$Patient)
-human_sepsis_data_normal_coarse_grouped$Day <- as.factor(human_sepsis_data_normal_coarse_grouped$Day)
+human_sepsis_data_normal_grouped <- cbind(human_sepsis_data[,1:5], matrix(0, nrow = nrow(human_sepsis_data_normal), ncol=length(unique(coarse_group_list))))
+colnames(human_sepsis_data_normal_grouped)[-1:-5] <- unique(coarse_group_list)
+human_sepsis_data_normal_grouped$Patient <- as.factor(human_sepsis_data_normal_grouped$Patient)
+human_sepsis_data_normal_grouped$Day <- as.factor(human_sepsis_data_normal_grouped$Day)
 for (n in 1:nrow(human_sepsis_data_normal)){
-  human_sepsis_data_normal_coarse_grouped[n, -1:-5] <- aggregate(t(human_sepsis_data_normal[n,-1:-5]), by = list(coarse_group_list), FUN = mean, na.action = na.omit)[,2]
+  human_sepsis_data_normal_grouped[n, -1:-5] <- aggregate(t(human_sepsis_data_normal[n,-1:-5]), by = list(coarse_group_list), FUN = mean, na.action = na.omit)[,2]
 }
 ##Split for metabolites and "phenotypical" factors
 split_start <- which(colnames(human_sepsis_data) == "Urea")
 pheno_sel <- split_start:ncol(human_sepsis_data)
 metab_sel <- 6:(split_start-1)
+group_pheno_sel <- which(colnames(human_sepsis_data_normal_grouped) %in% colnames(human_sepsis_data[,pheno_sel]))
+group_metab_sel <- which(colnames(human_sepsis_data_normal_grouped) %in% unique(coarse_group_list[metab_sel - 5]))
 ##Build covariance matrix with metabolite groups
-human_sepsis_data_normal_coarse_grouped_metab_cov <- cbind(human_sepsis_data_normal_coarse_grouped[, 1:5], cov(t(human_sepsis_data_normal_coarse_grouped[,metab_sel]), use = "pairwise.complete.obs"))
-human_sepsis_data_normal_coarse_grouped_pheno_cov <- cbind(human_sepsis_data_normal_coarse_grouped[, 1:5], cov(t(human_sepsis_data_normal_coarse_grouped[,pheno_sel]), use = "pairwise.complete.obs"))
+human_sepsis_data_normal_grouped_metab_cov <- cbind(human_sepsis_data_normal_grouped[, 1:5], cov(t(human_sepsis_data_normal_grouped[,group_metab_sel]), use = "pairwise.complete.obs"))
+human_sepsis_data_normal_grouped_pheno_cov <- cbind(human_sepsis_data_normal_grouped[, 1:5], cov(t(human_sepsis_data_normal_grouped[,group_pheno_sel]), use = "pairwise.complete.obs"))
+human_sepsis_data_normal_grouped_pheno_cov <- human_sepsis_data_normal_pheno_cov[, !apply(human_sepsis_data_normal_pheno_cov, 2, function(x){all(is.na(x))})]
 ##Build covariance matrix with original metabolites
 human_sepsis_data_normal_metab_cov <- cbind(human_sepsis_data_normal[, 1:5], cov(t(human_sepsis_data_normal[,metab_sel]), use = "pairwise.complete.obs"))
 human_sepsis_data_normal_pheno_cov <- cbind(human_sepsis_data_normal[, 1:5], cov(t(human_sepsis_data_normal[,pheno_sel]), use = "pairwise.complete.obs"))
+human_sepsis_data_normal_pheno_cov <- human_sepsis_data_normal_pheno_cov[, !apply(human_sepsis_data_normal_pheno_cov, 2, function(x){all(is.na(x))})]
 ##Build correlation matrix with metabolite groups
-human_sepsis_data_normal_coarse_grouped_metab_cor <- cbind(human_sepsis_data_normal_coarse_grouped[, 1:5], cor(t(human_sepsis_data_normal_coarse_grouped[,metab_sel]), use = "pairwise.complete.obs"))
-human_sepsis_data_normal_coarse_grouped_pheno_cor <- cbind(human_sepsis_data_normal_coarse_grouped[, 1:5], cor(t(human_sepsis_data_normal_coarse_grouped[,pheno_sel]), use = "pairwise.complete.obs"))
+human_sepsis_data_normal_grouped_metab_cor <- cbind(human_sepsis_data_normal_grouped[, 1:5], cor(t(human_sepsis_data_normal_grouped[,group_metab_sel]), use = "pairwise.complete.obs"))
+human_sepsis_data_normal_grouped_pheno_cor <- cbind(human_sepsis_data_normal_grouped[, 1:5], cor(t(human_sepsis_data_normal_grouped[,group_pheno_sel]), use = "pairwise.complete.obs"))
+human_sepsis_data_normal_grouped_pheno_cor <- human_sepsis_data_normal_grouped_pheno_cor[, !apply(human_sepsis_data_normal_grouped_pheno_cor, 2, function(x){all(is.na(x))})]
 ##Build covariance matrix with original metabolites
 human_sepsis_data_normal_metab_cor <- cbind(human_sepsis_data_normal[, 1:5], cov(t(human_sepsis_data_normal[, metab_sel]), use = "pairwise.complete.obs"))
 human_sepsis_data_normal_pheno_cor <- cbind(human_sepsis_data_normal[, 1:5], cov(t(human_sepsis_data_normal[, pheno_sel]), use = "pairwise.complete.obs"))
+human_sepsis_data_normal_pheno_cor <- human_sepsis_data_normal_pheno_cor[, !apply(human_sepsis_data_normal_pheno_cor, 2, function(x){all(is.na(x))})]
+
+##Build covariance matrix of metabolites with original metabolites
+###Survival-ignorant
+human_sepsis_data_normal_conc_metab_cov <- cov(human_sepsis_data_normal[, metab_sel], use = "pairwise.complete.obs")
+human_sepsis_data_normal_conc_pheno_cov <- cov(human_sepsis_data_normal[, pheno_sel], use = "pairwise.complete.obs")
+###Survival-regardent
+human_sepsis_data_normal_NS_conc_metab_cov <- cov(subset(human_sepsis_data_normal, Survival == "NS", metab_sel), use = "pairwise.complete.obs")
+human_sepsis_data_normal_S_conc_metab_cov <- cov(subset(human_sepsis_data_normal, Survival == "S", metab_sel), use = "pairwise.complete.obs")
+human_sepsis_data_normal_NS_conc_pheno_cov <- cov(subset(human_sepsis_data_normal, Survival == "NS", pheno_sel), use = "pairwise.complete.obs")
+human_sepsis_data_normal_S_conc_pheno_cov <- cov(subset(human_sepsis_data_normal, Survival == "S", pheno_sel), use = "pairwise.complete.obs")
+##Build covariance matrix of metabolites with metabolites groups
+###Survival-ignorant
+human_sepsis_data_normal_grouped_conc_metab_cov <- cov(human_sepsis_data_normal_grouped[, group_metab_sel], use = "pairwise.complete.obs")
+human_sepsis_data_normal_grouped_conc_pheno_cov <- cov(human_sepsis_data_normal_grouped[, group_pheno_sel], use = "pairwise.complete.obs")
+###Survival-regardent
+human_sepsis_data_normal_NS_grouped_conc_metab_cov <- cov(subset(human_sepsis_data_normal_grouped, Survival == "NS", group_metab_sel), use = "pairwise.complete.obs")
+human_sepsis_data_normal_S_grouped_conc_metab_cov <- cov(subset(human_sepsis_data_normal_grouped, Survival == "S", group_metab_sel), use = "pairwise.complete.obs")
+human_sepsis_data_normal_NS_grouped_conc_pheno_cov <- cov(subset(human_sepsis_data_normal_grouped, Survival == "NS", group_pheno_sel), use = "pairwise.complete.obs")
+human_sepsis_data_normal_S_grouped_conc_pheno_cov <- cov(subset(human_sepsis_data_normal_grouped, Survival == "S", group_pheno_sel), use = "pairwise.complete.obs")
 
 
 ####################
@@ -120,39 +144,79 @@ human_sepsis_data_normal_pheno_cor <- cbind(human_sepsis_data_normal[, 1:5], cov
 ####################
 
 ##Human, cluster-heatmap, coarse grouped metabolites
-heatmaply(x = subset(human_sepsis_data_normal_metab_cov, select = c(-1,-2,-3)), file = paste0(out_dir, "human_normal_grouped_metab.html"))
-heatmaply(x = subset(human_sepsis_data_normal_pheno_cov, select = c(-1,-2,-3)), file = paste0(out_dir, "human_normal_grouped_pheno.html"))
+x <- human_sepsis_data_normal_metab_cov
+heatmaply(x = x[,-1:-5], row_side_colors = x[c("Survival", "CAP / FP")], col_side_colors = x["Patient"], file = paste0(out_dir, "human_normal_grouped_metab.html"))
+x <- na.omit(human_sepsis_data_normal_pheno_cov)
+heatmaply(x = x[,-1:-5], row_side_colors = x[c("Survival", "CAP / FP")], col_side_colors = x["Patient"], file = paste0(out_dir, "human_normal_grouped_pheno.html"))
+rm("x")
 
 ##Human, cluster-heatmap of non-CAP and non-FP patients, coarse grouped metabolites; error because nothing es left
-#heatmaply(x = subset(human_sepsis_data_normal_coarse_grouped, subset = human_sepsis_data_normal_coarse_grouped$`CAP / FP` %in% c("-"), select = c(-1,-2,-3,-5)))
+#heatmaply(x = subset(human_sepsis_data_normal_grouped, subset = human_sepsis_data_normal_grouped$`CAP / FP` %in% c("-"), select = c(-1,-2,-3,-5)))
 
 ##Human, cluster-heatmap of patient covariance matrix, coarse grouped metabolites, survival marked
-x <- human_sepsis_data_normal_coarse_grouped_metab_cov
-heatmaply(x = x[,-1:-5], row_side_colors = human_sepsis_data[c("Survival", "CAP / FP")], col_side_colors = as.matrix(human_sepsis_data["Patient"]), file = paste0(out_dir, "human_normal_grouped_metab_cov.html"))
-x <- human_sepsis_data_normal_coarse_grouped_pheno_cov
-heatmaply(x = x[,-1:-5], row_side_colors = human_sepsis_data[c("Survival", "CAP / FP")], col_side_colors = as.matrix(human_sepsis_data["Patient"]), file = paste0(out_dir, "human_normal_grouped_pheno_cov.html"))
+x <- human_sepsis_data_normal_grouped_metab_cov
+heatmaply(x = x[,-1:-5], row_side_colors = x[c("Survival", "CAP / FP")], col_side_colors = x["Patient"], file = paste0(out_dir, "human_normal_grouped_metab_cov.html"))
+x <- na.omit(human_sepsis_data_normal_grouped_pheno_cov)
+heatmaply(x = x[,-1:-5], row_side_colors = x[c("Survival", "CAP / FP")], col_side_colors = x["Patient"], file = paste0(out_dir, "human_normal_grouped_pheno_cov.html"))
 rm("x")
 
 ##Human, cluster-heatmap of patient covariance matrix, ungrouped metabolites, survival marked
 x <- human_sepsis_data_normal_metab_cov
-heatmaply(x = x[,-1:-5], row_side_colors = human_sepsis_data[c("Survival", "CAP / FP")], col_side_colors = as.matrix(human_sepsis_data["Patient"]), file = paste0(out_dir, "human_normal_metab_cov.html"))
-x <- human_sepsis_data_normal_pheno_cov
-heatmaply(x = x[,-1:-5], row_side_colors = human_sepsis_data[c("Survival", "CAP / FP")], col_side_colors = as.matrix(human_sepsis_data["Patient"]), file = paste0(out_dir, "human_normal_pheno_cov.html"))
+heatmaply(x = x[,-1:-5], row_side_colors = x[c("Survival", "CAP / FP")], col_side_colors = x["Patient"], file = paste0(out_dir, "human_normal_metab_cov.html"))
+x <- na.omit(human_sepsis_data_normal_pheno_cov)
+heatmaply(x = x[,-1:-5], row_side_colors = x[c("Survival", "CAP / FP")], col_side_colors = x["Patient"], file = paste0(out_dir, "human_normal_pheno_cov.html"))
 rm("x")
 
 ##Human, cluster-heatmat of patient correlation matrix, coarse grouped metabolites, survival and CAP/FP marked
-x <- human_sepsis_data_normal_coarse_grouped_metab_cor
-heatmaply(x = x[,-1:-5], row_side_colors = human_sepsis_data[c("Survival", "CAP / FP")], col_side_colors = as.matrix(human_sepsis_data["Patient"]), file = paste0(out_dir, "human_normal_grouped_metab_cor.html"))
-x <- human_sepsis_data_normal_coarse_grouped_pheno_cor
-heatmaply(x = x[,-1:-5], row_side_colors = human_sepsis_data[c("Survival", "CAP / FP")], col_side_colors = as.matrix(human_sepsis_data["Patient"]), file = paste0(out_dir, "human_normal_grouped_pheno_cor.html"))
+x <- human_sepsis_data_normal_grouped_metab_cor
+heatmaply(x = x[,-1:-5], row_side_colors = x[c("Survival", "CAP / FP")], col_side_colors = x["Patient"], file = paste0(out_dir, "human_normal_grouped_metab_cor.html"))
+x <- na.omit(human_sepsis_data_normal_grouped_pheno_cor)
+heatmaply(x = x[,-1:-5], row_side_colors = x[c("Survival", "CAP / FP")], col_side_colors = x["Patient"], file = paste0(out_dir, "human_normal_grouped_pheno_cor.html"))
 rm("x")
 
 ##Human, cluster-heatmat of patient correlation matrix, coarse grouped metabolites, survival and CAP/FP marked
 x <- human_sepsis_data_normal_metab_cor
-heatmaply(x = x[,-1:-5], row_side_colors = human_sepsis_data[c("Survival", "CAP / FP")], col_side_colors = as.matrix(human_sepsis_data["Patient"]), file = paste0(out_dir, "human_normal_metab_cor.html"))
-x <- human_sepsis_data_normal_pheno_cor
-heatmaply(x = x[,-1:-5], row_side_colors = human_sepsis_data[c("Survival", "CAP / FP")], col_side_colors = as.matrix(human_sepsis_data["Patient"]), file = paste0(out_dir, "human_normal_pheno_cor.html"))
+heatmaply(x = x[,-1:-5], row_side_colors = x[c("Survival", "CAP / FP")], col_side_colors = x["Patient"], file = paste0(out_dir, "human_normal_metab_cor.html"))
+x <- na.omit(human_sepsis_data_normal_pheno_cor)
+heatmaply(x = x[,-1:-5], row_side_colors = x[c("Survival", "CAP / FP")], col_side_colors = x["Patient"], file = paste0(out_dir, "human_normal_pheno_cor.html"))
 rm("x")
+
+##Human, cluster-heatmap of metabolite covariance matrix, survival-ignorant
+x <- human_sepsis_data_normal_conc_metab_cov
+heatmaply(x = x, file = paste0(out_dir, "human_normal_conc_metab_cov.html"))
+x <- human_sepsis_data_normal_conc_pheno_cov
+heatmaply(x = x, file = paste0(out_dir, "human_normal_conc_pheno_cov.html"))
+rm("x")
+
+##Human, cluster-heatmap of metabolite covariance matrix, survival-regardent
+x <- human_sepsis_data_normal_NS_conc_metab_cov
+heatmaply(x = x, file = paste0(out_dir, "human_normal_NS_conc_metab_cov.html"))
+x <- human_sepsis_data_normal_S_conc_metab_cov
+heatmaply(x = x, file = paste0(out_dir, "human_normal_S_conc_metab_cov.html"))
+x <- human_sepsis_data_normal_NS_conc_pheno_cov
+heatmaply(x = x, file = paste0(out_dir, "human_normal_NS_conc_pheno_cov.html"))
+x <- human_sepsis_data_normal_S_conc_pheno_cov
+heatmaply(x = x, file = paste0(out_dir, "human_normal_S_conc_pheno_cov.html"))
+rm("x")
+
+##Human, cluster-heatmap of covariance matrix of grouped metabolites, survival-ignorant
+x <- human_sepsis_data_normal_grouped_conc_metab_cov
+heatmaply(x = x, file = paste0(out_dir, "human_normal_grouped_conc_metab_cov.html"))
+x <- human_sepsis_data_normal_grouped_conc_pheno_cov
+heatmaply(x = x, file = paste0(out_dir, "human_normal_grouped_conc_pheno_cov.html"))
+rm("x")
+
+##Human, cluster-heatmap of covariance matrix of grouped metabolites, survival-regardent
+x <- human_sepsis_data_normal_NS_grouped_conc_metab_cov
+heatmaply(x = x, file = paste0(out_dir, "human_normal_NS_grouped_conc_metab_cov.html"))
+x <- human_sepsis_data_normal_S_grouped_conc_metab_cov
+heatmaply(x = x, file = paste0(out_dir, "human_normal_S_grouped_conc_metab_cov.html"))
+x <- human_sepsis_data_normal_NS_grouped_conc_pheno_cov
+heatmaply(x = x, file = paste0(out_dir, "human_normal_NS_grouped_conc_pheno_cov.html"))
+x <- human_sepsis_data_normal_S_grouped_conc_pheno_cov
+heatmaply(x = x, file = paste0(out_dir, "human_normal_S_grouped_conc_pheno_cov.html"))
+rm("x")
+
 
 ##Human, p-val (t-test) plot of differences between non-survivors and survivors, grouped by day
 h_day_sig_t_diff_plot <- ggplot(melt(day_sig_t_diff, id.vars = 1), aes(x = Day, y = value)) +

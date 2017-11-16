@@ -30,12 +30,12 @@ rat_sepsis_data <- get_rat_sepsis_data()
 #Try prediction
 ##On human
 ###Build data set
-human_sepsis_data_ml <- subset(x = human_sepsis_data, select = c(4,6:ncol(human_sepsis_data)))
+human_sepsis_data_ml <- subset(x = human_sepsis_data, select = c(2,4,6:ncol(human_sepsis_data)))
 human_sepsis_data_ml$Survival <- as.numeric(as.factor(human_sepsis_data_ml$Survival)) - 1 #Dependent variable transformation
 ###Strip phenomenological variables
 strip_start <- which(colnames(human_sepsis_data_ml) == "Urea")
 human_sepsis_data_ml <- human_sepsis_data_ml[,-strip_start:-ncol(human_sepsis_data_ml)]
-###No, stip metabolic variables
+###No, strip metabolic variables
 #human_sepsis_data_ml <- human_sepsis_data_ml[,c(1,strip_start:ncol(human_sepsis_data_ml))]
 data_ml_subset <- apply(human_sepsis_data_ml, 1, function(x){ sum(!is.na(x)) > length(x) - 9})
 human_sepsis_data_ml <- human_sepsis_data_ml[data_ml_subset,]
@@ -44,7 +44,11 @@ colnames(human_sepsis_data_ml) <- make.names(colnames(human_sepsis_data_ml))
 ###Impute missing values
 human_sepsis_data_ml_full <- missRanger(human_sepsis_data_ml, pmm.k = 3, num.trees = 100)
 ###Scale values
-human_sepsis_data_ml_full[, -1] <- scale(human_sepsis_data_ml_full[, -1])
+human_sepsis_data_ml_full[, -1:-2] <- scale(human_sepsis_data_ml_full[, -1:-2])
+##Set important parameters
+fml <- Survival ~ .
+num_folds <- 5
+rg.num.trees <- 500
 ##Set up iteration
 num_repeats <- 6
 day_tab <- table(human_sepsis_data$Day[data_ml_subset])
@@ -55,12 +59,27 @@ lm.npr.repeat.df <- data.frame(day = day_set, tpr = 0, tnr = 0, fpr = 0, fnr = 0
 rg.red.npr.repeat.df <- data.frame(day = day_set, tpr = 0, tnr = 0, fpr = 0, fnr = 0)
 ks.red.npr.repeat.df <- data.frame(day = day_set, tpr = 0, tnr = 0, fpr = 0, fnr = 0)
 lm.red.npr.repeat.df <- data.frame(day = day_set, tpr = 0, tnr = 0, fpr = 0, fnr = 0)
+##Try prediction on last day for each patient
+pat_num <- unique(human_sepsis_data$Patient)
+full_index <- match(pat_num, human_sepsis_data$Patient[order(human_sepsis_data$`Sample ID`, decreasing = TRUE)])
+full_index <- nrow(human_sepsis_data) - full_index + 1
+fold_set <- ml.split.folds.strat(num_folds = num_folds, class = human_sepsis_data_ml_full$Survival[full_index])
+last_day_ml_data <- human_sepsis_data_ml_full[full_index,]
+v.rg.npr <- list()
+for (fold in 1:num_folds){
+  fold_learn_set <- last_day_ml_data[-fold_set[[fold]],]
+  rgCV <- ranger(data = fold_learn_set, dependent.variable.name = "Survival", num.trees = rg.num.trees, write.forest = T, save.memory = F, classification = TRUE)
+  v.rg.npr[[fold]] <- ml.npr(predict(rgCV, last_day_ml_data[fold_set[[fold]],])$predictions, last_day_ml_data$Survival[fold_set[[fold]]])
+}
+colMeans(rbindlist(v.rg.npr)) #Only a little better than first day.
+##Do the big CV loop
 for (d in seq_along(day_set)){
-  ###Reduce data set to Day <= x
-  human_sepsis_data_ml <- subset(human_sepsis_data_ml_full, subset = human_sepsis_data$Day[data_ml_subset] <= day_set[d])
-  #The following block greatly increases SVM performance and greatly decreases RF performance
+  ###Select data with Day <= x, remove Patient ID
+  human_sepsis_data_ml <- subset(human_sepsis_data_ml_full, subset = human_sepsis_data$Day[data_ml_subset] <= day_set[d], select = -1)
+  ###Get Patient ID seperately
+  patient_number <- subset(human_sepsis_data_ml_full, subset = human_sepsis_data$Day[data_ml_subset] <= day_set[d], select = Patient)[[1]]
   {
-  ###Build gram matrix
+  ###Build gram matrix; only on learn set! build on test set seperately x = learn_set, y = test_set
   #num_data <- as.matrix(human_sepsis_data_ml[,-1])
   #num_data <- num_data[, !colAnyNAs(num_data)]
   #g_num_data <- kernelMatrix(kernel = vanilladot(), x = num_data, y = num_data)
@@ -68,18 +87,17 @@ for (d in seq_along(day_set)){
   #human_sepsis_data_ml <- cbind(data.frame(Survival = human_sepsis_data_ml$Survival), g_num_data)
   }
   ###Test performance with cross-validation
-  fml <- Survival ~ .
-  num_folds <- 5
   v.rg.npr <- list()
   v.ks.npr <- list()
   v.lm.npr <- list()
   yPredRG <- rep(0, nrow(human_sepsis_data_ml))
   yPredKS <- rep(0, nrow(human_sepsis_data_ml))
   yPredLM <- rep(0, nrow(human_sepsis_data_ml))
+  #fold_set <- ml.split.folds.quasistrat(num_folds = num_folds, class = human_sepsis_data_ml$Survival, non_strat_class = patient_number)
   fold_set <- ml.split.folds.strat(num_folds = num_folds, class = human_sepsis_data_ml$Survival)
   for (fold in 1:num_folds){
     fold_learn_set <- human_sepsis_data_ml[-fold_set[[fold]],]
-    rgCV <- ranger(data = fold_learn_set, dependent.variable.name = "Survival", num.trees = 500, write.forest = T, save.memory = F, classification = TRUE)
+    rgCV <- ranger(data = fold_learn_set, dependent.variable.name = "Survival", num.trees = rg.num.trees, write.forest = T, save.memory = F, classification = TRUE)
     #ksCV <- ksvm(fml, fold_learn_set, type = "C-svc", kernel = "vanilladot")
     ksCV <- ksvm(fml, fold_learn_set, type = "C-svc", kernel = "rbfdot", kpar = "automatic", C = 10)
     lmCV <- lm(formula = fml, data = fold_learn_set)
@@ -103,10 +121,10 @@ for (d in seq_along(day_set)){
 
   ###Get variable importance and validate on special data subsets
   #print("Most important variables according to Random Forest internal ranking:")
-  rg <- ranger(data = human_sepsis_data_ml, dependent.variable.name = "Survival", num.trees = 1500, write.forest = T, save.memory = F, classification = TRUE, importance = "permutation")
+  rg <- ranger(data = human_sepsis_data_ml, dependent.variable.name = "Survival", num.trees = rg.num.trees * 3, write.forest = T, save.memory = F, classification = TRUE, importance = "permutation")
   #print(sort(rg$variable.importance, decreasing = TRUE)[1:10])
   var_importance <- rg$variable.importance
-  print(names(var_importance)[which(var_importance > quantile(x = var_importance, p = c(0.95))) + 1])
+  #print(names(var_importance)[which(var_importance > quantile(x = var_importance, p = c(0.95))) + 1])
   # print("Random Forest validation on set of first day measurements when learnt on non-first day measurements:")
   # rg <- ranger(data = human_sepsis_data_ml[human_sepsis_data$Day > 0, ], dependent.variable.name = "Survival", num.trees = 1500, write.forest = T, save.memory = F, classification = TRUE, importance = "permutation")
   # print(t(ml.npr(predict(rg, human_sepsis_data_ml[human_sepsis_data$Day == 0, ])$predictions, human_sepsis_data_ml$Survival[human_sepsis_data$Day == 0])))
@@ -125,7 +143,7 @@ for (d in seq_along(day_set)){
   yPredLM <- rep(0, nrow(human_sepsis_data_ml_red))
   for (fold in 1:num_folds){
     fold_learn_set <- human_sepsis_data_ml_red[-fold_set[[fold]],]
-    rgCV <- ranger(data = fold_learn_set, dependent.variable.name = "Survival", num.trees = 500, write.forest = T, save.memory = F, classification = TRUE)
+    rgCV <- ranger(data = fold_learn_set, dependent.variable.name = "Survival", num.trees = rg.num.trees, write.forest = T, save.memory = F, classification = TRUE)
     #ksCV <- ksvm(fml, fold_learn_set, type = "C-svc", kernel = "vanilladot")
     ksCV <- ksvm(fml, fold_learn_set, type = "C-svc", kernel = "rbfdot", kpar = "automatic", C = 10)
     lmCV <- lm(formula = fml, data = fold_learn_set)
@@ -171,5 +189,6 @@ perf_by_day_plot <- ggplot(perf_data, aes(x = day, y = value, color = Method)) +
   stat_summary(fun.ymin = "min", fun.ymax = "max", fun.y = "mean", geom = "line") +
   stat_summary(fun.ymin = "min", fun.ymax = "max", fun.y = "mean") +
   facet_grid(variable ~ dimensions) +
+  ylim(0, 1) +
   theme_bw()
 plot(perf_by_day_plot)

@@ -104,33 +104,75 @@ ml.split.folds.strat <- function(num_folds, class){
   return(res)
 }
 
-#' Generate folds for stratified cross-validation in a binary classification scenario, but fully seperate the second class set into learn and test set
+#' Generate folds for stratified cross-validation in a binary classification scenario, but fully seperate the second class set into learn and test set.
+#' Randomly samples partitions into folds to find one that has approximately equal number of cases and approx. equal class proportions (for stratified cross-validation).
+#' Currently only supports binary stratified class and the optimization following the random sampling is not implemented.
 #'
 #' @param num_folds number of folds
 #' @param class class membership, numerical coding in [<=0, >0]
 #' @param non_strat_class class membership, for full seperation of classes
+#' @param num_opt_steps number of optimisation steps following random sampling of partitions
+#' @param num_sampling_steps number of random samples to generate
 #'
 #' @return
 #' @export
 #'
 #' @examples
-ml.split.folds.quasistrat <- function(num_folds, class, non_strat_class){
-  non_strat_order <- order(table(non_strat_class))
-  pos_idx <- class > 0
-  neg_idx <- class <= 0
-  pos_sample <- sample(x = which(pos_idx), size = sum(pos_idx), replace = FALSE)
-  neg_sample <- sample(x = which(neg_idx), size = sum(neg_idx), replace = FALSE)
-  pos_sample_from <- ceiling(length(pos_sample)*(1:num_folds)/num_folds)
-  pos_sample_to <- ceiling(length(pos_sample)*(0:(num_folds-1))/num_folds)+1
-  neg_sample_from <- ceiling(length(neg_sample)*(1:num_folds)/num_folds)
-  neg_sample_to <- ceiling(length(neg_sample)*(0:(num_folds-1))/num_folds)+1
-  res <- list()
-  for (fold in 1:num_folds){
-    res[[fold]] <- c(pos_sample[pos_sample_from[fold]:pos_sample_to[fold]],
-                     neg_sample[neg_sample_from[fold]:neg_sample_to[fold]])
+ml.split.folds.quasistrat <- function(num_folds, class, non_strat_class, num_opt_steps = 500, num_sampling_steps = 5000){
+  #Get fields of stratified class
+  class_set <- unique(class)
+  num_non_strat_class1 <- length(table(non_strat_class[class == class_set[1]]))
+  num_non_strat_class2 <- length(table(non_strat_class[class == class_set[2]]))
+  #Get data stats
+  class1_tab <- table(non_strat_class[class == class_set[1]])
+  class2_tab <- table(non_strat_class[class == class_set[2]])
+  #Find ideal partition parameters
+  class1_part_count <- sum(class1_tab) / num_folds
+  class2_part_count <- sum(class2_tab) / num_folds
+  #Set random partition
+  class1_assig <- sample.int(n = num_folds, size = num_non_strat_class1, replace = TRUE)
+  class2_assig <- sample.int(n = num_folds, size = num_non_strat_class2, replace = TRUE)
+  #Get goodness impression
+  class1_num_cases <- sapply(1:num_folds, function(x){ sum(class1_tab[class1_assig == x]) })
+  class2_num_cases <- sapply(1:num_folds, function(x){ sum(class2_tab[class2_assig == x]) })
+  best_class1_assig_score <- sum((class1_part_count - class1_num_cases)^2)
+  best_class2_assig_score <- sum((class2_part_count - class2_num_cases)^2)
+  #Prepare sampling
+  best_class1_assig <- class1_assig
+  best_class2_assig <- class2_assig
+  #Run random sampling to improve
+  for (n in 1:num_sampling_steps){
+    #Set new random partition
+    class1_assig <- sample.int(n = num_folds, size = num_non_strat_class1, replace = TRUE)
+    class2_assig <- sample.int(n = num_folds, size = num_non_strat_class2, replace = TRUE)
+    #Get goodness impression
+    class1_num_cases <- sapply(1:num_folds, function(x){ sum(class1_tab[class1_assig == x]) })
+    class2_num_cases <- sapply(1:num_folds, function(x){ sum(class2_tab[class2_assig == x]) })
+    class1_assig_score <- sum((class1_part_count - class1_num_cases)^2)
+    class2_assig_score <- sum((class2_part_count - class2_num_cases)^2)
+    if (class1_assig_score < best_class1_assig_score){
+      best_class1_assig_score <- class1_assig_score
+      best_class1_assig <- class1_assig
+    }
+    if (class2_assig_score < best_class2_assig_score){
+      best_class2_assig_score <- class2_assig_score
+      best_class2_assig <- class2_assig
+    }
   }
-  #Exchange samples between test and learn sets to satisfy seperation
-  
+  #Combine class1 and class2 partitions into folds
+  ##Get members as index list
+  class1_indizes <- lapply(1:num_folds, function(x){ which(non_strat_class %in% names(class1_tab)[which(best_class1_assig == x)]) })
+  class2_indizes <- lapply(1:num_folds, function(x){ which(non_strat_class %in% names(class2_tab)[which(best_class2_assig == x)]) })
+  ##Sort first class folds ascending
+  class1_num_cases <- sapply(1:num_folds, function(x){ sum(class1_tab[best_class1_assig == x]) })
+  class2_num_cases <- sapply(1:num_folds, function(x){ sum(class2_tab[best_class2_assig == x]) })
+  class1_indizes <- class1_indizes[order(class1_num_cases, decreasing = TRUE)]
+  class2_indizes <- class2_indizes[order(class2_num_cases, decreasing = FALSE)]
+  ##Combine
+  res <- lapply(1:5, function(x){ c(class1_indizes[[x]], class2_indizes[[x]]) })
+  ##Feedback about partition goodness
+  #print(c(best_class1_assig_score, best_class2_assig_score, class1_num_cases, class2_num_cases))
+  ##Return
   return(res)
 }
 
@@ -178,4 +220,8 @@ human_sig_diffs_along_days <- function(data, corr_fdr = TRUE){
     day_sig_t_diff[,-1] <- apply(day_sig_t_diff[,-1], c(1), p.adjust, method = "fdr")
   }
   res <- list(day_sig_u_diff = day_sig_u_diff, day_sig_t_diff = day_sig_t_diff)
+}
+
+col.na.omit <- function(data){
+  return(t(na.omit(t(data))))
 }
