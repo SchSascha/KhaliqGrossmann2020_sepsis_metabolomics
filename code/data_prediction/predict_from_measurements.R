@@ -6,6 +6,7 @@ library(matrixStats)
 library(ranger)
 library(missRanger)
 library(kernlab)
+library(heatmaply)
 
 #Import central functions
 source("../function_definitions.R")
@@ -13,12 +14,15 @@ source("../function_definitions.R")
 #Set path
 out_dir <- "../../results"
 out_dir_stats <- "../../results/data_stats"
+out_dir_pred <- "../../results/data_pred"
 
 #Make sure paths exist
 if (!dir.exists(out_dir))
   dir.create(out_dir)
 if (!dir.exists(out_dir_stats))
   dir.create(out_dir_stats)
+if (!dir.exists(out_dir_pred))
+  dir.create(out_dir_pred)
 
 #Import data
 ##Import clinical data
@@ -29,9 +33,11 @@ rat_sepsis_data <- get_rat_sepsis_data()
 
 #Try prediction
 ##On human
-###Build data set
+###Build data set for "vanilla" prediction
 human_sepsis_data_ml <- subset(x = human_sepsis_data, select = c(2,4,6:ncol(human_sepsis_data)))
 human_sepsis_data_ml$Survival <- as.numeric(as.factor(human_sepsis_data_ml$Survival)) - 1 #Dependent variable transformation
+###Add CAP and FP as independent variables
+human_sepsis_data_ml <- cbind(human_sepsis_data_ml[,1:2], data.frame(CAP = human_sepsis_data$`CAP / FP` == "CAP"), data.frame(FP = human_sepsis_data$`CAP / FP` == "FP"), human_sepsis_data_ml[,-1:-2])
 ###Strip phenomenological variables
 strip_start <- which(colnames(human_sepsis_data_ml) == "Urea")
 human_sepsis_data_ml <- human_sepsis_data_ml[,-strip_start:-ncol(human_sepsis_data_ml)]
@@ -49,6 +55,26 @@ human_sepsis_data_ml_full[, -1:-2] <- scale(human_sepsis_data_ml_full[, -1:-2])
 fml <- Survival ~ .
 num_folds <- 5
 rg.num.trees <- 500
+
+##Try Survival forest
+###Build specific data set from first measurement
+human_surv_subset_ml <- cbind(data.frame(Day = human_sepsis_data$Day[data_ml_subset]), human_sepsis_data_ml_full)
+surv_pats_max_days <- tapply(X = human_surv_subset_ml$Day, INDEX = human_surv_subset_ml$Patient, FUN = max)
+surv_pats_min_days <- tapply(X = human_surv_subset_ml$Day, INDEX = human_surv_subset_ml$Patient, FUN = max)
+human_surv_subset_ml <- human_surv_subset_ml[match(names(surv_pats_min_days), human_surv_subset_ml$Patient), ]
+#human_sep_surv_ml$Day <- surv_pats_max_days[match(human_sep_surv_ml$Patient, names(surv_pats_max_days))] #For "time to fail" coding
+human_surv_subset_ml$MaxDay <- surv_pats_max_days[match(human_surv_subset_ml$Patient, names(surv_pats_max_days))] #For interval coding: Day is interval start, MaxDay is end, 1 - Survival is event
+human_surv_full_dat <- human_surv_subset_ml
+human_survival_col_dat <- human_surv_subset_ml$Survival
+human_surv_subset_ml <- subset(human_surv_subset_ml, Survival == 0, select = -1:-3)
+human_surv_subset_ml$MaxDay <- human_surv_subset_ml$MaxDay + 1
+human_surv_subset_ml$MaxDay[human_surv_subset_ml$Survival == 1] <- 100
+human_surv_obj <- Surv(human_surv_subset_ml$MaxDay)
+###Build RF
+surv.rg <- ranger(human_surv_obj ~ ., data = human_surv_subset_ml, write.forest = TRUE, num.trees = rg.num.trees, importance = "permutation")
+sp <- predict(surv.rg, cbind(data.frame(MaxDay = 0), subset(human_sepsis_data_ml_full, select = -1:-2)))
+heatmaply(x = sp$survival, row_side_colors = data.frame(Survival = human_sepsis_data_ml_full$Survival))
+
 ##Set up iteration
 num_repeats <- 6
 day_tab <- table(human_sepsis_data$Day[data_ml_subset])
@@ -93,8 +119,8 @@ for (d in seq_along(day_set)){
   yPredRG <- rep(0, nrow(human_sepsis_data_ml))
   yPredKS <- rep(0, nrow(human_sepsis_data_ml))
   yPredLM <- rep(0, nrow(human_sepsis_data_ml))
-  #fold_set <- ml.split.folds.quasistrat(num_folds = num_folds, class = human_sepsis_data_ml$Survival, non_strat_class = patient_number)
-  fold_set <- ml.split.folds.strat(num_folds = num_folds, class = human_sepsis_data_ml$Survival)
+  fold_set <- ml.split.folds.quasistrat(num_folds = num_folds, class = human_sepsis_data_ml$Survival, non_strat_class = patient_number)
+  #fold_set <- ml.split.folds.strat(num_folds = num_folds, class = human_sepsis_data_ml$Survival)
   for (fold in 1:num_folds){
     fold_learn_set <- human_sepsis_data_ml[-fold_set[[fold]],]
     rgCV <- ranger(data = fold_learn_set, dependent.variable.name = "Survival", num.trees = rg.num.trees, write.forest = T, save.memory = F, classification = TRUE)
@@ -134,7 +160,7 @@ for (d in seq_along(day_set)){
   
   ###Reduce data set to important variables
   human_sepsis_data_ml_red <- human_sepsis_data_ml
-  human_sepsis_data_ml_red[, which(var_importance < quantile(x = var_importance, p = c(0.75))) + 1] <- NULL
+  human_sepsis_data_ml_red[, which(var_importance < quantile(x = var_importance, p = c(0.5))) + 1] <- NULL
   v.rg.npr <- list()
   v.ks.npr <- list()
   v.lm.npr <- list()
@@ -190,5 +216,9 @@ perf_by_day_plot <- ggplot(perf_data, aes(x = day, y = value, color = Method)) +
   stat_summary(fun.ymin = "min", fun.ymax = "max", fun.y = "mean") +
   facet_grid(variable ~ dimensions) +
   ylim(0, 1) +
+  xlab("Day included") +
+  #ggtitle("Normal stratified Cross Validation may shows overfitting") +
+  ggtitle("Quasi-stratified Cross Validation prevents overfitting") +
   theme_bw()
 plot(perf_by_day_plot)
+#ggsave(filename = "prediction_performance_by_day_inclusion.png", plot = perf_by_day_plot, path = out_dir_pred, width = 7, height = 7, units = "in")

@@ -216,8 +216,12 @@ human_sig_diffs_along_days <- function(data, corr_fdr = TRUE){
     }
   }
   if (corr_fdr){
-    day_sig_u_diff[,-1] <- apply(day_sig_u_diff[,-1], c(1), p.adjust, method = "fdr")
-    day_sig_t_diff[,-1] <- apply(day_sig_t_diff[,-1], c(1), p.adjust, method = "fdr")
+    #correct the p-vals for FDR
+    #apply() may be faster for this, but it rearranges the result; a reshape with matrix() would be necessary, which is badly readable
+    for (d in 1:nrow(day_sig_u_diff)){
+      day_sig_u_diff[d, -1] <- p.adjust(p = day_sig_u_diff[d,-1], method = "fdr")
+      day_sig_t_diff[d, -1] <- p.adjust(p = day_sig_t_diff[d,-1], method = "fdr")
+    }
   }
   res <- list(day_sig_u_diff = day_sig_u_diff, day_sig_t_diff = day_sig_t_diff)
 }
