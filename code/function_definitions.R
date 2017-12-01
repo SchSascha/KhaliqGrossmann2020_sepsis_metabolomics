@@ -29,7 +29,9 @@ get_human_sepsis_legend <- function(){
 #' @examples
 get_rat_sepsis_data <- function(){
   data <- read.csv(file = "../../data/measurements/Summary rat sample data.csv", header = TRUE, sep = "\t", stringsAsFactors = FALSE, dec = ",", check.names = FALSE, blank.lines.skip = TRUE, strip.white = TRUE)
-  data <- data[rowSums(is.na(data[,-1:-4])) < ncol(data) - 4, ] #Strip rows without any non-NA value
+  data <- data[apply(data, 1, function(x){ sum(is.na(x)) }) < ncol(data) - 20, ] #Strip rows without any non-NA value
+  data <- data[, apply(data, 2, function(x) { sum(is.na(x)) }) < nrow(data)] #Strip columns without any non-NA value
+  data <- data[, apply(data, 2, function(x){ length(unique(x))}) > 1] #Strip columns with constant values
   data$BE <- data$BE - min(data$BE, na.rm = TRUE)
   return(data)
 }
@@ -198,7 +200,7 @@ human_sig_diffs_along_days <- function(data, corr_fdr = TRUE){
   for (d in seq_along(day_sig_u_diff$Day)){
     #Reduce to significant differences
     day <- day_sig_u_diff$Day[d]
-    for (n in seq_along(day_sig_u_diff[1,-1:-5])){
+    for (n in seq_along(day_sig_u_diff[1,-1])){
       g1 <- subset(data, subset = Survival == "S" & Day == day & Patient %in% non_short_stay_pats, select = n + 5)
       g2 <- subset(data, subset = Survival == "NS" & Day == day & Patient %in% non_short_stay_pats, select = n + 5)
       g1 <- na.omit(g1)[[1]]
@@ -224,6 +226,47 @@ human_sig_diffs_along_days <- function(data, corr_fdr = TRUE){
     }
   }
   res <- list(day_sig_u_diff = day_sig_u_diff, day_sig_t_diff = day_sig_t_diff)
+}
+
+
+rat_sig_diffs_along_time <- function(data, corr_fdr = TRUE){
+  time_survival_tab <- table(data[c("time point", "group")])
+  ##Keep times with large enough sample count
+  time_survival_tab <- time_survival_tab[rowMins(time_survival_tab) >= 2,]
+  ##Get significant differences for each time
+  time_sig_u_diff <- data.frame(Time = rownames(time_survival_tab), matrix(0, nrow = nrow(time_survival_tab), ncol = ncol(data)-4))
+  colnames(time_sig_u_diff)[-1] <- colnames(data)[-1:-4]
+  time_sig_t_diff <- time_sig_u_diff
+  groups <- unique(data$group)
+  for (d in seq_along(time_sig_u_diff$Time)){
+    #Reduce to significant differences
+    time <- time_sig_u_diff$Time[d]
+    for (n in seq_along(time_sig_u_diff[1,-1])){
+      g1 <- subset(data, subset = group == groups[1] & data$`time point` == time, select = n + 4)
+      g2 <- subset(data, subset = group == groups[2] & data$`time point` == time, select = n + 4)
+      g1 <- na.omit(g1)[[1]]
+      g2 <- na.omit(g2)[[1]]
+      if (length(g1) > 1 && length(g2) > 1 && length(table(g1)) > 1 && length(table(g2)) > 1){
+        u_res <- wilcox.test(x = g1, y = g2)
+        time_sig_u_diff[d, n + 1] <- u_res$p.value
+        t_res <- t.test(x = g1, y = g2, var.equal = FALSE)
+        time_sig_t_diff[d, n + 1] <- t_res$p.value
+      }
+      else{
+        time_sig_u_diff[d, n + 1] <- NA
+        time_sig_t_diff[d, n + 1] <- NA
+      }
+    }
+  }
+  if (corr_fdr){
+    #correct the p-vals for FDR
+    #apply() may be faster for this, but it rearranges the result; a reshape with matrix() would be necessary, which is badly readable
+    for (d in 1:nrow(time_sig_u_diff)){
+      time_sig_u_diff[d, -1] <- p.adjust(p = time_sig_u_diff[d,-1], method = "fdr")
+      time_sig_t_diff[d, -1] <- p.adjust(p = time_sig_t_diff[d,-1], method = "fdr")
+    }
+  }
+  res <- list(time_sig_u_diff = time_sig_u_diff, time_sig_t_diff = time_sig_t_diff)
 }
 
 col.na.omit <- function(data){
