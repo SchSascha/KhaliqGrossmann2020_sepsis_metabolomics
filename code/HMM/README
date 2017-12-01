@@ -1,0 +1,28 @@
+Treatment Response Alignment Model (TRAM) Matlab implementation
+
+This is the Matlab implementation for the paper "Alignment and Classification 
+of Time Series Gene Expression in Clinical Studies" by Lin, Kaminski, 
+and Bar-Joseph.
+
+The training and predicting functions are tramGenTrain, tramDiscTrain, and 
+tramPredict. To learn a HMM using generative training, call
+
+>> model = tramGenTrain(trainData, nState, ...);
+
+For input data format, options, and model data structure, type 
+"help tramGenTrain" in Matlab. 
+To optimize a generatively trained HMM using discriminative training, call
+
+>> model = tramDiscTrain(trainData, model, ...);
+
+To classify new data based on the learned model, call
+
+>> logOdds = tramPredict(testData, model, ...);
+
+Positive values in logOdds denote the second class, while negative values 
+denote the first class. Type "help tramGenTrain" and "help tramClassify" for 
+more details.
+
+See tramQuickExample for a quick example (taking less than 3 minutes), or 
+tramExample for an example of training and testing on simulated data with 
+parameters used in the paper (taking about 45 minutes).
