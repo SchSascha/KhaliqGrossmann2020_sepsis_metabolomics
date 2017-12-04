@@ -28,7 +28,7 @@ get_human_sepsis_legend <- function(){
 #'
 #' @examples
 get_rat_sepsis_data <- function(){
-  data <- read.csv(file = "../../data/measurements/Summary rat sample data.csv", header = TRUE, sep = "\t", stringsAsFactors = FALSE, dec = ",", check.names = FALSE, blank.lines.skip = TRUE, strip.white = TRUE)
+  data <- read.csv(file = "../../data/measurements/Summary rat sample data 61 edit.csv", header = TRUE, sep = "\t", stringsAsFactors = FALSE, dec = ",", check.names = FALSE, blank.lines.skip = TRUE, strip.white = TRUE)
   data <- data[apply(data, 1, function(x){ sum(is.na(x)) }) < ncol(data) - 20, ] #Strip rows without any non-NA value
   data <- data[, apply(data, 2, function(x) { sum(is.na(x)) }) < nrow(data)] #Strip columns without any non-NA value
   data <- data[, apply(data, 2, function(x){ length(unique(x))}) > 1] #Strip columns with constant values
@@ -45,6 +45,28 @@ get_rat_sepsis_data <- function(){
 get_rat_sepsis_legend <- function(){
   data <- read.csv(file = "../../data/measurements/Legend rat sample data.csv", header = TRUE, sep = "\t", stringsAsFactors = FALSE, dec = ",", check.names = FALSE)
   return(data)
+}
+
+#' Get time points of significant differences
+#'
+#' @param diff_data data.frame as provided by rat_sig_diffs_along_time
+#' @param alpha significance niveau, e.g. 0.05 (default)
+#'
+#' @return long format data.frame with time points at which a significant difference was found
+#' @export
+#'
+#' @examples
+get_sig_var_pos <- function(diff_data, alpha = 0.05){
+  #Get sig var pos
+  sig_diff_pos <- lapply(diff_data[,-1], function(x){ diff_data$Time[which(x <= 0.05)] })
+  ##Clean
+  sig_diff_pos <- sig_diff_pos[lapply(sig_diff_pos, length) > 0]
+  ##Transform to long table
+  for (n in seq_along(sig_diff_pos)){
+    sig_diff_pos[[n]] <- data.frame(Time = sig_diff_pos[[n]], variable = names(sig_diff_pos)[n])
+  }
+  sig_diff_pos_long <- rbindlist(sig_diff_pos)
+  return(sig_diff_pos_long)
 }
 
 #' Scale values in a matrix or data.frame by dividing through their column-wise maximum. No min-max scaling, unless the minimum value in each column is 0!
