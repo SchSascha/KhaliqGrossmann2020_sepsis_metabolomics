@@ -2,6 +2,7 @@
 % Includes a modification for loop-jump-HMM, where the loop HMM is extended
 % by jumps over states. Results are OK so far.
 
+tic;
 
 %% Load human clinical data
 filename = '../../data/measurements/Summary human sample data.csv';
@@ -30,9 +31,6 @@ for n = 6:length(hdm(1,:))
     hdm(~empty_bool, n) = num2cell(numdat);
 end
 
-%% Add TRAM scripts to path
-%addpath('tram');
-
 %% Reorganize data to fit TRAM
 % Prepare
 cellfind = @(string)(@(cell_contents)(strcmp(string,cell_contents)));
@@ -42,12 +40,14 @@ pats = cell2mat(hdm(:, head_pat_idx));
 surv = hdm(:, head_surv_idx);
 [u_pats, u_idx] = unique(pats);
 u_surv = surv(u_idx);
-u_pat_excl_idx = diff(u_idx) <= 1;
-u_pat_excl_idx(end+1) = (length(pats) - u_idx(end)) <= 1;
+u_pat_excl_idx = diff(u_idx) <= 0;
+u_pat_excl_idx(end+1) = (length(pats) - u_idx(end)) <= 0;
 u_pat_excl_idx = find(u_pat_excl_idx);
 % remove patients with only one time point
-u_pats(u_pat_excl_idx) = [];
-u_surv(u_pat_excl_idx) = [];
+if ~isempty(u_pat_excl_idx)
+    u_pats(u_pat_excl_idx) = [];
+    u_surv(u_pat_excl_idx) = [];
+end
 % set NaNs
 for n = 1:length(pats)
     hdm(n, find(cellfun(@isempty, hdm(n,:)))) = {nan};
@@ -68,7 +68,7 @@ for n = 1:length(u_pats)
         d2_idx = d2_idx + 1;
     end
 end
-% CV fold generation
+% CV fold generation, randomly permute order of instances
 nfolds = 5;
 order1 = randperm(length(data{1}));
 order2 = randperm(length(data{2}));
@@ -92,11 +92,13 @@ testData = {data{1}(1:floor(d1_start)), data{2}(1:floor(d2_start))};
 % Number of system states
 nState = 3;
 % Number of features to try, has to start with all features
-nFeatArr = [length(data{1}{1}(:,1)) 100 50 40 30:-2:2];
+nFeatArr = [length(data{1}{1}(:,1)) 100 50 40 30:-4:2];
+%nFeatArr = [length(data{1}{1}(:,1)) 100 50 20 10 6 2];
 
 %% Train and test HMM
 % generative training
-model = tramGenTrain(trainData, nState, nFeatArr, 'replicates', 20,'maxiterations', 50, 'model', 'loopjumphmm');
+parEval = license('test', 'distrib_computing_toolbox');
+[model, int_top_acc] = tramGenTrain(trainData, nState, nFeatArr, 'replicates', 10,'maxiterations', 60, 'model', 'loophmm', 'parEval', parEval);
 % select genes
 fsTrainData = selectFeature(trainData, model{1}.selGenes);
 fsTestData  = selectFeature(testData , model{1}.selGenes);
@@ -109,7 +111,7 @@ acc = 100 * (sum(logOdds1 <= 0) + sum(logOdds2 > 0)) ...
 tpr = 100 * sum(logOdds1 <= 0)/length(testData{1});
 tnr = 100 * sum(logOdds2 > 0)/length(testData{2});
 % discriminative training and evaluation
-discModel = tramDiscTrain(fsTrainData, model, 'mmieIterations', 1000);
+discModel = tramDiscTrain(fsTrainData, model, 'mmieIterations', 5000);
 % classify testing data
 discLogOdds1 = tramPredict(fsTestData{1}, discModel);
 discLogOdds2 = tramPredict(fsTestData{2}, discModel);
@@ -119,6 +121,8 @@ dtpr = 100 * sum(discLogOdds1 <= 0)/length(testData{1});
 dtnr = 100 * sum(discLogOdds2 > 0)/length(testData{2});
 
 % Report Accuracy
+fprintf('Accuracy of generative HMM by internal CV is %2.0f%%\n', 100 * int_top_acc);
+
 fprintf('Accuracy of generative HMM is %2.0f%%\n',acc);
 fprintf('TPR of generative HMM is %2.0f%%\n',tpr);
 fprintf('TNR of generative HMM is %2.0f%%\n',tnr);
@@ -126,3 +130,5 @@ fprintf('TNR of generative HMM is %2.0f%%\n',tnr);
 fprintf('Accuracy of discriminative HMM is %2.0f%%\n',dacc);
 fprintf('TPR of discriminative HMM is %2.0f%%\n',dtpr);
 fprintf('TNR of discriminative HMM is %2.0f%%\n',dtnr);
+
+toc;

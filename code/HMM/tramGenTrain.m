@@ -1,4 +1,4 @@
-function model = tramGenTrain(trainData, nState, nFeatArr, varargin)
+function [model, topMsAcc] = tramGenTrain(trainData, nState, nFeatArr, varargin)
 %TRAMGENTRAIN generatively trains hidden Markov models (HMM) for the
 %classification of time series gene expression data.
 %   MODEL = TRAMGENTRAIN(TRAINDATA, NSTATE, NFEATARR) generatively trains
@@ -29,6 +29,7 @@ function model = tramGenTrain(trainData, nState, nFeatArr, varargin)
 
 [validateFold, algArg] = varArgRemove('validatefold', 10, varargin);
 [mmieIterations, algArg] = varArgRemove('mmieIterations', 0, algArg);
+[parEval, algArg] = varArgRemove('parEval', false, algArg);
 
 isRFE = true;
 nGene = size(trainData{1}{1}, 1);
@@ -54,10 +55,13 @@ for iFeatArr = 1 : length(nFeatArr)
         mghmmFeatSel = mghmms;
         if isRFE, featSelTrainX = trainData; end % for next re-rank
         if validateFold > 0
-            modSelAcc(iFeatArr) = calModelSelAcc(trainData, validateFold,...
+            if parEval
+                modSelAcc(iFeatArr) = parCalModelSelAcc(trainData, validateFold,...
                                   nState, 'mmieIterations', 0, algArg{:});
-            %modSelAcc(iFeatArr) = parCalModelSelAcc(trainData, validateFold,...
-            %                      nState, 'mmieIterations', 0, algArg{:});
+            else
+                modSelAcc(iFeatArr) = calModelSelAcc(trainData, validateFold,...
+                                  nState, 'mmieIterations', 0, algArg{:});
+            end
         end
     else
         if isRFE, 
@@ -69,11 +73,13 @@ for iFeatArr = 1 : length(nFeatArr)
             featSelTrainX = selectFeature(trainData, selGenes);
         end
         if validateFold > 0
-            modSelAcc(iFeatArr) = calModelSelAcc(featSelTrainX, validateFold,...
-                                  nState, 'mmieIterations', 0, algArg{:});
-            %modSelAcc(iFeatArr) = parCalModelSelAcc(featSelTrainX, validateFold,...
-            %                      nState, 'mmieIterations', 0, algArg{:});
-                              
+            if parEval
+                modSelAcc(iFeatArr) = parCalModelSelAcc(featSelTrainX, validateFold,...
+                                      nState, 'mmieIterations', 0, algArg{:});
+            else
+                modSelAcc(iFeatArr) = calModelSelAcc(featSelTrainX, validateFold,...
+                                      nState, 'mmieIterations', 0, algArg{:});
+            end
         end
         mghmmFeatSel = mmieGenTrainNew(featSelTrainX, nState, ...
                                        'mmieIterations', 0, algArg{:});
@@ -83,7 +89,6 @@ for iFeatArr = 1 : length(nFeatArr)
 end
 [topMsAcc, iFeatTop] = max(modSelAcc);
 model = featModels(:, iFeatTop);
-model.acc = topMsAcc;
 
 %-----------------------------------------------------------Subroutines
 

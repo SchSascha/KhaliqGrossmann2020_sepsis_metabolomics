@@ -1,6 +1,7 @@
 function [emilik, emilik3d] = mghmmEmiLik(seq, mu, sigma, varargin)
 %MGHMMEMILIK calculates the emission likelihood for a multivariate
 %Gaussian-emission HMM. 
+%Added fix for single sample time series; Peter Großmann, Dec. 2017
 
 [isTermState, arg] = varArgRemove('termstate', 0, varargin);
 [covTypeStr, arg] = varArgRemove('cov', '', arg);
@@ -44,10 +45,16 @@ else
                repmat(mu,[1,1,L]), repmat(sqrt(sigma),[1,1,L]));
     emilik3d(~isfinite(emilik3d)) = 1;
     emilik = squeeze(prod(emilik3d, 1));
+    if L == 1
+        emilik = emilik'; %Fix for single sample time series
+    end
 end
 if isTermState,
     emilik = [emilik, zeros(numStates-1,1); zeros(1,L), 1];
 else
+    %if (L == 1)
+    %    sprintf('L is 1')
+    %end
     emilik = [emilik; zeros(1,L)];
 end
 
