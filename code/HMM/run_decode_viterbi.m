@@ -27,12 +27,7 @@ end
 % Calculate survivor Viterbi paths
 subset = 1;
 viterbi_S_seqs = cell(1, length(data{subset}));
-for set = 1:length(data{subset})Combine Multiple Plots
-
-You can combine plots in several ways. Combine plots in the same axes, or create multiple axes in a figure.
-Combine Plots in Same Axes
-
-Use the hold on command to combine multiple plots in the same axes. For example, plot two lines and a scatter plot. Then reset the hold state to off.
+for set = 1:length(data{subset})
     seq = data{subset}{set}(model{subset}.selGenes,:);
     tr = model{subset}.tr;
     mu = model{subset}.mu;
