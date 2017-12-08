@@ -51,20 +51,23 @@ get_rat_sepsis_legend <- function(){
 #'
 #' @param diff_data data.frame as provided by rat_sig_diffs_along_time
 #' @param alpha significance niveau, e.g. 0.05 (default)
+#' @param time_var name of the time point column
 #'
 #' @return long format data.frame with time points at which a significant difference was found
 #' @export
 #'
 #' @examples
-get_sig_var_pos <- function(diff_data, alpha = 0.05){
+get_sig_var_pos <- function(diff_data, alpha = 0.05, time_var = "Time"){
   #Get sig var pos
-  sig_diff_pos <- lapply(diff_data[,-1], function(x){ diff_data$Time[which(x <= 0.05)] })
+  sig_diff_pos <- lapply(diff_data[,-1], function(x, t_var, a){ diff_data[[t_var]][which(x <= a)] }, t_var = time_var, a = alpha)
   ##Clean
   sig_diff_pos <- sig_diff_pos[lapply(sig_diff_pos, length) > 0]
   ##Transform to long table
   for (n in seq_along(sig_diff_pos)){
     sig_diff_pos[[n]] <- data.frame(Time = sig_diff_pos[[n]], variable = names(sig_diff_pos)[n])
+    colnames(sig_diff_pos[[n]])[1] = time_var
   }
+  
   sig_diff_pos_long <- rbindlist(sig_diff_pos)
   return(sig_diff_pos_long)
 }
@@ -205,26 +208,30 @@ ml.split.folds.quasistrat <- function(num_folds, class, non_strat_class, num_opt
 #'
 #' @param data The human metabolome time series data set
 #' @param corr_fdr Correct the p-values for FDR (default: TRUE)
+#' @param time_var name of the time point column
+#' @param status_var name of the status column
+#' @param case_var name of the case column
+#' @param descr_till_col column number up to which the case is described (time, status, case, ...)
 #'
 #' @return a list with members day_sig_u_diff and day_sig_t_diff. These are data.frames of p-values from U-test and t-test respectively.
 #' @export
 #'
 #' @examples
-human_sig_diffs_along_days <- function(data, corr_fdr = TRUE){
-  day_survival_tab <- table(data[c("Day", "Survival")])
+human_sig_diffs_along_days <- function(data, corr_fdr = TRUE, time_var = "Day", status_var = "Survival", case_var = "Patient", descr_till_col = 5){
+  day_survival_tab <- table(data[c(time_var, status_var)])
   ##Keep days with large enough sample count
   day_survival_tab <- day_survival_tab[rowMins(day_survival_tab) >= 3,]
   ##Get significant differences for each day
-  day_sig_u_diff <- data.frame(Day = as.numeric(rownames(day_survival_tab)), matrix(0, nrow = nrow(day_survival_tab), ncol = ncol(data)-5))
-  colnames(day_sig_u_diff)[-1] <- colnames(data)[-1:-5]
+  day_sig_u_diff <- data.frame(Day = as.numeric(rownames(day_survival_tab)), matrix(0, nrow = nrow(day_survival_tab), ncol = ncol(data)-descr_till_col))
+  colnames(day_sig_u_diff) <- c(time_var, colnames(data)[-1:-descr_till_col])
   day_sig_t_diff <- day_sig_u_diff
-  non_short_stay_pats <- unique(subset(data, Day >= 0, Patient))[[1]]
-  for (d in seq_along(day_sig_u_diff$Day)){
+  non_short_stay_pats <- unique(subset(data, data[[time_var]] >= 0, case_var))[[1]]
+  for (d in seq_along(day_sig_u_diff[[time_var]])){
     #Reduce to significant differences
-    day <- day_sig_u_diff$Day[d]
+    day <- day_sig_u_diff[[time_var]][d]
     for (n in seq_along(day_sig_u_diff[1,-1])){
-      g1 <- subset(data, subset = Survival == "S" & Day == day & Patient %in% non_short_stay_pats, select = n + 5)
-      g2 <- subset(data, subset = Survival == "NS" & Day == day & Patient %in% non_short_stay_pats, select = n + 5)
+      g1 <- subset(data, subset = data[[status_var]] == "S" & data[[time_var]] == day & data[[case_var]] %in% non_short_stay_pats, select = n + descr_till_col)
+      g2 <- subset(data, subset = data[[status_var]] == "NS" & data[[time_var]] == day & data[[case_var]] %in% non_short_stay_pats, select = n + descr_till_col)
       g1 <- na.omit(g1)[[1]]
       g2 <- na.omit(g2)[[1]]
       if (length(g1) > 1 && length(g2) > 1 && length(table(g1)) > 1 && length(table(g2)) > 1){

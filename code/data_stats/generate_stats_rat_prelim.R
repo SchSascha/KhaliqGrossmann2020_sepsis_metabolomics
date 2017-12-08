@@ -191,10 +191,6 @@ x <- na.omit(rat_sepsis_data_normal_grouped_pheno_cov)
 heatmaply(x = x[,-1:-4], row_side_colors = x[c("group")], file = paste0(out_dir, "rat_normal_grouped_pheno_cov.png"), main = "Profiles of grouped phenomenological variables cluster survival")
 rm("x")
 
-x <- na.omit(rat_sepsis_data_normal_grouped_pheno_cov)
-heatmaply(x = x[,-1:-4], row_side_colors = x[c("group")], file = paste0(out_dir, "rat_normal_grouped_pheno_cov.png"), main = "Profiles of grouped phenomenological variables cluster survival")
-rm("x")
-
 ##rat, cluster-heatmap of patient correlation matrix, ungrouped metabolites, survival marked
 x <- rat_sepsis_data_normal_metab_cor
 heatmaply(x = x[,-1:-4], row_side_colors = x[c("group")], file = paste0(out_dir, "rat_normal_metab_cor.png"), main = "Metabolite profile correlation gives mainly patient clusters")

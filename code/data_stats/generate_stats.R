@@ -51,6 +51,9 @@ sig_u_class <- na.omit(colnames(day_sig_u_diff[,-1])[colAnys(day_sig_u_diff[, -1
 sig_t_class <- na.omit(colnames(day_sig_t_diff[,-1])[colAnys(day_sig_t_diff[, -1] <= 0.05)])
 
 #Get sig var pos
+day_sig_t_diff_pos_long1 <- get_sig_var_pos(day_sig_t_diff, time_var = "Day")
+day_sig_u_diff_pos_long <- get_sig_var_pos(day_sig_u_diff, time_var = "Day")
+
 day_sig_u_diff_pos <- lapply(day_sig_u_diff[,-1], function(x){ day_sig_u_diff$Day[which(x <= 0.05)] })
 day_sig_t_diff_pos <- lapply(day_sig_t_diff[,-1], function(x){ day_sig_t_diff$Day[which(x <= 0.05)] })
 ##Clean
