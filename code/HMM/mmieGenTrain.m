@@ -191,6 +191,9 @@ function [numGamma, numO1, numO2, numXi, genGamma, genO1, genO2, genXi, ...
                     genBs, genScale, genEmiLik, genHMM.tr);
                 genGamma = genGamma + totGamma;
                 genO1 = genO1 + eO1; genO2 = genO2 + eO2; 
+                if any(isnan(totXi))
+                    warning('debug here')
+                end
                 genXi = genXi + totXi;
             end
         end
@@ -381,7 +384,9 @@ function mghmms = updateParameter(mghmms, numGamma, numO1, numO2, numXi, ...
         denominator = dGamma{c} + smoothE;
         oldMu = mghmms{c}.mu(:, 2:nState-1); 
         Mu = (dEO1{c} + smoothE .* oldMu) ./ denominator;
-        if any(any(~isfinite(Mu))), error('MU include NaN'); end
+        if any(any(~isfinite(Mu)))
+            error('MU include NaN'); 
+        end
         mghmms{c}.mu(:, 2:nState-1) = (1-learnRt) * oldMu + learnRt * Mu; 
         oldSigma = mghmms{c}.sigma(:, 2:nState-1);
         Sigma = (dEO2{c} + smoothE.*(oldSigma+mu2{c})) ./ denominator - Mu.^2;

@@ -27,7 +27,7 @@ tol = 1e-6;
 trtol = tol;
 mutol = tol;
 sigmatol = tol;
-maxiter = 100; %500;
+maxiter = 500; %100;
 pseudoTRcounts = false;
 verbose = false;
 COV_DIAG = 0; COV_FULL = 1; covType = COV_DIAG; 
@@ -166,10 +166,18 @@ for iteration = 1:maxiter
             seq = squeeze(seqs(count,:,:));
         end
         emilik = mghmmEmiLik(seq, guessMu, guessSigma, varargin{:});
-        if any(any(~isfinite(emilik))), disp(emilik); error('emilik NaN'); end
+        if any(any(isnan(emilik))) | any(any(isnan(guessTR)))
+            disp(emilik); 
+            %For debug purposes
+            emilik = mghmmEmiLik(seq, guessMu, guessSigma, varargin{:});
+            error('emilik NaN'); 
+        end
         L1 = size(emilik, 2); %length after adding terminal state
         % E-step (get the scaled forward and backward probabilities)
         [p,logPseq,fs,bs,scale] = hmmDecodeLik(guessTR, emilik);
+%         if isempty(p)
+%             sprintf('Sequence number %u skipped because of zero probability for any state', count)
+%         end
         % if seq likelihood is 0, skip this seq, following HMMER implementation
         if size(p, 1) == 0, continue; end %seq likelihood zero
         if ~all(all(isfinite(fs))) || ~all(all(isfinite(bs))), %here for dbstop

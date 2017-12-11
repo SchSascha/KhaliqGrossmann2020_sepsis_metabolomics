@@ -10,7 +10,10 @@ function [tr mu sigma loglikArray mghmmArr] = mghmmTrainNew(seqs, varargin)
 nState = nState + 1;
 [nRepeat, algArg] = varArgRemove('replicates', 1, algArg);
 [modelStr, algArg] = varArgRemove('model', 'loophmm', algArg);
-isLoopHmm = false; isJumpHmm = false; isEqLenHmm = false; isLoopJumpHmm = false;
+isLoopHmm = false; 
+isJumpHmm = false; 
+isEqLenHmm = false; 
+isLoopJumpHmm = false;
 if     strcmpi('jumphmm', modelStr), isJumpHmm  = true; 
 elseif strcmpi('eqlenhmm',modelStr), isEqLenHmm = true;
 elseif strcmpi('loopjumphmm',modelStr), isLoopJumpHmm = true;
@@ -18,7 +21,9 @@ else                                 isLoopHmm  = true;
 end
 
 covTypeStr = varArgRemove('cov', 'diag', algArg);
-COV_DIAG = 0; COV_FULL = 1; covType = COV_DIAG; 
+COV_DIAG = 0; 
+COV_FULL = 1; 
+covType = COV_DIAG; 
 if strcmpi('full',covTypeStr), covType = COV_FULL; end
 
 pseudoStay = .1;
@@ -46,10 +51,14 @@ elseif isJumpHmm
 %elseif isEqLenHmm, do nothing
 end
 
-if nargout > 4, mghmmArr = cell(nRepeat, 1); end
+if nargout > 4, 
+    mghmmArr = cell(nRepeat, 1); 
+end
 loglikArray = cell(nRepeat, 1);
 topLogLiks = -Inf;
-if nRepeat == 0, error('replicates cannot be zero'); end
+if nRepeat == 0
+    error('replicates cannot be zero'); 
+end
 for iRepeat = 1 : nRepeat
     if isLoopHmm
         [tr1, mu1, sigma1] = loopHmmInit(seqs, numSeqs, nDim, nState, maxL, ...
@@ -64,20 +73,45 @@ for iRepeat = 1 : nRepeat
         [tr1, mu1, sigma1] = eqLenHmmInit(seqs, numSeqs, nDim, maxL, ...
                                            iRepeat, covType, varargin{:});
     end
-    %sigma1(sigma1 <= 0) = 1;
-    [tr1,mu1,sigma1,loglik1] = mghmmTrain(seqs,tr1,mu1,sigma1,varargin{:});
+    %sigma1(sigma1 <= 0) = 1; %Try this one uncommented
+    [tr1,mu1,sigma1,loglik1] = mghmmTrain(seqs,tr1,mu1,sigma1,varargin{:}); %TODO: problem - returns tr1 = (0) for various sequences
     if nargout > 4
         mghmmArr{iRepeat}.tr = tr1; 
         mghmmArr{iRepeat}.mu = mu1; 
         mghmmArr{iRepeat}.sigma = sigma1;
     end
     loglikArray{iRepeat} = loglik1;
-    %if ~isfinite(max(loglik1)), error('nan', 'loglik1 nan'); end
+    if ~isfinite(max(loglik1))
+        error('nan', 'loglik1 nan'); 
+    end
     if max(loglik1) > max(topLogLiks)
         topLogLiks = loglik1; tr = tr1; mu = mu1; sigma = sigma1;
     end
 end
-if ~(max(topLogLiks,2) > -Inf), error('LOGLIKS never assigned'); end
+if ~(max(topLogLiks,2) > -Inf)
+    error('LOGLIKS never assigned'); 
+end
+% Check for CV-braking error
+if exist('tr', 'var') == 0
+    sprintf('tr is truly not assigned');
+    
+    % Repeat analysis for debugging
+    if isLoopHmm
+        [tr1, mu1, sigma1] = loopHmmInit(seqs, numSeqs, nDim, nState, maxL, ...
+                pseudoStay, pars, cumPars, iRepeat, covType, varargin{:});
+        %if nDim > 1, disp('sigma1:'); disp(sigma1); end
+    elseif isJumpHmm
+        tr1 = tr0; sigma1 = sigma0; mu1 = muArr{iRepeat};
+    elseif isLoopJumpHmm
+        [tr1, mu1, sigma1] = loopJumpHmmInit(seqs, numSeqs, nDim, nState, maxL, ...
+                pseudoStay, pars, cumPars, iRepeat, covType, varargin{:});
+    elseif isEqLenHmm
+        [tr1, mu1, sigma1] = eqLenHmmInit(seqs, numSeqs, nDim, maxL, ...
+                                           iRepeat, covType, varargin{:});
+    end
+    %sigma1(sigma1 <= 0) = 1;
+    [tr1,mu1,sigma1,loglik1] = mghmmTrain(seqs,tr1,mu1,sigma1,varargin{:}); %TODO: problem - returns tr1 = (0) for various sequences
+end
 
 function [pars, cumPars, nRepeat] = loopHmmPrepare(nState, maxL, nRepeat)
     if nRepeat == 1
@@ -160,11 +194,11 @@ function [tr1, mu1, sigma1] = loopJumpHmmInit(seqs, numSeqs, nDim, nState, maxL,
                               pseudoStay, pars, cumPars, iRepeat, covType, varargin)
     [glbCovRt, algArg] = varArgRemove('rtglbcov', 0.5, varargin);
     glbCov = varArgRemove('glbcov', [], algArg);
-    %esc_seq = (1./(nState:-1:1))';
-    %tr1 = diag([0; esc_seq]);
-    %for k = 1:nState
-    %    tr1 = tr1 + diag([esc_seq(1); esc_seq(1:(nState-k))], k);
-    %end
+%     esc_seq = (1./(nState:-1:1))';
+%     tr1 = diag([0; esc_seq]);
+%     for k = 1:nState
+%         tr1 = tr1 + diag([esc_seq(1); esc_seq(1:(nState-k))], k);
+%     end
     
     escape = ((nState-1)*pseudoStay+maxL)./maxL./(pseudoStay+pars(iRepeat,:))';    
     tr1 = diag([0; 1 - escape; 1]) + diag([1; escape], 1);

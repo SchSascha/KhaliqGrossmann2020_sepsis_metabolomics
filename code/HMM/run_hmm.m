@@ -19,6 +19,17 @@ for n = 6:length(hdm(1,:))
 end
 remove_idx = find(remove_idx);
 hdm(:, remove_idx) = [];
+hdmh(remove_idx) = [];
+
+%% Filter rows with zero SD?
+for n = 1:size(hdm,1)
+    row = hdm(:, n);
+    row(cellfun(@isempty, row)) = [];
+    numdat = cellfun(@(x) x(1), row);
+    remove_idx(n) = std(numdat) == 0;
+end
+remove_idx = find(remove_idx);
+hdm(:, remove_idx) = [];
 
 %% Normalize columns
 for n = 6:length(hdm(1,:))
@@ -27,7 +38,7 @@ for n = 6:length(hdm(1,:))
     numdat = cellfun(@(x) x(1), col(~empty_bool));
     m = mean(numdat);
     s = std(numdat);
-    numdat = (numdat - m) / s;
+    %numdat = (numdat - m) / s;
     hdm(~empty_bool, n) = num2cell(numdat);
 end
 
@@ -56,37 +67,37 @@ end
 data = cell(1, 2);
 data{1} = cell(1, sum(strcmp(u_surv, 'S')));
 data{2} = cell(1, sum(strcmp(u_surv, 'NS')));
+pat = cell(1,2);
 % Fill data structure
 d1_idx = 1;
 d2_idx = 1;
 for n = 1:length(u_pats)
     if strcmp(u_surv(n), 'S')
         data{1}{d1_idx} = cell2mat(hdm(find(pats == u_pats(n)), 6:end))';
+        pat{1}{d1_idx} = u_pats{n};
         d1_idx = d1_idx + 1;
     else
         data{2}{d2_idx} = cell2mat(hdm(find(pats == u_pats(n)), 6:end))';
+        pat{2}{d2_idx} = u_pats{n};
         d2_idx = d2_idx + 1;
     end
 end
 % CV fold generation, randomly permute order of instances
 nfolds = 5;
-order1 = randperm(length(data{1}));
-order2 = randperm(length(data{2}));
+%order1 = randperm(length(data{1}));
+%order2 = randperm(length(data{2}));
 CV_set1 = cell(1,nfolds);
 CV_set2 = cell(1,nfolds);
 breaks1 = [0, floor((1:(nfolds-1)) * length(data{1}) / (nfolds)), length(data{1})];
 breaks2 = [0, floor((1:(nfolds-1)) * length(data{2}) / (nfolds)), length(data{2})];
-cvdata1 = data{1}(order1);
-cvdata2 = data{2}(order2);
-% for k = 1:nfolds
-%     CV_set1{k} = cvdata1((breaks1(k)+1):breaks1(k + 1));
-%     CV_set2{k} = cvdata2((breaks2(k)+1):breaks2(k + 1));
-% end
-%%% Cheap validation set selection
-d1_start = length(data{1}) * 1 / 5;
-d2_start = length(data{2}) * 1 / 5;
-trainData = {data{1}(ceil(d1_start):length(data{1})), data{2}(ceil(d2_start):length(data{2}))};
-testData = {data{1}(1:floor(d1_start)), data{2}(1:floor(d2_start))};
+cvdata1 = data{1};%(order1);
+cvdata2 = data{2};%(order2);
+pat{1} = pat{1}(order1);
+pat{2} = pat{2}(order2);
+for k = 1:nfolds
+    CV_set1{k} = cvdata1((breaks1(k)+1):breaks1(k + 1));
+    CV_set2{k} = cvdata2((breaks2(k)+1):breaks2(k + 1));
+end
 
 %% Set central parameters
 % Number of system states
@@ -94,41 +105,98 @@ nState = 3;
 % Number of features to try, has to start with all features
 nFeatArr = [length(data{1}{1}(:,1)) 100 50 40 30:-4:2];
 %nFeatArr = [length(data{1}{1}(:,1)) 100 50 20 10 6 2];
+%nFeatArr = [length(data{1}{1}(:,1))];
+
+%% Set performance measures
+acc = zeros(1, nfolds);
+tpr = zeros(1, nfolds);
+tnr = zeros(1, nfolds);
+dacc = zeros(1, nfolds);
+dtpr = zeros(1, nfolds);
+dtnr = zeros(1, nfolds);
+sacc = zeros(1, nfolds);
+stpr = zeros(1, nfolds);
+stnr = zeros(1, nfolds);
+int_top_acc = zeros(1, nfolds);
+logOdds1 = zeros(1,length(cvdata1));
+logOdds2 = zeros(1,length(cvdata2));
+discLogOdds1 = zeros(1,length(cvdata1));
+discLogOdds2 = zeros(1,length(cvdata2));
+singleLogOdds1 = zeros(1,length(cvdata1));
+singleLogOdds2 = zeros(1,length(cvdata2));
+
 
 %% Train and test HMM
-% generative training
-parEval = license('test', 'distrib_computing_toolbox');
-[model, int_top_acc] = tramGenTrain(trainData, nState, nFeatArr, 'replicates', 10,'maxiterations', 60, 'model', 'loophmm', 'parEval', parEval);
-% select genes
-fsTrainData = selectFeature(trainData, model{1}.selGenes);
-fsTestData  = selectFeature(testData , model{1}.selGenes);
-% classify testing data
-logOdds1 = tramPredict(fsTestData{1}, model);
-logOdds2 = tramPredict(fsTestData{2}, model);
-% calculate and print the accuracy
-acc = 100 * (sum(logOdds1 <= 0) + sum(logOdds2 > 0)) ...
-    / (length(testData{1}) + length(testData{2}));
-tpr = 100 * sum(logOdds1 <= 0)/length(testData{1});
-tnr = 100 * sum(logOdds2 > 0)/length(testData{2});
-% discriminative training and evaluation
-discModel = tramDiscTrain(fsTrainData, model, 'mmieIterations', 5000);
-% classify testing data
-discLogOdds1 = tramPredict(fsTestData{1}, discModel);
-discLogOdds2 = tramPredict(fsTestData{2}, discModel);
-dacc = 100 * (sum(discLogOdds1 <= 0) + sum(discLogOdds2 > 0)) ...
-    / (length(testData{1}) + length(testData{2}));
-dtpr = 100 * sum(discLogOdds1 <= 0)/length(testData{1});
-dtnr = 100 * sum(discLogOdds2 > 0)/length(testData{2});
+for n = 1:nfolds
+%n = 2;
+    train_cv_sel = 1:nfolds;
+    train_cv_sel(n) = [];
+    trainData = cell(1,2);
+    for s = train_cv_sel
+        for l = 1:length(CV_set1{s})
+            trainData{1}{length(trainData{1})+1} = CV_set1{s}{l};
+        end
+        for l = 1:length(CV_set2{s})
+            trainData{2}{length(trainData{2})+1} = CV_set2{s}{l};
+        end
+    end
+    testData = {CV_set1{n}, CV_set2{n}};
+    % generative training
+    parEval = license('test', 'distrib_computing_toolbox');
+    %parEval = false;
+    [model, int_top_acc(n)] = tramGenTrain(trainData, nState, nFeatArr, 'replicates', 10,'maxiterations', 500, 'model', 'loopjumphmm', 'parEval', parEval);
+    % select genes
+    fsTrainData = selectFeature(trainData, model{1}.selGenes);
+    fsTestData  = selectFeature(testData , model{1}.selGenes);
+    % classify testing data
+    ar_range1 = (breaks1(n)+1):breaks1(n + 1);
+    ar_range2 = (breaks2(n)+1):breaks2(n + 1);
+    logOdds1(ar_range1) = tramPredict(fsTestData{1}, model);
+    logOdds2(ar_range2) = tramPredict(fsTestData{2}, model);
+    % calculate and print the accuracy
+    acc(n) = 100 * (sum(logOdds1(ar_range1) <= 0) + sum(logOdds2(ar_range2) > 0)) ...
+        / (length(testData{1}) + length(testData{2}));
+    tpr(n) = 100 * sum(logOdds1(ar_range1) <= 0)/length(testData{1});
+    tnr(n) = 100 * sum(logOdds2(ar_range2) > 0)/length(testData{2});
+    % discriminative training and evaluation
+    %discModel = tramDiscTrain(fsTrainData, model, 'mmieIterations', 500);
+    % classify testing data
+    %discLogOdds1(ar_range1) = tramPredict(fsTestData{1}, discModel);
+    %discLogOdds2(ar_range2) = tramPredict(fsTestData{2}, discModel);
+    %dacc(n) = 100 * (sum(discLogOdds1(ar_range1) <= 0) + sum(discLogOdds2(ar_range2) > 0)) ...
+    %    / (length(testData{1}) + length(testData{2}));
+    %dtpr(n) = 100 * sum(discLogOdds1(ar_range1) <= 0)/length(testData{1});
+    %dtnr(n) = 100 * sum(discLogOdds2(ar_range2) > 0)/length(testData{2});
+    % reduce test set to first day
+    fsTestDataSingle = cell(1, 2);
+    for m = 1 : 2
+        for k = 1 : length(fsTestData{m}), fsTestDataSingle{m}{k} = fsTestData{m}{k}(:, 1); end
+    end
+    % classify test data
+    singleLogOdds1(ar_range1) = tramPredict(fsTestDataSingle{1}, model);
+    singleLogOdds2(ar_range2) = tramPredict(fsTestDataSingle{2}, model);
+    % calculate and print the accuracy
+    sacc(n) = 100 * (sum(singleLogOdds1(ar_range1) <= 0) + sum(singleLogOdds2(ar_range2) > 0)) ...
+        / (length(testData{1}) + length(testData{2}));
+    stpr(n) = 100 * sum(singleLogOdds1(ar_range1) <= 0)/length(testData{1});
+    stnr(n) = 100 * sum(singleLogOdds2(ar_range2) > 0)/length(testData{2});
+end
 
 % Report Accuracy
-fprintf('Accuracy of generative HMM by internal CV is %2.0f%%\n', 100 * int_top_acc);
+fprintf('Accuracy of generative HMM by internal CV is %2.0f%%\n', mean(100 * int_top_acc));
 
-fprintf('Accuracy of generative HMM is %2.0f%%\n',acc);
-fprintf('TPR of generative HMM is %2.0f%%\n',tpr);
-fprintf('TNR of generative HMM is %2.0f%%\n',tnr);
+fprintf('Accuracy of generative HMM is %2.0f%%\n',mean(acc));
+fprintf('TPR of generative HMM is %2.0f%%\n',mean(tpr));
+fprintf('TNR of generative HMM is %2.0f%%\n',mean(tnr));
    
-fprintf('Accuracy of discriminative HMM is %2.0f%%\n',dacc);
-fprintf('TPR of discriminative HMM is %2.0f%%\n',dtpr);
-fprintf('TNR of discriminative HMM is %2.0f%%\n',dtnr);
+fprintf('Accuracy of discriminative HMM is %2.0f%%\n',mean(dacc));
+fprintf('TPR of discriminative HMM is %2.0f%%\n',mean(dtpr));
+fprintf('TNR of discriminative HMM is %2.0f%%\n',mean(dtnr));
+
+% print performance
+fprintf('Accuracy of generative HMM on first day only is %2.0f%%\n',mean(sacc));
+fprintf('TPR of generative HMM is %2.0f%%\n',mean(stpr));
+fprintf('TNR of generative HMM is %2.0f%%\n',mean(stnr));
+
 
 toc;
