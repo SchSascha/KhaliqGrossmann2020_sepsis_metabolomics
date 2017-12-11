@@ -44,7 +44,7 @@ for count = 2:L
     fs(:,count) = (tr' * fs(:,count-1)) .* emilik(:,count);
     % scale factor normalizes sum(fs,count) to be 1. 
     s(count) =  sum(fs(:,count));
-    if s(count) < 0
+    if s(count) <= 0 % Set this to "<=" to ensure run-through, but omits some sequences; orig: "<"
         % if seq likelihood is 0, return (and have caller skip this seq)
         % following HMMER implementation (not documented)
         %turn off warning so that dbstop at caller
@@ -80,3 +80,7 @@ pStates(:,1) = [];
 
 if size(fs,1)==0 || size(fs,2)==0, error('fs empty'); end
 if size(bs,1)==0 || size(bs,2)==0, error('bs empty'); end
+
+%if all(isnan(pStates))
+%    [pStates, loglikSeq, fs, bs, s] = hmmDecodeLik(tr, emilik);
+%end
