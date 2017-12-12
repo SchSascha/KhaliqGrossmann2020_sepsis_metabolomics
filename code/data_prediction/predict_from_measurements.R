@@ -7,14 +7,15 @@ library(ranger)
 library(missRanger)
 library(kernlab)
 library(heatmaply)
+library(survival)
 
 #Import central functions
 source("../function_definitions.R")
 
 #Set path
 out_dir <- "../../results"
-out_dir_stats <- "../../results/data_stats"
-out_dir_pred <- "../../results/data_pred_pheno"
+out_dir_pred_metab <- "../../results/data_pred_metab"
+out_dir_pred <- "../../results/data_pred_metab"
 
 #Make sure paths exist
 if (!dir.exists(out_dir))
@@ -31,6 +32,9 @@ human_sepsis_data <- get_human_sepsis_data()
 ##Import experiment data
 rat_sepsis_data <- get_rat_sepsis_data()
 
+##Import viterbi path data
+viterbi_path <- fread(input = "../HMM/tram_viterbi_paths_all_samples.csv", header = TRUE, data.table = FALSE)
+viterbi_path <- viterbi_path[order(human_sepsis_data$Patient),]
 
 #Get significantly different classes
 human_sig_diff_res <- human_sig_diffs_along_days(human_sepsis_data, corr_fdr = TRUE)
@@ -52,9 +56,9 @@ human_sepsis_data_ml$Survival <- as.numeric(as.factor(human_sepsis_data_ml$Survi
 #human_sepsis_data_ml <- cbind(human_sepsis_data_ml[,1:2], data.frame(CAP = human_sepsis_data$`CAP / FP` == "CAP"), data.frame(FP = human_sepsis_data$`CAP / FP` == "FP"), human_sepsis_data_ml[,-1:-2])
 ###Strip phenomenological variables
 strip_start <- which(colnames(human_sepsis_data_ml) == "Urea")
-#human_sepsis_data_ml <- human_sepsis_data_ml[,-strip_start:-ncol(human_sepsis_data_ml)]
+human_sepsis_data_ml <- cbind(human_sepsis_data_ml[,-strip_start:-ncol(human_sepsis_data_ml)], viterbi_path$State)
 ###No, strip metabolic variables
-human_sepsis_data_ml <- human_sepsis_data_ml[,c(1:2,strip_start:ncol(human_sepsis_data_ml))]
+#human_sepsis_data_ml <- human_sepsis_data_ml[,c(1:2,strip_start:ncol(human_sepsis_data_ml))]
 data_ml_subset <- apply(human_sepsis_data_ml, 1, function(x){ sum(!is.na(x)) > length(x) - 9})
 human_sepsis_data_ml <- human_sepsis_data_ml[data_ml_subset,]
 #human_sepsis_data_ml$`CAP / FP` <- as.factor(human_sepsis_data$`CAP / FP`)
