@@ -74,24 +74,24 @@ d2_idx = 1;
 for n = 1:length(u_pats)
     if strcmp(u_surv(n), 'S')
         data{1}{d1_idx} = cell2mat(hdm(find(pats == u_pats(n)), 6:end))';
-        pat{1}{d1_idx} = u_pats{n};
+        pat{1}{d1_idx} = u_pats(n);
         d1_idx = d1_idx + 1;
     else
         data{2}{d2_idx} = cell2mat(hdm(find(pats == u_pats(n)), 6:end))';
-        pat{2}{d2_idx} = u_pats{n};
+        pat{2}{d2_idx} = u_pats(n);
         d2_idx = d2_idx + 1;
     end
 end
 % CV fold generation, randomly permute order of instances
 nfolds = 5;
-%order1 = randperm(length(data{1}));
-%order2 = randperm(length(data{2}));
+order1 = randperm(length(data{1}));
+order2 = randperm(length(data{2}));
 CV_set1 = cell(1,nfolds);
 CV_set2 = cell(1,nfolds);
 breaks1 = [0, floor((1:(nfolds-1)) * length(data{1}) / (nfolds)), length(data{1})];
 breaks2 = [0, floor((1:(nfolds-1)) * length(data{2}) / (nfolds)), length(data{2})];
-cvdata1 = data{1};%(order1);
-cvdata2 = data{2};%(order2);
+cvdata1 = data{1}(order1);
+cvdata2 = data{2}(order2);
 pat{1} = pat{1}(order1);
 pat{2} = pat{2}(order2);
 for k = 1:nfolds
@@ -103,7 +103,7 @@ end
 % Number of system states
 nState = 3;
 % Number of features to try, has to start with all features
-nFeatArr = [length(data{1}{1}(:,1)) 100 50 40 30:-4:2];
+nFeatArr = [length(data{1}{1}(:,1)) 100 50 40 30:-2:2];
 %nFeatArr = [length(data{1}{1}(:,1)) 100 50 20 10 6 2];
 %nFeatArr = [length(data{1}{1}(:,1))];
 
@@ -144,7 +144,7 @@ for n = 1:nfolds
     % generative training
     parEval = license('test', 'distrib_computing_toolbox');
     %parEval = false;
-    [model, int_top_acc(n)] = tramGenTrain(trainData, nState, nFeatArr, 'replicates', 10,'maxiterations', 500, 'model', 'loopjumphmm', 'parEval', parEval);
+    [model, int_top_acc(n)] = tramGenTrain(trainData, nState, nFeatArr, 'replicates', 10,'maxiterations', 500, 'model', 'loophmm', 'parEval', parEval);
     % select genes
     fsTrainData = selectFeature(trainData, model{1}.selGenes);
     fsTestData  = selectFeature(testData , model{1}.selGenes);
@@ -182,7 +182,7 @@ for n = 1:nfolds
     stnr(n) = 100 * sum(singleLogOdds2(ar_range2) > 0)/length(testData{2});
 end
 
-% Report Accuracy
+% Report accuracy
 fprintf('Accuracy of generative HMM by internal CV is %2.0f%%\n', mean(100 * int_top_acc));
 
 fprintf('Accuracy of generative HMM is %2.0f%%\n',mean(acc));
@@ -193,10 +193,17 @@ fprintf('Accuracy of discriminative HMM is %2.0f%%\n',mean(dacc));
 fprintf('TPR of discriminative HMM is %2.0f%%\n',mean(dtpr));
 fprintf('TNR of discriminative HMM is %2.0f%%\n',mean(dtnr));
 
-% print performance
+% print performance on single day samples
 fprintf('Accuracy of generative HMM on first day only is %2.0f%%\n',mean(sacc));
 fprintf('TPR of generative HMM is %2.0f%%\n',mean(stpr));
 fprintf('TNR of generative HMM is %2.0f%%\n',mean(stnr));
 
+% Retrain on all samples
+trainData = {cvdata1, cvdata2};
+parEval = license('test', 'distrib_computing_toolbox');
+[model, int_top_acc_all] = tramGenTrain(trainData, nState, nFeatArr, 'replicates', 20,'maxiterations', 500, 'model', 'loophmm', 'parEval', parEval);
+
+% Print performance measures
+fprintf('Accuracy of generative HMM by internal CV an all samples is %2.0f%%\n', 100 * int_top_acc_all);
 
 toc;
