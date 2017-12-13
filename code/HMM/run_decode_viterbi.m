@@ -68,3 +68,13 @@ for n = 1:length(viterbi_NS_seqs)
     end
 end
 fclose(fileID);
+
+%% Write metabolite names selected by HMM training
+fileID = fopen('tram_selected_features.csv', 'w');
+% Write table header
+formatspec = '%s\n';
+% Write table
+for l = 1:length(model{1}.selGenes)
+    fprintf(fileID, formatspec, hdmh{model{1}.selGenes(l)});
+end
+fclose(fileID);
