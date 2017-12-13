@@ -12,7 +12,7 @@ library(TANOVA)
 source("../function_definitions.R")
 
 #Set path
-out_dir <- "../../results/data_stats_rat/"
+out_dir <- "../../results/data_stats_rat_surv_vs_nonsurv/"
 
 #Make sure paths exist
 if (!dir.exists(out_dir))
@@ -33,6 +33,7 @@ human_sepsis_legend <- human_sepsis_legend[-1:-5, ]
 ##Import experiment data
 rat_sepsis_data <- get_rat_sepsis_data()
 rat_sepsis_data <- rat_sepsis_data[, -which(colnames(rat_sepsis_data) %in% c("HR", "SV", "CO", "EF", "Resp Rate", "Temperature"))]
+
 
 ##Import corresponding group assignment
 rat_sepsis_legend <- get_rat_sepsis_legend()
