@@ -17,12 +17,12 @@ out_dir <- "../../results/data_stats/"
 human_sepsis_data <- get_human_sepsis_data()
 
 #Read viterbi paths from file
-viterbi_paths <- fread(input = '../HMM/tram_viterbi_paths_all_samples_loopHMM.csv', sep = "\t", header = TRUE, data.table = FALSE)
-
+viterbi_paths <- fread(input = '../HMM/tram_viterbi_paths_all_samples_loopjumpHMM.csv', sep = "\t", header = TRUE, data.table = FALSE)
+viterbi_paths <- viterbi_paths[order(viterbi_paths$Case),]
 #Attach metabolites to viterbi paths using the case column (= patient number)
 split_start <- which(colnames(human_sepsis_data) == "Urea")
 pheno_sel <- split_start:ncol(human_sepsis_data)
-metab_sel <- 6:(split_start-1)
+metab_sel <- 6:ncol(human_sepsis_data)
 viterbi_paths = cbind(viterbi_paths, max_norm(human_sepsis_data[,metab_sel]))
 
 #Transform paths to long format table
@@ -36,7 +36,7 @@ hmm_h_sig_t_diff <- hmm_h_sig_diff$day_sig_t_diff
 hmm_h_sig_t_class <- na.omit(colnames(hmm_h_sig_t_diff[,-1])[colAnys(hmm_h_sig_t_diff[, -1] <= 0.05)])
 
 #Reduce metabolite set to significantly different ones
-viterbi_paths_long <- subset(viterbi_paths_long, variable %in% hmm_h_sig_t_class)
+viterbi_paths_long <- na.omit(subset(viterbi_paths_long, variable %in% hmm_h_sig_t_class))
 
 #Get position of significantly differnt concentrations
 hmm_h_viterbi_path_sig_t_diff_pos_long <- get_sig_var_pos(diff_data = hmm_h_sig_t_diff, alpha = 0.05, time_var = "State")
@@ -46,15 +46,22 @@ hmm_h_viterbi_path_sigs$value <- m_val + 0.5
 
 #Plot viterbi paths
 viterbi_p <- ggplot(viterbi_paths_long, aes(x = State, y = value, group = Status, color = Status)) +
-  facet_wrap(facets = ~ variable, ncol = 6, nrow = ceiling(length(unique(viterbi_paths_long$variable))/6)) +
+  facet_wrap(facets = ~ variable, ncol = 12, nrow = ceiling(length(unique(viterbi_paths_long$variable))/12)) +
   stat_summary(fun.ymin = "min", fun.ymax = "max", fun.y = "mean", geom = "line") +
-  stat_summary(fun.ymin = "min", fun.ymax = "max", fun.y = "mean", size = 0.5, geom = "errorbar") +
+  stat_summary(fun.ymin = "min", fun.ymax = "max", fun.y = "mean", width = 0.5, geom = "errorbar") +
+  #stat_summary(fun.data = "mean_sdl", width = 0.5, geom = "errorbar") + 
   geom_point(data = hmm_h_viterbi_path_sigs, mapping = aes(x = State, y = value), shape = 8, inherit.aes = FALSE, size = 0.8) +
+  scale_x_discrete(limits = 2:4) + 
+  ylim(c(0, m_val+0.6)) +
   ylab("standardized concentration") +
-  ggtitle("Aligned time courses differ\n in different metabolites") +
+  ggtitle("Aligned time courses differ in more metabolites than unaligned time courses") +
   theme_bw()
-ggsave(plot = viterbi_p, filename = paste0(out_dir, "human_HMM_aligned_time_course.png"), width = 9, height = 10, units = "in")
-plot(viterbi_p)
+ggsave(plot = viterbi_p, filename = paste0(out_dir, "human_HMM_aligned_time_course.png"), width = 14, height = 14, units = "in")
+
+p <- ggplot(human_sepsis_data, aes_string(x = "Day", y = "`PC aa C36:0`", group = "Survival", color = "Survival"))+
+  geom_boxplot() +
+  theme_bw()
+X11();plot(p)
 
 plot_list <- list()
 for (case in unique(viterbi_paths$Case)){

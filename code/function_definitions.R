@@ -81,7 +81,7 @@ get_sig_var_pos <- function(diff_data, alpha = 0.05, time_var = "Time"){
 #' @export
 #'
 #' @examples
-max_norm <- function(x, subset = 1:ncol(data)){
+max_norm <- function(x, subset = 1:ncol(x)){
   x_max_norm <- x
   x_max_norm[, subset] <- t(t(x_max_norm[, subset]) / colMaxs(as.matrix(x_max_norm[, subset]), na.rm = TRUE))
   return(x_max_norm)
