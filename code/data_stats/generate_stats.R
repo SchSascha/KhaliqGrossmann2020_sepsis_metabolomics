@@ -7,6 +7,7 @@ library(kernlab)
 library(heatmaply)
 library(missRanger)
 library(TANOVA)
+library(corpcor)
 
 #Import central functions
 source("../function_definitions.R")
@@ -125,7 +126,7 @@ group_metab_sel <- which(colnames(human_sepsis_data_normal_grouped) %in% unique(
 ##Build covariance matrix with metabolite groups
 human_sepsis_data_normal_grouped_metab_cov <- cbind(human_sepsis_data_normal_grouped[, 1:5], cov(t(human_sepsis_data_normal_grouped[,group_metab_sel]), use = "pairwise.complete.obs"))
 human_sepsis_data_normal_grouped_pheno_cov <- cbind(human_sepsis_data_normal_grouped[, 1:5], cov(t(human_sepsis_data_normal_grouped[,group_pheno_sel]), use = "pairwise.complete.obs"))
-human_sepsis_data_normal_grouped_pheno_cov <- human_sepsis_data_normal_pheno_cov[, !apply(human_sepsis_data_normal_pheno_cov, 2, function(x){all(is.na(x))})]
+human_sepsis_data_normal_grouped_pheno_cov <- human_sepsis_data_normal_grouped_pheno_cov[, !apply(human_sepsis_data_normal_grouped_pheno_cov, 2, function(x){all(is.na(x))})]
 ##Build covariance matrix with original metabolites
 human_sepsis_data_normal_metab_cov <- cbind(human_sepsis_data_normal[, 1:5], cov(t(human_sepsis_data_normal[,metab_sel]), use = "pairwise.complete.obs"))
 human_sepsis_data_normal_pheno_cov <- cbind(human_sepsis_data_normal[, 1:5], cov(t(human_sepsis_data_normal[,pheno_sel]), use = "pairwise.complete.obs"))
@@ -158,6 +159,20 @@ human_sepsis_data_normal_S_grouped_conc_metab_cov <- cov(subset(human_sepsis_dat
 human_sepsis_data_normal_NS_grouped_conc_pheno_cov <- cov(subset(human_sepsis_data_normal_grouped, Survival == "NS", group_pheno_sel), use = "pairwise.complete.obs")
 human_sepsis_data_normal_S_grouped_conc_pheno_cov <- cov(subset(human_sepsis_data_normal_grouped, Survival == "S", group_pheno_sel), use = "pairwise.complete.obs")
 
+##Build inverse covariance matrices
+inv_human_sepsis_data_normal_conc_metab_cov <- pcor.shrink(na.omit(human_sepsis_data_normal[, metab_sel]))
+class(inv_human_sepsis_data_normal_conc_metab_cov) <- "matrix"
+inv_human_sepsis_data_normal_conc_pheno_cov <- pcor.shrink(na.omit(human_sepsis_data_normal[, pheno_sel]))
+class(inv_human_sepsis_data_normal_conc_pheno_cov) <- "matrix"
+inv_human_sepsis_data_normal_NS_conc_metab_cov <- pcor.shrink(na.omit(subset(human_sepsis_data_normal, Survival == "NS", metab_sel)))
+class(inv_human_sepsis_data_normal_NS_conc_metab_cov) <- "matrix"
+inv_human_sepsis_data_normal_S_conc_metab_cov <- pcor.shrink(na.omit(subset(human_sepsis_data_normal, Survival == "S", metab_sel)))
+class(inv_human_sepsis_data_normal_S_conc_metab_cov) <- "matrix"
+inv_human_sepsis_data_normal_NS_conc_pheno_cov <- pcor.shrink(na.omit(subset(human_sepsis_data_normal, Survival == "NS", pheno_sel)))
+class(inv_human_sepsis_data_normal_NS_conc_pheno_cov) <- "matrix"
+inv_human_sepsis_data_normal_S_conc_pheno_cov <- pcor.shrink(na.omit(subset(human_sepsis_data_normal, Survival == "S", pheno_sel)))
+class(inv_human_sepsis_data_normal_S_conc_pheno_cov) <- "matrix"
+
 
 ####################
 #Plot data
@@ -166,7 +181,21 @@ human_sepsis_data_normal_S_grouped_conc_pheno_cov <- cov(subset(human_sepsis_dat
 ##Human, cluster-heatmap, all metabolites, but groups at the side
 x <- na.omit(data.frame(group = coarse_group_list[metab_sel - 5], human_sepsis_data_normal_conc_metab_cov));
 heatmaply(x = x[, -1], row_side_colors = x[c("group")], key.title = "Cov", dendrogram = FALSE, showticklabels = FALSE, file = paste0(out_dir, "human_normal_metab_nonclust.png"))
+##Human, cluster-heatmap, phenomenological vars, but groups at the side
+x <- na.omit(data.frame(group = coarse_group_list[pheno_sel - 5], inv_human_sepsis_data_normal_conc_pheno_cov));
+heatmaply(x = x[, -1], row_side_colors = x[c("group")], key.title = "pcor", dendrogram = FALSE, showticklabels = FALSE, file = paste0(out_dir, "human_normal_pheno_nonclust_pcor.png"))
+
+x <- na.omit(data.frame(group = coarse_group_list[metab_sel - 5], inv_human_sepsis_data_normal_S_conc_metab_cov));
+heatmaply(x = x[, -1], row_side_colors = x[c("group")], key.title = "pcor", dendrogram = FALSE, showticklabels = FALSE, file = paste0(out_dir, "human_normal_metab_S_nonclust_pcor.png"))
+x <- na.omit(data.frame(group = coarse_group_list[metab_sel - 5], inv_human_sepsis_data_normal_NS_conc_metab_cov));
+heatmaply(x = x[, -1], row_side_colors = x[c("group")], key.title = "pcor", dendrogram = FALSE, showticklabels = FALSE, file = paste0(out_dir, "human_normal_metab_NS_nonclust_pcor.png"))
+x <- na.omit(data.frame(group = coarse_group_list[pheno_sel - 5], inv_human_sepsis_data_normal_S_conc_pheno_cov));
+heatmaply(x = x[, -1], row_side_colors = x[c("group")], key.title = "pcor", dendrogram = FALSE, showticklabels = FALSE, file = paste0(out_dir, "human_normal_pheno_S_nonclust_pcor.png"))
+x <- na.omit(data.frame(group = coarse_group_list[pheno_sel - 5], inv_human_sepsis_data_normal_NS_conc_pheno_cov));
+heatmaply(x = x[, -1], row_side_colors = x[c("group")], key.title = "pcor", dendrogram = FALSE, showticklabels = FALSE, file = paste0(out_dir, "human_normal_pheno_NS_nonclust_pcor.png"))
 rm("x")
+
+
 
 ##Human, cluster-heatmap, coarse grouped metabolites
 x <- na.omit(human_sepsis_data_normal[,c(1:5, metab_sel)])
