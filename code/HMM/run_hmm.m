@@ -144,7 +144,7 @@ for n = 1:nfolds
     % generative training
     parEval = license('test', 'distrib_computing_toolbox');
     %parEval = false;
-    [model, int_top_acc(n)] = tramGenTrain(trainData, nState, nFeatArr, 'replicates', 10,'maxiterations', 500, 'model', 'loophmm', 'parEval', parEval);
+    [model, int_top_acc(n)] = tramGenTrain(trainData, nState, nFeatArr, 'replicates', 10,'maxiterations', 500, 'model', 'loopjumphmm', 'parEval', parEval);
     % select genes
     fsTrainData = selectFeature(trainData, model{1}.selGenes);
     fsTestData  = selectFeature(testData , model{1}.selGenes);
@@ -201,7 +201,7 @@ fprintf('TNR of generative HMM is %2.0f%%\n',mean(stnr));
 % Retrain on all samples
 trainData = {cvdata1, cvdata2};
 parEval = license('test', 'distrib_computing_toolbox');
-[model, int_top_acc_all] = tramGenTrain(trainData, nState, nFeatArr, 'replicates', 20,'maxiterations', 500, 'model', 'loophmm', 'parEval', parEval);
+[model, int_top_acc_all] = tramGenTrain(trainData, nState, nFeatArr, 'replicates', 20,'maxiterations', 500, 'model', 'loopjumphmm', 'parEval', parEval);
 
 % Print performance measures
 fprintf('Accuracy of generative HMM by internal CV an all samples is %2.0f%%\n', 100 * int_top_acc_all);
