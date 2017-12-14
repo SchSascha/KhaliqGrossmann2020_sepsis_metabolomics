@@ -1,12 +1,16 @@
 %% Load and clean the data, then run the loop-HMM from TRAM
 % Includes a modification for loop-jump-HMM, where the loop HMM is extended
-% by jumps over states. Results are OK so far.
+% by free entry state choice. Results are OK so far.
 
 tic;
 
 %% Load human clinical data
 filename = '../../data/measurements/Summary human sample data.csv';
 [hd, header] = import_human_data(filename);
+%% Split off nonseptic patients
+nonsept = cellfun(@(x)(strcmp(x, '-')) , hd(:,5));
+hd = hd(~nonsept,:);
+%% Seperate metabolic and phenomenological variables
 [hdm, hdp, hdmh, hdph] = split_human_metab_pheno(hd, header);
 
 %% Filter columns with zero SD
@@ -101,11 +105,11 @@ end
 
 %% Set central parameters
 % Number of system states
-nState = 3;
+nState = 2;
 % Number of features to try, has to start with all features
 nFeatArr = [length(data{1}{1}(:,1)) 100 50 40 30:-2:2];
 %nFeatArr = [length(data{1}{1}(:,1)) 100 50 20 10 6 2];
-%nFeatArr = [length(data{1}{1}(:,1))];
+%nFeatArr = [length(data{1}{1}(:,1)) 50 20:-2:10];
 
 %% Set performance measures
 acc = zeros(1, nfolds);
@@ -144,7 +148,7 @@ for n = 1:nfolds
     % generative training
     parEval = license('test', 'distrib_computing_toolbox');
     %parEval = false;
-    [model, int_top_acc(n)] = tramGenTrain(trainData, nState, nFeatArr, 'replicates', 10,'maxiterations', 500, 'model', 'loopjumphmm', 'parEval', parEval);
+    [model, int_top_acc(n)] = tramGenTrain(trainData, nState, nFeatArr, 'replicates', 10,'maxiterations', 40, 'model', 'loopjumplrhmm', 'parEval', parEval);
     % select genes
     fsTrainData = selectFeature(trainData, model{1}.selGenes);
     fsTestData  = selectFeature(testData , model{1}.selGenes);
@@ -156,21 +160,21 @@ for n = 1:nfolds
     % calculate and print the accuracy
     acc(n) = 100 * (sum(logOdds1(ar_range1) <= 0) + sum(logOdds2(ar_range2) > 0)) ...
         / (length(testData{1}) + length(testData{2}));
-    tpr(n) = 100 * sum(logOdds1(ar_range1) <= 0)/length(testData{1});
-    tnr(n) = 100 * sum(logOdds2(ar_range2) > 0)/length(testData{2});
+    tpr(n) = 100 * sum(logOdds1(ar_range1) <= 0)/length(fsTestData{1});
+    tnr(n) = 100 * sum(logOdds2(ar_range2) > 0)/length(fsTestData{2});
     % discriminative training and evaluation
-    %discModel = tramDiscTrain(fsTrainData, model, 'mmieIterations', 500);
+    discModel = tramDiscTrain(fsTrainData, model, 'mmieIterations', 500);
     % classify testing data
-    %discLogOdds1(ar_range1) = tramPredict(fsTestData{1}, discModel);
-    %discLogOdds2(ar_range2) = tramPredict(fsTestData{2}, discModel);
-    %dacc(n) = 100 * (sum(discLogOdds1(ar_range1) <= 0) + sum(discLogOdds2(ar_range2) > 0)) ...
-    %    / (length(testData{1}) + length(testData{2}));
-    %dtpr(n) = 100 * sum(discLogOdds1(ar_range1) <= 0)/length(testData{1});
-    %dtnr(n) = 100 * sum(discLogOdds2(ar_range2) > 0)/length(testData{2});
+    discLogOdds1(ar_range1) = tramPredict(fsTestData{1}, discModel);
+    discLogOdds2(ar_range2) = tramPredict(fsTestData{2}, discModel);
+    dacc(n) = 100 * (sum(discLogOdds1(ar_range1) <= 0) + sum(discLogOdds2(ar_range2) > 0)) ...
+        / (length(testData{1}) + length(testData{2}));
+    dtpr(n) = 100 * sum(discLogOdds1(ar_range1) <= 0)/length(testData{1});
+    dtnr(n) = 100 * sum(discLogOdds2(ar_range2) > 0)/length(testData{2});
     % reduce test set to first day
     fsTestDataSingle = cell(1, 2);
     for m = 1 : 2
-        for k = 1 : length(fsTestData{m}), fsTestDataSingle{m}{k} = fsTestData{m}{k}(:, 1); end
+        for k = 1 : length(fsTestData{m}), fsTestDataSingle{m}{k} = fsTestData{m}{k}(:, min(size(fsTestData{m}{k},2) ,2)); end
     end
     % classify test data
     singleLogOdds1(ar_range1) = tramPredict(fsTestDataSingle{1}, model);
@@ -178,8 +182,8 @@ for n = 1:nfolds
     % calculate and print the accuracy
     sacc(n) = 100 * (sum(singleLogOdds1(ar_range1) <= 0) + sum(singleLogOdds2(ar_range2) > 0)) ...
         / (length(testData{1}) + length(testData{2}));
-    stpr(n) = 100 * sum(singleLogOdds1(ar_range1) <= 0)/length(testData{1});
-    stnr(n) = 100 * sum(singleLogOdds2(ar_range2) > 0)/length(testData{2});
+    stpr(n) = 100 * sum(singleLogOdds1(ar_range1) <= 0)/length(fsTestData{1});
+    stnr(n) = 100 * sum(singleLogOdds2(ar_range2) > 0)/length(fsTestData{2});
 end
 
 % Report accuracy
@@ -201,9 +205,11 @@ fprintf('TNR of generative HMM is %2.0f%%\n',mean(stnr));
 % Retrain on all samples
 trainData = {cvdata1, cvdata2};
 parEval = license('test', 'distrib_computing_toolbox');
-[model, int_top_acc_all] = tramGenTrain(trainData, nState, nFeatArr, 'replicates', 20,'maxiterations', 500, 'model', 'loopjumphmm', 'parEval', parEval);
+[model, int_top_acc_all] = tramGenTrain(trainData, nState, nFeatArr, 'replicates', 30,'maxiterations', 150, 'model', 'loopjumplrhmm', 'parEval', parEval);
 
 % Print performance measures
 fprintf('Accuracy of generative HMM by internal CV an all samples is %2.0f%%\n', 100 * int_top_acc_all);
+
+%save('last_model.mat', model);
 
 toc;

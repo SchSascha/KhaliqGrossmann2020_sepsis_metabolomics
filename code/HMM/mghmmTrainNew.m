@@ -14,9 +14,11 @@ isLoopHmm = false;
 isJumpHmm = false; 
 isEqLenHmm = false; 
 isLoopJumpHmm = false;
+isLoopJumpLRHmm = false;
 if     strcmpi('jumphmm', modelStr), isJumpHmm  = true; 
 elseif strcmpi('eqlenhmm',modelStr), isEqLenHmm = true;
 elseif strcmpi('loopjumphmm',modelStr), isLoopJumpHmm = true;
+elseif strcmpi('loopjumplrhmm',modelStr), isLoopJumpLRHmm = true;
 else                                 isLoopHmm  = true; 
 end
 
@@ -45,6 +47,8 @@ if isLoopHmm
     [pars, cumPars, nRepeat] = loopHmmPrepare(nState, maxL, nRepeat);
 elseif isLoopJumpHmm
     [pars, cumPars, nRepeat] = loopHmmPrepare(nState, maxL, nRepeat);
+elseif isLoopJumpLRHmm
+    [pars, cumPars, nRepeat] = loopHmmPrepare(nState, maxL, nRepeat);
 elseif isJumpHmm
     [tr0, sigma0, muArr, nRepeat] = jumpHmmPrepare(seqs, numSeqs, nDim, ...
                                      nState, maxL, covType, varargin{:});
@@ -68,6 +72,9 @@ for iRepeat = 1 : nRepeat
         tr1 = tr0; sigma1 = sigma0; mu1 = muArr{iRepeat};
     elseif isLoopJumpHmm
         [tr1, mu1, sigma1] = loopJumpHmmInit(seqs, numSeqs, nDim, nState, maxL, ...
+                pseudoStay, pars, cumPars, iRepeat, covType, varargin{:});
+    elseif isLoopJumpLRHmm
+        [tr1, mu1, sigma1] = loopJumpLRHmmInit(seqs, numSeqs, nDim, nState, maxL, ...
                 pseudoStay, pars, cumPars, iRepeat, covType, varargin{:});
     elseif isEqLenHmm
         [tr1, mu1, sigma1] = eqLenHmmInit(seqs, numSeqs, nDim, maxL, ...
@@ -261,6 +268,78 @@ function [tr1, mu1, sigma1] = loopJumpHmmInit(seqs, numSeqs, nDim, nState, maxL,
         sigma1 = [ones(nDim,1), sum2Pars / numSeqs - mu1(:,2:nState).^2]; 
     end
     
+function [tr1, mu1, sigma1] = loopJumpLRHmmInit(seqs, numSeqs, nDim, nState, maxL, ...
+                              pseudoStay, pars, cumPars, iRepeat, covType, varargin)
+    [glbCovRt, algArg] = varArgRemove('rtglbcov', 0.5, varargin);
+    glbCov = varArgRemove('glbcov', [], algArg);
+%     esc_seq = (1./(nState:-1:1))';
+%     tr1 = diag([0; esc_seq]);
+%     for k = 1:nState
+%         tr1 = tr1 + diag([esc_seq(1); esc_seq(1:(nState-k))], k);
+%     end
+    
+    escape = ((nState-1)*pseudoStay+maxL)./maxL./(pseudoStay+pars(iRepeat,:))';    
+    tr1 = diag([0; 1 - escape; 1]) + diag([1; escape(1:(length(escape)-1)); 0], 1) + diag([0; escape(1:(length(escape)-1)); 0], -1);
+    tr1(1, 2:(nState)) = 1/(nState-1);
+    tr1 = tr1 ./ sum(tr1, 2);
+    
+    %no terminal state: tr1 = diag([0; 1 - escape(1:nState-2); 1]) + diag([1; escape(1:nState-2)], 1);
+    if covType == 1 %COV_FULL
+        totalPost = zeros(nDim, nState-1);
+        meanSeq = zeros(nDim, nState-1); 
+        nCov = zeros(nState-1, 1);
+        covSeq = zeros(nDim, nDim, nState-1); 
+        for count = 1 : numSeqs
+            seq = seqs{count};
+            for j = 1 : nState-1
+                seq1 = seq(:, cumPars(iRepeat,j)+1 : ...
+                                 min(size(seq, 2), cumPars(iRepeat,j+1)));
+                isFin = isfinite(seq1); seq1(~isFin) = 0;
+                meanSeq(:,j) = meanSeq(:,j) + sum(seq1,2);
+                totalPost(:,j) = totalPost(:,j) + sum(isFin, 2);
+            end
+        end
+        mu1 = [zeros(nDim,1), meanSeq ./ totalPost];
+        for count = 1 : numSeqs
+            seq = seqs{count}; 
+            for j = 1 : nState-1
+                seq1 = seq(:, cumPars(iRepeat,j)+1 : ...
+                                 min(size(seq, 2), cumPars(iRepeat,j+1)));
+                ut = ~isfinite(seq1); 
+                for t=1:size(seq1,2), seq1(ut(:,t),t) = mu1(ut(:,t), j+1); end
+                covSeq(:,:,j) = covSeq(:,:,j) + seq1 * seq1';
+                nCov(j) = nCov(j) + size(seq1,2);%FIXME
+            end
+        end
+        sigma1 = zeros(nDim, nDim, nState);
+        sigma1(:, :, 1) = eye(nDim);
+        for j = 1 : nState-1
+            sigma1(:,:,j+1) = glbCovRt * glbCov + (1-glbCovRt) ...
+                * (covSeq(:,:,j)/nCov(j)-mu1(:,j+1)*mu1(:,j+1)');
+            [upper,part] = chol(sigma1(:,:,j+1)); %check positive definite
+            if part~=0, sigma1(:,:,j+1) = sigma1(:,:,j+1) + 0.01*eye(nDim); end
+        end
+    else
+        sumPars = zeros(nDim, nState-1);
+        sum2Pars = zeros(nDim, nState-1);
+        for count = 1 : numSeqs
+            seq = seqs{count};
+            for j = 1 : nState-1
+                for iVar = 1 : nDim
+                    seq1 = seq(iVar, cumPars(iRepeat,j)+1 : ...
+                                     min(size(seq, 2), cumPars(iRepeat,j+1)));
+                    seq1 = seq1(isfinite(seq1));
+                    if ~isempty(seq1), 
+                        sumPars(iVar,j) = sumPars(iVar,j)+mean(seq1);
+                        sum2Pars(iVar,j) = sum2Pars(iVar,j)+mean(seq1.^2);
+                    end
+                end
+            end
+        end
+        mu1 = [zeros(nDim,1), sumPars / numSeqs];
+        sigma1 = [ones(nDim,1), sum2Pars / numSeqs - mu1(:,2:nState).^2]; 
+    end
+
 function [tr0, sigma0, muArr, nRepeat] = jumpHmmPrepare(seqs, numSeqs, nDim, ...
                                          nState, maxL, covType, varargin)
     [isTermState, algArg] = varArgRemove('termstate', 0, varargin);
