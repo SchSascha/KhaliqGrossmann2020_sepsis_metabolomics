@@ -41,6 +41,35 @@ rat_sepsis_legend <- get_rat_sepsis_legend()
 #Process data
 ###########################
 
+#Seperate septic and nonseptic patients
+human_nonsepsis_data <- human_sepsis_data[human_sepsis_data$`CAP / FP` == "-", ]
+human_sepsis_data <- human_sepsis_data[human_sepsis_data$`CAP / FP` != "-", ]
+
+#Find outlier sample
+##Scale mesaurement values by standardization
+human_sepsis_data_normal <- human_sepsis_data
+human_sepsis_data_normal[,-1:-5] <- scale(x = human_sepsis_data[,-1:-5])
+human_sepsis_data_normal$Patient <- as.factor(human_sepsis_data_normal$Patient)
+human_sepsis_data_normal$Day <- as.factor(human_sepsis_data_normal$Day)
+##Group metabolites
+coarse_group_list <- human_sepsis_legend[human_sepsis_legend[,1] %in% colnames(human_sepsis_data[,-1:-5]), 3]
+human_sepsis_data_normal_grouped <- cbind(human_sepsis_data[,1:5], matrix(0, nrow = nrow(human_sepsis_data_normal), ncol=length(unique(coarse_group_list))))
+colnames(human_sepsis_data_normal_grouped)[-1:-5] <- unique(coarse_group_list)
+human_sepsis_data_normal_grouped$Patient <- as.factor(human_sepsis_data_normal_grouped$Patient)
+human_sepsis_data_normal_grouped$Day <- as.factor(human_sepsis_data_normal_grouped$Day)
+for (n in 1:nrow(human_sepsis_data_normal)){
+  human_sepsis_data_normal_grouped[n, -1:-5] <- aggregate(t(human_sepsis_data_normal[n,-1:-5]), by = list(coarse_group_list), FUN = mean, na.action = na.omit)[,2]
+}
+##Split for metabolites and "phenotypical" factors
+split_start <- which(colnames(human_sepsis_data) == "Urea")
+pheno_sel <- split_start:ncol(human_sepsis_data)
+metab_sel <- 6:(split_start-1)
+group_pheno_sel <- which(colnames(human_sepsis_data_normal_grouped) %in% colnames(human_sepsis_data[,pheno_sel]))
+group_metab_sel <- which(colnames(human_sepsis_data_normal_grouped) %in% unique(coarse_group_list[metab_sel - 5]))
+X11();plot(hclust(dist(human_sepsis_data_normal_grouped[, group_metab_sel])))
+##According to cluster plot, sample number 11 is an outlier
+human_sepsis_data <- human_sepsis_data[-11, ]
+
 #Get data overview
 ##Get overview of sample distribution along days
 human_sig_diff_res <- human_sig_diffs_along_days(human_sepsis_data, corr_fdr = TRUE)
@@ -52,29 +81,14 @@ sig_u_class <- na.omit(colnames(day_sig_u_diff[,-1])[colAnys(day_sig_u_diff[, -1
 sig_t_class <- na.omit(colnames(day_sig_t_diff[,-1])[colAnys(day_sig_t_diff[, -1] <= 0.05)])
 
 #Get sig var pos
-day_sig_t_diff_pos_long1 <- get_sig_var_pos(day_sig_t_diff, time_var = "Day")
+day_sig_t_diff_pos_long <- get_sig_var_pos(day_sig_t_diff, time_var = "Day")
 day_sig_u_diff_pos_long <- get_sig_var_pos(day_sig_u_diff, time_var = "Day")
-
-day_sig_u_diff_pos <- lapply(day_sig_u_diff[,-1], function(x){ day_sig_u_diff$Day[which(x <= 0.05)] })
-day_sig_t_diff_pos <- lapply(day_sig_t_diff[,-1], function(x){ day_sig_t_diff$Day[which(x <= 0.05)] })
-##Clean
-day_sig_u_diff_pos <- day_sig_u_diff_pos[lapply(day_sig_u_diff_pos, length) > 0]
-day_sig_t_diff_pos <- day_sig_t_diff_pos[lapply(day_sig_t_diff_pos, length) > 0]
-##Transform to long table
-for (n in seq_along(day_sig_u_diff_pos)){
-  day_sig_u_diff_pos[[n]] <- data.frame(Day = day_sig_u_diff_pos[[n]], variable = names(day_sig_u_diff_pos)[n])
-}
-for (n in seq_along(day_sig_t_diff_pos)){
-  day_sig_t_diff_pos[[n]] <- data.frame(Day = day_sig_t_diff_pos[[n]], variable = names(day_sig_t_diff_pos)[n])
-}
-day_sig_u_diff_pos_long <- rbindlist(day_sig_u_diff_pos)
-day_sig_t_diff_pos_long <- rbindlist(day_sig_t_diff_pos)
 
 #Find time points in long time course data where changes are significant
 ##Construct tANOVA arguments; tANOVA requires equal number of replicates for each time point of a factor level
 full_tanova_data <- subset(human_sepsis_data, Day %in% rownames(table(Day))[table(Day) > 1])
-tanova_day_set <- c(0,1,2,3,5,7,14)
-#tanova_day_set <- c(0,1,2,3,5)
+#tanova_day_set <- c(0,1,2,3,5,7,14)
+tanova_day_set <- c(0,1,2,3)
 tanova_patient_set <- unique(full_tanova_data$Patient)
 for (n in tanova_day_set){
   tanova_patient_set <- intersect(tanova_patient_set, full_tanova_data$Patient[full_tanova_data$Day == n])
@@ -87,9 +101,11 @@ f2 <- 0
 tp <- as.numeric(as.factor(full_tanova_data$Day))
 ##Clean metabolite data
 t_data <- na.omit(t_data)
+##Test
+t_data[2:nrow(t_data), ] <- rnorm(n = (nrow(t_data)-1)*ncol(t_data))
 ##Run tANOVA
-#tanova_res <- tanova(data = t_data, f1 = f1, f2 = f2, tp = tp, test.type = 2, robustify = FALSE, eb = FALSE, B = 1000)
-#tanova_sig_metabs <- tanova_res$obj$gene.order[tanova_res$obj$pvalue <= 0.05]
+tanova_res <- tanova(data = t_data, f1 = f1, f2 = f2, tp = tp, test.type = 2, robustify = TRUE, eb = TRUE, B = 1000)
+tanova_sig_metabs <- tanova_res$obj$gene.order[tanova_res$obj$pvalue <= 0.05]
 
 #Build long format tables for plotting
 ##Scale measurement values at maximum concentration

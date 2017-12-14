@@ -20,8 +20,6 @@ out_dir_pred <- "../../results/data_pred_metab"
 #Make sure paths exist
 if (!dir.exists(out_dir))
   dir.create(out_dir)
-if (!dir.exists(out_dir_stats))
-  dir.create(out_dir_stats)
 if (!dir.exists(out_dir_pred))
   dir.create(out_dir_pred)
 
@@ -33,7 +31,13 @@ human_sepsis_data <- get_human_sepsis_data()
 rat_sepsis_data <- get_rat_sepsis_data()
 
 ##Import viterbi path data
-viterbi_path <- fread(input = "../HMM/tram_viterbi_paths_all_samples.csv", header = TRUE, data.table = FALSE)
+viterbi_path <- fread(input = "../HMM/tram_viterbi_paths_all_septic_samples_2LJHMM.csv.csv", header = TRUE, data.table = FALSE)
+
+##Filter out patients without sepsis
+human_nonsepsis_data <- human_sepsis_data[human_sepsis_data$`CAP / FP` == "-", ]
+human_sepsis_data <- human_sepsis_data[human_sepsis_data$`CAP / FP` != "-", ]
+
+##Reorder paths as in original data
 viterbi_path <- viterbi_path[order(human_sepsis_data$Patient),]
 
 #Get significantly different classes
@@ -89,7 +93,7 @@ human_surv_obj <- Surv(human_surv_subset_ml$MaxDay)
 ###Build RF
 surv.rg <- ranger(human_surv_obj ~ ., data = human_surv_subset_ml, write.forest = TRUE, num.trees = rg.num.trees, importance = "permutation")
 sp <- predict(surv.rg, cbind(data.frame(MaxDay = 0), subset(human_sepsis_data_ml_full, select = -1:-2)))
-heatmaply(x = sp$survival, row_side_colors = data.frame(Survival = human_sepsis_data_ml_full$Survival))
+#heatmaply(x = sp$survival, row_side_colors = data.frame(Survival = human_sepsis_data_ml_full$Survival))
 
 ##Set up iteration
 num_repeats <- 6
@@ -140,8 +144,8 @@ for (d in seq_along(day_set)){
   for (fold in 1:num_folds){
     fold_learn_set <- human_sepsis_data_ml[-fold_set[[fold]],]
     rgCV <- ranger(data = fold_learn_set, dependent.variable.name = "Survival", num.trees = rg.num.trees, write.forest = T, save.memory = F, classification = TRUE)
-    #ksCV <- ksvm(fml, fold_learn_set, type = "C-svc", kernel = "vanilladot")
-    ksCV <- ksvm(fml, fold_learn_set, type = "C-svc", kernel = "rbfdot", kpar = "automatic", C = 10)
+    ksCV <- ksvm(fml, fold_learn_set, type = "C-svc", kernel = "vanilladot")
+    #ksCV <- ksvm(fml, fold_learn_set, type = "C-svc", kernel = "rbfdot", kpar = "automatic", C = 10)
     lmCV <- lm(formula = fml, data = fold_learn_set)
     v.rg.npr[[fold]] <- ml.npr(predict(rgCV, human_sepsis_data_ml[fold_set[[fold]],])$predictions, human_sepsis_data_ml$Survival[fold_set[[fold]]])
     v.ks.npr[[fold]] <- ml.npr(predict(ksCV, human_sepsis_data_ml[fold_set[[fold]],]), human_sepsis_data_ml$Survival[fold_set[[fold]]])
@@ -186,8 +190,8 @@ for (d in seq_along(day_set)){
   for (fold in 1:num_folds){
     fold_learn_set <- human_sepsis_data_ml_red[-fold_set[[fold]],]
     rgCV <- ranger(data = fold_learn_set, dependent.variable.name = "Survival", num.trees = rg.num.trees, write.forest = T, save.memory = F, classification = TRUE)
-    #ksCV <- ksvm(fml, fold_learn_set, type = "C-svc", kernel = "vanilladot")
-    ksCV <- ksvm(fml, fold_learn_set, type = "C-svc", kernel = "rbfdot", kpar = "automatic", C = 10)
+    ksCV <- ksvm(fml, fold_learn_set, type = "C-svc", kernel = "vanilladot")
+    #ksCV <- ksvm(fml, fold_learn_set, type = "C-svc", kernel = "rbfdot", kpar = "automatic", C = 10)
     lmCV <- lm(formula = fml, data = fold_learn_set)
     v.rg.npr[[fold]] <- ml.npr(predict(rgCV, human_sepsis_data_ml_red[fold_set[[fold]],])$predictions, human_sepsis_data_ml_red$Survival[fold_set[[fold]]])
     v.ks.npr[[fold]] <- ml.npr(predict(ksCV, human_sepsis_data_ml_red[fold_set[[fold]],]), human_sepsis_data_ml_red$Survival[fold_set[[fold]]])

@@ -43,6 +43,9 @@ rat_sepsis_legend$group[rat_sepsis_legend$group == ""] <- rat_sepsis_legend[rat_
 #Process data
 ###########################
 
+#Remove outlier rat
+
+
 #Get data overview
 ##Get overview of sample distribution along days
 rat_plasma_sig_diff_res <- rat_sig_diffs_along_time(subset(rat_sepsis_data, material == "plasma" & group %in% c("septic survivor", "septic non-survivor")), corr_fdr = T)
@@ -126,18 +129,22 @@ group_pheno_sel <- which(colnames(rat_sepsis_data_normal_grouped) %in% colnames(
 group_metab_sel <- which(colnames(rat_sepsis_data_normal_grouped) %in% unique(coarse_group_list[metab_sel - 4]))
 ##Build covariance matrix with metabolite groups
 rat_sepsis_data_normal_grouped_metab_cov <- cbind(rat_sepsis_data_normal_grouped[, 1:4], cov(t(rat_sepsis_data_normal_grouped[,group_metab_sel]), use = "pairwise.complete.obs"))
+rat_sepsis_data_normal_grouped_metab_cov <- rat_sepsis_data_normal_grouped_metab_cov[, !apply(rat_sepsis_data_normal_grouped_metab_cov, 2, function(x){all(is.na(x))})]
 rat_sepsis_data_normal_grouped_pheno_cov <- cbind(subset(rat_sepsis_data_normal_grouped[, 1:4], material == "plasma"), cov(t(subset(x = rat_sepsis_data_normal_grouped, subset = material == "plasma", select = group_pheno_sel)), use = "pairwise.complete.obs"))
 rat_sepsis_data_normal_grouped_pheno_cov <- rat_sepsis_data_normal_grouped_pheno_cov[, !apply(rat_sepsis_data_normal_grouped_pheno_cov, 2, function(x){all(is.na(x))})]
 ##Build covariance matrix with original metabolites
 rat_sepsis_data_normal_metab_cov <- cbind(rat_sepsis_data_normal[, 1:4], cov(t(rat_sepsis_data_normal[,metab_sel]), use = "pairwise.complete.obs"))
+rat_sepsis_data_normal_metab_cov <- rat_sepsis_data_normal_metab_cov[, !apply(rat_sepsis_data_normal_metab_cov, 2, function(x){all(is.na(x))})]
 rat_sepsis_data_normal_pheno_cov <- cbind(rat_sepsis_data_normal[, 1:4], cov(t(rat_sepsis_data_normal[,pheno_sel]), use = "pairwise.complete.obs"))
 rat_sepsis_data_normal_pheno_cov <- rat_sepsis_data_normal_pheno_cov[, !apply(rat_sepsis_data_normal_pheno_cov, 2, function(x){all(is.na(x))})]
 ##Build correlation matrix with metabolite groups
 rat_sepsis_data_normal_grouped_metab_cor <- cbind(rat_sepsis_data_normal_grouped[, 1:4], cor(t(rat_sepsis_data_normal_grouped[,group_metab_sel]), use = "pairwise.complete.obs"))
+rat_sepsis_data_normal_grouped_metab_cor <- rat_sepsis_data_normal_grouped_metab_cor[, !apply(rat_sepsis_data_normal_grouped_metab_cor, 2, function(x){all(is.na(x))})]
 rat_sepsis_data_normal_grouped_pheno_cor <- cbind(rat_sepsis_data_normal_grouped[, 1:4], cor(t(rat_sepsis_data_normal_grouped[,group_pheno_sel]), use = "pairwise.complete.obs"))
 rat_sepsis_data_normal_grouped_pheno_cor <- rat_sepsis_data_normal_grouped_pheno_cor[, !apply(rat_sepsis_data_normal_grouped_pheno_cor, 2, function(x){all(is.na(x))})]
 ##Build covariance matrix with original metabolites
 rat_sepsis_data_normal_metab_cor <- cbind(rat_sepsis_data_normal[, 1:4], cov(t(rat_sepsis_data_normal[, metab_sel]), use = "pairwise.complete.obs"))
+rat_sepsis_data_normal_metab_cor <- rat_sepsis_data_normal_metab_cor[, !apply(rat_sepsis_data_normal_metab_cor, 2, function(x){all(is.na(x))})]
 rat_sepsis_data_normal_pheno_cor <- cbind(rat_sepsis_data_normal[, 1:4], cov(t(rat_sepsis_data_normal[, pheno_sel]), use = "pairwise.complete.obs"))
 rat_sepsis_data_normal_pheno_cor <- rat_sepsis_data_normal_pheno_cor[, !apply(rat_sepsis_data_normal_pheno_cor, 2, function(x){all(is.na(x))})]
 
@@ -177,9 +184,9 @@ rm("x")
 
 ##Rat, cluster-heatmap, coarse grouped metabolites
 x <- na.omit(rat_sepsis_data_normal_metab_cov)
-heatmaply(x = x[,-1:-4], row_side_colors = x[c("group")], col_side_colors = x["material"], file = paste0(out_dir, "rat_normal_grouped_metab_cov.png"), main = "Metabolite profile covariance clusters only material", key.title = "Cov", showticklabels = FALSE)
+heatmaply(x = x[,-1:-4], row_side_colors = x[c("group")], col_side_colors = x["material"], file = paste0(out_dir, "rat_normal_metab_cov.png"), main = "Metabolite profile covariance clusters only material", key.title = "Cov", showticklabels = FALSE)
 x <- na.omit(rat_sepsis_data_normal_pheno_cov)
-heatmaply(x = x[,-1:-4], row_side_colors = x[c("group")], file = paste0(out_dir, "rat_normal_grouped_pheno_cov.png"), main = "Phenomenological profile covariance clusters survival/control better", key.title = "Cov", showticklabels = FALSE)
+heatmaply(x = x[,-1:-4], row_side_colors = x[c("group")], file = paste0(out_dir, "rat_normal_pheno_cov.png"), main = "Phenomenological profile covariance clusters survival/control better", key.title = "Cov", showticklabels = FALSE)
 rm("x")
 
 ##rat, cluster-heatmap of non-CAP and non-FP patients, coarse grouped metabolites; error because nothing es left
@@ -187,7 +194,7 @@ rm("x")
 
 ##rat, cluster-heatmap of patient covariance matrix, coarse grouped metabolites, survival marked
 x <- na.omit(rat_sepsis_data_normal_grouped_metab_cov)
-heatmaply(x = x[,-1:-4], row_side_colors = x[c("group")], file = paste0(out_dir, "rat_normal_grouped_metab_cov.png"))
+heatmaply(x = x[,-1:-4], row_side_colors = x[c("group")], file = paste0(out_dir, "rat_normal_grouped_metab_cov.png"), showticklabels = F)
 x <- na.omit(rat_sepsis_data_normal_grouped_pheno_cov)
 heatmaply(x = x[,-1:-4], row_side_colors = x[c("group")], file = paste0(out_dir, "rat_normal_grouped_pheno_cov.png"), main = "Profiles of grouped phenomenological variables cluster survival")
 rm("x")
@@ -201,9 +208,9 @@ rm("x")
 
 ##Human, cluster-heatmat of patient correlation matrix, coarse grouped metabolites, survival and CAP/FP marked
 x <- na.omit(rat_sepsis_data_normal_grouped_metab_cor)
-heatmaply(x = x[,-1:-5], row_side_colors = x[c("group")], file = paste0(out_dir, "rat_normal_grouped_metab_cor.png"), main = "Profiles of grouped metabolites cluster nothing")
+heatmaply(x = x[,-1:-4], row_side_colors = x[c("group")], file = paste0(out_dir, "rat_normal_grouped_metab_cor.png"), main = "Profiles of grouped metabolites cluster nothing")
 x <- na.omit(rat_sepsis_data_normal_grouped_pheno_cor)
-heatmaply(x = x[,-1:-5], row_side_colors = x[c("group")], file = paste0(out_dir, "rat_normal_grouped_pheno_cor.png"), main = "Profiles of grouped phenomenological variables cluster nothing")
+heatmaply(x = x[,-1:-4], row_side_colors = x[c("group")], file = paste0(out_dir, "rat_normal_grouped_pheno_cor.png"), main = "Profiles of grouped phenomenological variables cluster nothing")
 rm("x")
 
 ##rat, cluster-heatmap of metabolite covariance matrix, survival-ignorant
