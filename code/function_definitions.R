@@ -36,6 +36,21 @@ get_rat_sepsis_data <- function(){
   return(data)
 }
 
+#' Read the data set on provoked sepsis and controls in rat
+#'
+#' @return the data.frame with data, column names are identical to file content (non-standard for R)
+#' @export
+#'
+#' @examples
+get_rat_sepsis_data_unedit <- function(){
+  data <- read.csv(file = "../../data/measurements/Summary rat sample data.csv", header = TRUE, sep = "\t", stringsAsFactors = FALSE, dec = ",", check.names = FALSE, blank.lines.skip = TRUE, strip.white = TRUE)
+  data <- data[apply(data, 1, function(x){ sum(is.na(x)) }) < ncol(data) - 20, ] #Strip rows without any non-NA value
+  data <- data[, apply(data, 2, function(x) { sum(is.na(x)) }) < nrow(data)] #Strip columns without any non-NA value
+  data <- data[, apply(data, 2, function(x){ length(unique(x))}) > 1] #Strip columns with constant values
+  data$BE <- data$BE - min(data$BE, na.rm = TRUE)
+  return(data)
+}
+
 #' Read the legend to the clinical data set on sepsis and controls in rat. The legend has two group assignments of different coarseness.
 #'
 #' @return data.frame, first column stores the column names in the measurement data table, second the fine grained grouping, third the coarse grained grouping
@@ -296,6 +311,18 @@ rat_sig_diffs_along_time <- function(data, corr_fdr = TRUE){
     }
   }
   res <- list(time_sig_u_diff = time_sig_u_diff, time_sig_t_diff = time_sig_t_diff)
+}
+
+#' Import Anna's significantly differentially concentrated metabolite names (acronyms like "C10" or "SM OH C16:0")
+#'
+#' @return chr vector of metabolite names
+#' @export
+#'
+#' @examples
+get_annas_rat_sig_diffs <- function(){
+  mets = fread(input = "../../data/measurements/annas_sig_metabs.csv", sep = "\t", header = TRUE, data.table = FALSE)
+  mets = subset(mets, isPresent == 1, "Variable")
+  return(mets[[1]])
 }
 
 col.na.omit <- function(data){

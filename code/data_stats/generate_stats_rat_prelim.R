@@ -34,17 +34,16 @@ human_sepsis_legend <- human_sepsis_legend[-1:-5, ]
 rat_sepsis_data <- get_rat_sepsis_data()
 rat_sepsis_data <- rat_sepsis_data[, -which(colnames(rat_sepsis_data) %in% c("HR", "SV", "CO", "EF", "Resp Rate", "Temperature"))]
 
-
 ##Import corresponding group assignment
 rat_sepsis_legend <- get_rat_sepsis_legend()
 rat_sepsis_legend$group[rat_sepsis_legend$group == ""] <- rat_sepsis_legend[rat_sepsis_legend$group == "", 1]
 
+##Import the metabolite names that Anna found significantly different
+annas_mets <- get_annas_rat_sig_diffs()
+
 ###########################
 #Process data
 ###########################
-
-#Remove outlier rat
-
 
 #Get data overview
 ##Get overview of sample distribution along days
@@ -59,6 +58,15 @@ rat_heart_time_sig_t_diff <- rat_heart_sig_diff_res$time_sig_t_diff
 rat_liver_sig_diff_res <- rat_sig_diffs_along_time(subset(rat_sepsis_data, material == "liver" & group %in% c("septic survivor", "septic non-survivor")), corr_fdr = T)
 rat_liver_time_sig_u_diff <- rat_liver_sig_diff_res$time_sig_u_diff
 rat_liver_time_sig_t_diff <- rat_liver_sig_diff_res$time_sig_t_diff
+
+#Remove outlier rat
+#rat_sepsis_data <- subset(rat_sepsis_data, !rat_sepsis_data$`Sample Identification` %in% c("039L"))
+
+rat_liver_sig_diff_res_o <- rat_sig_diffs_along_time(subset(rat_sepsis_data, !rat_sepsis_data$`Sample Identification` %in% c("039L") & material == "liver" & group %in% c("septic survivor", "septic non-survivor")), corr_fdr = T)
+rat_liver_time_sig_u_diff_o <- rat_liver_sig_diff_res_o$time_sig_u_diff
+rat_liver_time_sig_t_diff_o <- rat_liver_sig_diff_res_o$time_sig_t_diff
+
+X11(); plot(t(rat_liver_time_sig_t_diff[2,-1]), t(rat_liver_time_sig_t_diff_o[2,-1]))
 
 #Get significant differences at all time points
 cols <- colnames(rat_sepsis_data)[-1:-4]
@@ -264,6 +272,15 @@ r_time_sig_t_diff_plot <- ggplot(melt(rat_time_sig_t_diff, id.vars = c("Time", "
   ggtitle("Rat metabolites differ at two time points\nin non-/survival, most in plasma") +
   theme_bw()
 ggsave(plot = r_time_sig_t_diff_plot, filename = "rat_all_days_survival_sig_diff.png", path = out_dir, width = 4, height = 4, units = "in")
+
+##Rat, annas significantly different metabolites
+x <- subset(na.omit(rat_sepsis_data_long_form), variable %in% annas_mets & material %in% c("liver") & group %in% c("septic survivor", "septic non-survivor"))
+colnames(x)[colnames(x) == "time point"] <- "time_point"
+x <- subset(x, time_point %in% c("6h", "24h"))
+ggplot(x, aes(x = group, y = value, group = time_point, color = time_point)) +
+  facet_wrap(facets = ~ variable + time_point + material, ncol = 10, scales = "free_y") +
+  geom_jitter(height = 0, width = 0.3) +
+  theme_bw()
 
 
 ##rat, plasma, metabolite concentration time course, only metabolites with p-val < 0.05 at any time point
