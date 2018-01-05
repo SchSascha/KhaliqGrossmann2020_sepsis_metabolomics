@@ -120,6 +120,71 @@ ml.npr <- function(pred, ref){
   return(res)
 }
 
+#' Calculate the points of the Receiver Operatoring Curve
+#'
+#' @param pred predicted class, coded in [-1, 1], but really any [<=0, >0] counts
+#' @param ref true class, see pred for info
+#' @param conf classification confidence
+#'
+#' @return a matrix of column vectors for x and y coordinates
+#' @export
+#'
+#' @examples
+ml.roc <- function(ref, conf){
+  conf_order <- order(conf, decreasing = TRUE)
+  ref <- ref[conf_order]
+  roc <- matrix(0, ncol = 2, nrow = length(conf))
+  colnames(roc) <- c("FPR", "TPR")
+  #hit <- names(u) == "TRUE"
+  #fnr <- cumsum(hit) / sum(hit)
+  #tpr <- 1-fnr
+  #tnr <- cumsum(!hit) / sum(!hit)
+  #fpr <- 1-tnr
+  
+  tp <- ref > 0
+  fp <- ref <= 0
+  tpr <- cumsum(tp) / sum(tp)
+  fpr <- cumsum(fp) / sum(fp)
+  # 
+  # for (n in 1:nrow(roc)){
+  #   if (sum(ref[1:n] > 0) > 0){
+  #     tpr <- sum(pred[1:n] > 0 & ref[1:n] > 0) / sum(ref[1:n] > 0)
+  #   }
+  #   else{
+  #     tpr <- 0
+  #   }
+  #   if (sum(ref[1:n] <= 0) > 0)  {
+  #     fpr <- sum(pred[1:n] > 0 & ref[1:n] <= 0) / sum(ref[1:n] <= 0)
+  #   }
+  #   else{
+  #     fpr = 0
+  #   }
+  #   roc[n,1] <- fpr
+  #   roc[n,2] <- tpr
+  # }
+  roc[,1] <- fpr
+  roc[,2] <- tpr
+  return(roc)
+}
+
+#' Calculate the Area Under the receiver-operator-Curve
+#'
+#' @param pred predicted class, coded in [-1, 1], but really any [<=0, >0] counts
+#' @param ref true class, see pred for info
+#' @param conf classification confidence
+#'
+#' @return the AUC value
+#' @export
+#'
+#' @examples
+ml.auc <- function(ref, conf){
+  roc <- ml.roc(ref, conf)
+  fpr_diff <- diff(c(roc[,1], 1))
+  tpr_diff <- diff(c(roc[,2], 1))
+  auc <- sum(fpr_diff * roc[,2] + 0.5 * fpr_diff * tpr_diff)
+  return(auc)
+}
+
 #' Generate folds for stratified cross-validation in a binary classification scenario
 #'
 #' @param num_folds number of folds
@@ -211,7 +276,7 @@ ml.split.folds.quasistrat <- function(num_folds, class, non_strat_class, num_opt
   class1_indizes <- class1_indizes[order(class1_num_cases, decreasing = TRUE)]
   class2_indizes <- class2_indizes[order(class2_num_cases, decreasing = FALSE)]
   ##Combine
-  res <- lapply(1:5, function(x){ c(class1_indizes[[x]], class2_indizes[[x]]) })
+  res <- lapply(1:num_folds, function(x){ c(class1_indizes[[x]], class2_indizes[[x]]) })
   ##Feedback about partition goodness
   #print(c(best_class1_assig_score, best_class2_assig_score, class1_num_cases, class2_num_cases))
   ##Return
@@ -293,7 +358,7 @@ rat_sig_diffs_along_time <- function(data, corr_fdr = TRUE){
       if (length(g1) > 1 && length(g2) > 1 && length(table(g1)) > 1 && length(table(g2)) > 1){
         u_res <- wilcox.test(x = g1, y = g2)
         time_sig_u_diff[d, n + 1] <- u_res$p.value
-        t_res <- t.test(x = g1, y = g2, var.equal = FALSE)
+        t_res <- t.test(x = g1, y = g2, var.equal = T)
         time_sig_t_diff[d, n + 1] <- t_res$p.value
       }
       else{
@@ -323,6 +388,53 @@ get_annas_rat_sig_diffs <- function(){
   mets = fread(input = "../../data/measurements/annas_sig_metabs.csv", sep = "\t", header = TRUE, data.table = FALSE)
   mets = subset(mets, isPresent == 1, "Variable")
   return(mets[[1]])
+}
+
+#' Return column and row coordinates of TRUE values in matrix
+#'
+#' @param matrix logical or 0/1 matrix
+#'
+#' @return data.frame with x-location vector and y-location vector
+#' @export
+#'
+#' @examples
+which.xy <- function(matrix){
+  dims <- dim(matrix)
+  locs <- which(matrix)
+  loc.x <- (locs - 1) %% dims[2] + 1
+  loc.y <- (locs - 1) %/% dims[1] + 1
+  return(data.frame(x = loc.x, y = loc.y))
+}
+
+#' Compute the correlation and p value column vs column, remove NAs as in cov()'s use="pairwise.complete.obs"
+#'
+#' @param data a matrix or data.frame with numeric data
+#' @param cmethod method of correlation test, either "Pearson" (default), "Spearman" or "Kendall"
+#' @param adjust method of p value correction, see p.adjust; default is "fdr"
+#'
+#' @return a list with a 
+#' @export
+#'
+#' @examples
+my.corr.test <- function(data, cmethod = "pearson", adjust = "fdr"){
+  cmat <- matrix(0, nrow = ncol(data), ncol = ncol(data))
+  pmat <- matrix(0, nrow = ncol(data), ncol = ncol(data))
+  for (n in 1:ncol(data)){
+    for (m in 1:ncol(data)){
+      rowset <- !is.na(data[, n]) & !is.na(data[, m])
+      ctres <- cor.test(x = data[rowset, n], y = data[rowset, m], method = cmethod)
+      cmat[n,m] <- ctres$estimate
+      pmat[n,m] <- ctres$p.value
+    }
+  }
+  upmat <- upper.tri(pmat, diag = FALSE)
+  pmat[upmat] <- p.adjust(p = pmat[upmat], method = adjust)
+  #pmat <- matrix(p.adjust(p = pmat[upmat], method = adjust), ncol = ncol(data)) #checked for correct order of values in matrix
+  colnames(pmat) <- colnames(data)
+  rownames(pmat) <- colnames(data)
+  colnames(cmat) <- colnames(data)
+  rownames(cmat) <- colnames(data)
+  return(list(r = cmat, p = pmat))
 }
 
 col.na.omit <- function(data){
