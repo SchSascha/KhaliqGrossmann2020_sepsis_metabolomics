@@ -204,27 +204,46 @@ human_sepsis_data_normal_S_grouped_conc_pheno_cov <- cov(subset(human_sepsis_dat
 human_sepsis_data_normal_conc_metab_corr <- list()
 cols_grouped_metab <- colnames(human_sepsis_data)[group_metab_sel]
 cols_metab <- colnames(human_sepsis_data)[metab_sel]
-for (d in 0:2){
-  corr_dat <- list()
-  NS_corr <- corr.test(x = subset(human_sepsis_data_normal, Survival == "NS" & Day == d, select = metab_sel), adjust = "fdr")
-  S_corr <- corr.test(x = subset(human_sepsis_data_normal, Survival == "S" & Day == d, select = metab_sel), adjust = "fdr")
-  NS_grouped_corr <- corr.test(x = subset(human_sepsis_data_normal_grouped, Survival == "NS" & Day == d, select = group_metab_sel), adjust = "fdr")
-  S_grouped_corr <- corr.test(x = subset(human_sepsis_data_normal_grouped, Survival == "S" & Day == d, select = group_metab_sel), adjust = "fdr")
-  ###Get significant metabolite pairs
-  xy <- which.xy(NS_grouped_corr$p <= 0.05)
-  xy <- subset(xy, x < y) # x is row, y is column, so x < y means "upper triangle only"
-  corr_dat[["NS_grouped_sig_pairs"]] <- paste0(cols_grouped_metab[xy$x], " ~ ", cols_grouped_metab[xy$y])
-  xy <- which.xy(S_grouped_corr$p <= 0.05)
-  xy <- subset(xy, x < y)
-  corr_dat[["S_grouped_sig_pairs"]] <- paste0(cols_grouped_metab[xy$x], " ~ ", cols_grouped_metab[xy$y])
-  xy <- which.xy(NS_corr$p <= 0.05)
-  xy <- subset(xy, x < y)
-  corr_dat[["NS_sig_pairs"]] <- paste0(cols_metab[xy$x], " ~ ", cols_metab[xy$y])
-  xy <- which.xy(S_corr$p <= 0.05)
-  xy <- subset(xy, x < y)
-  corr_dat[["S_sig_pairs"]] <- paste0(cols_metab[xy$x], " ~ ", cols_metab[xy$y])
-  human_sepsis_data_normal_conc_metab_corr[[paste0("Day",d)]] <- corr_dat
-}
+#bootstrap_list <- list()
+#for (r in 1:20){
+  for (d in 0:2){
+    corr_dat <- list()
+    n_NS <- sum(human_sepsis_data$Survival == "NS" & human_sepsis_data$Day == d)
+    n_S <- sum(human_sepsis_data$Survival == "S" & human_sepsis_data$Day == d)
+    rand_subset <- sample.int(n = n_S, size = n_NS)
+    NS_corr <- corr.test(x = subset(human_sepsis_data_normal, Survival == "NS" & Day == d, select = metab_sel), adjust = "fdr")
+    S_corr <- corr.test(x = subset(human_sepsis_data_normal, Survival == "S" & Day == d & 1:n_S %in% rand_subset, select = metab_sel), adjust = "fdr")
+    NS_grouped_corr <- corr.test(x = subset(human_sepsis_data_normal_grouped, Survival == "NS" & Day == d, select = group_metab_sel), adjust = "fdr")
+    S_grouped_corr <- corr.test(x = subset(human_sepsis_data_normal_grouped, Survival == "S" & Day == d, select = group_metab_sel), adjust = "fdr")
+    ###Get significant metabolite pairs
+    xy <- which.xy(NS_grouped_corr$p <= 0.05)
+    xy <- subset(xy, x < y) # x is row, y is column, so x < y means "upper triangle only"
+    corr_dat[["NS_grouped_sig_pairs"]] <- paste0(cols_grouped_metab[xy$x], " ~ ", cols_grouped_metab[xy$y])
+    xy <- which.xy(S_grouped_corr$p <= 0.05)
+    xy <- subset(xy, x < y)
+    corr_dat[["S_grouped_sig_pairs"]] <- paste0(cols_grouped_metab[xy$x], " ~ ", cols_grouped_metab[xy$y])
+    xy <- which.xy(NS_corr$p <= 0.05)
+    xy <- subset(xy, x < y)
+    corr_dat[["NS_sig_pairs"]] <- paste0(cols_metab[xy$x], " ~ ", cols_metab[xy$y])
+    xy <- which.xy(S_corr$p <= 0.05)
+    xy <- subset(xy, x < y)
+    corr_dat[["S_sig_pairs"]] <- paste0(cols_metab[xy$x], " ~ ", cols_metab[xy$y])
+    human_sepsis_data_normal_conc_metab_corr[[paste0("Day",d)]] <- corr_dat
+  }
+#  bootstrap_list[[r]] <- human_sepsis_data_normal_conc_metab_corr
+#}
+# mean(unlist(lapply(bootstrap_list, function(x){ length(x$Day0$S_sig_pairs) })))
+# mean(unlist(lapply(bootstrap_list, function(x){ length(x$Day1$S_sig_pairs) })))
+# mean(unlist(lapply(bootstrap_list, function(x){ length(x$Day2$S_sig_pairs) })))
+# mean(unlist(lapply(bootstrap_list, function(x){ length(intersect(x$Day0$S_sig_pairs, x$Day0$NS_sig_pairs)) })))
+# mean(unlist(lapply(bootstrap_list, function(x){ length(intersect(x$Day1$S_sig_pairs, x$Day1$NS_sig_pairs)) })))
+# mean(unlist(lapply(bootstrap_list, function(x){ length(intersect(x$Day2$S_sig_pairs, x$Day2$NS_sig_pairs)) })))
+S_sig_pairs_day0_tab <- table(unlist(lapply(bootstrap_list, function(x){ x$Day0$S_sig_pairs })))
+S_sig_pairs_day1_tab <- table(unlist(lapply(bootstrap_list, function(x){ x$Day1$S_sig_pairs })))
+S_sig_pairs_day2_tab <- table(unlist(lapply(bootstrap_list, function(x){ x$Day2$S_sig_pairs })))
+NS_sig_pairs_day0_tab <- table(unlist(lapply(bootstrap_list, function(x){ x$Day0$NS_sig_pairs })))
+NS_sig_pairs_day1_tab <- table(unlist(lapply(bootstrap_list, function(x){ x$Day1$NS_sig_pairs })))
+NS_sig_pairs_day2_tab <- table(unlist(lapply(bootstrap_list, function(x){ x$Day2$NS_sig_pairs })))
 
 ##Build inverse covariance matrices
 inv_human_sepsis_data_normal_conc_metab_cov <- pcor.shrink(na.omit(human_sepsis_data_normal[, metab_sel]))
@@ -247,13 +266,14 @@ class(inv_human_sepsis_data_normal_S_conc_pheno_cov) <- "matrix"
 
 ##Human, Venn diagram of significant metabolite correlations for ungrouped metabolites
 for (d in seq_along(human_sepsis_data_normal_conc_metab_corr)){
-  png(filename = paste0(out_dir, "human_normal_metab_sig_pairs_Venn_day", d, ".png"), width = 500, height = 500, units = "px")
+  png(filename = paste0(out_dir, "human_normal_metab_sig_pairs_Venn_day", d - 1, ".png"), width = 500, height = 500, units = "px")
   corr_dat <- human_sepsis_data_normal_conc_metab_corr[[d]]
   v1 <- length(corr_dat$NS_sig_pairs)
   v2 <- length(corr_dat$S_sig_pairs)
   vc <- length(intersect(corr_dat$NS_sig_pairs, corr_dat$S_sig_pairs))
+  day_surv_table <- table(human_sepsis_data[c("Day", "Survival")])
   grid.newpage()
-  g <- draw.pairwise.venn(area1 = v1, area2 = v2, cross.area = vc, category = c("Nonsurvivors", "Survivors"), fill = c("blue", "red"), lwd = 0, cat.pos = c(0,0), scaled = F, cex = 2, cat.cex = 2, fontfamily = "arial", cat.fontfamily = "arial")
+  g <- draw.pairwise.venn(area1 = v1, area2 = v2, cross.area = vc, category = c(paste0("Nonsurvivors, n=", day_surv_table[d, 1]) , paste0("Survivors, n=", day_surv_table[d, 2])), fill = c("blue", "red"), lwd = 0, cat.pos = c(0,0), scaled = F, cex = 2, cat.cex = 2, fontfamily = "arial", cat.fontfamily = "arial")
   grid.arrange(gTree(children = g), top = textGrob(paste0("Number of significantly correlating\nmetabolites at day ", d-1), gp = gpar(cex = 2, font = "arial")))
   dev.off()
 }

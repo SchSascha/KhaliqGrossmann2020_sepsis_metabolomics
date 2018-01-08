@@ -113,11 +113,30 @@ max_norm <- function(x, subset = 1:ncol(x)){
 #' @examples
 ml.npr <- function(pred, ref){
   res <- list()
+  tp <- sum(pred > 0 & ref > 0)
+  tn <- sum(pred <= 0 & ref <= 0)
+  fp <- sum(pred > 0 & ref <= 0)
+  fn <- sum(pred <= 0 & ref > 0)
   res[["tpr"]] <- sum(pred > 0 & ref > 0)/sum(ref > 0)
   res[["tnr"]] <- sum(pred <= 0 & ref <= 0)/sum(ref <= 0)
   res[["fpr"]] <- sum(pred > 0 & ref <= 0)/sum(ref <= 0)
   res[["fnr"]] <- sum(pred <= 0 & ref > 0)/sum(ref > 0)
+  res[["ppv"]] <- tp / sum(pred > 0)
+  res[["npv"]] <- tn / sum(pred <= 0)
   return(res)
+}
+
+#' Compute the accuracy measure for classifier predictions. Works for only for binary classes.
+#'
+#' @param pred predicted class
+#' @param ref true class
+#'
+#' @return accuracy, single value
+#' @export
+#'
+#' @examples
+ml.acc <- function(pred, ref){
+  return(sum(pred > 0 & ref > 0 | pred <= 0 & ref <= 0) / length(ref))
 }
 
 #' Calculate the points of the Receiver Operatoring Curve
