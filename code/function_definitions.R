@@ -10,6 +10,47 @@ get_human_sepsis_data <- function(){
   return(data)
 }
 
+#' Read the clinical data set on sepsis shock cases from Ferrario et al., Scientific Reports, 2016
+#'
+#' @return data.frame with measurements for day1 and day7, formatted the same way as data from Mervyn
+#' @export
+#'
+#' @examples
+get_Ferrario_validation_data <- function(){
+  #Read data
+  data_day1 <- read.csv(file = "../../data/measurements/Ferrario_validation_day1.csv", header = FALSE, skip = 3, sep = "\t", stringsAsFactors = FALSE, dec = ",", check.names = FALSE)
+  data_day7 <- read.csv(file = "../../data/measurements/Ferrario_validation_day7.csv", header = FALSE, skip = 3, sep = "\t", stringsAsFactors = FALSE, dec = ",", check.names = FALSE)
+  header_day1 <- read.csv(file = "../../data/measurements/Ferrario_validation_day1.csv", header = FALSE, sep = "\t", stringsAsFactors = FALSE, dec = ",", check.names = FALSE, nrows = 3)
+  header_day7 <- read.csv(file = "../../data/measurements/Ferrario_validation_day7.csv", header = FALSE, sep = "\t", stringsAsFactors = FALSE, dec = ",", check.names = FALSE, nrows = 3)
+  #Build Patient characteristic
+  data <- data.frame(Patient = unlist(c(header_day1[1, -1], header_day7[1, -1])), Survival28 = unlist(c(header_day1[2, -1], header_day7[2, -1])), Survival90 = unlist(c(header_day1[3, -1], header_day7[3, -1])), Day = rep(c(0,6), each = 20), stringsAsFactors = FALSE)
+  #Transpose concentration data
+  rownames(data_day1) <- data_day1$V1
+  rownames(data_day7) <- data_day7$V1
+  data_day1$V1 <- NULL
+  data_day7$V1 <- NULL
+  data_day1 <- t(data_day1)
+  data_day7 <- t(data_day7)
+  #Combine and edit metabolite names
+  mets <- union(colnames(data_day1), colnames(data_day7))
+  m1 <- match(colnames(data_day1), mets)
+  m2 <- match(colnames(data_day7), mets)
+  mets <- trimws(mets)
+  mets <- sub(pattern = "LPC", replacement = "lysoPC", x = mets)
+  mets <- sub(pattern = "SM OH", replacement = "SM (OH)", x = mets)
+  mets[mets == "Sugars"] <- "H1"
+  mets[mets == "Met:SO"] <- "Met-SO"
+  mets[mets == "Ac Orn"] <- "Ac-Orn"
+  mets[mets == "Alpha AAA"] <- "alpha-AAA"
+  #Copy concentrations into data.frame
+  data <- cbind(data, matrix(NA, ncol = length(mets), nrow = nrow(data)))
+  colnames(data)[-1:-4] <- mets
+  data[1:nrow(data_day1), m1 + 4] <- data_day1
+  data[(nrow(data_day1) + 1):nrow(data_day7), m2 + 4] <- data_day7
+  data <- data[order(data$Patient),]
+  return(data)
+}
+
 #' Read the legend to the clinical data set on sepsis cases. The legend has two group assignments of different coarseness.
 #'
 #' @return data.frame, first column stores the column names in the measurement data table, second the fine grained grouping, third the coarse grained grouping
@@ -32,7 +73,7 @@ get_rat_sepsis_data <- function(){
   data <- data[apply(data, 1, function(x){ sum(is.na(x)) }) < ncol(data) - 20, ] #Strip rows without any non-NA value
   data <- data[, apply(data, 2, function(x) { sum(is.na(x)) }) < nrow(data)] #Strip columns without any non-NA value
   data <- data[, apply(data, 2, function(x){ length(unique(x))}) > 1] #Strip columns with constant values
-  data$BE <- data$BE - min(data$BE, na.rm = TRUE)
+  data$BE <- data$BE - (min(data$BE, na.rm = TRUE) - 0.1) # without -0.1 later normalization will return -Inf for the lowest value
   return(data)
 }
 
@@ -362,9 +403,12 @@ rat_sig_diffs_along_time <- function(data, corr_fdr = TRUE){
   ##Keep times with large enough sample count
   time_survival_tab <- time_survival_tab[rowMins(time_survival_tab) >= 2,]
   ##Get significant differences for each time
-  time_sig_u_diff <- data.frame(Time = rownames(time_survival_tab), matrix(0, nrow = nrow(time_survival_tab), ncol = ncol(data)-4))
+  time_sig_u_diff <- data.frame(Time = rownames(time_survival_tab), matrix(1, nrow = nrow(time_survival_tab), ncol = ncol(data)-4))
   colnames(time_sig_u_diff)[-1] <- colnames(data)[-1:-4]
   time_sig_t_diff <- time_sig_u_diff
+  time_mag_g1_t_diff <- time_sig_u_diff
+  time_mag_g2_t_diff <- time_sig_u_diff
+  time_fold_change <- time_sig_u_diff
   groups <- unique(data$group)
   for (d in seq_along(time_sig_u_diff$Time)){
     #Reduce to significant differences
@@ -377,13 +421,16 @@ rat_sig_diffs_along_time <- function(data, corr_fdr = TRUE){
       if (length(g1) > 1 && length(g2) > 1 && length(table(g1)) > 1 && length(table(g2)) > 1){
         u_res <- wilcox.test(x = g1, y = g2)
         time_sig_u_diff[d, n + 1] <- u_res$p.value
-        t_res <- t.test(x = g1, y = g2, var.equal = T)
+        t_res <- t.test(x = g1, y = g2, var.equal = F)
         time_sig_t_diff[d, n + 1] <- t_res$p.value
       }
       else{
         time_sig_u_diff[d, n + 1] <- NA
         time_sig_t_diff[d, n + 1] <- NA
       }
+      time_mag_g1_t_diff[d, n + 1] <- mean(g1)
+      time_mag_g2_t_diff[d, n + 1] <- mean(g2)
+      time_fold_change[d, n + 1] <- log(mean(g1) / mean(g2))
     }
   }
   if (corr_fdr){
@@ -394,7 +441,7 @@ rat_sig_diffs_along_time <- function(data, corr_fdr = TRUE){
       time_sig_t_diff[d, -1] <- p.adjust(p = time_sig_t_diff[d,-1], method = "fdr")
     }
   }
-  res <- list(time_sig_u_diff = time_sig_u_diff, time_sig_t_diff = time_sig_t_diff)
+  res <- list(time_sig_u_diff = time_sig_u_diff, time_sig_t_diff = time_sig_t_diff, time_mag_g1_t_diff = time_mag_g1_t_diff, time_mag_g2_t_diff = time_mag_g2_t_diff, time_fold_change = time_fold_change)
 }
 
 #' Import Anna's significantly differentially concentrated metabolite names (acronyms like "C10" or "SM OH C16:0")
@@ -435,25 +482,69 @@ which.xy <- function(matrix){
 #' @export
 #'
 #' @examples
-my.corr.test <- function(data, cmethod = "pearson", adjust = "fdr"){
-  cmat <- matrix(0, nrow = ncol(data), ncol = ncol(data))
-  pmat <- matrix(0, nrow = ncol(data), ncol = ncol(data))
-  for (n in 1:ncol(data)){
-    for (m in 1:ncol(data)){
-      rowset <- !is.na(data[, n]) & !is.na(data[, m])
-      ctres <- cor.test(x = data[rowset, n], y = data[rowset, m], method = cmethod)
+my.corr.test <- function(x, method = "pearson", adjust = "fdr"){
+  cmat <- matrix(0, nrow = ncol(x), ncol = ncol(x))
+  pmat <- matrix(0, nrow = ncol(x), ncol = ncol(x))
+  for (n in 1:ncol(x)){
+    for (m in n:ncol(x)){
+      rowset <- !is.na(x[, n]) & !is.na(x[, m])
+      ctres <- cor.test(x = x[rowset, n], y = x[rowset, m], method = method)
       cmat[n,m] <- ctres$estimate
+      cmat[m,n] <- ctres$estimate
       pmat[n,m] <- ctres$p.value
+      pmat[m,n] <- ctres$p.value
     }
   }
   upmat <- upper.tri(pmat, diag = FALSE)
   pmat[upmat] <- p.adjust(p = pmat[upmat], method = adjust)
   #pmat <- matrix(p.adjust(p = pmat[upmat], method = adjust), ncol = ncol(data)) #checked for correct order of values in matrix
-  colnames(pmat) <- colnames(data)
-  rownames(pmat) <- colnames(data)
-  colnames(cmat) <- colnames(data)
-  rownames(cmat) <- colnames(data)
+  colnames(pmat) <- colnames(x)
+  rownames(pmat) <- colnames(x)
+  colnames(cmat) <- colnames(x)
+  rownames(cmat) <- colnames(x)
   return(list(r = cmat, p = pmat))
+}
+
+#' Compute one bootstrap sample of concentration correlations in Survivors. This is a dirty hack to reduce overhead in parralelization.
+#'
+#' @param n_S number of Survivor patients to sample
+#' @param corr_dat list, probably with fields NS_sig_pairs and NS_grouped_sig_pairs and the corresponding coefficients
+#'
+#' @return the list corr_dat extended by fields for Survivors from one random sample of survivor patients
+#' @export
+#'
+#' @examples
+bootstrap_S_corr_fun <- function(r, n_S, corr_dat){
+  set.seed(r)
+  rand_subset <- sample.int(n = n_S, size = n_NS)
+  S_corr <- my.corr.test(x = subset(subset(human_sepsis_data_normal, Survival == "S" & Day == d, select = -1:-5), 1:n_S %in% rand_subset), adjust = "fdr")
+  S_grouped_corr <- my.corr.test(x = subset(human_sepsis_data_normal_grouped, Survival == "S" & Day == d, select = -1:-5), adjust = "fdr")
+  ###Get significant metabolite pairs in survivors
+  xy <- which.xy(S_grouped_corr$p <= 0.05)
+  xy <- subset(xy, x < y)
+  if (nrow(xy) > 0) {
+    coeffs <- apply(xy, c(1), function(cc){ S_grouped_corr$r[cc[1], cc[2]] })
+    cdir <- ifelse(coeffs > 0, "+", "-")
+    corr_dat[["S_grouped_sig_pairs"]] <- paste0(cols_grouped_metab[xy$x], " ~(", cdir, ") ", cols_grouped_metab[xy$y])
+    corr_dat[["S_grouped_sig_coeff"]] <- apply(xy, c(1), function(cc){ S_grouped_corr$coeff[cc[1], cc[2]] })
+  }
+  else{
+    corr_dat[["S_grouped_sig_pairs"]] <- c()
+    corr_dat[["S_grouped_sig_coeff"]] <- c()
+  }
+  xy <- which.xy(S_corr$p <= 0.05)
+  xy <- subset(xy, x < y)
+  if (nrow(xy) > 0){
+    coeffs <- apply(xy, c(1), function(cc){ S_corr$r[cc[1], cc[2]] })
+    cdir <- ifelse(coeffs > 0, "+", "-")
+    corr_dat[["S_sig_pairs"]] <- paste0(cols_metab[xy$x], " ~(", cdir, ") ", cols_metab[xy$y])
+    corr_dat[["S_sig_coeff"]] <- coeffs
+  }
+  else{
+    corr_dat[["S_sig_pairs"]] <- c()
+    corr_dat[["S_sig_coeff"]] <- c()
+  }
+  return(corr_dat)
 }
 
 col.na.omit <- function(data){
