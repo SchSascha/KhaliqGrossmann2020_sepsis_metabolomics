@@ -54,11 +54,11 @@ rat_plasma_sig_diff_res <- rat_sig_diffs_along_time(subset(rat_sepsis_data, mate
 rat_plasma_time_sig_u_diff <- rat_plasma_sig_diff_res$time_sig_u_diff
 rat_plasma_time_sig_t_diff <- rat_plasma_sig_diff_res$time_sig_t_diff
 
-rat_heart_sig_diff_res <- rat_sig_diffs_along_time(subset(rat_sepsis_data, material == "heart" & group %in% c("septic survivor", "septic non-survivor")), corr_fdr = F)
+rat_heart_sig_diff_res <- rat_sig_diffs_along_time(subset(rat_sepsis_data, material == "heart" & group %in% c("septic survivor", "septic non-survivor")), corr_fdr = T)
 rat_heart_time_sig_u_diff <- rat_heart_sig_diff_res$time_sig_u_diff
 rat_heart_time_sig_t_diff <- rat_heart_sig_diff_res$time_sig_t_diff
 
-rat_liver_sig_diff_res <- rat_sig_diffs_along_time(subset(rat_sepsis_data, material == "liver" & group %in% c("septic survivor", "septic non-survivor")), corr_fdr = F)
+rat_liver_sig_diff_res <- rat_sig_diffs_along_time(subset(rat_sepsis_data, material == "liver" & group %in% c("septic survivor", "septic non-survivor")), corr_fdr = T)
 rat_liver_time_sig_u_diff <- rat_liver_sig_diff_res$time_sig_u_diff
 rat_liver_time_sig_t_diff <- rat_liver_sig_diff_res$time_sig_t_diff
 
@@ -218,8 +218,15 @@ xmt <- data.frame(t(xm[, -1:-4]))
 rownames(xmt) <- colnames(xm[,-1:-4])
 colnames(xmt) <- xm$`Sample Identification`
 
+mat_sigs <- list()
+mat_sig_subset <- colnames(rat_plasma_sig_diff_ctrl_surv_res$time_sig_t_diff) %in% rownames(xmt)
+mat_sigs[["plasma"]] <- as.matrix(colAnys(rat_plasma_sig_diff_ctrl_surv_res$time_sig_t_diff[,-1] <= 0.05) + 2*colAnys(rat_plasma_sig_diff_ctrl_nonsurv_res$time_sig_t_diff[,-1] <= 0.05))[mat_sig_subset]
+mat_sigs[["liver"]] <- as.matrix(colAnys(rat_liver_sig_diff_ctrl_surv_res$time_sig_t_diff[,-1] <= 0.05) + 2*colAnys(rat_liver_sig_diff_ctrl_nonsurv_res$time_sig_t_diff[,-1] <= 0.05))[mat_sig_subset]
+mat_sigs[["heart"]] <- as.matrix(colAnys(rat_heart_sig_diff_ctrl_surv_res$time_sig_t_diff[,-1] <= 0.05) + 2*colAnys(rat_heart_sig_diff_ctrl_nonsurv_res$time_sig_t_diff[,-1] <= 0.05))[mat_sig_subset]
+mat_sigs <- lapply(mat_sigs, function(x){ c(NA, "Sig diff Surv", "Sig diff Nonsurv")[x + 1] })
+
 for (mat in unique(xm$material)){
-  h <- heatmaply(x = xmt[, xm$material == mat], dendrogram = "row", plot_method = "plotly", col_side_colors = subset(xm, material == mat, c("time point", "group")), key.title = "fold change with\nrespect to control", margins = c(50,100,0,50), subplot_heights = c(0.03, 0.97))
+  h <- heatmaply(x = xmt[, xm$material == mat], dendrogram = "row", plot_method = "plotly", col_side_colors = subset(xm, material == mat, c("time point", "group")), row_side_colors = data.frame(sig_reg = mat_sigs[[mat]]), key.title = "fold change with\nrespect to control", margins = c(50,100,0,50), subplot_heights = c(0.03, 0.97))
   #png(filename = paste0(out_dir, "rat_fold_change_", mat, "_pheno.png"), width = 800, height = 1600)
   h$width <- 800
   h$height <- 1600
@@ -235,7 +242,10 @@ rownames(xpt) <- colnames(xp[,-1:-4])
 colnames(xpt) <- xp$`Sample Identification`
 
 mat <- "plasma"
-h <- heatmaply(file = paste0(out_dir, "rat_fold_change_", mat, "_pheno.png"), x = xpt[, xp$material == mat], dendrogram = "row", plot_method = "plotly", col_side_colors = subset(xp, material == mat, c("time point", "group")), key.title = "fold change\nwith respect to control", margins = c(50,100,0,50), subplot_heights = c(0.05, 0.95))
+mat_sig_subset <- colnames(rat_plasma_sig_diff_ctrl_surv_res$time_sig_t_diff) %in% rownames(xpt)
+mat_sig_pl <- as.matrix(colAnys(rat_plasma_sig_diff_ctrl_surv_res$time_sig_t_diff[,-1] <= 0.05) + 2*colAnys(rat_plasma_sig_diff_ctrl_nonsurv_res$time_sig_t_diff[,-1] <= 0.05))[mat_sig_subset]
+mat_sig_pheno <- c(NA, "Sig diff Surv", "Sig diff Nonsurv")[mat_sig_pl + 1]
+h <- heatmaply(file = paste0(out_dir, "rat_fold_change_", mat, "_pheno.png"), x = xpt[, xp$material == mat], dendrogram = "row", plot_method = "plotly", col_side_colors = subset(xp, material == mat, c("time point", "group")), row_side_colors = data.frame(sig_reg = mat_sig_pheno), key.title = "fold change with\nrespect to control", margins = c(100,80,0,250), subplot_heights = c(0.05, 0.95))
 
 
 

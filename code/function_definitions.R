@@ -58,7 +58,7 @@ get_Ferrario_validation_data <- function(){
 #'
 #' @examples
 get_human_sepsis_legend <- function(){
-  data <- read.csv(file = "../../data/measurements/Legend human sample data.csv", header = TRUE, sep = "\t", stringsAsFactors = FALSE, dec = ",", check.names = FALSE)
+  data <- read.csv(file = "../../data/measurements/Legend human sample data pheno class.csv", header = TRUE, sep = "\t", stringsAsFactors = FALSE, dec = ",", check.names = FALSE)
   return(data)
 }
 

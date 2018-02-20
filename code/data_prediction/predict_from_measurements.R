@@ -137,7 +137,7 @@ for (d in seq_along(day_set)){
   v.rg.npr <- list()
   v.ks.npr <- list()
   v.lm.npr <- list()
-  v.ol.npr <- list()
+  #v.ol.npr <- list()
   yPredRG <- rep(0, nrow(human_sepsis_data_ml))
   yPredKS <- rep(0, nrow(human_sepsis_data_ml))
   yPredLM <- rep(0, nrow(human_sepsis_data_ml))
@@ -146,15 +146,18 @@ for (d in seq_along(day_set)){
   for (fold in 1:num_folds){
     fold_learn_set <- human_sepsis_data_ml[-fold_set[[fold]],]
     fold_test_set <- human_sepsis_data_ml[fold_set[[fold]],]
-    rgCV <- ranger(data = fold_learn_set, dependent.variable.name = "Survival", num.trees = rg.num.trees, write.forest = T, save.memory = F, classification = TRUE)
-    ksCV <- ksvm(fml, fold_learn_set, type = "C-svc", kernel = "vanilladot")
+    class_count <- table(fold_learn_set$Survival)
+    case_weights <- rep(class_count[1]/class_count[2], nrow(fold_learn_set))
+    case_weights[fold_learn_set$Survival == 0] <- class_count[2]/class_count[1]
+    rgCV <- ranger(data = fold_learn_set, dependent.variable.name = "Survival", num.trees = rg.num.trees, write.forest = T, save.memory = F, classification = TRUE, case.weights = case_weights)
+    ksCV <- ksvm(fml, fold_learn_set, type = "C-svc", kernel = "vanilladot", class.weights = class_count)
     #ksCV <- ksvm(fml, fold_learn_set, type = "C-svc", kernel = "rbfdot", kpar = "automatic", C = 10)
     lmCV <- lm(formula = fml, data = fold_learn_set)
     olCV <- opls(x = fold_learn_set[, -1], y = fold_learn_set[, 1], predI = 1, orthoI = 1, printL = F, plotL = F)
     v.rg.npr[[fold]] <- ml.npr(predict(rgCV, fold_test_set)$predictions, fold_test_set$Survival)
     v.ks.npr[[fold]] <- ml.npr(predict(ksCV, fold_test_set), fold_test_set$Survival)
     v.lm.npr[[fold]] <- ml.npr(predict(lmCV, fold_test_set[,-1]), fold_test_set$Survival)
-    v.ol.npr[[fold]] <- ml.npr(predict(olCV, fold_test_set[,-1]), fold_test_set$Survival)
+    #v.ol.npr[[fold]] <- ml.npr(predict(olCV, fold_test_set[,-1]), fold_test_set$Survival)
     yPredRG[fold_set[[fold]]] <- predict(rgCV, fold_test_set)$predictions
     yPredKS[fold_set[[fold]]] <- predict(ksCV, fold_test_set)
     yPredLM[fold_set[[fold]]] <- predict(lmCV, fold_test_set)
@@ -169,7 +172,7 @@ for (d in seq_along(day_set)){
   rg.npr.repeat.df[d,-1] <- colMeans(rbindlist(v.rg.npr))
   ks.npr.repeat.df[d,-1] <- colMeans(rbindlist(v.ks.npr))
   lm.npr.repeat.df[d,-1] <- colMeans(rbindlist(v.lm.npr))
-  ol.npr.repeat.df[d,-1] <- colMeans(rbindlist(v.ol.npr))
+  #ol.npr.repeat.df[d,-1] <- colMeans(rbindlist(v.ol.npr))
 
   ###Get variable importance and validate on special data subsets
   #print("Most important variables according to Random Forest internal ranking:")
@@ -197,14 +200,17 @@ for (d in seq_along(day_set)){
   for (fold in 1:num_folds){
     fold_learn_set <- human_sepsis_data_ml_red[-fold_set[[fold]],]
     fold_test_set <- human_sepsis_data_ml[fold_set[[fold]],]
-    rgCV <- ranger(data = fold_learn_set, dependent.variable.name = "Survival", num.trees = rg.num.trees, write.forest = T, save.memory = F, classification = TRUE)
+    class_count <- table(fold_learn_set$Survival)
+    case_weights <- rep(class_count[1]/class_count[2], nrow(fold_learn_set))
+    case_weights[fold_learn_set$Survival == 0] <- class_count[2]/class_count[1]
+    rgCV <- ranger(data = fold_learn_set, dependent.variable.name = "Survival", num.trees = rg.num.trees, write.forest = T, save.memory = F, classification = TRUE, case.weights = case_weights)
     ksCV <- ksvm(fml, fold_learn_set, type = "C-svc", kernel = "vanilladot")
     #ksCV <- ksvm(fml, fold_learn_set, type = "C-svc", kernel = "rbfdot", kpar = "automatic", C = 10)
     lmCV <- lm(formula = fml, data = fold_learn_set)
     v.rg.npr[[fold]] <- ml.npr(predict(rgCV, fold_test_set)$predictions, fold_test_set$Survival)
     v.ks.npr[[fold]] <- ml.npr(predict(ksCV, fold_test_set), fold_test_set$Survival)
     v.lm.npr[[fold]] <- ml.npr(predict(lmCV, fold_test_set[,-1]), fold_test_set$Survival)
-    v.ol.npr[[fold]] <- ml.npr(predict(olCV, fold_test_set[,-1]), fold_test_set$Survival)
+    #v.ol.npr[[fold]] <- ml.npr(predict(olCV, fold_test_set[,-1]), fold_test_set$Survival)
     yPredRG[fold_set[[fold]]] <- predict(rgCV, human_sepsis_data_ml_red[fold_set[[fold]],])$predictions
     yPredKS[fold_set[[fold]]] <- predict(ksCV, human_sepsis_data_ml_red[fold_set[[fold]],])
     yPredLM[fold_set[[fold]]] <- predict(lmCV, human_sepsis_data_ml_red[fold_set[[fold]],])
@@ -219,7 +225,7 @@ for (d in seq_along(day_set)){
   rg.red.npr.repeat.df[d,-1] <- colMeans(rbindlist(v.rg.npr))
   ks.red.npr.repeat.df[d,-1] <- colMeans(rbindlist(v.ks.npr))
   lm.red.npr.repeat.df[d,-1] <- colMeans(rbindlist(v.lm.npr))
-  ol.red.npr.repeat.df[d,-1] <- colMeans(rbindlist(v.ol.npr))
+  #ol.red.npr.repeat.df[d,-1] <- colMeans(rbindlist(v.ol.npr))
 }
 
 rg.npr.repeat.df$Method <- "RF"
