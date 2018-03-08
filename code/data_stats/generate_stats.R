@@ -44,6 +44,8 @@ human_sepsis_data <- get_human_sepsis_data()
 human_sepsis_legend <- get_human_sepsis_legend()
 human_sepsis_legend$group[human_sepsis_legend$group == ""] <- human_sepsis_legend[human_sepsis_legend$group == "", 1]
 human_sepsis_legend <- human_sepsis_legend[-1:-5, ]
+human_sepsis_pheno_var_groups <- get_human_pheno_var_groups()
+human_sepsis_legend$group[match(human_sepsis_pheno_var_groups[,1], human_sepsis_legend[200:nrow(human_sepsis_legend), 1]) + 199] <- human_sepsis_pheno_var_groups$group
 
 ##Import experiment data
 rat_sepsis_data <- get_rat_sepsis_data()
@@ -72,7 +74,7 @@ human_sepsis_data_normal[,-1:-5] <- scale(x = human_sepsis_data[,-1:-5])
 human_sepsis_data_normal$Patient <- as.factor(human_sepsis_data_normal$Patient)
 human_sepsis_data_normal$Day <- as.factor(human_sepsis_data_normal$Day)
 ##Group metabolites
-coarse_group_list <- human_sepsis_legend[human_sepsis_legend[,1] %in% colnames(human_sepsis_data[,-1:-5]), 3]
+coarse_group_list <- human_sepsis_legend[human_sepsis_legend[,1] %in% colnames(human_sepsis_data)[-1:-5], 3] #lucky ... no col in data without match in legend
 human_sepsis_data_normal_grouped <- cbind(human_sepsis_data[,1:5], matrix(0, nrow = nrow(human_sepsis_data_normal), ncol=length(unique(coarse_group_list))))
 colnames(human_sepsis_data_normal_grouped)[-1:-5] <- unique(coarse_group_list)
 human_sepsis_data_normal_grouped$Patient <- as.factor(human_sepsis_data_normal_grouped$Patient)
@@ -84,10 +86,10 @@ for (n in 1:nrow(human_sepsis_data_normal)){
 split_start <- which(colnames(human_sepsis_data) == "Urea")
 pheno_sel <- split_start:ncol(human_sepsis_data)
 metab_sel <- 6:(split_start-1)
-group_pheno_sel <- which(colnames(human_sepsis_data_normal_grouped) %in% colnames(human_sepsis_data[,pheno_sel]))
+group_pheno_sel <- which(colnames(human_sepsis_data_normal_grouped) %in% unique(coarse_group_list[pheno_sel - 5]))
 group_metab_sel <- which(colnames(human_sepsis_data_normal_grouped) %in% unique(coarse_group_list[metab_sel - 5]))
-X11();plot(hclust(dist(human_sepsis_data_normal_grouped[, group_metab_sel])))
-##According to cluster plot, sample number 11 is an outlier
+##Cluster plot, see outlier?
+X11();plot(hclust(dist(human_sepsis_data_normal[, metab_sel])))
 #human_sepsis_data <- human_sepsis_data[-11, ]
 
 #Get data overview
@@ -108,7 +110,7 @@ day_sig_u_diff_pos_long <- get_sig_var_pos(day_sig_u_diff, time_var = "Day")
 ##Construct tANOVA arguments; tANOVA requires equal number of replicates for each time point of a factor level
 full_tanova_data <- subset(human_sepsis_data, Day %in% rownames(table(Day))[table(Day) > 1])
 #tanova_day_set <- c(0,1,2,3,5,7,14)
-tanova_day_set <- c(0,1,2) # before : c(0,1,2,3)
+tanova_day_set <- c(0,1,2,3) # before : c(0,1,2)
 tanova_patient_set <- unique(full_tanova_data$Patient)
 for (n in tanova_day_set){
   tanova_patient_set <- intersect(tanova_patient_set, full_tanova_data$Patient[full_tanova_data$Day == n])
@@ -122,7 +124,7 @@ tp <- as.numeric(as.factor(full_tanova_data$Day))
 ##Clean metabolite data
 t_data <- na.omit(t_data)
 ##Run tANOVA
-tanova_res <- tanova(data = t_data, f1 = f1, f2 = f2, tp = tp, test.type = 2, robustify = TRUE, eb = FALSE, B = 100)
+tanova_res <- tanova(data = t_data, f1 = f1, f2 = f2, tp = tp, test.type = 2, robustify = TRUE, eb = FALSE, B = 400)
 tanova_sig_metabs <- tanova_res$obj$gene.order[tanova_res$obj$pvalue <= 0.05]
 sig_tanova_class <- colnames(human_sepsis_data)[-1:-5][tanova_sig_metabs]
 
@@ -152,8 +154,8 @@ sig_anova.car_class <- colnames(anova.car.ps)[colAnys(anova.car.ps[(nrow(anova.c
 anova.car.posthocs <- list()
 anova.car.posthoc.sig.days <- list()
 for (n in seq_along(anova.car.models)){
-  #anova.car.posthocs[[n]] <- summary(glht(anova.car.models[[n]], linfct = mcp(Day = rbind("0 - 1" = c(-1, 1, 0, 0), "1 - 2" = c(0, -1, 1, 0), "2 - 3" = c(0, 0, -1, 1)))))
-  anova.car.posthocs[[n]] <- summary(glht(anova.car.models[[n]], linfct = mcp(Day = rbind("0 - 1" = c(-1, 1, 0), "1 - 2" = c(0, -1, 1)))))
+  anova.car.posthocs[[n]] <- summary(glht(anova.car.models[[n]], linfct = mcp(Day = rbind("0 - 1" = c(-1, 1, 0, 0), "1 - 2" = c(0, -1, 1, 0), "2 - 3" = c(0, 0, -1, 1)))))
+  #anova.car.posthocs[[n]] <- summary(glht(anova.car.models[[n]], linfct = mcp(Day = rbind("0 - 1" = c(-1, 1, 0), "1 - 2" = c(0, -1, 1)))))
   post_hoc_p <- anova.car.posthocs[[n]]$test$pvalues
   anova.car.posthoc.sig.days[[n]] <- which(post_hoc_p <= 0.05)
 }
@@ -169,26 +171,6 @@ human_sepsis_data_long_form <- melt(data = human_sepsis_data_max_norm, id.vars =
 rat_sepsis_data_long_form <- melt(data = rat_sepsis_data_max_norm, id.vars = c("Sample Identification", "material", "group", "time point"))
 
 #Build tables for cluster-heatmaps
-##Scale mesaurement values by standardization
-human_sepsis_data_normal <- human_sepsis_data
-human_sepsis_data_normal[,-1:-5] <- scale(x = human_sepsis_data[,-1:-5])
-human_sepsis_data_normal$Patient <- as.factor(human_sepsis_data_normal$Patient)
-human_sepsis_data_normal$Day <- as.factor(human_sepsis_data_normal$Day)
-##Group metabolites
-coarse_group_list <- human_sepsis_legend[human_sepsis_legend[,1] %in% colnames(human_sepsis_data[,-1:-5]), 3]
-human_sepsis_data_normal_grouped <- cbind(human_sepsis_data[,1:5], matrix(0, nrow = nrow(human_sepsis_data_normal), ncol=length(unique(coarse_group_list))))
-colnames(human_sepsis_data_normal_grouped)[-1:-5] <- unique(coarse_group_list)
-human_sepsis_data_normal_grouped$Patient <- as.factor(human_sepsis_data_normal_grouped$Patient)
-human_sepsis_data_normal_grouped$Day <- as.factor(human_sepsis_data_normal_grouped$Day)
-for (n in 1:nrow(human_sepsis_data_normal)){
-  human_sepsis_data_normal_grouped[n, -1:-5] <- aggregate(t(human_sepsis_data_normal[n,-1:-5]), by = list(coarse_group_list), FUN = mean, na.action = na.omit)[,2]
-}
-##Split for metabolites and "phenotypical" factors
-split_start <- which(colnames(human_sepsis_data) == "Urea")
-pheno_sel <- split_start:ncol(human_sepsis_data)
-metab_sel <- 6:(split_start-1)
-group_pheno_sel <- which(colnames(human_sepsis_data_normal_grouped) %in% unique(coarse_group_list[pheno_sel - 5]))
-group_metab_sel <- which(colnames(human_sepsis_data_normal_grouped) %in% unique(coarse_group_list[metab_sel - 5]))
 ##Build covariance matrix with metabolite groups
 human_sepsis_data_normal_grouped_metab_cov <- cbind(human_sepsis_data_normal_grouped[, 1:5], cov(t(human_sepsis_data_normal_grouped[,group_metab_sel]), use = "pairwise.complete.obs"))
 human_sepsis_data_normal_grouped_pheno_cov <- cbind(human_sepsis_data_normal_grouped[, 1:5], cov(t(human_sepsis_data_normal_grouped[,group_pheno_sel]), use = "pairwise.complete.obs"))
@@ -205,6 +187,8 @@ human_sepsis_data_normal_grouped_pheno_cor <- human_sepsis_data_normal_grouped_p
 human_sepsis_data_normal_metab_cor <- cbind(human_sepsis_data_normal[, 1:5], cor(t(human_sepsis_data_normal[, metab_sel]), use = "pairwise.complete.obs"))
 human_sepsis_data_normal_pheno_cor <- cbind(human_sepsis_data_normal[, 1:5], cor(t(human_sepsis_data_normal[, pheno_sel]), use = "pairwise.complete.obs"))
 human_sepsis_data_normal_pheno_cor <- human_sepsis_data_normal_pheno_cor[, !apply(human_sepsis_data_normal_pheno_cor, 2, function(x){all(is.na(x))})]
+##Build covariance matrix with original metabolites and phenom. vars
+human_sepsis_data_normal_metab_pheno_cov <- cbind(human_sepsis_data_normal[, 1:5], cov(t(human_sepsis_data_normal[, -1:-5]), use = "pairwise.complete.obs"))
 
 ##Build covariance matrix of metabolites with original metabolites
 ###Survival-ignorant
@@ -331,6 +315,8 @@ S_sig_pairs_day0_tab <- S_sig_pairs_day0_tab[1:ceiling(S_sig_pairs_day0_cutoff)]
 S_sig_pairs_day1_tab <- S_sig_pairs_day1_tab[1:ceiling(S_sig_pairs_day1_cutoff)]
 S_sig_pairs_day2_tab <- S_sig_pairs_day2_tab[1:ceiling(S_sig_pairs_day2_cutoff)]
 
+split_pat <- " ~\\(.\\) "
+
 S_sig_pairs_day0_mets <- strsplit(x = names(S_sig_pairs_day0_tab), split = split_pat)
 S_sig_pairs_day1_mets <- strsplit(x = names(S_sig_pairs_day1_tab), split = split_pat)
 S_sig_pairs_day2_mets <- strsplit(x = names(S_sig_pairs_day2_tab), split = split_pat)
@@ -347,32 +333,33 @@ NS_d1_from <- unlist(lapply(NS_sig_pairs_day1_mets, function(x) x[1]))
 S_d1_to <- unlist(lapply(S_sig_pairs_day1_mets, function(x) x[2]))
 NS_d1_to <- unlist(lapply(NS_sig_pairs_day1_mets, function(x) x[2]))
 S_d2_from <- unlist(lapply(S_sig_pairs_day2_mets, function(x) x[1]))
-NS_d2_from <- unlist(lapply(NS_sig_pairs_day2_mets, function(x) x[1]))
+#NS_d2_from <- unlist(lapply(NS_sig_pairs_day2_mets, function(x) x[1]))
 S_d2_to <- unlist(lapply(S_sig_pairs_day2_mets, function(x) x[2]))
-NS_d2_to <- unlist(lapply(NS_sig_pairs_day2_mets, function(x) x[2]))
+#NS_d2_to <- unlist(lapply(NS_sig_pairs_day2_mets, function(x) x[2]))
 
-split_pat <- " ~\\(.\\) "
+S_d0_sign <- grepl(x = names(S_sig_pairs_day0_tab), pattern = "(+)", fixed = TRUE)
+NS_d0_sign <- grepl(x = names(NS_sig_pairs_day0_tab), pattern = "(+)", fixed = TRUE)
+S_d1_sign <- grepl(x = names(S_sig_pairs_day1_tab), pattern = "(+)", fixed = TRUE)
+NS_d1_sign <- grepl(x = names(NS_sig_pairs_day1_tab), pattern = "(+)", fixed = TRUE)
+S_d2_sign <- grepl(x = names(S_sig_pairs_day2_tab), pattern = "(+)", fixed = TRUE)
+NS_d2_sign <- grepl(x = names(NS_sig_pairs_day2_tab), pattern = "(+)", fixed = TRUE)
 
 ##Human, graph of significant concentration correlations at day 0
 graph_day0_nodes <- data.frame(metabolite = human_sepsis_legend[,1], connectivity = 0, class = "", stringsAsFactors = FALSE)
-S_sig_pairs_day0_mets <- strsplit(x = names(S_sig_pairs_day0_tab), split = split_pat)
-S_sig_pairs_day1_mets <- strsplit(x = names(S_sig_pairs_day1_tab), split = split_pat)
-NS_sig_pairs_day0_mets <- strsplit(x = names(NS_sig_pairs_day0_tab), split = split_pat)
-NS_sig_pairs_day1_mets <- strsplit(x = names(NS_sig_pairs_day1_tab), split = split_pat)
 combined_mets <- c(unlist(S_sig_pairs_day0_mets), unlist(NS_sig_pairs_day0_mets))
 cmt <- table(combined_mets)
 graph_day0_nodes$connectivity[match(names(cmt), graph_day0_nodes$metabolite)] <- cmt
 graph_day0_nodes <- subset(graph_day0_nodes, connectivity > 0)
 
-from <- unlist(lapply(c(S_sig_pairs_day0_mets, NS_sig_pairs_day0_mets), function(x) x[1]))
-to <- unlist(lapply(c(S_sig_pairs_day0_mets, NS_sig_pairs_day0_mets), function(x) x[2]))
+from <- c(S_d0_from, NS_d0_from)
+to <- c(S_d0_to, NS_d0_to)
 graph_day0_edges <- data.frame(from = from, to = to, class = "", stringsAsFactors = FALSE)
 graph_day0_edges <- subset(graph_day0_edges, from %in% graph_day0_nodes$metabolite & to %in% graph_day0_nodes$metabolite)
-graph_day0_edges$class[1:length(S_sig_pairs_day0_mets)] <- "Survivor"
-graph_day0_edges$class[(length(S_sig_pairs_day0_mets)+1):nrow(graph_day0_edges)] <- "Nonsurvivor"
+graph_day0_edges$class[1:length(S_d0_from)] <- "Survivor"
+graph_day0_edges$class[(length(S_d0_from)+1):nrow(graph_day0_edges)] <- "Nonsurvivor"
 graph_day0_edges$class[duplicated(graph_day0_edges[c("from", "to")])] <- "Overlap"
 graph_day0_edges$class[duplicated(graph_day0_edges[c("from", "to")], fromLast = TRUE)] <- "Overlap"
-graph_day0_edges$lty <- c(1 + as.numeric(grepl(x = names(S_sig_pairs_day0_tab), pattern = "-")), 1 + as.numeric(grepl(x = names(NS_sig_pairs_day0_tab), pattern = "-")))
+graph_day0_edges$lty <- c(1 + as.numeric(grepl(x = names(S_sig_pairs_day0_tab), pattern = "(-)", fixed = TRUE)), 1 + as.numeric(grepl(x = names(NS_sig_pairs_day0_tab), pattern = "(-)", fixed = TRUE)))
 
 igraph_day0_df <- graph.data.frame(graph_day0_edges, directed = FALSE, vertices = graph_day0_nodes)
 colorset <- colorspace::rainbow_hcl(3)
@@ -389,7 +376,7 @@ dev.off()
 
 ##Human, graph of significant overlapping concentration correlations at day 0
 graph_shared_day0_nodes <- data.frame(metabolite = human_sepsis_legend[,1], connectivity = 0, class = "", stringsAsFactors = FALSE)
-shared_sig_pairs_day0_sel <- S_d0_from %in% NS_d0_from & S_d0_to %in% NS_d0_to
+shared_sig_pairs_day0_sel <- paste0(S_d0_from, S_d0_to) %in% paste0(NS_d0_from, NS_d0_to)
 shared_sig_pairs_day0_mets <- c(S_d0_from[shared_sig_pairs_day0_sel], S_d0_to[shared_sig_pairs_day0_sel])
 shared_sig_pairs_day0 <- names(S_sig_pairs_day0_tab)[shared_sig_pairs_day0_sel]
 cmt <- table(shared_sig_pairs_day0_mets)
@@ -406,8 +393,11 @@ edge_type <- shared_sig_pairs_day0 %in% names(S_sig_pairs_day1_tab) + 3 * shared
 edge_type[edge_type == 0] <- 2
 E(igraph_shared_day0_df)$color <- colorset[edge_type]
 E(igraph_shared_day0_df)$width <- 4
-vertex_classes <- unique(human_sepsis_legend$group[match(V(igraph_shared_day0_df)$name, human_sepsis_legend[,1])])
-vertex_membership <- as.numeric(as.factor(human_sepsis_legend$group[match(V(igraph_shared_day0_df)$name, human_sepsis_legend[,1])]))
+legend_groups <- human_sepsis_legend
+legend_groups$group[pheno_sel - 1] <- "phenomenological variable"
+legend_groups <- legend_groups[match(V(igraph_shared_day0_df)$name, legend_groups[,1]), ]
+vertex_classes <- unique(legend_groups$group)
+vertex_membership <- as.numeric(as.factor(legend_groups$group))
 num_groups <- max(vertex_membership)
 V(igraph_shared_day0_df)$color <- brewer.pal(num_groups, "Set3")[vertex_membership]
 V(igraph_shared_day0_df)$frame.color <- "#ffffff"
@@ -440,8 +430,11 @@ edge_type <- (graph_day1_edges$class == "Survivor") + 3 * (graph_day1_edges$clas
 edge_type[edge_type == 0] <- 2
 E(igraph_day1_df)$color <- colorset[edge_type]
 E(igraph_day1_df)$width <- 4
-vertex_classes <- unique(human_sepsis_legend$group[match(V(igraph_day1_df)$name, human_sepsis_legend[,1])])
-vertex_membership <- as.numeric(as.factor(human_sepsis_legend$group[match(V(igraph_day1_df)$name, human_sepsis_legend[,1])]))
+legend_groups <- human_sepsis_legend
+legend_groups$group[pheno_sel - 1] <- "phenomenological variable"
+legend_groups <- legend_groups[match(V(igraph_day1_df)$name, legend_groups[,1]), ]
+vertex_classes <- unique(legend_groups$group)
+vertex_membership <- as.numeric(as.factor(legend_groups$group))
 num_groups <- max(vertex_membership)
 V(igraph_day1_df)$color <- brewer.pal(num_groups, "Set3")[vertex_membership]
 V(igraph_day1_df)$frame.color <- "#ffffff"
@@ -459,13 +452,13 @@ dev.off()
 col_metab <- colnames(human_sepsis_data_normal)
 S_d0_sig_metab_pheno <- S_d0_from %in% col_metab[metab_sel] & S_d0_to %in% col_metab[pheno_sel]
 NS_d0_sig_metab_pheno <- NS_d0_from %in% col_metab[metab_sel] & NS_d0_to %in% col_metab[pheno_sel]
-Overlap_d0_sig_metab_pheno <- S_d0_from[S_d0_sig_metab_pheno] %in% NS_d0_from[NS_d0_sig_metab_pheno] & S_d0_to[S_d0_sig_metab_pheno] %in% NS_d0_to[NS_d0_sig_metab_pheno]
+Overlap_d0_sig_metab_pheno <- paste0(S_d0_from, S_d0_to)[S_d0_sig_metab_pheno] %in% paste0(NS_d0_from, NS_d0_to)[NS_d0_sig_metab_pheno]
 sum(S_d0_sig_metab_pheno)
 sum(NS_d0_sig_metab_pheno)
 sum(Overlap_d0_sig_metab_pheno)
 S_d1_sig_metab_pheno <- S_d1_from %in% col_metab[metab_sel] & S_d1_to %in% col_metab[pheno_sel]
 NS_d1_sig_metab_pheno <- NS_d1_from %in% col_metab[metab_sel] & NS_d1_to %in% col_metab[pheno_sel]
-Overlap_d1_sig_metab_pheno <- S_d1_from[S_d1_sig_metab_pheno] %in% NS_d1_from[NS_d1_sig_metab_pheno] & S_d1_to[S_d1_sig_metab_pheno] %in% NS_d1_to[NS_d1_sig_metab_pheno]
+Overlap_d1_sig_metab_pheno <- paste0(S_d1_from, S_d1_to)[S_d1_sig_metab_pheno] %in% paste0(NS_d1_from, NS_d1_to)[NS_d1_sig_metab_pheno]
 sum(S_d1_sig_metab_pheno)
 sum(NS_d1_sig_metab_pheno)
 sum(Overlap_d1_sig_metab_pheno)
@@ -474,18 +467,77 @@ sum(S_d2_sig_metab_pheno)
 
 S_d0_sig_metab_metab <- S_d0_from %in% col_metab[metab_sel] & S_d0_to %in% col_metab[metab_sel]
 NS_d0_sig_metab_metab <- NS_d0_from %in% col_metab[metab_sel] & NS_d0_to %in% col_metab[metab_sel]
-Overlap_d0_sig_metab_metab <- S_d0_from[S_d0_sig_metab_metab] %in% NS_d0_from[NS_d0_sig_metab_metab] & S_d0_to[S_d0_sig_metab_metab] %in% NS_d0_to[NS_d0_sig_metab_metab]
+Overlap_d0_sig_metab_metab <- paste0(S_d0_from, S_d0_to)[S_d0_sig_metab_metab] %in% paste0(NS_d0_from, NS_d0_to)[NS_d0_sig_metab_metab]
 sum(S_d0_sig_metab_metab)
 sum(NS_d0_sig_metab_metab)
 sum(Overlap_d0_sig_metab_metab)
 S_d1_sig_metab_metab <- S_d1_from %in% col_metab[metab_sel] & S_d1_to %in% col_metab[metab_sel]
 NS_d1_sig_metab_metab <- NS_d1_from %in% col_metab[metab_sel] & NS_d1_to %in% col_metab[metab_sel]
-Overlap_d1_sig_metab_metab <- S_d1_from[S_d1_sig_metab_metab] %in% NS_d1_from[NS_d1_sig_metab_metab] & S_d1_to[S_d1_sig_metab_metab] %in% NS_d1_to[NS_d1_sig_metab_metab]
+Overlap_d1_sig_metab_metab <- paste0(S_d1_from, S_d1_to)[S_d1_sig_metab_metab] %in% paste0(NS_d1_from, NS_d1_to)[NS_d1_sig_metab_metab]
 sum(S_d1_sig_metab_metab)
 sum(NS_d1_sig_metab_metab)
 sum(Overlap_d1_sig_metab_metab)
 S_d2_sig_metab_metab <- S_d2_from %in% col_metab[metab_sel] & S_d2_to %in% col_metab[metab_sel]
 sum(S_d2_sig_metab_metab)
+
+##Human, connectivity statistics
+mean(table(c(S_d0_from, S_d0_to)))
+mean(table(c(NS_d0_from, NS_d0_to)))
+
+mean(table(c(S_d1_from, S_d1_to)))
+mean(table(c(NS_d1_from, NS_d1_to)))
+
+mean(table(c(S_d2_from, S_d2_to)))
+
+S_d0_igraph <- graph.data.frame(d = data.frame(from = S_d0_from, to = S_d0_to, stringsAsFactors = TRUE), directed = FALSE, vertices = union(S_d0_from, S_d0_to))
+V(S_d0_igraph)$size <- 8
+S_d0_community <- cluster_fast_greedy(S_d0_igraph)
+sum(crossing(S_d0_community, S_d0_igraph))
+modularity(S_d0_community)
+mean(sizes(S_d0_community))
+length(S_d0_community)
+
+NS_d0_igraph <- graph.data.frame(d = data.frame(from = NS_d0_from, to = NS_d0_to, stringsAsFactors = TRUE), directed = FALSE, vertices = union(NS_d0_from, NS_d0_to))
+V(NS_d0_igraph)$size <- 8
+NS_d0_community <- cluster_fast_greedy(NS_d0_igraph)
+sum(crossing(NS_d0_community, NS_d0_igraph))
+modularity(NS_d0_community)
+mean(sizes(NS_d0_community))
+length(NS_d0_community)
+
+S_d1_igraph <- graph.data.frame(d = data.frame(from = S_d1_from, to = S_d1_to, stringsAsFactors = TRUE), directed = FALSE, vertices = union(S_d1_from, S_d1_to))
+V(S_d1_igraph)$size <- 8
+S_d1_community <- cluster_fast_greedy(S_d1_igraph)
+sum(crossing(S_d1_community, S_d1_igraph))
+modularity(S_d1_community)
+mean(sizes(S_d1_community))
+length(S_d1_community)
+
+NS_d1_igraph <- graph.data.frame(d = data.frame(from = NS_d1_from, to = NS_d1_to, stringsAsFactors = TRUE), directed = FALSE, vertices = union(NS_d1_from, NS_d1_to))
+V(NS_d1_igraph)$size <- 8
+NS_d1_community <- cluster_fast_greedy(NS_d1_igraph)
+sum(crossing(NS_d1_community, NS_d1_igraph))
+modularity(NS_d1_community)
+mean(sizes(NS_d1_community))
+length(NS_d1_community)
+
+S_d2_igraph <- graph.data.frame(d = data.frame(from = S_d2_from, to = S_d2_to, stringsAsFactors = TRUE), directed = FALSE, vertices = union(S_d2_from, S_d2_to))
+V(S_d2_igraph)$size <- 8
+S_d2_community <- cluster_fast_greedy(S_d2_igraph)
+sum(crossing(S_d2_community, S_d2_igraph))
+modularity(S_d2_community)
+mean(sizes(S_d2_community))
+length(S_d2_community)
+
+X11();plot(S_d2_community, S_d2_igraph)
+
+X11();plot(S_d0_community, S_d0_igraph)
+X11();plot(NS_d0_community, NS_d0_igraph)
+
+X11();plot(S_d1_community, S_d1_igraph)
+X11();plot(NS_d1_community, NS_d1_igraph)
+
+
 
 ##Human, cluster-heatmap, all metabolites, but groups at the side
 x <- na.omit(data.frame(group = coarse_group_list[metab_sel - 5], human_sepsis_data_normal_conc_metab_cov));
@@ -504,6 +556,46 @@ x <- na.omit(data.frame(group = coarse_group_list[pheno_sel - 5], inv_human_seps
 heatmaply(x = x[, -1], row_side_colors = x[c("group")], key.title = "pcor", dendrogram = FALSE, showticklabels = FALSE, file = paste0(out_dir, "human_normal_pheno_NS_nonclust_pcor.png"))
 rm("x")
 
+##Human, cluster-heatmap, all phenom. vars, groups at the top
+x <- na.omit(human_sepsis_data_normal[, c(1:5, pheno_sel)]);
+heatmaply(x = x[, -1:-5], row_side_colors = x[c("Survival", "CAP / FP")], col_side_colors = data.frame(Group = coarse_group_list[pheno_sel - 5]), plot_method = "plotly", margins = c(100,50,0,150))
+rm("x")
+
+##Human, cluster-heatmap, phenom. var groups
+x <- na.omit(human_sepsis_data_normal_grouped[, c(1:5, group_pheno_sel)])
+h <- heatmaply(x = x[, -1:-5], row_side_colors = x[c("Survival", "CAP / FP")], plot_method = "ggplot", margins = c(150,100,30,0), key.title = "Normalized\nConcentration", main = "Phenom. groups, survivors and nonsurvivors", subplot_heights = c(0.1, 0.9))
+h$width <- 800
+h$height <- 1100
+export(p = h, file = paste0(out_dir, "human_normal_pheno_grouped.png"))
+x <- na.omit(subset(human_sepsis_data_normal_grouped[, c(1:5, group_pheno_sel)], Survival == "S"))
+h <- heatmaply(x = x[, -1:-5], row_side_colors = x[c("CAP / FP")], plot_method = "ggplot", margins = c(150,50,30,150), key.title = "Normalized\nConcentration", main = "Phenom. groups, survivors", subplot_heights = c(0.1, 0.9))
+h$width <- 800
+h$height <- 800
+export(p = h, file = paste0(out_dir, "human_normal_pheno_S_grouped.png"))
+x <- na.omit(subset(human_sepsis_data_normal_grouped[, c(1:5, group_pheno_sel)], Survival == "NS"))
+h <- heatmaply(x = x[, -1:-5], row_side_colors = x[c("CAP / FP")], plot_method = "ggplot", margins = c(150,100,30,150), key.title = "Normalized\nConcentration", main = "Phenom. groups, nonsurvivors", subplot_heights = c(0.1, 0.9))
+h$width <- 800
+h$height <- 600
+export(p = h, file = paste0(out_dir, "human_normal_pheno_NS_grouped.png"))
+rm("x")
+
+##Human, cluster-heatmap, metab groups
+x <- na.omit(human_sepsis_data_normal_grouped[, c(1:5, group_metab_sel)])
+h <- heatmaply(x = x[, -1:-5], row_side_colors = x[c("Survival", "CAP / FP")], plot_method = "ggplot", margins = c(150,100,30,0), key.title = "Normalized\nConcentration", main = "Metab. groups, survivors and nonsurvivors", subplot_heights = c(0.1, 0.9))
+h$width <- 800
+h$height <- 1100
+export(p = h, file = paste0(out_dir, "human_normal_metab_grouped.png"))
+x <- na.omit(subset(human_sepsis_data_normal_grouped[, c(1:5, group_metab_sel)], Survival == "S"))
+h <- heatmaply(x = x[, -1:-5], row_side_colors = x[c("CAP / FP")], plot_method = "ggplot", margins = c(150,100,30,150), key.title = "Normalized\nConcentration", main = "Metab. groups, survivors", subplot_heights = c(0.1, 0.9))
+h$width <- 800
+h$height <- 800
+export(p = h, file = paste0(out_dir, "human_normal_metab_S_grouped.png"))
+x <- na.omit(subset(human_sepsis_data_normal_grouped[, c(1:5, group_metab_sel)], Survival == "NS"))
+h <- heatmaply(x = x[, -1:-5], row_side_colors = x[c("CAP / FP")], plot_method = "ggplot", margins = c(150,100,30,150), key.title = "Normalized\nConcentration", main = "Metab. groups, nonsurvivors", subplot_heights = c(0.1, 0.9))
+h$width <- 800
+h$height <- 600
+export(p = h, file = paste0(out_dir, "human_normal_metab_NS_grouped.png"))
+rm("x")
 
 ##Human, cluster-heatmap, coarse grouped metabolites
 x <- na.omit(human_sepsis_data_normal[,c(1:5, metab_sel)])
@@ -511,7 +603,9 @@ heatmaply(x = x[,-1:-5], row_side_colors = x[c("Survival", "CAP / FP")], file = 
 x <- na.omit(human_sepsis_data_normal[,c(1:5, pheno_sel)])
 heatmaply(x = x[,-1:-5], row_side_colors = x[c("Survival", "CAP / FP")], file = paste0(out_dir, "human_normal_pheno.png"), main = "Phenomenological profile has survival clusters", key.title = "Concentration\n(normalized)", showticklabels = TRUE)
 x <- na.omit(human_sepsis_data_normal_grouped[,c(1:5, group_metab_sel)])
-heatmaply(x = x[,-1:-5], row_side_colors = x[c("Survival", "CAP / FP")], file = paste0(out_dir, "human_normal_metab_grouped.png"), main = "Metablite group profiles somwwhat cluster survival", key.title = "Concentration\n(normalized)", showticklabels = TRUE)
+heatmaply(x = x[,-1:-5], row_side_colors = x[c("Survival", "CAP / FP")], file = paste0(out_dir, "human_normal_metab_grouped.png"), main = "Metablite group profiles somewhat cluster survival", key.title = "Concentration\n(normalized)", showticklabels = TRUE)
+x <- na.omit(human_sepsis_data_normal_grouped[,c(1:5, group_pheno_sel)])
+heatmaply(x = x[,-1:-5], row_side_colors = x[c("Survival", "CAP / FP")], file = paste0(out_dir, "human_normal_pheno_grouped.png"), main = "Pheno var group profiles [?] survival", key.title = "Concentration\n(normalized)", showticklabels = TRUE)
 rm("x")
 
 ##Human, variance of metabolites, NS vs. S
@@ -531,7 +625,7 @@ for (gr in metab_var_sig_df$group){
     metab_var_sig_df$sig[metab_var_sig_df$group == gr] <- t.test(x = b1, y = b2)$p.value
 }
 metab_var_sig_df$sig <- p.adjust(p = metab_var_sig_df$sig, method = "fdr")
-metab_var_sig_df$value = 2.9
+metab_var_sig_df$value = 2
 metab_var_sig_df <- subset(metab_var_sig_df, sig <= 0.05)
   
 metab_var_plot <- ggplot(data = metab_var_long_df, mapping = aes(x = group, y = value, fill = Survival)) +
@@ -557,13 +651,14 @@ pheno_var_plot <- ggplot(data = pheno_var_long_df, mapping = aes(x = group, y = 
   theme_bw() + 
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ggsave(plot = pheno_var_plot, filename = "human_all_days_grouped_pheno_var_patientcentered.png", path = out_dir, width = 9, height = 4, units = "in")
-  
 
-##Human, covariance cluster-heatmap, coarse grouped metabolites
+##Human, covariance cluster-heatmap, metabolites
 x <- human_sepsis_data_normal_metab_cov
 heatmaply(x = x[,-1:-5], row_side_colors = x[c("Survival", "CAP / FP")], col_side_colors = x["Patient"], file = paste0(out_dir, "human_normal_metab_cov.png"), main = "Metabolite profile covariance has mainly patient clusters", key.title = "Cov", showticklabels = FALSE)
 x <- na.omit(human_sepsis_data_normal_pheno_cov)
 heatmaply(x = x[,-1:-5], row_side_colors = x[c("Survival", "CAP / FP")], col_side_colors = x["Patient"], file = paste0(out_dir, "human_normal_pheno_cov.png"), main = "Phenomenological profile covariance has patient\n and survival clusters", key.title = "Cov", showticklabels = FALSE)
+x <- na.omit(human_sepsis_data_normal_metab_pheno_cov)
+heatmaply(x = x[,-1:-5], row_side_colors = x[c("Survival", "CAP / FP")], col_side_colors = x["Patient"], file = paste0(out_dir, "human_normal_metab_and_pheno_cov.png"), main = "", key.title = "Cov", showticklabels = FALSE, margins = c(100,50,0,150), plot_method = "ggplot")
 rm("x")
 
 ##Human, cluster-heatmap of non-CAP and non-FP patients, coarse grouped metabolites; error because nothing es left
@@ -573,7 +668,7 @@ rm("x")
 x <- human_sepsis_data_normal_grouped_metab_cov
 heatmaply(x = x[,-1:-5], row_side_colors = x[c("Survival", "CAP / FP")], col_side_colors = x["Patient"], file = paste0(out_dir, "human_normal_grouped_metab_cov.png"))
 x <- na.omit(human_sepsis_data_normal_grouped_pheno_cov)
-heatmaply(x = x[,-1:-5], row_side_colors = x[c("Survival", "CAP / FP")], col_side_colors = x["Patient"], file = paste0(out_dir, "human_normal_grouped_pheno_cov.png"), main = "Profiles of grouped phenomenological variables cluster nothing")
+heatmaply(x = x[,-1:-5], row_side_colors = x[c("Survival", "CAP / FP")], col_side_colors = x["Patient"], file = paste0(out_dir, "human_normal_grouped_pheno_cov.png"))
 rm("x")
 
 ##Human, cluster-heatmap of patient correlation matrix, ungrouped metabolites, survival marked
@@ -585,9 +680,20 @@ rm("x")
 
 ##Human, cluster-heatmat of patient correlation matrix, coarse grouped metabolites, survival and CAP/FP marked
 x <- human_sepsis_data_normal_grouped_metab_cor
-heatmaply(x = x[,-1:-5], row_side_colors = x[c("Survival", "CAP / FP")], col_side_colors = x["Patient"], file = paste0(out_dir, "human_normal_grouped_metab_cor.png"), main = "Profiles of grouped metabolites cluster nothing")
+heatmaply(x = x[,-1:-5], row_side_colors = x[c("Survival", "CAP / FP")], col_side_colors = x["Patient"], file = paste0(out_dir, "human_normal_grouped_metab_cor.png"), margins = c(100, 50, 0, 150), showticklabels = F, k_row = 2, key.title = "Cor")
 x <- na.omit(human_sepsis_data_normal_grouped_pheno_cor)
 heatmaply(x = x[,-1:-5], row_side_colors = x[c("Survival", "CAP / FP")], col_side_colors = x["Patient"], file = paste0(out_dir, "human_normal_grouped_pheno_cor.png"), main = "Profiles of grouped phenomenological variables cluster nothing")
+rm("x")
+
+##Human, cluster-heatmap of patient covariance matrix, coarse grouped everything, survival-regardent
+x <- human_sepsis_data_normal
+for (group in unique(coarse_group_list[coarse_group_list != "sugar"])){
+  col_sel <- which(coarse_group_list == group)
+  h <- heatmaply(x = x[, col_sel + 5], row_side_colors = x[c("Survival", "CAP / FP")], key.title = "Normlized\nConcentrations", margins = c(100,80,0,250), k_row = 2, subplot_heights = c(0.08, 0.92))
+  h$width <- 1600
+  h$height <- 1200
+  export(p = h, file = paste0(out_dir, "human_normal_conc_", group, ".png"))
+}
 rm("x")
 
 ##Human, cluster-heatmap of metabolite covariance matrix, survival-ignorant
@@ -617,13 +723,13 @@ rm("x")
 
 ##Human, cluster-heatmap of covariance matrix of grouped metabolites, survival-regardent
 x <- human_sepsis_data_normal_NS_grouped_conc_metab_cov
-heatmaply(x = x, file = paste0(out_dir, "human_normal_NS_grouped_conc_metab_cov.png"), key.title = "Cov")
+heatmaply(x = x, file = paste0(out_dir, "human_normal_NS_grouped_conc_metab_cov.png"), key.title = "Cov", margins = c(200,200,0,150))
 x <- human_sepsis_data_normal_S_grouped_conc_metab_cov
-heatmaply(x = x, file = paste0(out_dir, "human_normal_S_grouped_conc_metab_cov.png"), key.title = "Cov")
+heatmaply(x = x, file = paste0(out_dir, "human_normal_S_grouped_conc_metab_cov.png"), key.title = "Cov", margins = c(200,200,0,150))
 x <- human_sepsis_data_normal_NS_grouped_conc_pheno_cov
-heatmaply(x = x, file = paste0(out_dir, "human_normal_NS_grouped_conc_pheno_cov.png"), key.title = "Cov")
+heatmaply(x = x, file = paste0(out_dir, "human_normal_NS_grouped_conc_pheno_cov.png"), key.title = "Cov", margins = c(200,200,0,150))
 x <- human_sepsis_data_normal_S_grouped_conc_pheno_cov
-heatmaply(x = x, file = paste0(out_dir, "human_normal_S_grouped_conc_pheno_cov.png"), key.title = "Cov")
+heatmaply(x = x, file = paste0(out_dir, "human_normal_S_grouped_conc_pheno_cov.png"), key.title = "Cov", margins = c(200,200,0,150))
 rm("x")
 
 ##Human, Venn diagram of significantly correlating grouped concentrations in sepsis survivors, Day 1
@@ -632,7 +738,6 @@ p <- human_sepsis_data_normal_S_grouped_conc_metab_corr$p
 p[upper.tri(p, diag = TRUE)] <- 1
 xy <- which.xy(p <= 0.05)
 x_sig_pairs <- paste0(colnames(x)[xy$x], " ~ ", colnames(x)[xy$y])
-
 
 ##Human, p-val (t-test) plot of differences between non-survivors and survivors, grouped by day
 day_sig_t_diff$method <- "t-test"
@@ -688,8 +793,8 @@ ggsave(plot = h_time_course_sig_diff_plot, filename = "human_metab_time_course_a
 human_sepsis_data_long_form_sig <- subset(human_sepsis_data_long_form, subset = as.character(variable) %in% sig_anova.car_class)
 #human_sepsis_data_long_form_sig <- subset(melt(max_norm(full_tanova_data, subset = -1:-5), id.vars = c("Survival", "Day", "Sample ID", "CAP / FP")), subset = as.character(variable) %in% sig_anova.car_class)
 human_sepsis_data_long_form_sig$variable <- factor(as.character(human_sepsis_data_long_form_sig$variable), levels = sig_anova.car_class, ordered = TRUE)
-h_time_course_sig_diff_dat <- subset(na.omit(human_sepsis_data_long_form_sig), Day %in% c(0,1,2))
-h_time_course_group <- data.frame(variable = sort(unique(h_time_course_sig_diff_dat$variable)), value = 1.1, Day = 2, text = coarse_group_list[match(sort(unique(h_time_course_sig_diff_dat$variable)), colnames(human_sepsis_data)[-1:-5])])
+h_time_course_sig_diff_dat <- subset(na.omit(human_sepsis_data_long_form_sig), Day %in% c(0,1,2,3))
+h_time_course_group <- data.frame(variable = sort(unique(h_time_course_sig_diff_dat$variable)), value = 1.1, Day = 3, text = coarse_group_list[match(sort(unique(h_time_course_sig_diff_dat$variable)), colnames(human_sepsis_data)[-1:-5])])
 phds <- unlist(anova.car.posthoc.sig.days)
 phds <- phds[names(phds) %in% sig_anova.car_class]
 phds <- data.frame(variable = names(phds), Day = as.numeric(phds) + 0.5, value = -0.05) #works only for single change points per metabolite

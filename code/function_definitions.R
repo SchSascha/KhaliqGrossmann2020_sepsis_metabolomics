@@ -62,6 +62,17 @@ get_human_sepsis_legend <- function(){
   return(data)
 }
 
+#' Read the grouping of phenomenological variables.
+#'
+#' @return data.frame, table of associated groups
+#' @export
+#'
+#' @examples
+get_human_pheno_var_groups <- function(){
+  data <- read.csv(file = "../../data/measurements/Human phenomenological groups.csv", header = TRUE, sep = "\t", stringsAsFactors = FALSE, dec = ",", check.names = FALSE)
+  return(data)
+}
+
 #' Read the data set on provoked sepsis and controls in rat
 #'
 #' @return the data.frame with data, column names are identical to file content (non-standard for R)

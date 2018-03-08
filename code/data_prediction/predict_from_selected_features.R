@@ -90,7 +90,7 @@ human_sepsis_data_ml_full <- missRanger(human_sepsis_data_ml, pmm.k = 3, num.tre
 human_validation_data <- missRanger(human_validation_data, pmm.k = 3, num.trees = 100)
 ###Keep only common metabolites
 shared_metabs <- intersect(colnames(human_sepsis_data_ml)[-1:-2], colnames(human_validation_data)[-1])
-human_sepsis_data_ml[,-1:-2] <- subset(human_sepsis_data_ml[,-1:-2], select = shared_metabs)
+human_sepsis_data_ml_full[,-1:-2] <- subset(human_sepsis_data_ml_full[,-1:-2], select = shared_metabs)
 human_validation_data[,-1] <- subset(human_validation_data[,-1], select = shared_metabs)
 ###Scale values
 hsd_colmeans <- colMeans(as.matrix(human_sepsis_data_ml_full[,-1:-2]))
@@ -99,13 +99,13 @@ human_sepsis_data_ml_full[, -1:-2] <- scale(human_sepsis_data_ml_full[, -1:-2])
 human_validation_data[, -1] <- t((t(human_validation_data[, -1]) - hsd_colmeans) / hsd_colsds)
 ##Set important parameters
 fml <- Survival ~ .
-num_folds <- 4
+num_folds <- 5
 rg.num.trees <- 1000
 ##Set up iteration
 num_repeats <- 20
 day_tab <- table(human_sepsis_data$Day[data_ml_subset])
 day_set <- rep(as.numeric(names(day_tab)), each = num_repeats)
-var_range <- c(2:20)
+var_range <- c(2:6)
 var_set <- rep(var_range, each = num_repeats)
 var_set_name_list <- list()
 tot_n_var <- ncol(human_sepsis_data_ml_full)-2
@@ -369,7 +369,7 @@ npr_FVal_data <- subset(npr_FVal_data, subset = variable %in% c("ppv", "npv", "a
 npr_by_day_data$dimensions <- "All variables"
 npr_red_by_day_data$dimensions <- "Important variables"
 npr_data <- rbind(npr_by_day_data, npr_red_by_day_data)
-npr_red_by_day_data$dimensions <- "UK data"
+npr_red_by_day_data$dimensions <- "UKJ data"
 npr_FVal_data$dimensions <- "Ferrario data (validation)"
 npr_red_FVal_data <- rbind(npr_red_by_day_data, npr_FVal_data)
 auc_data$dimensions <- "All variables"

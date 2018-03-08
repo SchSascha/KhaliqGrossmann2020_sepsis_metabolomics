@@ -1,0 +1,31 @@
+	name	group	unit	comment
+Urea		Catabolism-associated	mmol/l	Product of protein catabolism
+Creatinine		Catabolism-associated	µmol/l	Product of catabolism in muscle
+ALT	Alanine transaminase	Liver damage indicator	IU/l	
+AST	Aspartate Aminotransferase	Liver damage indicator	IU/l	also elevated from hemolysis and antibiotic therapy
+ALP	Alkaline phosphatase	Liver damage indicator	IU/l	also found in white blood cells
+Albumin		Catabolism-associated	g/l	substrate of catabolism
+Total Cholesterol		Cholesterol-associated		Substrate for Aldosterone, Testosteron, Cortisol and Estradiol, and bile acids GCA, TCA, GCDCA and TCDCA
+HDL	High-density lipoprotein	Cholesterol-associated	mmol/l	liver and small intestine derived
+LDL	Low-density lipoprotein	Cholesterol-associated	mmol/l	liver and small intestine derived
+Triglycerides		Cholesterol-associated	mmol/l	
+Troponin T		Heart damage indicator	µg/l	
+TSH	Thyroid-stimulating hormone	Thyroid-associated	ng/ml	pituitary gland derived; regulated by FT4 and FT3 level; circadian rhythm
+FT4	thyroxine	Thyroid-associated	ng/ml	
+FT3	triiodothyronine	Thyroid-associated	pg/ml	synthesized in liver from FT4
+IL6	interleukin-6	inflammation regulation	pg/ml	
+IL10	interleukin-10	inflammation regulation	pg/ml	
+ACTH	Adrenocorticotropic hormone	Stress indicator	pg/ml	adrenal gland-derived; indicator of biological stress
+Aldosterone		Blood pressure-associated	pg/ml	adrenal gland-derived; stimulates plasma ACTH levels; increases blood pressure
+BNP	B-type natriuretic peptide	Heart damage indicator	pg/ml	
+DHEA	Dehydroepiandrosterone	Stress indicator	pg/ml	adrenal gland-derived; anti-inflammatory; potential G6PDH inhibitor
+Adrenaline		Blood pressure-associated	pg/ml	adrenal gland-derived; sympathetic neurotransmitter
+Noradrenaline		Blood pressure-associated	ng/ml	adrenal gland-derived; increases blood pressure and heart rate
+Glucagon		Stress indicator	pg/ml	pancreas derived; raises blood fat and sugar levels
+Cortisol		Stress indicator	nmol/l	adrenal gland-derived; raises blood sugar levels; indicator of biological stress; anti-inflammatory; increases serum amino acid levels
+Estradiol		Cholesterol-associated	pg/ml	Bound to albumin (and SHBG) in plasma; varies a lot over the menstrual cycle
+GH	growth hormone	Stress indicator	ng/ml	indicator of biological stress; raises blood sugar and fat levels; inhibited by free fatty acids
+Leptin		Cholesterol-associated	pg/ml	adipose tissue derived; levels vary with fat mass (in healthy individuals)
+Prolactin		Stress indicator	ng/ml	pituitary gland derived; levels elevated after psychobiological stress, also ACTH and cortisol
+Testosterone		Catabolism-associated	nmol/l	degredation in liver; stimulates anabolism
+Vasopressin		Blood pressure-associated	pg/ml	increases blood pressure

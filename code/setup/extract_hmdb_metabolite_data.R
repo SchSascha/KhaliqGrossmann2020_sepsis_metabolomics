@@ -1,6 +1,7 @@
 library(data.table)
 library(stringi)
 library(MetaboAnalystR)
+library(matrixStats)
 
 source("../function_definitions.R")
 
@@ -37,8 +38,10 @@ gsm_mets_list[["Recon2.04"]] <- fread(input = "../../data/template_models/Recon2
 gsm_mets_list[["iHsa"]] <- fread(input = "../../data/template_models/iHsa_iRno/iHsa_met_names.txt", sep = "\n", header = FALSE)
 
 gsm_S_list <- list()
-gsm_S_list[["Recon2.04"]] <- fread(input = "../../data/template_models/Recon2.v04.mat_/recon2_stoich_mat.txt", header = FALSE, sep = "\t")
-gsm_S_list[["iHsa"]] <- fread(input = "../../data/template_models/iHsa_iRno/iHsa_stoich_mat.txt")
+gsm_S_list[["Recon2.04"]] <- fread(input = "../../data/template_models/Recon2.v04.mat_/recon2_stoich_mat.txt", header = FALSE, sep = ",")
+gsm_S_list[["iHsa"]] <- fread(input = "../../data/template_models/iHsa_iRno/iHsa_stoich_mat.txt", header = FALSE, sep = "\n")
+gsm_S_list[["iHsa"]] <- unlist(lapply(gsm_S_list[["iHsa"]], function(x) stri_replace_all_fixed(str = x, pattern = ",", replacement = "\t"))) #stoich. mat. switches seperator inbetween ...
+gsm_S_list[["iHsa"]] <- fread(paste(gsm_S_list[["iHsa"]], sep = "\n", collapse = "\n"), header = FALSE, sep = "\t")
 
 met_present_in_hmdb <- list()
 met_present_in_hmdb[["Human Sepsis"]] <- match(human_sepsis_mets$name, mnames_s) 
@@ -53,15 +56,60 @@ for (model in names(gsm_mets_list)){
 human_sepsis_legend <- get_human_sepsis_legend()
 human_sepsis_data <- get_human_sepsis_data()
 human_sepsis_data <- human_sepsis_data[human_sepsis_data$`CAP / FP` != "-",]
-write.csv(x = subset(human_sepsis_data, Day == 0, c(-1:-3,-5)), file = "metaboAnalyst_sepsis_temp.csv")
+pheno_col_idx <- (which(colnames(human_sepsis_data) == "LCA") + 1):ncol(human_sepsis_data)
+write_set <- subset(human_sepsis_data, Day == 0, -c(1:3, 5, pheno_col_idx))
+write.csv(x = write_set, file = "metaboAnalyst_sepsis_temp.csv")
 
 #Init
+rm("mSet", "mSet1", "mSet2")
 mSet<-InitDataObjects("conc", "pathinteg", FALSE)
 mSet<-Read.TextData(mSet, "metaboAnalyst_sepsis_temp.csv", "rowu", "disc") #might fail bc. of path requirement
 
 #Set up mSetObj with the list of compounds
-mSet1<-Setup.MapData(mSet, human_sepsis_legend[-1:-5,1])
-mSet2<-Setup.MapData(mSet, human_sepsis_legend[-1:-5,2])
+##first clean compound list
+pheno_legend_idx <- (which(human_sepsis_legend[,1] == "LCA") + 1):nrow(human_sepsis_legend)
+comp_i_list <- stri_trim_both(human_sepsis_legend[-c(1:5, pheno_legend_idx),1])
+comp_n_list <- stri_trim_both(human_sepsis_legend[-c(1:5, pheno_legend_idx),2])
+comp_n_list[comp_n_list == "Decenoylcarnitine"] <- "9-decenoylcarnitine"
+comp_n_list[comp_n_list == "Dodecenoylcarnitine"] <- "trans-2-Dodecenoylcarnitine"
+comp_n_list[comp_n_list == "Tetradecenoylcarnitine"] <- "trans-2-Tetradecenoylcarnitine"
+comp_n_list[comp_n_list == "Hydroxytetradecenoylcarnitine"] <- "3-Hydroxytetradecenoylcarnitine"
+comp_n_list[comp_n_list == "Tetradecadienylcarnitine"] <- "3, 5-Tetradecadiencarnitine"
+comp_n_list[comp_n_list == "Hydroxytetradecadienylcarnitine"] <- "3-Hydroxy-5, 8-tetradecadiencarnitine"
+comp_n_list[comp_n_list == "Hexadecenoylcarnitine"] <- "9-Hexadecenoylcarnitine"
+comp_n_list[comp_n_list == "Hydroxyhexadecenoylcarnitine"] <- "3-Hydroxyhexadecenoylcarnitine"
+comp_n_list[comp_n_list == "Hexadecadienylcarnitine"] <- "9,12-Hexadecadienylcarnitine"
+comp_n_list[comp_n_list == "Hydroxyhexadecadienylcarnitine"] <- "3-Hydroxyhexadecadienoylcarnitine"
+comp_n_list[comp_n_list == "Hydroxyhexadecanoylcarnitine"] <- "3-Hydroxyhexadecanoylcarnitine" #check in HMDB
+comp_n_list[comp_n_list == "Octadecenoylcarnitine"] <- "11(Z)-Octadecenoylcarnitine"
+comp_n_list[comp_n_list == "Hydroxyoctadecenoylcarnitine"] <- "3-Hydroxy-11(Z)-octadecenoylcarnitine"
+comp_n_list[comp_n_list == "Octadecadienylcarnitine"] <- "9,12-Octadecadienylcarnitine"
+comp_n_list[comp_n_list == "Hydroxyvalerylcarnitine (Methylmalonylcarnitine)"] <- "Hydroxyvalerylcarnitine" #Methylmalonylcarnitine is another compund in HMDB
+comp_n_list[comp_n_list == "Hexanoylcarnitine (Fumarylcarnitine)"] <- "L-Hexanoylcarnitine" #first name appears two times in HMDB, second none
+comp_n_list[comp_n_list == "Glutarylcarnitine (Hydroxyhexanoylcarnitine)"] <- "Glutarylcarnitine" #second name not in HMDB
+comp_n_list[comp_n_list == "Methylglutarylcarnitine"] <- "3-Methylglutarylcarnitine" #appears two times in HMDB
+comp_n_list[comp_n_list == "Hexenoylcarnitine"] <- "2-Hexenoylcarnitine"
+comp_n_list[comp_n_list == "Acetylornithine"] <- "Acetyl-Ornithine"
+comp_n_list[comp_n_list == "Methioninesulfoxide"] <- "Methionine sulfoxide"
+#comp_n_list[comp_n_list == "Total dimethylarginine"] <- NULL #Symmetric DMA is the dominant part of the total and there is only Asymmetric DMA left, but the mesaured SDMA is sometimes above the total DMA
+#Switching to short names because of better matches
+comp_i_list[comp_i_list == "lysoPC a C14:0"] <- "LysoPC(14:0)"
+comp_i_list[comp_i_list == "lysoPC a C18:2"] <- "LysoPC(18:2)"
+#comp_i_list <- comp_i_list[comp_i_list != "PC aa C24:0"] #Not in HMDB
+#comp_i_list <- comp_i_list[comp_i_list != "PC aa C26:0"] #Not in HMDB
+pcaas <- grep(pattern = "PC aa C", x = comp_i_list)
+comp_i_list[pcaas] <- stri_replace_all_regex(str = comp_i_list[pcaas], pattern = "PC aa C(.+)", replacement = "PC($1)")
+comp_n_list[comp_n_list == "Sphingomyeline C16:0"] <- "C16 Sphingomyelin"
+comp_n_list[comp_n_list == "Sphingomyeline C18:0"] <- "C18 Sphingomyelin"
+comp_n_list[comp_n_list == "Sphingomyeline C24:0"] <- "Sphingomyelin (d18:0/24:0)"
+comp_n_list[comp_n_list == "Sphingomyeline C26:0"] <- "SM(d18:1/26:0)"
+sms <- grep(pattern = "Sphingomyeline C", x = comp_n_list)
+comp_n_list[sms] <- stri_replace_all_regex(str = comp_n_list[sms], pattern = "^Sphingomyeline C(.+)", replacement = "C$1 Sphingomyelin")
+comp_n_list[comp_n_list == "Glycochenodeoxycholic acid"] <- "Chenodeoxycholic acid glycine conjugate"
+comp_i_list[comp_i_list == "H1"] <- "Glucose"
+
+mSet1<-Setup.MapData(mSet, comp_i_list)
+mSet2<-Setup.MapData(mSet, comp_n_list)
 
 mSet1<-CrossReferencing(mSet1, "name")
 mSet1<-CreateMappingResultTable(mSet1)
@@ -69,4 +117,35 @@ mSet1<-CreateMappingResultTable(mSet1)
 mSet2<-CrossReferencing(mSet2, "name")
 mSet2<-CreateMappingResultTable(mSet2)
 
-sum(!is.na(mSet1$name.map$hit.values) | !is.na(mSet2$name.map$hit.values))
+#mapping consistency check
+match_hmdb_ids <- cbind(mSet1$dataSet$map.table[,2], mSet2$dataSet$map.table[,2])
+match_hmdb_ids[,1] <- match_hmdb_ids[match(mSet1$dataSet$map.table[,1], comp_i_list),1]
+match_hmdb_ids[,2] <- match_hmdb_ids[match(mSet2$dataSet$map.table[,1], comp_n_list),2]
+match_inconsist <- which(match_hmdb_ids[,1] != match_hmdb_ids[,2] & match_hmdb_ids[,1] != "NA" & match_hmdb_ids[,2] != "NA") #negligible
+
+master_match_list <- c(match_hmdb_ids[1:82, 2], match_hmdb_ids[83:172, 1], match_hmdb_ids[173:203, 2])
+master_match_list[188] <- match_hmdb_ids[188,1]
+
+write_set2 <- write_set
+colnames(write_set2)[-1] <- master_match_list
+
+rm("mSetFinal")
+mSetFinal <- Setup.MapData(mSet, master_match_list)
+mSetFinal <- SanityCheckData(mSetFinal)
+
+mSetFinal<-CrossReferencing(mSetFinal, "name")
+mSetFinal<-CreateMappingResultTable(mSetFinal)
+
+map_table <- mSetFinal$dataSet$map.table
+map_table <- map_table[match(map_table[,1], master_match_list)]
+
+mSetFinal <- SetCurrentMsetLib(mSetFinal, "pathway", 0);
+#mSetFinal <- SetKEGG.PathLib(mSetFinal, "hsa")
+mSetFinal <- SetMetabolomeFilter(mSetFinal, F)
+
+mSetFinal <- CalculateOraScore(mSetFinal, "rbc", "hyperg")
+mSetFinal <- CalculateHyperScore(mSetFinal)
+#mSetFinal <- PlotORA(mSetFinal, "ora_0_", "bar", "png", 72, width=NA)
+#mSetFinal <- PlotPathSummary(mSetFinal, "path_view_0_", "png", 72, width=NA)
+mSetFinal <- CalculateGlobalTestScore(mSetFinal)
+mSetFinal <- PerformIntegPathwayAnalysis(mSetFinal, "dc", "hyper", "integ")

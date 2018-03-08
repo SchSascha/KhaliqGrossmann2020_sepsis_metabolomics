@@ -1,0 +1,260 @@
+Variable	isPresent
+C0	0
+C10	1
+C10:1	0
+C10:2	0
+C12	1
+C12-DC	0
+C12:1	1
+C14	1
+C14:1	1
+C14:1-OH	0
+C14:2	0
+C14:2-OH	0
+C16	1
+C16-OH	0
+C16:1	1
+C16:1-OH	0
+C16:2	1
+C16:2-OH	0
+C18	0
+C18:1	1
+C18:1-OH	1
+C18:2	1
+C2	1
+C3	0
+C5-OH (C3-DC-M)	0
+C3-OH	0
+C3:1	0
+C4	1
+C3-DC (C4-OH)	0
+C4:1	0
+C5	1
+C5-DC (C6-OH)	0
+C5-M-DC	0
+C5:1	0
+C5:1-DC	0
+C6 (C4:1-DC)	1
+C6:1	0
+C7-DC	0
+C8	0
+C9	0
+Ala	0
+Arg	0
+Asn	0
+Asp	0
+Cit	0
+Gln	0
+Glu	0
+Gly	0
+His	0
+Ile	0
+Leu	0
+Lys	0
+Met	1
+Orn	0
+Phe	0
+Pro	0
+Ser	0
+Thr	0
+Trp	0
+Tyr	0
+Val	0
+Ac-Orn	0
+ADMA	0
+alpha-AAA	0
+c4-OH-Pro	0
+Carnosine	0
+Creatinine	0
+DOPA	0
+Dopamine	0
+Histamine	0
+Kynurenine	0
+Met-SO	0
+Nitro-Tyr	0
+PEA	0
+Putrescine	0
+SDMA	0
+Serotonin	0
+Spermidine	0
+Spermine	0
+t4-OH-Pro	0
+Taurine	0
+total DMA	0
+lysoPC a C14:0	0
+lysoPC a C16:0	0
+lysoPC a C16:1	0
+lysoPC a C17:0	0
+lysoPC a C18:0	0
+lysoPC a C18:1	0
+lysoPC a C18:2	0
+lysoPC a C20:3	0
+lysoPC a C20:4	0
+lysoPC a C24:0	0
+lysoPC a C26:0	0
+lysoPC a C26:1	0
+lysoPC a C28:0	0
+lysoPC a C28:1	0
+PC aa C24:0	0
+PC aa C26:0	0
+PC aa C28:1	0
+PC aa C30:0	0
+PC aa C30:2	0
+PC aa C32:0	0
+PC aa C32:1	0
+PC aa C32:2	0
+PC aa C32:3	0
+PC aa C34:1	0
+PC aa C34:2	0
+PC aa C34:3	0
+PC aa C34:4	0
+PC aa C36:0	0
+PC aa C36:1	0
+PC aa C36:2	0
+PC aa C36:3	0
+PC aa C36:4	0
+PC aa C36:5	0
+PC aa C36:6	0
+PC aa C38:0	0
+PC aa C38:1	0
+PC aa C38:3	0
+PC aa C38:4	0
+PC aa C38:5	0
+PC aa C38:6	0
+PC aa C40:1	0
+PC aa C40:2	0
+PC aa C40:3	0
+PC aa C40:4	0
+PC aa C40:5	0
+PC aa C40:6	0
+PC aa C42:0	0
+PC aa C42:1	0
+PC aa C42:2	0
+PC aa C42:4	0
+PC aa C42:5	0
+PC aa C42:6	0
+PC ae C30:0	0
+PC ae C30:1	0
+PC ae C30:2	0
+PC ae C32:1	0
+PC ae C32:2	0
+PC ae C34:0	0
+PC ae C34:1	0
+PC ae C34:2	0
+PC ae C34:3	0
+PC ae C36:0	0
+PC ae C36:1	0
+PC ae C36:2	0
+PC ae C36:3	0
+PC ae C36:4	0
+PC ae C36:5	0
+PC ae C38:0	0
+PC ae C38:1	0
+PC ae C38:2	0
+PC ae C38:3	0
+PC ae C38:4	0
+PC ae C38:5	0
+PC ae C38:6	0
+PC ae C40:1	0
+PC ae C40:2	0
+PC ae C40:3	0
+PC ae C40:4	0
+PC ae C40:5	0
+PC ae C40:6	0
+PC ae C42:0	0
+PC ae C42:1	0
+PC ae C42:2	0
+PC ae C42:3	0
+PC ae C42:4	0
+PC ae C42:5	0
+PC ae C44:3	0
+PC ae C44:4	0
+PC ae C44:5	0
+PC ae C44:6	0
+SM (OH) C14:1	1
+SM (OH) C16:1	1
+SM (OH) C22:1	1
+SM (OH) C22:2	1
+SM (OH) C24:1	1
+SM C16:0	1
+SM C16:1	1
+SM C18:0	1
+SM C18:1	1
+SM C20:2	0
+SM C22:3	1
+SM C24:0	1
+SM C24:1	1
+SM C26:0	1
+SM C26:1	0
+H1	0
+TCA	0
+GCA	0
+GCDCA	0
+TCDCA	0
+TLCA	0
+GLCA	0
+TDCA	0
+GDCA	0
+CA	0
+CDCA	0
+UDCA	0
+DCA	0
+TUDCA	0
+GUDCA	0
+LCA	0
+HR	0
+SV	0
+CO	0
+EF	0
+Resp Rate	0
+Temperature	0
+pH	0
+pCO2	0
+pO2	0
+Hb	0
+SaO2	0
+K	0
+Na	0
+Cl	0
+Glucose	0
+Lactate	0
+BE	0
+HCO3	0
+Albumin	0
+AST	0
+ALP	0
+ALT	0
+Insulin	0
+Ghrelin	0
+Leptin	0
+Glucagon	0
+Tot Cholesterol	0
+HDL	0
+LDL/VLDL	1
+Triglycerides	0
+Cardiac Troponin	0
+BNP	0
+Acetoacetate	0
+3-HB	0
+Ca	0
+Urea	0
+Creatinine	0
+Cystatin C	0
+GH	0
+ACTH	0
+Corticosterone	0
+TSH	0
+T3	0
+T4	0
+Prolactin	0
+Vasopressin	0
+Oxytocin	0
+Adrenaline	0
+Noradrenaline	0
+Aldosterone	0
+DHEA	0
+17b-Estradiol	0
+Testosterone	0
+Progesterone	0
+IL6	0
+IL10	0

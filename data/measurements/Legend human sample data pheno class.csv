@@ -17,11 +17,11 @@ C14:1-OH	Hydroxytetradecenoylcarnitine	aclycarnitine	µM
 C14:2	Tetradecadienylcarnitine	aclycarnitine	µM
 C14:2-OH	Hydroxytetradecadienylcarnitine	aclycarnitine	µM
 C16	Hexadecanoylcarnitine	aclycarnitine	µM
-C16-OH	Hydroxyhexadecanoylcarnitine	aclycarnitine	µM
-C16:1	Hexadecenoylcarnitine	aclycarnitine	µM
-C16:1-OH	Hydroxyhexadecenoylcarnitine	aclycarnitine	µM
-C16:2	Hexadecadienylcarnitine	aclycarnitine	µM
-C16:2-OH	Hydroxyhexadecadienylcarnitine	aclycarnitine	µM
+C16-OH	Hexadecenoylcarnitine	aclycarnitine	µM
+C16:1	Hydroxyhexadecenoylcarnitine	aclycarnitine	µM
+C16:1-OH	Hexadecadienylcarnitine	aclycarnitine	µM
+C16:2	Hydroxyhexadecadienylcarnitine	aclycarnitine	µM
+C16:2-OH	Hydroxyhexadecanoylcarnitine	aclycarnitine	µM
 C18	Octadecanoylcarnitine	aclycarnitine	µM
 C18:1	Octadecenoylcarnitine	aclycarnitine	µM
 C18:1-OH	Hydroxyoctadecenoylcarnitine	aclycarnitine	µM
@@ -207,33 +207,33 @@ DCA	Deoxycholic acid	bile acid	µM
 TUDCA	Tauroursodeoxycholic acid	bile acid	µM
 GUDCA	Glycoursodeoxycholic acid	bile acid	µM
 LCA	Lithocholic acid	bile acid	µM
-Urea			mmol/l
-Creatinine			µmol/l
-ALT	Alanine transaminase		IU/l
-AST	Aspartate Aminotransferase		IU/l
-ALP	Alkaline phosphatase		IU/l
-Albumin			g/l
-Total Cholesterol			
-HDL	High-density lipoprotein		mmol/l
-LDL	Low-density lipoprotein		mmol/l
-Triglycerides			mmol/l
-Troponin T			µg/l
-TSH	Thyroid-stimulating hormone		ng/ml
-FT4	thyroxine		ng/ml
-FT3	triiodothyronine		pg/ml
-IL6	interleukin-6		pg/ml
-IL10	interleukin-10		pg/ml
-ACTH	Adrenocorticotropic hormone		pg/ml
-Aldosterone			pg/ml
-BNP	B-type natriuretic peptide		pg/ml
-DHEA	Dehydroepiandrosterone		pg/ml
-Adrenaline			pg/ml
-Noradrenaline			ng/ml
-Glucagon			pg/ml
-Cortisol			nmol/l
-Estradiol			pg/ml
-GH	growth hormone		ng/ml
-Leptin			pg/ml
-Prolactin			ng/ml
-Testosterone			nmol/l
-Vasopressin			pg/ml
+Urea		phenomenological variable	mmol/l
+Creatinine		phenomenological variable	µmol/l
+ALT	Alanine transaminase	phenomenological variable	IU/l
+AST	Aspartate Aminotransferase	phenomenological variable	IU/l
+ALP	Alkaline phosphatase	phenomenological variable	IU/l
+Albumin		phenomenological variable	g/l
+Total Cholesterol		phenomenological variable	
+HDL	High-density lipoprotein	phenomenological variable	mmol/l
+LDL	Low-density lipoprotein	phenomenological variable	mmol/l
+Triglycerides		phenomenological variable	mmol/l
+Troponin T		phenomenological variable	µg/l
+TSH	Thyroid-stimulating hormone	phenomenological variable	ng/ml
+FT4	thyroxine	phenomenological variable	ng/ml
+FT3	triiodothyronine	phenomenological variable	pg/ml
+IL6	interleukin-6	phenomenological variable	pg/ml
+IL10	interleukin-10	phenomenological variable	pg/ml
+ACTH	Adrenocorticotropic hormone	phenomenological variable	pg/ml
+Aldosterone		phenomenological variable	pg/ml
+BNP	B-type natriuretic peptide	phenomenological variable	pg/ml
+DHEA	Dehydroepiandrosterone	phenomenological variable	pg/ml
+Adrenaline		phenomenological variable	pg/ml
+Noradrenaline		phenomenological variable	ng/ml
+Glucagon		phenomenological variable	pg/ml
+Cortisol		phenomenological variable	nmol/l
+Estradiol		phenomenological variable	pg/ml
+GH	growth hormone	phenomenological variable	ng/ml
+Leptin		phenomenological variable	pg/ml
+Prolactin		phenomenological variable	ng/ml
+Testosterone		phenomenological variable	nmol/l
+Vasopressin		phenomenological variable	pg/ml
