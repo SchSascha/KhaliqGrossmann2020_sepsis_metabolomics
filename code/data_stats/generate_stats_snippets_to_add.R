@@ -1,4 +1,9 @@
 library(CCA)
+library(hexbin)
+library(matrixStats)
+library(data.table)
+
+source("../function_definitions.R")
 
 human_sepsis_data <- get_human_sepsis_data()
 
@@ -60,8 +65,38 @@ corr_hist2D <- list()
 for (n in 0:2){
   dat <- corr_dat[[paste0(n)]]
   dat_sel <- upper.tri(dat$S$r)
-  corr_hist2D[[paste(n)]] <- hexbin(x = dat$S$r[dat_sel], y = dat$NS$r[dat_sel], xlab = "NS correlation", ylab = "S correlation")
+  corr_hist2D[[paste(n)]] <- hexbin(x = dat$S$r[dat_sel], y = dat$NS$r[dat_sel], xlab = "NS correlation", ylab = "S correlation", IDs = TRUE)
 }
-plot(corr_hist2D[[1]])
-plot(corr_hist2D[[2]])
-plot(corr_hist2D[[3]])
+plot(corr_hist2D[[1]], main = "Day 0")
+plot(-1:1, -1:1)
+day0_dy <- aggregate(corr_S[,2], list(ID = corr_hist2D[[1]]@cID), mean)
+day0_dx <- aggregate(corr_NS[,2], list(ID = corr_hist2D[[1]]@cID), mean)
+arrows(corr_hist2D[[1]]@xcm, corr_hist2D[[1]]@ycm, day0_dx$x, day0_dy$x, length = 0.05)
+plot(corr_hist2D[[2]], main = "Day 1")
+plot(-1:1, -1:1)
+day1_dy <- aggregate(corr_S[,3], list(ID = corr_hist2D[[2]]@cID), mean)
+day1_dx <- aggregate(corr_NS[,3], list(ID = corr_hist2D[[2]]@cID), mean)
+arrows(corr_hist2D[[2]]@xcm, corr_hist2D[[2]]@ycm, day1_dx$x, day1_dy$x, length = 0.05)
+
+plot(-1:1, -1:1)
+day0_d2_dy <- aggregate(corr_S[,3], list(ID = corr_hist2D[[1]]@cID), mean)
+day0_d2_dx <- aggregate(corr_NS[,3], list(ID = corr_hist2D[[1]]@cID), mean)
+arrows(corr_hist2D[[1]]@xcm, corr_hist2D[[1]]@ycm, day0_d2_dx$x, day0_d2_dy$x, length = 0.05)
+
+plot(corr_hist2D[[3]], main = "Day 2")
+
+slim <- c(-0.5,0)
+nslim <- c(-0.4,0)
+for (n in 1:3){
+  print(sum(between(corr_S_mat[,n], slim[1], slim[2]) & between(corr_NS_mat[,n], nslim[1], nslim[2])))
+}
+
+slim <- c(0.6,1)
+nslim <- c(0,0.5)
+for (n in 1:3){
+  print(sum(between(corr_S_mat[,n], slim[1], slim[2]) & between(corr_NS_mat[,n], nslim[1], nslim[2])))
+}
+
+
+plot(-1:1, -1:1)
+arrows(corr_hist2D[[1]]@xcm, corr_hist2D[[1]]@ycm, corr_hist2D[[3]]@xcm, corr_hist2D[[3]]@ycm, length = 0.05)
