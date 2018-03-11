@@ -2,6 +2,7 @@ library(CCA)
 library(hexbin)
 library(matrixStats)
 library(data.table)
+library(missRanger)
 
 source("../function_definitions.R")
 
@@ -11,12 +12,37 @@ human_sepsis_data <- get_human_sepsis_data()
 human_nonsepsis_data <- human_sepsis_data[human_sepsis_data$`CAP / FP` == "-", ]
 human_sepsis_data <- human_sepsis_data[human_sepsis_data$`CAP / FP` != "-", ]
 
-human_sepsis_data <- na.omit(human_sepsis_data)
+#human_sepsis_data <- na.omit(human_sepsis_data)
 human_sepsis_data_normal <- human_sepsis_data
-human_sepsis_data_normal[,-1:-5] <- scale(human_sepsis_data[,-1:-5])
+human_sepsis_data_normal[,-1:-5] <- scale(human_sepsis_data_normal[,-1:-5])
 
-human_sepsis_data_metab <- subset(human_sepsis_data_normal, Day < 4, 6:205)
-human_sepsis_data_pheno <- subset(human_sepsis_data_normal, Day < 4, 206:ncol(human_sepsis_data))
+human_sepsis_data_metab <- subset(human_sepsis_data_normal, Day < 4, 6:204)
+human_sepsis_data_pheno <- subset(human_sepsis_data_normal, Day < 4, 205:ncol(human_sepsis_data))
+
+human_sepsis_data_normal <- human_sepsis_data_normal[,1:204]
+
+col <- colnames(human_sepsis_data_normal)
+colnames(human_sepsis_data_normal) <- make.names(col)
+human_sepsis_data_normal[, -1:-5] <- missRanger(human_sepsis_data_normal[,-1:-5])
+colnames(human_sepsis_data_normal) <- col
+
+pat_list <- human_sepsis_data_normal[match(unique(human_sepsis_data_normal$Patient), human_sepsis_data_normal$Patient), 1:5]
+
+pca_list <- lapply(pat_list$Patient, function(p){ prcomp(subset(human_sepsis_data_normal, Patient == p, -1:-5)) })
+for (n in seq_along(pca_list)){
+  pca_list[[n]]$surv <- pat_list$Survival[n]
+}
+pca_list[unlist(lapply(pca_list, function(e) ncol(e$x) == 1))] <- NULL
+par(mfrow = c(4,5))
+lapply(pca_list, plot)
+par(mfrow = c(4,5))
+lapply(pca_list, function(e){ plot(e$x[,1], main = e$surv) })
+par(mfrow = c(4,5))
+lapply(pca_list, function(e){ plot(e$x[,2], main = e$surv) })
+par(mfrow = c(4,5))
+lapply(pca_list, function(e){ plot(e$rotation[,1], main = e$surv) })
+par(mfrow = c(4,5))
+lapply(pca_list, function(e){ plot(e$x[,1:min(2,ncol(e$x))], type = "p", col = 1:nrow(e$x), main = e$surv); arrows(x0 = e$x[1:(nrow(e$x)-1),1], y0 = e$x[1:(nrow(e$x)-1),2], x1 = e$x[2:nrow(e$x),1], y1 = e$x[2:nrow(e$x),2], length = 0.1) })
 
 er <- estim.regul(X = human_sepsis_data_metab, Y = human_sepsis_data_pheno, grid1 = seq(0.01, 3, length.out = 10), grid2 = seq(0.25, 1.5, length.out = 8))
 
