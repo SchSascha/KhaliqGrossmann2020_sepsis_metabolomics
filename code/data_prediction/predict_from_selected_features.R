@@ -6,10 +6,10 @@ library(matrixStats)
 library(ranger)
 library(missRanger)
 library(kernlab)
-library(ropls)
-library(pROC)
-library(caTools)
-library(AUC)
+#library(ropls)
+#library(pROC)
+#library(caTools)
+#library(AUC)
 
 #Import central functions
 source("../function_definitions.R")
@@ -36,7 +36,7 @@ human_validation_data <- get_Ferrario_validation_data()
 rat_sepsis_data <- get_rat_sepsis_data()
 
 ##Import viterbi path data
-viterbi_path <- fread(input = "../HMM/tram_viterbi_paths_all_septic_samples_2LJHMM.csv", header = TRUE, data.table = FALSE)
+#viterbi_path <- fread(input = "../HMM/tram_viterbi_paths_all_septic_samples_2LJHMM.csv", header = TRUE, data.table = FALSE)
 
 ##Filter out patients without sepsis
 human_nonsepsis_data <- human_sepsis_data[human_sepsis_data$`CAP / FP` == "-", ]
