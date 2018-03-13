@@ -44,6 +44,15 @@ lapply(pca_list, function(e){ plot(e$rotation[,1], main = e$surv) })
 par(mfrow = c(4,5))
 lapply(pca_list, function(e){ plot(e$x[,1:min(2,ncol(e$x))], type = "p", col = 1:nrow(e$x), main = e$surv); arrows(x0 = e$x[1:(nrow(e$x)-1),1], y0 = e$x[1:(nrow(e$x)-1),2], x1 = e$x[2:nrow(e$x),1], y1 = e$x[2:nrow(e$x),2], length = 0.1) })
 
+rot_pc1 <- t(sapply(pca_list, function(e) e$rotation[,1]))
+rot_pca <- prcomp(rot_pc1)
+plot(rot_pca)
+plot(rot_pca$rotation[,1])
+
+plot(rot_pca$sdev/sum(rot_pca$sdev))
+
+linmod <- lm(rot_pc1 ~ 1)
+
 er <- estim.regul(X = human_sepsis_data_metab, Y = human_sepsis_data_pheno, grid1 = seq(0.01, 3, length.out = 10), grid2 = seq(0.25, 1.5, length.out = 8))
 
 rc <- rcc(X = human_sepsis_data_metab, Y = human_sepsis_data_pheno, lambda1 = er$lambda1, lambda2 = er$lambda2)
