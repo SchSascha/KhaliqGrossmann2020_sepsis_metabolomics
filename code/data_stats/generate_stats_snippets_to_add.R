@@ -6,6 +6,8 @@ library(missRanger)
 
 source("../function_definitions.R")
 
+out_dir <- "../../results/data_stats/"
+
 human_sepsis_data <- get_human_sepsis_data()
 
 #Seperate septic and nonseptic patients
@@ -31,23 +33,67 @@ pat_list <- human_sepsis_data_normal[match(unique(human_sepsis_data_normal$Patie
 pca_list <- lapply(pat_list$Patient, function(p){ prcomp(subset(human_sepsis_data_normal, Patient == p, -1:-5)) })
 for (n in seq_along(pca_list)){
   pca_list[[n]]$surv <- pat_list$Survival[n]
+  pca_list[[n]]$pat <- pat_list$Patient[n]
+  pca_list[[n]]$capfp <- pat_list$`CAP / FP`[n]
+  pca_list[[n]]$days <- unlist(subset(human_sepsis_data_normal, Patient == pat_list$Patient[n], "Day"))
 }
 pca_list[unlist(lapply(pca_list, function(e) ncol(e$x) == 1))] <- NULL
-par(mfrow = c(4,5))
-lapply(pca_list, plot)
-par(mfrow = c(4,5))
-lapply(pca_list, function(e){ plot(e$x[,1], main = e$surv) })
-par(mfrow = c(4,5))
-lapply(pca_list, function(e){ plot(e$x[,2], main = e$surv) })
-par(mfrow = c(4,5))
-lapply(pca_list, function(e){ plot(e$rotation[,1], main = e$surv) })
-par(mfrow = c(4,5))
-lapply(pca_list, function(e){ plot(e$x[,1:min(2,ncol(e$x))], type = "p", col = 1:nrow(e$x), main = e$surv); arrows(x0 = e$x[1:(nrow(e$x)-1),1], y0 = e$x[1:(nrow(e$x)-1),2], x1 = e$x[2:nrow(e$x),1], y1 = e$x[2:nrow(e$x),2], length = 0.1) })
+png(filename = paste0(out_dir, "pca_sepsis_pats_expl_var.png"), width = 36, height = 9, units = "cm", res = 300)
+par(mfrow = c(2,10))
+lapply(pca_list, function(e) barplot(summary(e)$importance[2,], ylab = "Explained variance", main = paste(e$pat, e$surv, e$capfp, sep = ", ")))
+dev.off()
+png(filename = paste0(out_dir, "pca_sepsis_pats_PC1.png"), width = 36, height =9, units = "cm", res = 300)
+par(mfrow = c(2,10))
+lapply(pca_list, function(e){ plot(e$days, e$x[,1], main = paste(e$pat, e$surv, e$capfp, sep = ", "), type = "l", xlab = "Day", ylab = "PC1") })
+dev.off()
+png(filename = paste0(out_dir, "pca_sepsis_pats_PC2.png"), width = 36, height = 9, units = "cm", res = 300)
+par(mfrow = c(2,10))
+lapply(pca_list, function(e){ plot(e$days, e$x[,2], main = paste(e$pat, e$surv, e$capfp, sep = ", "), type = "l", xlab = "Day", ylab = "PC2") })
+dev.off()
+png(filename = paste0(out_dir, "pca_sepsis_pats_rot1.png"), width = 36, height = 9, units = "cm", res = 300)
+par(mfrow = c(2,10))
+lapply(pca_list, function(e){ plot(e$rotation[,1], type = "l", main = paste(e$pat, e$surv, e$capfp, sep = ", "), xlab = "Met. index", ylab = "Loading") })
+dev.off()
+png(filename = paste0(out_dir, "pca_sepsis_pats_PC1_vs_PC2.png"), width = 40, height = 10, units = "cm", res = 300)
+par(mfrow = c(2,10))
+lapply(pca_list, function(e){ plot(e$x[,1:min(2,ncol(e$x))], type = "p", col = 1:nrow(e$x), main = paste("Patient ", e$pat, ", ", e$surv, ", ", e$capfp, sep = "")); arrows(x0 = e$x[1:(nrow(e$x)-1),1], y0 = e$x[1:(nrow(e$x)-1),2], x1 = e$x[2:nrow(e$x),1], y1 = e$x[2:nrow(e$x),2], length = 0.1) })
+dev.off()
 
 rot_pc1 <- t(sapply(pca_list, function(e) e$rotation[,1]))
-rot_pca <- prcomp(rot_pc1)
-plot(rot_pca)
-plot(rot_pca$rotation[,1])
+rot_pca_pc1 <- prcomp(rot_pc1)
+plot(rot_pca_pc1)
+plot(rot_pca_pc1$rotation[,1])
+rot_pc2 <- t(sapply(pca_list, function(e) e$rotation[,2]))
+rot_pca_pc2 <- prcomp(rot_pc2)
+plot(rot_pca_pc2)
+plot(rot_pca_pc2$rotation[,1])
+pca_con1 <- rot_pca_pc1$rotation[,1] %*% t(as.matrix(human_sepsis_data_normal[, -1:-5]))
+pca_con2 <- rot_pca_pc2$rotation[,1] %*% t(as.matrix(human_sepsis_data_normal[, -1:-5]))
+
+stab <- table(human_sepsis_data_normal$Survival)
+human_sepsis_data_normal[human_sepsis_data_normal$Survival == "NS", -1:-5] <- sqrt(stab["NS"]) * human_sepsis_data_normal[human_sepsis_data_normal$Survival == "NS", -1:-5]
+human_sepsis_data_normal[human_sepsis_data_normal$Survival == "S", -1:-5] <- sqrt(stab["S"]) * human_sepsis_data_normal[human_sepsis_data_normal$Survival == "S", -1:-5]
+for (pat in unique(human_sepsis_data_normal$Patient)){
+  sel <- human_sepsis_data_normal$Patient == pat
+  human_sepsis_data_normal[sel, -1:-5] <- sqrt(sum(sel)) * human_sepsis_data_normal[sel, -1:-5]
+}
+
+#p <- prcomp(kernelMatrix(kernel = rbfdot(sigma = 0.0000001), x = as.matrix(human_sepsis_data_normal[,-1:-5])))
+p <- prcomp(human_sepsis_data_normal[,-1:-5])
+par(mfrow = c(1,1))
+plot(summary(p)$importance[2,])
+plot(p$x[,1:2], col = as.factor(human_sepsis_data_normal$Day))
+col <- as.factor(pat_list$Survival)
+for (n in seq_along(pat_list$Patient)){
+  ind <- which(human_sepsis_data_normal$Patient == pat_list$Patient[n])
+  x <- p$x[ind ,1]
+  y <- p$x[ind ,2]
+  arrows(x0 = x[-length(x)], y0 = y[-length(y)], x1 = x[-1], y1 = y[-1], length = 0.1, col = col[n])
+}
+
+rot_pc12 <- rbind(rot_pc1, rot_pc2)
+rot_pc12_sim <- as.matrix(dist(rot_pc12))
+heatmaply(rot_pc12_sim, dendrogram = T, margins = c(50,50,0,50))
 
 plot(rot_pca$sdev/sum(rot_pca$sdev))
 
