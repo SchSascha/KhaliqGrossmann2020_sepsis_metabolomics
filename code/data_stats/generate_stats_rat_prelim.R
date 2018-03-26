@@ -6,10 +6,11 @@ library(matrixStats)
 library(kernlab)
 library(heatmaply)
 library(missRanger)
-library(TANOVA)
 library(webshot)
 library(htmlwidgets)
 library(forcats)
+library(car)
+library(nlme)
 
 #Import central functions
 source("../function_definitions.R")
@@ -36,6 +37,8 @@ human_sepsis_legend <- human_sepsis_legend[-1:-5, ]
 ##Import experiment data
 rat_sepsis_data <- get_rat_sepsis_data()
 rat_sepsis_data <- rat_sepsis_data[, -which(colnames(rat_sepsis_data) %in% c("HR", "SV", "CO", "EF", "Resp Rate", "Temperature"))]
+###Remove outlier rats
+rat_sepsis_data <- rat_sepsis_data[!rat_sepsis_data$`Sample Identification` %in% c("60H", "39L"),] 
 
 ##Import corresponding group assignment
 rat_sepsis_legend <- get_rat_sepsis_legend()
@@ -62,16 +65,9 @@ rat_liver_sig_diff_res <- rat_sig_diffs_along_time(subset(rat_sepsis_data, mater
 rat_liver_time_sig_u_diff <- rat_liver_sig_diff_res$time_sig_u_diff
 rat_liver_time_sig_t_diff <- rat_liver_sig_diff_res$time_sig_t_diff
 
-rat_liver_sig_diff_res_o <- rat_sig_diffs_along_time(subset(rat_sepsis_data, !rat_sepsis_data$`Sample Identification` == c("039L") & material == "liver" & group %in% c("septic survivor", "septic non-survivor")), corr_fdr = F)
-rat_liver_time_sig_t_diff_o <- rat_liver_sig_diff_res_o$time_sig_t_diff
-
-#Remove outlier rat
-#rat_sepsis_data <- subset(rat_sepsis_data, !rat_sepsis_data$`Sample Identification` %in% c("039L"))
-
 #Get significant differences at all time points
 cols <- colnames(rat_sepsis_data)[-1:-4]
 rat_liver_sig_t_class <- na.omit(cols[colAnys(as.matrix(rat_liver_time_sig_t_diff[, -1]) <= 0.05)])
-rat_liver_sig_t_class_o <- na.omit(cols[colAnys(as.matrix(rat_liver_time_sig_t_diff_o[, -1]) <= 0.05)])
 rat_plasma_sig_t_class <- na.omit(cols[colAnys(as.matrix(rat_plasma_time_sig_t_diff[, -1]) <= 0.05)])
 rat_heart_sig_t_class <- na.omit(cols[colAnys(as.matrix(rat_heart_time_sig_t_diff[, -1]) <= 0.05)])
 
@@ -115,25 +111,89 @@ rat_heart_sig_diff_ctrl_nonsurv_res <- rat_sig_diffs_along_time(subset(rat_sepsi
 rat_heart_time_fc_diff_ctrl_nonsurv <- rat_heart_sig_diff_ctrl_nonsurv_res$time_fold_change
 
 #Find time points in long time course data where changes are significant
-##Construct tANOVA arguments; tANOVA requires equal number of replicates for each time point of a factor level
-# full_tanova_data <- subset(human_sepsis_data, Day %in% rownames(table(Day))[table(Day) > 1])
-# tanova_day_set <- c(0,1,2,3,5,7,14)
-# #tanova_day_set <- c(0,1,2,3,5)
-# tanova_patient_set <- unique(full_tanova_data$Patient)
-# for (n in tanova_day_set){
-#   tanova_patient_set <- intersect(tanova_patient_set, full_tanova_data$Patient[full_tanova_data$Day == n])
-# }
-# full_tanova_data <- subset(full_tanova_data, Patient %in% tanova_patient_set & Day %in% tanova_day_set)
-# full_tanova_data <- full_tanova_data[order(full_tanova_data$Survival),]
-# t_data <- t(scale(full_tanova_data[,-1:-5]))
-# f1 <- as.numeric(as.factor(full_tanova_data$Survival))
-# f2 <- 0
-# tp <- as.numeric(as.factor(full_tanova_data$Day))
-# ##Clean metabolite data
-# t_data <- na.omit(t_data)
-# ##Run tANOVA
-# tanova_res <- tanova(data = t_data, f1 = f1, f2 = f2, tp = tp, test.type = 2, robustify = FALSE, eb = FALSE, B = 1000)
-# tanova_sig_metabs <- tanova_res$obj$gene.order[tanova_res$obj$pvalue <= 0.05]
+met_set <- colnames(rat_sepsis_data)
+met_set <- met_set[colSums(is.na(rat_sepsis_data)) < 2]
+met_set <- met_set[-1:-4]
+fml <- concentration ~ group*time #TODO: work on formula and random effects specification
+anova.car.models <- list()
+anova.car.levene <- list()
+for (mat in unique(rat_sepsis_data$material)){
+  material.models <- list()
+  material.levene <- list()
+  for (met in met_set){
+    test_data <- subset(rat_sepsis_data, material == mat & group != "control", c("group", "time point", met))
+    test_data <- test_data[test_data["time point"] != "72h", ]
+    colnames(test_data)[ncol(test_data)] <- "concentration"
+    colnames(test_data)[2] <- "time"
+    test_data$group <- as.factor(test_data$group)
+    test_data$time <- as.factor(test_data$time)
+    try(material.models[[met]] <- lme(fml, random = ~ 1|time, data = test_data, method = "REML"))
+    try(material.levene[[met]] <- leveneTest(fml, data = test_data))
+  }
+  anova.car.models[[mat]] <- material.models
+  anova.car.levene[[mat]] <- material.levene
+}
+anova.car.var.homog.p <- lapply(anova.car.levene, sapply, function(e) e[[3]][[1]])
+anova.car.normality.p <- lapply(anova.car.models, sapply, function(e) shapiro.test(residuals(e))$p.value)
+anova.car.terms <- list()
+anova.car.ps <- list()
+for (mat in unique(rat_sepsis_data$material)){
+  anova.car.terms[[mat]] <- rownames(Anova(anova.car.models[[mat]][[1]], type = 3))
+  anova.car.ps[[mat]] <- sapply(anova.car.models[[mat]], function(x){ Anova(x, type = 3)[[3]] }, USE.NAMES = TRUE)
+  rownames(anova.car.ps[[mat]]) <- anova.car.terms[[mat]]
+  anova.car.ps[[mat]] <- apply(anova.car.ps[[mat]], c(2), function(row){ p.adjust(p = row, method = "fdr") })
+}
+rat_sig_anova.car_class <- lapply(anova.car.ps, function(e) colnames(e)[colAnys(e[c("group", "group:time"), ] <= 0.05)])
+for (mat in names(rat_sig_anova.car_class)){
+  rat_sig_anova.car_class[[mat]] <- setdiff(rat_sig_anova.car_class[[mat]], names(which(anova.car.var.homog.p[[mat]] < 0.05)))
+  rat_sig_anova.car_class[[mat]] <- setdiff(rat_sig_anova.car_class[[mat]], names(which(anova.car.normality.p[[mat]] < 0.05)))
+}
+
+#Check correlations between tissue types on ungrouped metabolites
+rat_sepsis_data_normal <- rat_sepsis_data
+rat_sepsis_data_normal[, -1:-4] <- scale(rat_sepsis_data[-1:-4])
+cross_mat_corr <- list()
+for (comp in list(c("heart", "plasma"), c("heart", "liver"), c("plasma", "liver"))){
+  comp_str <- paste(comp, collapse = " ~ ")
+  cross_mat_corr[[comp_str]] <- list()
+  for (met in met_set){
+    test_data <- subset(rat_sepsis_data_normal, material %in% comp & group != "control", c("Sample Identification", "material", met))
+    colnames(test_data)[1] <- "ID"
+    test_data$ID <- substr(test_data$ID, start = 1, stop = 3)
+    test_data <- dcast(test_data, ID ~ material, value.var = met)
+    cross_mat_corr[[comp_str]][[met]] <- cor.test(x = test_data[,2], y = test_data[,3])
+  }
+}
+cross_mat_coeff <- lapply(cross_mat_corr, sapply, function(r){ r$estimate })
+cross_mat_p <- lapply(cross_mat_corr, sapply, function(r){ r$p.value })
+cross_mat_p <- lapply(cross_mat_p, p.adjust, method = "fdr")
+
+#Check correlations between tissue types on grouped metabolites
+coarse_group_list <- rat_sepsis_legend[match(colnames(rat_sepsis_data)[-1:-4], rat_sepsis_legend[,1]), 3] #lucky ... no col in data without match in legend
+coarse_group_list[is.na(coarse_group_list)] <- "Plasma Creatinine"
+rat_sepsis_data_grouped <- cbind(rat_sepsis_data[,1:4], matrix(0, nrow = nrow(rat_sepsis_data), ncol=length(unique(coarse_group_list))))
+colnames(rat_sepsis_data_grouped)[-1:-4] <- unique(coarse_group_list)
+for (n in 1:nrow(rat_sepsis_data)){
+  agg <- aggregate(t(as.matrix(rat_sepsis_data_normal[n,-1:-4])), by = list(coarse_group_list), FUN = mean, na.action = na.omit, na.rm = T) #output is disordered!
+  rat_sepsis_data_grouped[n, -1:-4] <- agg[match(colnames(rat_sepsis_data_grouped)[-1:-4], agg[,1]), 2]
+}
+cross_mat_group_corr <- list()
+for (comp in list(c("heart", "plasma"), c("heart", "liver"), c("plasma", "liver"))){
+  comp_str <- paste(comp, collapse = " ~ ")
+  cross_mat_group_corr[[comp_str]] <- list()
+  for (met in unique(coarse_group_list[1:199])){
+    test_data <- subset(rat_sepsis_data_grouped, material %in% comp & group != "!control", c("Sample Identification", "material", met))
+    colnames(test_data)[1] <- "ID"
+    test_data$ID <- substr(test_data$ID, start = 1, stop = 3)
+    test_data <- dcast(test_data, ID ~ material, value.var = met)
+    if (all(colSums(is.na(test_data)) < nrow(test_data)))
+      cross_mat_group_corr[[comp_str]][[met]] <- cor.test(x = test_data[,2], y = test_data[,3])
+  }
+}
+cross_mat_group_coeff <- lapply(cross_mat_group_corr, sapply, function(r){ r$estimate })
+cross_mat_group_p <- lapply(cross_mat_group_corr, sapply, function(r){ r$p.value })
+cross_mat_group_p <- lapply(cross_mat_group_p, p.adjust, method = "fdr")
+
 
 #Build long format tables for plotting
 ##Scale measurement values at maximum concentration
@@ -359,6 +419,27 @@ ggplot(x, aes(x = group, y = value, group = time_point, color = time_point)) +
   geom_jitter(height = 0, width = 0.3) +
   theme_bw()
 
+
+##rat, metabolite concentration time courses, ANOVA results
+for (mat in names(rat_sig_anova.car_class)){
+  r_time_course_sig_diff_dat <- subset(rat_sepsis_data, group %in% c("septic survivor", "septic non-survivor") & material == mat)
+  r_time_course_sig_diff_dat <- max_norm(r_time_course_sig_diff_dat, -1:-4)
+  r_time_course_sig_diff_dat <- melt(r_time_course_sig_diff_dat, id.vars = c("Sample Identification", "material", "group", "time point"))
+  r_time_course_sig_diff_dat <- subset(r_time_course_sig_diff_dat, variable %in% rat_sig_anova.car_class[[mat]])
+  r_time_course_group <- unique(data.frame(variable = r_time_course_sig_diff_dat$variable, value = 1.2, Time = 1.5, text = coarse_group_list[match(r_time_course_sig_diff_dat$variable, colnames(rat_sepsis_data)[-1:-4])]))
+  r_time_course_sig_diff_plot <- ggplot(na.omit(r_time_course_sig_diff_dat), aes_string(x = "`time point`", y = "value", group = "group", color = "group")) +
+    facet_wrap(facets = ~ variable, ncol = 6, nrow = ceiling(length(rat_plasma_time_sig_t_diff)/6)) +
+    geom_boxplot(mapping = aes_string(x = "`time point`", color = "group", y = "value"), inherit.aes = FALSE) +
+    #stat_summary(fun.ymin = "min", fun.ymax = "max", fun.y = "mean", geom = "line") +
+    #stat_summary(fun.ymin = "min", fun.ymax = "max", fun.y = "mean", size = 0.5) +
+    geom_text(data = r_time_course_group, mapping = aes(x = Time, y = value, label = text), inherit.aes = FALSE, size = 3.2) +
+    scale_x_discrete(limits = c("6h", "24h")) +
+    ylim(0, 1.4) +
+    ylab("Concentration relative to max value") +
+    ggtitle(paste0("Metabolites significantly differing for survival at any time point in ", mat)) + 
+    theme_bw()
+  ggsave(plot = r_time_course_sig_diff_plot, filename = paste0("rat_", mat, "_time_course_sig_anova_diff.png"), path = out_dir, width = 12, height = 0.1 + 0.4 * ceiling(length(rat_plasma_time_sig_t_diff)/6), units = "in")
+}
 
 ##rat, plasma, metabolite concentration time course, only metabolites with p-val < 0.05 at any time point
 r_time_course_sig_diff_dat <- subset(rat_sepsis_data_long_form_sig, group %in% c("septic survivor", "septic non-survivor") & material == "plasma" & variable %in% rat_plasma_sig_t_class)
