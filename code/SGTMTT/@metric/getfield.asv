@@ -1,0 +1,11 @@
+function [bResult,cField] = getfield(cClass, sString)
+    bResult = 1;
+    switch sString
+        case 'descriptor'
+               cField = cClass.descriptor;
+        case 'type'
+               cField = cClass.type;
+        otherwise
+               [bResult, cField] = 
+    [bResult, cField] = getfield(cClass, sString);
+return 

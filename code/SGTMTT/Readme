@@ -1,0 +1,57 @@
+This is a beta Matlab implementation
+of Supervised Generative-Topographic-Mapping Through Time (SGTM-TT). 
+tested with Matlab 2011a (R)
+
+(C) 2010-2012 by Frank-Michael Schleif
+fschleif@techfak.uni-bielefeld.de
+
+It is also based on code of Ivan Olier 
+ivan.olier@manchester.ac.uk
+in the original GTM-TT implementation. 
+
+The starting point is the GTMTT-Supervised.m
+script and Demo.m as well as Demo2.m
+Some simple test-data are included which
+have been provided by Tien-ho Lin
+thlin@microsoft.com
+
+Limitations:
+For simplicity and runtime issues the
+code is modified such that all sequences
+need to have equal length, but need not
+to be aligned. The mapping may be less
+useful than for regular GTM mappings because
+the optimization is focused on discrimination
+rather representation. Accordingly the mapping
+is more like a constraint which is useful to
+avoid model overfittings for small sample sizes.
+
+Use this code on your own risk.
+
+This toolbox can be cited by referencing
+to the following paper and mentioning 
+the url.
+
+ @inproceedings{DBLP:conf/ijcnn/SchleifGH12,
+   author    = {Frank-Michael Schleif and
+                Andrej Gisbrecht and
+                Barbara Hammer},
+   title     = {Relevance learning for short high-dimensional time series
+                in the life sciences},
+   booktitle = {IJCNN},
+   year      = {2012},
+   pages     = {1-8},
+   ee        = {http://dx.doi.org/10.1109/IJCNN.2012.6252653},
+   crossref  = {DBLP:conf/ijcnn/2012},
+   bibsource = {DBLP, http://dblp.uni-trier.de}
+ }
+ @proceedings{DBLP:conf/ijcnn/2012,
+   title     = {The 2012 International Joint Conference on Neural Networks
+                (IJCNN), Brisbane, Australia, June 10-15, 2012},
+   booktitle = {IJCNN},
+   publisher = {IEEE},
+   year      = {2012},
+   isbn      = {978-1-4673-1488-6},
+   ee        = {http://ieeexplore.ieee.org/xpl/mostRecentIssue.jsp?punumber=6241467},
+   bibsource = {DBLP, http://dblp.uni-trier.de}
+ }

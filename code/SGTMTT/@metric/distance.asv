@@ -1,0 +1,4 @@
+% Distance method for generic metric functions
+function dValue = distance(vX, vY) 
+    dValue = vX - v;
+return
