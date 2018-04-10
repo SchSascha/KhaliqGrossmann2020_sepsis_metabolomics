@@ -563,6 +563,36 @@ png(filename = paste0(out_dir, "human_sepsis_S_day2_community_graph.png"), width
 plot(S_d2_community, S_d2_igraph)
 dev.off()
 
+##Human, carnitine sequences
+hsd_carnit <- human_sepsis_data[, c(1:5, grep("^C[0-9]", colnames(human_sepsis_data)))]
+hsd_carnit_single_even <- hsd_carnit[, c("C0", "C2", "C4", "C6 (C4:1-DC)", "C8", "C10", "C12", "C14", "C16", "C18") ]
+hsd_carnit_single_odd <- hsd_carnit[, c("C3", "C5", "C7-DC", "C9") ]
+hsd_carnit_single_su <- hsd_carnit[, c("C3:1", "C4:1", "C5:1", "C6:1", "C10:1", "C12:1", "C14:1", "C16:1", "C18:1")]
+matplot(t(log(hsd_carnit_single_even)), type = "l", col = as.factor(hsd_carnit$Survival))
+matplot(t(log(hsd_carnit_single_odd)), type = "l", col = as.factor(hsd_carnit$Survival))
+matplot(t(log(hsd_carnit_single_su)), type = "l", col = as.factor(hsd_carnit$Survival))
+
+hnd_carnit <- human_nonsepsis_data[, c(1:5, grep("^C[0-9]", colnames(human_nonsepsis_data)))]
+hnd_carnit_single_even <- hnd_carnit[, c("C0", "C2", "C4", "C6 (C4:1-DC)", "C8", "C10", "C12", "C14", "C16", "C18") ]
+hnd_carnit_single_odd <- hnd_carnit[, c("C3", "C5", "C7-DC", "C9") ]
+hnd_carnit_single_su <- hnd_carnit[, c("C3:1", "C4:1", "C5:1", "C6:1", "C10:1", "C12:1", "C14:1", "C16:1", "C18:1")]
+matplot(t(log(hnd_carnit_single_even)), type = "l", col = as.factor(hnd_carnit$Survival))
+matplot(t(log(hnd_carnit_single_odd)), type = "l", col = as.factor(hnd_carnit$Survival))
+matplot(t(log(hnd_carnit_single_su)), type = "l", col = as.factor(hnd_carnit$Survival))
+
+plot(hsd_carnit$C0, hsd_carnit$C16, col = as.factor(hsd_carnit$Survival), pch = as.numeric(as.factor(hsd_carnit$Patient)))
+for (pat in unique(hsd_carnit$Patient)){
+  dat <- subset(hsd_carnit, Patient == pat, c("C0", "C16"))
+  l <- nrow(dat)
+  arrows(x0 = dat$C0[1:(l-1)], y0 = dat$C16[1:(l-1)], x1 = dat$C0[2:l], y1 = dat$C16[2:l], length = 0.1)
+}
+plot(hnd_carnit$C0, hnd_carnit$C16, col = as.factor(hnd_carnit$Survival), pch = as.numeric(as.factor(hnd_carnit$Patient)))
+for (pat in unique(hnd_carnit$Patient)){
+  dat <- subset(hnd_carnit, Patient == pat, c("C0", "C16"))
+  l <- nrow(dat)
+  arrows(x0 = dat$C0[1:(l-1)], y0 = dat$C16[1:(l-1)], x1 = dat$C0[2:l], y1 = dat$C16[2:l], length = 0.1)
+}
+
 ##Human, cluster-heatmap, all metabolites, but groups at the side
 x <- na.omit(data.frame(group = coarse_group_list[metab_sel - 5], human_sepsis_data_normal_conc_metab_cov));
 heatmaply(x = x[, -1], row_side_colors = x[c("group")], key.title = "Cov", dendrogram = FALSE, showticklabels = FALSE, file = paste0(out_dir, "human_normal_metab_nonclust.png"))

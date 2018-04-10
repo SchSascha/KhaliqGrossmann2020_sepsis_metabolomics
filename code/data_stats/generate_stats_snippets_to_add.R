@@ -4,6 +4,7 @@ library(matrixStats)
 library(data.table)
 library(missRanger)
 library(nscancor)
+library(TDAmapper)
 
 source("../function_definitions.R")
 
@@ -84,6 +85,28 @@ for (pat in unique(human_sepsis_data_normal$Patient)){
 }
 
 #p <- prcomp(kernelMatrix(kernel = rbfdot(sigma = 0.0001), x = as.matrix(human_sepsis_data_normal[,-1:-5])))
+rangeKernel <- function(x, range = 1){
+  as.matrix(dist(x)) < range
+}
+p <- prcomp(rangeKernel(human_sepsis_data_normal[, 6:204], 20))
+barplot(p$sdev/sum(p$sdev))
+plot(p$x[,1:2], col = as.factor(human_sepsis_data_normal$Day))
+col <- as.factor(pat_list$Survival)
+for (n in seq_along(pat_list$Patient)){
+  ind <- which(human_sepsis_data_normal$Patient == pat_list$Patient[n])
+  x <- p$x[ind ,1]
+  y <- p$x[ind ,2]
+  arrows(x0 = x[-length(x)], y0 = y[-length(y)], x1 = x[-1], y1 = y[-1], length = 0.1, col = col[n])
+}
+
+m2d <- mapper2D(distance_matrix = dist(human_sepsis_data_normal[, 6:204]), filter_values = human_sepsis_data_normal[, 6:8], num_intervals = c(4, 4), percent_overlap = 50, num_bins_when_clustering = 10)
+m2d_graph <- graph.adjacency(m2d$adjacency, mode = "undirected")
+plot(m2d_graph, layout = layout.circle(m2d_graph))
+
+g <- graph.adjacency(rangeKernel(subset(human_sepsis_data_normal, TRUE, 6:204), range = 16), mode = "undirected", diag = F)
+gc <- cluster_fast_greedy(g)
+plot(gc, g)
+
 p <- prcomp(human_sepsis_data_normal[, which(rowMeans(rot_score) > 140) + 5])
 par(mfrow = c(1,1))
 plot(summary(p)$importance[2,])
