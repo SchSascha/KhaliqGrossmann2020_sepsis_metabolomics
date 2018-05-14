@@ -33,13 +33,21 @@ human_sepsis_data_normal <- human_sepsis_data_normal[,1:204]
 #human_sepsis_data_normal <- cbind(human_sepsis_data_normal[,1:5], distance(x = human_sepsis_data_normal[, -1:-5], method = "chi.distance")) # distance() works on a per row basis
 
 pat_list <- human_sepsis_data_normal[match(unique(human_sepsis_data_normal$Patient), human_sepsis_data_normal$Patient), 1:5]
+pat_len <- table(human_sepsis_data_normal$Patient)
+m <- match(pat_list$Patient, human_sepsis_data_normal$Patient)
+pd <- cbind(human_sepsis_data_normal[, 1:5], human_sepsis_data_normal[, -1:-5] - human_sepsis_data_normal[rep(m, times = pat_len), -1:-5])
+pd <- subset(pd, Day > 0)
+pat_list <- subset(pat_list, Patient %in% names(pat_len[pat_len > 1]))
 
-pca_list <- lapply(pat_list$Patient, function(p){ prcomp(subset(human_sepsis_data_normal, Patient == p, -1:-5)) })
+p <- prcomp(pd[, -1:-5])
+            
+pca_list <- lapply(pat_list$Patient, function(p){ prcomp(diff(as.matrix(subset(human_sepsis_data_normal, Patient == p, -1:-5)))) })
 for (n in seq_along(pca_list)){
   pca_list[[n]]$surv <- pat_list$Survival[n]
   pca_list[[n]]$pat <- pat_list$Patient[n]
   pca_list[[n]]$capfp <- pat_list$`CAP / FP`[n]
   pca_list[[n]]$days <- unlist(subset(human_sepsis_data_normal, Patient == pat_list$Patient[n], "Day"))
+  pca_list[[n]]$days <- pca_list[[n]]$days[-length(pca_list[[n]]$days)]
 }
 pca_list[unlist(lapply(pca_list, function(e) ncol(e$x) <= 2))] <- NULL
 png(filename = paste0(out_dir, "pca_sepsis_pats_expl_var.png"), width = 36, height = 16, units = "cm", res = 300)

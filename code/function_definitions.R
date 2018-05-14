@@ -467,6 +467,38 @@ get_annas_rat_sig_diffs <- function(){
   return(mets[[1]])
 }
 
+#' Fit a linear model for later use in Anova().
+#'
+#' @param data data, cases in rows
+#' @param formula formula connecting the variablees
+#' @param dvar name of dependent variable in data
+#' @param id.vars names of independent and grouping/misc. variables in data
+#' @param random random effect specification, e.g. ~1|subject
+#' @param use.corAR use corAR1()?
+#'
+#' @return linear model fitted with lme() from nlme package
+#' @export
+#'
+#' @examples
+fit.lin.mod.lme <- function(dvar, data, formula, id.vars, random, use.corAR = FALSE){
+  test_data <- data[, c(id.vars, dvar)]
+  colnames(test_data)[ncol(test_data)] <- "concentration"
+  for (s in id.vars){
+    test_data[[s]] <- factor(test_data[[s]]) #to re-level
+  }
+  res <- NULL
+  if (use.corAR){
+    model.pre <- lme(fixed = formula, random = random, data = test_data)
+    ac_val <- ACF(model.pre)[2,2] #autocorrelation value for a 1 day-lag
+    #ac_val <- max(min(ac_val, 0.99), -0.99) #value is in some cases >= 1
+    try(res <- lme(fixed = formula, random = random, correlation = corAR1(form = ~1|Patient, value = ac_val), data = test_data, method = "REML", keep.data = TRUE))
+  }
+  else{
+    try(res <- lme(fixed = formula, random = random, data = test_data, method = "REML", keep.data = TRUE))
+  }
+  return(res)
+}
+
 #' Return column and row coordinates of TRUE values in matrix
 #'
 #' @param matrix logical or 0/1 matrix
