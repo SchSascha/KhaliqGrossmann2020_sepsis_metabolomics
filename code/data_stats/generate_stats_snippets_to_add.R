@@ -34,20 +34,19 @@ human_sepsis_data_normal <- human_sepsis_data_normal[,1:204]
 
 pat_list <- human_sepsis_data_normal[match(unique(human_sepsis_data_normal$Patient), human_sepsis_data_normal$Patient), 1:5]
 pat_len <- table(human_sepsis_data_normal$Patient)
-m <- match(pat_list$Patient, human_sepsis_data_normal$Patient)
-pd <- cbind(human_sepsis_data_normal[, 1:5], human_sepsis_data_normal[, -1:-5] - human_sepsis_data_normal[rep(m, times = pat_len), -1:-5])
-pd <- subset(pd, Day > 0)
-pat_list <- subset(pat_list, Patient %in% names(pat_len[pat_len > 1]))
-
-p <- prcomp(pd[, -1:-5])
+# m <- match(pat_list$Patient, human_sepsis_data_normal$Patient)
+# pd <- cbind(human_sepsis_data_normal[, 1:5], human_sepsis_data_normal[, -1:-5] - human_sepsis_data_normal[rep(m, times = pat_len), -1:-5])
+# pd <- subset(pd, Day > 0)
+# pat_list <- subset(pat_list, Patient %in% names(pat_len[pat_len > 1]))
+# 
+# p <- prcomp(pd[, -1:-5])
             
-pca_list <- lapply(pat_list$Patient, function(p){ prcomp(diff(as.matrix(subset(human_sepsis_data_normal, Patient == p, -1:-5)))) })
+pca_list <- lapply(pat_list$Patient, function(p){ prcomp(subset(human_sepsis_data_normal, Patient == p, -1:-5)) })
 for (n in seq_along(pca_list)){
   pca_list[[n]]$surv <- pat_list$Survival[n]
   pca_list[[n]]$pat <- pat_list$Patient[n]
   pca_list[[n]]$capfp <- pat_list$`CAP / FP`[n]
   pca_list[[n]]$days <- unlist(subset(human_sepsis_data_normal, Patient == pat_list$Patient[n], "Day"))
-  pca_list[[n]]$days <- pca_list[[n]]$days[-length(pca_list[[n]]$days)]
 }
 pca_list[unlist(lapply(pca_list, function(e) ncol(e$x) <= 2))] <- NULL
 png(filename = paste0(out_dir, "pca_sepsis_pats_expl_var.png"), width = 36, height = 16, units = "cm", res = 300)
@@ -70,6 +69,31 @@ png(filename = paste0(out_dir, "pca_sepsis_pats_PC1_vs_PC2.png"), width = 40, he
 par(mfrow = c(3,6))
 lapply(pca_list, function(e){ plot(e$x[,1:min(2,ncol(e$x))], type = "p", col = 1:nrow(e$x), main = paste("Patient ", e$pat, ", ", e$surv, ", ", e$capfp, sep = "")); arrows(x0 = e$x[1:(nrow(e$x)-1),1], y0 = e$x[1:(nrow(e$x)-1),2], x1 = e$x[2:nrow(e$x),1], y1 = e$x[2:nrow(e$x),2], length = 0.1) })
 dev.off()
+
+s <- subset(human_sepsis_data_normal, Survival == "S")
+ns <- subset(human_sepsis_data_normal, Survival == "NS")
+pca_s <- prcomp(s[, metab_sel])
+pca_ns <- prcomp(ns[, metab_sel])
+
+png(filename = paste0(out_dir, "pca_sepsis_s_pats_PC1_vs_PC2.png"), width = 16, height = 15, units = "cm", res = 300)
+plot(pca_s$x[, 1:2], col = s$Day + 1, main = "Surviving Sepsis patients in common PC space")
+for (pat in unique(s$Patient)){
+  idx <- which(s$Patient == pat)
+  lidx <- length(idx)
+  arrows(x0 = pca_s$x[idx[1:(lidx - 1)], 1], y0 = pca_s$x[idx[1:(lidx-1)], 2], x1 = pca_s$x[idx[2:lidx], 1], y1 = pca_s$x[idx[2:lidx], 2], length = 0.1)
+}
+dev.off()
+
+png(filename = paste0(out_dir, "pca_sepsis_ns_pats_PC1_vs_PC2.png"), width = 16, height = 15, units = "cm", res = 300)
+plot(pca_ns$x[, 1:2], col = ns$Day + 1, main = "Nonsurviving Sepsis patients in common PC space\noften start off with a hook")
+for (pat in unique(ns$Patient)){
+  idx <- which(ns$Patient == pat)
+  lidx <- length(idx)
+  arrows(x0 = pca_ns$x[idx[1:(lidx - 1)], 1], y0 = pca_ns$x[idx[1:(lidx-1)], 2], x1 = pca_ns$x[idx[2:lidx], 1], y1 = pca_ns$x[idx[2:lidx], 2], length = 0.1)
+}
+dev.off()
+
+
 
 rot_score <- sapply(pca_list, function(e){ rank(e$rotation[,1]) })
 

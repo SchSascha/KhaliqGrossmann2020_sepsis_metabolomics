@@ -85,6 +85,10 @@ get_rat_sepsis_data <- function(){
   data <- data[, apply(data, 2, function(x) { sum(is.na(x)) }) < nrow(data)] #Strip columns without any non-NA value
   data <- data[, apply(data, 2, function(x){ length(unique(x))}) > 1] #Strip columns with constant values
   data$BE <- data$BE - (min(data$BE, na.rm = TRUE) - 0.1) # without -0.1 later normalization will return -Inf for the lowest value
+  colns <- colnames(data)
+  colns[colns == "Tot Cholesterol"] <- "Total Cholesterol"
+  colns[colns == "LDL/VLDL"] <- "LDL"
+  colnames(data) <- colns
   return(data)
 }
 
@@ -100,6 +104,10 @@ get_rat_sepsis_data_unedit <- function(){
   data <- data[, apply(data, 2, function(x) { sum(is.na(x)) }) < nrow(data)] #Strip columns without any non-NA value
   data <- data[, apply(data, 2, function(x){ length(unique(x))}) > 1] #Strip columns with constant values
   data$BE <- data$BE - min(data$BE, na.rm = TRUE)
+  colns <- colnames(data)
+  colns[colns == "Tot Cholesterol"] <- "Total Cholesterol"
+  colns[colns == "LDL/VLDL"] <- "LDL"
+  colnames(data) <- colns
   return(data)
 }
 
@@ -111,6 +119,8 @@ get_rat_sepsis_data_unedit <- function(){
 #' @examples
 get_rat_sepsis_legend <- function(){
   data <- read.csv(file = "../../data/measurements/Legend rat sample data.csv", header = TRUE, sep = "\t", stringsAsFactors = FALSE, dec = ",", check.names = FALSE)
+  data[[1]][data[[1]] == "Tot Cholesterol"] <- "Total Cholesterol"
+  data[[1]][data[[1]] == "LDL/VLDL"] <- "LDL"
   return(data)
 }
 
@@ -467,7 +477,7 @@ get_annas_rat_sig_diffs <- function(){
   return(mets[[1]])
 }
 
-#' Fit a linear model for later use in Anova().
+#' Fit a linear model with nlme::lme() and apply car::Anova().
 #'
 #' @param data data, cases in rows
 #' @param formula formula connecting the variablees
@@ -476,26 +486,68 @@ get_annas_rat_sig_diffs <- function(){
 #' @param random random effect specification, e.g. ~1|subject
 #' @param use.corAR use corAR1()?
 #'
-#' @return linear model fitted with lme() from nlme package
+#' @return function call to fit linear model with lme() from nlme package
 #' @export
 #'
 #' @examples
-fit.lin.mod.lme <- function(dvar, data, formula, id.vars, random, use.corAR = FALSE){
+fit_lin_mod_lme <- function(dvar, data, formula, id.vars, random, use.corAR = FALSE){
   test_data <- data[, c(id.vars, dvar)]
   colnames(test_data)[ncol(test_data)] <- "concentration"
   for (s in id.vars){
     test_data[[s]] <- factor(test_data[[s]]) #to re-level
   }
   res <- NULL
+  #fit linear model
   if (use.corAR){
     model.pre <- lme(fixed = formula, random = random, data = test_data)
     ac_val <- ACF(model.pre)[2,2] #autocorrelation value for a 1 day-lag
-    #ac_val <- max(min(ac_val, 0.99), -0.99) #value is in some cases >= 1
-    try(res <- lme(fixed = formula, random = random, correlation = corAR1(form = ~1|Patient, value = ac_val), data = test_data, method = "REML", keep.data = TRUE))
+    ac_val <- max(min(ac_val, 0.99), -0.99) #value is in some cases >= 1
+    try(res <- bquote(lme(fixed = .(formula), random = .(random), correlation = corAR1(form = .(random), value = .(ac_val)), data = .(test_data), method = "REML", keep.data = TRUE)))
+    #try(res <- lmer(formula = formula, data = test_data, REML = TRUE))
   }
   else{
-    try(res <- lme(fixed = formula, random = random, data = test_data, method = "REML", keep.data = TRUE))
+    try(res <- bquote(lme(fixed = .(formula), random = .(random), data = .(test_data), method = "REML", keep.data = TRUE)))
   }
+  return(res)
+}
+
+#' Return model matrix for linear models fitted with lme() from the nlme package when the original data is not in the current environment
+#'
+#' @param object linear model build with lme()
+#' @param data data used to build the linear model. Requires keep.data = TRUE in call to lme() if not supplied here.
+#'
+#' @return model matrix for lme objects
+#' @export
+#'
+#' @examples
+model.matrix.lme <- function(object, data){
+  if (missing(data))
+    data <- object$data
+  model.matrix(object = object$terms, data = data, contrast.arg = object$contrasts)
+}
+
+#' Perform type III ANOVA, optionally with repeated measures, on each column of a data.frame indicated by col.set
+#'
+#' @param data data.frame
+#' @param random random effect specification
+#' @param formula data formula object
+#' @param use.corAR use autocorrelated residual structure
+#' @param col.set character vector of column names to iterate over
+#' @param id.vars id variables in data.frame to use in random effect and formula
+#'
+#' @return list with fitted linear models, shapiro test p value and ANOVA p values
+#' @export
+#'
+#' @examples
+t3ANOVA <- function(data, random, formula, use.corAR, col.set, id.vars){
+  lin.models <- lapply(X = col.set, FUN = fit_lin_mod_lme, data = data, formula = formula, id.vars = id.vars, random = random, use.corAR = use.corAR)
+  lin.models <- lapply(lin.models, function(m) try(eval(m)))
+  lin.models <- lin.models[sapply(lin.models, function(m) class(m) == "lme")]
+  model.normality.p <- unlist(lapply(lin.models, function(e) shapiro.test(residuals(e))$p.value))
+  anova.terms <- rownames(Anova(lin.models[[1]], type = 3))
+  anova.ps <- sapply(lin.models, function(x){ Anova(x, type = 3, white.adjust = TRUE)[[3]] }, USE.NAMES = TRUE)
+  rownames(anova.ps) <- anova.terms
+  res <- list(models = lin.models, normality.p = model.normality.p, ps = anova.ps)
   return(res)
 }
 

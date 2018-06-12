@@ -89,5 +89,7 @@ nx_all <- names(all_nscc$ycoef[all_nscc$ycoef[,1] > 0, 1])
 nx_human <- names(human_nscc$ycoef[human_nscc$ycoef[,1] > 0, 1])
 nx_rat <- names(rat_nscc$ycoef[rat_nscc$ycoef[,1] > 0, 1])
 
-venn.diagram(x = list(Combined = nx_all, Human = nx_human, Rat = nx_rat), 
+vp <- venn.diagram(x = list(Combined = nx_all, Human = nx_human, Rat = nx_rat), 
              filename = paste0(out_dir,"CCA_overlap.tiff"))
+
+grid.draw(vp)
