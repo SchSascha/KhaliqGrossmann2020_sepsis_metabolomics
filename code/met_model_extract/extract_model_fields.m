@@ -4,11 +4,12 @@
 % date: 06.09.2017
 % update: 20.12.2017 (processing of iHsa)
 % update: 16.03.2018 (processing of iRno and Recon3D)
+% update: 25.06.2018 (output compartments to metabolites)
 
 %% Initialize COBRA toolbox
-code_dir = cd('../cobratoolbox');
-initCobraToolbox;
-cd(code_dir);
+%code_dir = cd('../cobratoolbox');
+%initCobraToolbox;
+%cd(code_dir);
 
 %% Set file path
 out_dir = '../../data/template_models/';
@@ -46,10 +47,10 @@ end
 for m = 1:length(models)
     comppos = strlength(models{m}.mets) - 1;
     fileID = fopen(strcat(out_dir, mnames{m}, '_mets.txt'), 'w');
-    formatstr = '%s\t%s\t%s\t%s\n';
+    formatstr = '%s\t%s\t%s\t%s\t%s\n';
     fprintf(fileID, formatstr, 'Name', 'ChEBI ID', 'KEGG ID', 'PUBCHEM ID', 'Compartment');
     for n = 1:length(models{m}.metNames)
-        fprintf(fileID, formatstr, models{m}.metNames{n}, models{m}.metChEBIID{n}, models{m}.metKEGGID{n}, models{m}.metPubChemID{n}, models{m}.mets(n));
+        fprintf(fileID, formatstr, models{m}.metNames{n}, models{m}.metChEBIID{n}, models{m}.metKEGGID{n}, models{m}.metPubChemID{n}, models{m}.mets{n}(comppos(n)));
     end
     fclose(fileID);
 end
