@@ -44,11 +44,12 @@ end
 %% Write metabolite names to disk
 
 for m = 1:length(models)
+    comppos = strlength(models{m}.mets) - 1;
     fileID = fopen(strcat(out_dir, mnames{m}, '_mets.txt'), 'w');
     formatstr = '%s\t%s\t%s\t%s\n';
-    fprintf(fileID, formatstr, 'Name', 'ChEBI ID', 'KEGG ID', 'PUBCHEM ID');
+    fprintf(fileID, formatstr, 'Name', 'ChEBI ID', 'KEGG ID', 'PUBCHEM ID', 'Compartment);
     for n = 1:length(models{m}.metNames)
-        fprintf(fileID, formatstr, models{m}.metNames{n}, models{m}.metChEBIID{n}, models{m}.metKEGGID{n}, models{m}.metPubChemID{n});
+        fprintf(fileID, formatstr, models{m}.metNames{n}, models{m}.metChEBIID{n}, models{m}.metKEGGID{n}, models{m}.metPubChemID{n}, models{m}.mets(n));
     end
     fclose(fileID);
 end
