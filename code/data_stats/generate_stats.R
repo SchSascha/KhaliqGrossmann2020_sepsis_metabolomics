@@ -77,25 +77,26 @@ human_nonsepsis_data_normal$Day <- as.factor(human_nonsepsis_data_normal$Day)
 #Find outlier sample
 ##Group metabolites
 coarse_group_list <- human_sepsis_legend[human_sepsis_legend[,1] %in% colnames(human_sepsis_data)[-1:-5], 3] #lucky ... no col in data without match in legend
-human_sepsis_data_normal_grouped <- cbind(human_sepsis_data[,1:5], matrix(0, nrow = nrow(human_sepsis_data_normal), ncol=length(unique(coarse_group_list))))
-colnames(human_sepsis_data_normal_grouped)[-1:-5] <- unique(coarse_group_list)
-human_sepsis_data_normal_grouped$Patient <- as.factor(human_sepsis_data_normal_grouped$Patient)
-human_sepsis_data_normal_grouped$Day <- as.factor(human_sepsis_data_normal_grouped$Day)
+human_sepsis_data_grouped <- cbind(human_sepsis_data[,1:5], matrix(0, nrow = nrow(human_sepsis_data_normal), ncol=length(unique(coarse_group_list))))
+colnames(human_sepsis_data_grouped)[-1:-5] <- unique(coarse_group_list)
+human_sepsis_data_grouped$Patient <- as.factor(human_sepsis_data_grouped$Patient)
+human_sepsis_data_grouped$Day <- as.factor(human_sepsis_data_grouped$Day)
 ###Split for metabolites and "phenotypical" factors
 split_start <- which(colnames(human_sepsis_data) == "Urea")
 pheno_sel <- split_start:ncol(human_sepsis_data)
 metab_sel <- 6:(split_start-1)
-group_pheno_sel <- which(colnames(human_sepsis_data_normal_grouped) %in% unique(coarse_group_list[pheno_sel - 5]))
-group_metab_sel <- which(colnames(human_sepsis_data_normal_grouped) %in% unique(coarse_group_list[metab_sel - 5]))
+group_pheno_sel <- which(colnames(human_sepsis_data_grouped) %in% unique(coarse_group_list[pheno_sel - 5]))
+group_metab_sel <- which(colnames(human_sepsis_data_grouped) %in% unique(coarse_group_list[metab_sel - 5]))
 hsd <- human_sepsis_data
 hsd[, pheno_sel] <- scale(hsd[, pheno_sel])
 for (n in 1:nrow(human_sepsis_data)){
   m_agg <- tapply(X = t(hsd[n, metab_sel]), INDEX = factor(coarse_group_list[metab_sel - 5]), FUN = sum)
   p_agg <- tapply(X = t(hsd[n, pheno_sel]), INDEX = factor(coarse_group_list[pheno_sel - 5]), FUN = mean)
   b_agg <- c(m_agg, p_agg)
-  human_sepsis_data_normal_grouped[n, -1:-5] <- b_agg[match(colnames(human_sepsis_data_normal_grouped)[-1:-5], names(b_agg))]
+  human_sepsis_data_grouped[n, -1:-5] <- b_agg[match(colnames(human_sepsis_data_grouped)[-1:-5], names(b_agg))]
 }
-human_sepsis_data_normal_grouped[, -1:-5] <- scale(human_sepsis_data_normal_grouped[, -1:-5])
+human_sepsis_data_normal_grouped <- human_sepsis_data_grouped
+human_sepsis_data_normal_grouped[, -1:-5] <- scale(human_sepsis_data_grouped[, -1:-5])
 ##Cluster plot, see outlier?
 X11();plot(hclust(dist(human_sepsis_data_normal[, metab_sel])))
 #human_sepsis_data <- human_sepsis_data[-11, ]
@@ -1146,6 +1147,17 @@ for (n in seq_along(ss)[sapply(ss, length) > 0]){
     theme_bw()
   ggsave(plot = h_time_course_sig_diff_plot, filename = paste0("human_pheno_time_course_car_rm_anova_", fs[[n]], "_sig_diff.png"), path = out_dir, width = 12, height = 0.3 + 1.5 * ceiling(n_mets/5), units = "in")
 }
+
+##Human, metabolite groups
+n_mets <- ncol(human_sepsis_data_grouped[, -group_pheno_sel]) - 5
+p <- ggplot(data = subset(melt(human_sepsis_data_grouped[, -group_pheno_sel], id.vars = 1:5), Day %in% 0:3), mapping = aes(x = Day, y = value, group = Survival, colour = Survival)) + 
+  facet_wrap(facets = ~ variable, ncol = 4, nrow = ceiling(n_mets/4), scales = "free_y") +
+  geom_point(position = position_dodge(width = 0.2)) +
+  stat_summary(fun.ymin = "min", fun.ymax = "max", fun.y = "mean", geom = "line") +
+  ylab("Concentration, µM") +
+  xlab("Day") +
+  theme_bw()
+ggsave(plot = p, filename = paste0("human_metab_group_time_course.png"), path = out_dir, width = 12, height = 0.3 + 1.5 * ceiling(n_mets/4), units = "in")
 
 ##Human, metabolites vs survival, p < 0.05, second day only, 
 hp2 <- ggplot(data = subset(x = human_sepsis_data_long_form_sig, subset = Day == 0), mapping = aes(x = Survival, y = value)) + 
