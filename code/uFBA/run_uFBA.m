@@ -21,27 +21,37 @@ cd(code_dir);
 load('../../data/template_models/iRno.mat');
 load('../../data/template_models/iHsa.mat');
 load('../../data/template_models/Recon3D_301.mat');
+iRno.mets = strrep(iRno.mets, '[s]', '[e]'); % in iRno [s] is for extracellular compartment
+iHsa.mets = strrep(iRno.mets, '[s]', '[e]'); % in iHsa [s] is for extracellular compartment
+iRno.comps{strcmp(iRno.comps, 's')} = 'e';
+iHsa.comps{strcmp(iHsa.comps, 's')} = 'e';
+iRno.compNames{strcmp(iRno.compNames, 's')} = 'e';
+iHsa.compNames{strcmp(iHsa.compNames, 's')} = 'e';
 models = {iRno, iHsa, Recon3D};
 
 % Collect input files to run uFBA on
-in_files = ls('../../data/uFBA/*.csv');
-in_files = strsplit(in_files, '\n|\t');
+dir_cont = dir('../../data/uFBA/*.csv');
+in_files = cell(1, length(dir_cont));
+in_files = arrayfun(@(x) strcat(x.folder, '/', x.name), dir_cont, 'UniformOutput', false);
 
-mo = cellfun(@(x) strsplit(x, '_'), in_files, 'UniformOutput', false);
-mo = cellfun(@(x) find(x == ['iRno', 'iHsa', 'Recon3D']), mo);
+mo = arrayfun(@(x) strsplit(x.name, '_'), dir_cont, 'UniformOutput', false);
+mo = cellfun(@(x) x{1}, mo, 'UniformOutput', false);
+mo = cellfun(@(x) find(ismember({'iRno', 'iHsa', 'Recon3D'}, x)), mo, 'UniformOutput', false);
 
 uFBAmodels = cell(length(in_files));
 
 % Run uFBA on input files
-for n = 1:length(in_files)
+for n = 1%:length(in_files)
     data = read_input_file_for_uFBA(in_files{n});
     vars.metNames = data.met;
     vars.changeSlopes = data.slope;
     vars.changeIntervals = data.confint;
-    vars.ignoreSlope = data.ignore;
+    vars.ignoreSlopes = data.ignore;
+    vars.ignoreSlopes(isnan(vars.ignoreSlopes)) = true;
     um = buildUFBAmodel(models{mo{n}}, vars);
     uFBAmodels{n} = um; % The target fields are f (obj) and v (rxn fluxes)
 end
+uFBAresults = cellfun(@(x) optimizeCbModel(x), uFBAmodels);
 
 % Save built models
-save(strcat(out_dir, 'uFBA_models.mat'), 'uFBAmodels');
+save(strcat(out_dir, 'uFBA_models.mat'), 'uFBAmodels', 'uFBAresults');
