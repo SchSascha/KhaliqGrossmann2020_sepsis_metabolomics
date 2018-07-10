@@ -43,7 +43,9 @@ uFBAmodels = cell(length(in_files));
 % Run uFBA on input files
 for n = 1%:length(in_files)
     data = read_input_file_for_uFBA(in_files{n});
-    vars.metNames = data.met;
+    mo_struct = models{mo{n}};
+    [~, mo_loc] = ismember(data.met, mo_struct.metNames)
+    vars.metNames = mo_struct.mets(mo_loc); % unnecessary
     vars.changeSlopes = data.slope;
     vars.changeIntervals = data.confint;
     vars.ignoreSlopes = data.ignore;
