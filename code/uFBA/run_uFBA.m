@@ -44,12 +44,12 @@ uFBAmodels = cell(length(in_files));
 for n = 1%:length(in_files)
     data = read_input_file_for_uFBA(in_files{n});
     mo_struct = models{mo{n}};
-    [~, mo_loc] = ismember(data.met, mo_struct.metNames)
-    vars.metNames = mo_struct.mets(mo_loc); % unnecessary
+    vars.metNames = mo_struct.mets; % order of metabolite critical, has to match order in model
     vars.changeSlopes = data.slope;
     vars.changeIntervals = data.confint;
     vars.ignoreSlopes = data.ignore;
     vars.ignoreSlopes(isnan(vars.ignoreSlopes)) = true;
+    vars.solvingStrategy = 'case2';
     um = buildUFBAmodel(models{mo{n}}, vars);
     uFBAmodels{n} = um; % The target fields are f (obj) and v (rxn fluxes)
 end
