@@ -136,9 +136,9 @@ for (m in seq_along(model_mets)){
     model_slopes[[m]][[comb_str]][which(cell_ind), 2:4] <- ds[metma_int, c("slope", "ci", "ignore")]
     # add plasma metabolites to extracellular compartment
     model_slopes[[m]][[comb_str]][!cell_ind, 2:4] <- dext[metma_ext, c("slope", "ci", "ignore")]
-    # divide slopes equally among metabolite instances
-    model_slopes[[m]][[comb_str]][cell_ind, 2:3] <- model_slopes[[m]][[comb_str]][cell_ind, 2:3] / tab_cell[model_slopes[[m]][[comb_str]][cell_ind, "Metabolite"]] # divison works correctly
-    model_slopes[[m]][[comb_str]][!cell_ind, 2:3] <- model_slopes[[m]][[comb_str]][!cell_ind, 2:3] / tab_ex[model_slopes[[m]][[comb_str]][!cell_ind, "Metabolite"]]
+    # divide slopes equally among metabolite instances - not necessary, we are working with concentrations!
+    #model_slopes[[m]][[comb_str]][cell_ind, 2:3] <- model_slopes[[m]][[comb_str]][cell_ind, 2:3] / tab_cell[model_slopes[[m]][[comb_str]][cell_ind, "Metabolite"]] # divison works correctly
+    #model_slopes[[m]][[comb_str]][!cell_ind, 2:3] <- model_slopes[[m]][[comb_str]][!cell_ind, 2:3] / tab_ex[model_slopes[[m]][[comb_str]][!cell_ind, "Metabolite"]]
   }
 }
 names(model_slopes) <- names(model_mets)
