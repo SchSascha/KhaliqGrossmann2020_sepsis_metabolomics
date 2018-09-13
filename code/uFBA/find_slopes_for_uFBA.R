@@ -117,9 +117,10 @@ model_cilen <- list()
 ignore_slope <- list()
 for (m in seq_along(model_mets)){
   mod <- model_mets[[m]]
-  cell_ind <- !mod[["Compartment"]] %in% c("e", "s")
-  tab_cell <- table(mod[["Biocrates ID"]][cell_ind]) #e: extracellular in Recon3D; s: extracellular in iHsa/iRno
-  tab_ex <- table(mod[["Biocrates ID"]][!cell_ind]) #e: extracellular in Recon3D; s: extracellular in iHsa/iRno
+  cell_idx <- mod[["Compartment"]] %in% c("c")
+  ex_idx <- mod[["Compartment"]] %in% c("e", "s")
+  tab_cell <- table(mod[["Biocrates ID"]][cell_idx]) #e: extracellular in Recon3D; s: extracellular in iHsa/iRno
+  tab_ex <- table(mod[["Biocrates ID"]][!cell_idx]) #e: extracellular in Recon3D; s: extracellular in iHsa/iRno
   combs <- subset(unique(sl[, 1:3]), L1 %in% matv)
   model_slopes[[m]] <- list()
   for (idx in 1:nrow(combs)){
@@ -129,16 +130,16 @@ for (m in seq_along(model_mets)){
     dext <- subset(sl, L1 == "plasma" & L2 == cb$L2 & L3 == cb$L3)
     metv_int <- ds$L4
     metv_ext <- dext$L4
-    metma_int <- match(mod[["Biocrates ID"]][cell_ind], metv_int)
-    metma_ext <- match(mod[["Biocrates ID"]][!cell_ind], metv_ext)
+    metma_int <- match(mod[["Biocrates ID"]][cell_idx], metv_int)
+    metma_ext <- match(mod[["Biocrates ID"]][ex_idx], metv_ext)
     model_slopes[[m]][[comb_str]] <- data.frame(Metabolite = mod[["Name"]], slope = 0, ci = 0, ignore = TRUE, stringsAsFactors = FALSE)
     # add tissue metabolites to cellular compartments
-    model_slopes[[m]][[comb_str]][which(cell_ind), 2:4] <- ds[metma_int, c("slope", "ci", "ignore")]
+    model_slopes[[m]][[comb_str]][which(cell_idx), 2:4] <- ds[metma_int, c("slope", "ci", "ignore")]
     # add plasma metabolites to extracellular compartment
-    model_slopes[[m]][[comb_str]][!cell_ind, 2:4] <- dext[metma_ext, c("slope", "ci", "ignore")]
+    model_slopes[[m]][[comb_str]][which(ex_idx), 2:4] <- dext[metma_ext, c("slope", "ci", "ignore")]
     # divide slopes equally among metabolite instances - not necessary, we are working with concentrations!
-    #model_slopes[[m]][[comb_str]][cell_ind, 2:3] <- model_slopes[[m]][[comb_str]][cell_ind, 2:3] / tab_cell[model_slopes[[m]][[comb_str]][cell_ind, "Metabolite"]] # divison works correctly
-    #model_slopes[[m]][[comb_str]][!cell_ind, 2:3] <- model_slopes[[m]][[comb_str]][!cell_ind, 2:3] / tab_ex[model_slopes[[m]][[comb_str]][!cell_ind, "Metabolite"]]
+    #model_slopes[[m]][[comb_str]][cell_idx, 2:3] <- model_slopes[[m]][[comb_str]][cell_idx, 2:3] / tab_cell[model_slopes[[m]][[comb_str]][cell_idx, "Metabolite"]] # divison works correctly
+    #model_slopes[[m]][[comb_str]][!cell_idx, 2:3] <- model_slopes[[m]][[comb_str]][!cell_idx, 2:3] / tab_ex[model_slopes[[m]][[comb_str]][!cell_idx, "Metabolite"]]
   }
 }
 names(model_slopes) <- names(model_mets)
