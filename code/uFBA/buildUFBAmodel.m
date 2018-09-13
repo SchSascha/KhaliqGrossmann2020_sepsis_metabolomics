@@ -245,7 +245,7 @@ upStoich = [-diag(ones(1, l_umg)); -diag(ones(1, l_uml))];
 uFBAmodel = addMultipleReactions(uFBAmodel, upRxns, [upMetsG; upMetsL], upStoich, ...
                             'lb', zeros(l_ur, 1), ...
                             'ub', 1000 * ones(l_ur, 1), ...
-                            'rev', zeros(l_ur, 1), 'c', zeros(l_ur, 1), 'subSystems', repmat('', l_ur, 1), ...
+                            'c', zeros(l_ur, 1), 'subSystems', repmat('', l_ur, 1), ...
                             'grRules', repmat('', l_ur, 1));
 
 %for i = 1:length(upMets)
@@ -266,7 +266,7 @@ downStoich = [diag(ones(1, l_dmg)); diag(ones(1, l_dml))];
 uFBAmodel = addMultipleReactions(uFBAmodel, downRxns, [downMetsG; downMetsL], downStoich, ...
                             'lb', zeros(l_dr, 1), ...
                             'ub', 1000 * ones(l_dr, 1), ...
-                            'rev', zeros(l_dr, 1), 'c', zeros(l_dr, 1), 'subSystems', repmat('', l_dr, 1), ...
+                            'c', zeros(l_dr, 1), 'subSystems', repmat('', l_dr, 1), ...
                             'grRules', repmat('', l_dr, 1));
 
 %for i = 1:length(downMets)
@@ -277,6 +277,7 @@ uFBAmodel = addMultipleReactions(uFBAmodel, downRxns, [downMetsG; downMetsL], do
 
 % loop through metsToUse and set bounds
 disp('Setting bounds and csense')
+iterStat = cell(length(metsToUse), 1);
 for i = 1:length(metsToUse)
     tmpModel = uFBAmodel;
     tmpMet = metsToUse(i);
@@ -317,6 +318,7 @@ for i = 1:length(metsToUse)
         tmpModel.csense(newMetLoc2) = 'L';
     end
     sol = optimizeCbModel(tmpModel);
+    interStat{i} = sol.origStat;
     uFBAmodel = tmpModel;
 end
 maxMetChange = max(abs(uFBAmodel.b));
@@ -686,3 +688,4 @@ end
 output.model=uFBAmodelConstrained;
 output.metsToUse=metsToUse;
 output.relaxedNodes=relaxedNodes;
+output.interStat=interStat;

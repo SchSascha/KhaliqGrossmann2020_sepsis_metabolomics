@@ -38,4 +38,6 @@ fclose(fileID);
 data.met = dataArray{:, 1};
 data.slope = dataArray{:, 2};
 data.confint = dataArray{:, 3};
-data.ignore = dataArray{:, 4} == 'TRUE';
+data.ignore = true(length(dataArray{:, 4}), 1);
+data.ignore(strcmp(dataArray{:, 4}, 'FALSE')) = false;
+

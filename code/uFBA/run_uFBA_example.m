@@ -30,6 +30,12 @@ changeIntervals(i, 1) = abs(changeSlopes(i, 1) - tmp2(1));
 
 end
 
+tmp1 = changeSlopes - changeIntervals;
+
+tmp2 = changeSlopes + changeIntervals;
+
+ignoreSlopes = double(tmp1 < 0 & tmp2 > 0);
+
 uFBAvariables.metNames = met_IDs;
 
 uFBAvariables.changeSlopes = changeSlopes;

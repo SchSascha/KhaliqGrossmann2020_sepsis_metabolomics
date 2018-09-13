@@ -38,7 +38,9 @@ mo = arrayfun(@(x) strsplit(x.name, '_'), dir_cont, 'UniformOutput', false);
 mo = cellfun(@(x) x{1}, mo, 'UniformOutput', false);
 mo = cellfun(@(x) find(ismember({'iRno', 'iHsa', 'Recon3D'}, x)), mo, 'UniformOutput', false);
 
-uFBAmodels = cell(length(in_files));
+uFBAmodels = cell(length(in_files), 1);
+
+neededSinks = {'ascb-L[c]', 'gthrd[e]', 'urate[e]'};
 
 % Run uFBA on input files
 for n = 1%:length(in_files)
