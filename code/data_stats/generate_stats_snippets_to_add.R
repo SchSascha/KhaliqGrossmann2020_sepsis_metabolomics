@@ -5,10 +5,13 @@ library(data.table)
 library(missRanger)
 library(nscancor)
 library(TDAmapper)
+library(elasticnet)
 
 source("../function_definitions.R")
 
 out_dir <- "../../results/data_stats/"
+if (!dir.exists(out_dir))
+  dir.create(out_dir)
 
 human_sepsis_data <- get_human_sepsis_data()
 
@@ -20,15 +23,20 @@ human_sepsis_data <- human_sepsis_data[human_sepsis_data$`CAP / FP` != "-", ]
 human_sepsis_data_normal <- human_sepsis_data
 human_sepsis_data_normal[,-1:-5] <- scale(human_sepsis_data_normal[,-1:-5])
 
+metab_end <- which(colnames(human_sepsis_data) == "H1")
+metab_sel <- 6:metab_end
+pheno_start <- metab_end + 1
+pheno_sel <- pheno_start:ncol(human_sepsis_data)
+
 col <- colnames(human_sepsis_data_normal)
 colnames(human_sepsis_data_normal) <- make.names(col)
-human_sepsis_data_normal[, 6:204] <- missRanger(human_sepsis_data_normal[,6:204])
+human_sepsis_data_normal[, 6:metab_end] <- missRanger(human_sepsis_data_normal[,6:metab_end])
 colnames(human_sepsis_data_normal) <- col
 
-human_sepsis_data_metab <- subset(human_sepsis_data_normal, Day < 4, 6:204)
-human_sepsis_data_pheno <- subset(human_sepsis_data_normal, Day < 4, 205:ncol(human_sepsis_data))
+human_sepsis_data_metab <- subset(human_sepsis_data_normal, Day < 4, 6:metab_end)
+human_sepsis_data_pheno <- subset(human_sepsis_data_normal, Day < 4, pheno_start:ncol(human_sepsis_data))
 
-human_sepsis_data_normal <- human_sepsis_data_normal[,1:204]
+human_sepsis_data_normal <- human_sepsis_data_normal[,1:metab_end]
 
 #human_sepsis_data_normal <- cbind(human_sepsis_data_normal[,1:5], distance(x = human_sepsis_data_normal[, -1:-5], method = "chi.distance")) # distance() works on a per row basis
 
@@ -93,9 +101,34 @@ for (pat in unique(ns$Patient)){
 }
 dev.off()
 
+sp <- spca(human_sepsis_data_normal[, metab_sel], 2, sparse = "varnum", para = c(20, 7))
+sp$x <- as.matrix(human_sepsis_data_normal[, metab_sel]) %*% sp$loadings
 
+p <- prcomp(human_sepsis_data_normal[, metab_sel])
+#barplot(summary(p)$importance[3, ])
+plot(p$x[,1:2], col = as.factor(human_sepsis_data_normal$Day))
+col <- as.factor(pat_list$Survival)
+for (n in seq_along(pat_list$Patient)){
+  ind <- which(human_sepsis_data_normal$Patient == pat_list$Patient[n])
+  x <- p$x[ind ,1]
+  y <- p$x[ind ,2]
+  arrows(x0 = x[-length(x)], y0 = y[-length(y)], x1 = x[-1], y1 = y[-1], length = 0.1, col = col[n])
+}
 
-rot_score <- sapply(pca_list, function(e){ rank(e$rotation[,1]) })
+rot_score <- lapply(pca_list, function(e){ order(abs(e$rotation[,1]), decreasing = FALSE) })
+rot_rem <- sapply(lapply(rot_score, `<=`, 10), which)
+rot_rem <- unique(as.numeric(rot_rem))
+
+p <- prcomp(human_sepsis_data_normal[, metab_sel][, rot_rem])
+#barplot(summary(p)$importance[3, ])
+plot(p$x[,1:2], col = as.factor(human_sepsis_data_normal$Day))
+col <- as.factor(pat_list$Survival)
+for (n in seq_along(pat_list$Patient)){
+  ind <- which(human_sepsis_data_normal$Patient == pat_list$Patient[n])
+  x <- p$x[ind ,1]
+  y <- p$x[ind ,2]
+  arrows(x0 = x[-length(x)], y0 = y[-length(y)], x1 = x[-1], y1 = y[-1], length = 0.1, col = col[n])
+}
 
 rot_pc1 <- t(sapply(pca_list, function(e) e$rotation[,1]))
 rot_pca_pc1 <- prcomp(rot_pc1)

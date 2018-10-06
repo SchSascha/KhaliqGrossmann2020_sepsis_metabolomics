@@ -7,6 +7,7 @@
 get_human_sepsis_data <- function(){
   data <- read.csv(file = "../../data/measurements/Summary human sample data.csv", header = TRUE, sep = "\t", stringsAsFactors = FALSE, dec = ",", check.names = FALSE)
   data <- data[, -(which(colSds(as.matrix(data[, -1:-5])) == 0) + 5)] #remove columns with fixed values
+  data <- remove_bile_acids_from_measurements(data)
   return(data)
 }
 
@@ -59,6 +60,7 @@ get_Ferrario_validation_data <- function(){
 #' @examples
 get_human_sepsis_legend <- function(){
   data <- read.csv(file = "../../data/measurements/Legend human sample data pheno class.csv", header = TRUE, sep = "\t", stringsAsFactors = FALSE, dec = ",", check.names = FALSE)
+  data <- remove_bile_acids_from_legend(data)
   return(data)
 }
 
@@ -85,11 +87,36 @@ get_rat_sepsis_data <- function(){
   data <- data[, apply(data, 2, function(x) { sum(is.na(x)) }) < nrow(data)] #Strip columns without any non-NA value
   data <- data[, apply(data, 2, function(x){ length(unique(x))}) > 1] #Strip columns with constant values
   data$BE <- data$BE - (min(data$BE, na.rm = TRUE) - 0.1) # without -0.1 later normalization will return -Inf for the lowest value
+  data <- remove_bile_acids_from_measurements(data)
   colns <- colnames(data)
   colns[colns == "Tot Cholesterol"] <- "Total Cholesterol"
   colns[colns == "LDL/VLDL"] <- "LDL"
   colnames(data) <- colns
   return(data)
+}
+
+#' Remove all bile acids from the metabolite legend table
+#'
+#' @param df the metabolite legend
+#'
+#' @return the legend without bile acids
+#' @export
+#'
+#' @examples
+remove_bile_acids_from_legend <- function(df){
+  df[df[, 3] != "bile acid"] #remove because of unsuitable measurement method
+}
+
+#' Remove all bile acids from the measurements table, select by colname
+#'
+#' @param df the measurement table
+#'
+#' @return the measurement table without bile acids
+#' @export
+#'
+#' @examples
+remove_bile_acids_from_measurements <- function(df){
+  df[, -grep(pattern = ".*CA$", x = colnames(df))] #remove because of unsuitable measurement method
 }
 
 #' Read the data set on provoked sepsis and controls in rat
@@ -104,6 +131,7 @@ get_rat_sepsis_data_unedit <- function(){
   data <- data[, apply(data, 2, function(x) { sum(is.na(x)) }) < nrow(data)] #Strip columns without any non-NA value
   data <- data[, apply(data, 2, function(x){ length(unique(x))}) > 1] #Strip columns with constant values
   data$BE <- data$BE - min(data$BE, na.rm = TRUE)
+  data <- remove_bile_acids_from_measurements(data)
   colns <- colnames(data)
   colns[colns == "Tot Cholesterol"] <- "Total Cholesterol"
   colns[colns == "LDL/VLDL"] <- "LDL"
@@ -121,6 +149,7 @@ get_rat_sepsis_legend <- function(){
   data <- read.csv(file = "../../data/measurements/Legend rat sample data.csv", header = TRUE, sep = "\t", stringsAsFactors = FALSE, dec = ",", check.names = FALSE)
   data[[1]][data[[1]] == "Tot Cholesterol"] <- "Total Cholesterol"
   data[[1]][data[[1]] == "LDL/VLDL"] <- "LDL"
+  data <- remove_bile_acids_from_legend(data)
   return(data)
 }
 
