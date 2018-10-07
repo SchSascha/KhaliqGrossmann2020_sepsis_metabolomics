@@ -104,7 +104,7 @@ get_rat_sepsis_data <- function(){
 #'
 #' @examples
 remove_bile_acids_from_legend <- function(df){
-  df[df[, 3] != "bile acid"] #remove because of unsuitable measurement method
+  df[df[, 3] != "bile acid", ] #remove because of unsuitable measurement method
 }
 
 #' Remove all bile acids from the measurements table, select by colname
