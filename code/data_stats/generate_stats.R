@@ -42,7 +42,8 @@ human_sepsis_legend <- get_human_sepsis_legend()
 human_sepsis_legend$group[human_sepsis_legend$group == ""] <- human_sepsis_legend[human_sepsis_legend$group == "", 1]
 human_sepsis_legend <- human_sepsis_legend[-1:-5, ]
 human_sepsis_pheno_var_groups <- get_human_pheno_var_groups()
-human_sepsis_legend$group[match(human_sepsis_pheno_var_groups[,1], human_sepsis_legend[200:nrow(human_sepsis_legend), 1]) + 199] <- human_sepsis_pheno_var_groups$Mervyn_group
+pheno_start <- which(human_sepsis_legend[,1] == "Urea")
+human_sepsis_legend$group[match(human_sepsis_pheno_var_groups[,1], human_sepsis_legend[pheno_start:nrow(human_sepsis_legend), 1]) + pheno_start - 1] <- human_sepsis_pheno_var_groups$Mervyn_group
 
 ##Import experiment data
 rat_sepsis_data <- get_rat_sepsis_data()
@@ -134,6 +135,8 @@ anova.car.c.pre.ps <- anova.car.c$ps
 anova.car.s.pre.ps <- anova.car.s$ps
 sig.anova.car.c.pre.class <- colnames(anova.car.c.pre.ps)[colAnys(anova.car.c.pre.ps[c("Survival", "Day:Survival"), ] <= 0.05)]
 sig.anova.car.s.pre.class <- colnames(anova.car.s.pre.ps)[colAnys(anova.car.s.pre.ps[c("Survival", "Day:Survival"), ] <= 0.05)]
+insig.anova.car.c.pre.class <- colnames(anova.car.c.pre.ps)[colAlls(anova.car.c.pre.ps[c("Survival", "Day:Survival"), ] > 0.05)]
+insig.anova.car.s.pre.class <- colnames(anova.car.s.pre.ps)[colAlls(anova.car.s.pre.ps[c("Survival", "Day:Survival"), ] > 0.05)]
 anova.car.c.ps <- (apply(anova.car.c.pre.ps, 2, function(row){ p.adjust(p = row, method = "fdr") }))
 anova.car.s.ps <- (apply(anova.car.s.pre.ps, 2, function(row){ p.adjust(p = row, method = "fdr") }))
 #anova.car.c.ps <- matrix(p.adjust(anova.car.c.ps[3:4, ], method = "fdr"), nrow = 2)
@@ -142,6 +145,10 @@ sig.anova.car.c.class <- colnames(anova.car.c.ps)[colAnys(anova.car.c.ps[c("Surv
 sig.anova.car.c.class <- intersect(sig.anova.car.c.class, sig.anova.car.c.pre.class)
 sig.anova.car.s.class <- colnames(anova.car.s.ps)[colAnys(anova.car.s.ps[c("Survival", "Day:Survival"), ] <= 0.05)]
 sig.anova.car.s.class <- intersect(sig.anova.car.s.class, sig.anova.car.s.pre.class)
+insig.anova.car.c.class <- colnames(anova.car.c.ps)[colAlls(anova.car.c.ps[c("Survival", "Day:Survival"), ] >= 0.95)]
+insig.anova.car.c.class <- intersect(insig.anova.car.c.class, insig.anova.car.c.pre.class)
+insig.anova.car.s.class <- colnames(anova.car.s.ps)[colAlls(anova.car.s.ps[c("Survival", "Day:Survival"), ] >= 0.95)]
+insig.anova.car.s.class <- intersect(insig.anova.car.s.class, insig.anova.car.s.pre.class)
 
 ###Post hoc analysis of when the change happened
 ####Build models
@@ -181,9 +188,12 @@ ftd_s <- subset(full_tanova_data, Survival != "Nonsep" & Day %in% tanova_day_set
 anova.car.s.pheno <- t3ANOVA(data = ftd_s, random = ~1|Patient, formula = fml, use.corAR = TRUE, col.set = met_set, id.vars = c("Survival", "Day", "Patient"))
 anova.car.s.pheno.pre.ps <- anova.car.s.pheno$ps
 sig.anova.car.s.pheno.pre.class <- colnames(anova.car.s.pheno.pre.ps)[colAnys(anova.car.s.pheno.pre.ps[c("Survival", "Day:Survival"), ] <= 0.05)]
+insig.anova.car.s.pheno.pre.class <- colnames(anova.car.s.pheno.pre.ps)[colAlls(anova.car.s.pheno.pre.ps[c("Survival", "Day:Survival"), ] > 0.05)]
 anova.car.s.pheno.ps <- (apply(anova.car.s.pheno.pre.ps, 2, p.adjust, method = "fdr"))
 sig.anova.car.s.pheno.class <- colnames(anova.car.s.pheno.ps)[colAnys(anova.car.s.pheno.ps[c("Survival", "Day:Survival"), ] <= 0.05)]
 sig.anova.car.s.pheno.class <- intersect(sig.anova.car.s.pheno.class, sig.anova.car.s.pheno.pre.class)
+insig.anova.car.s.pheno.class <- colnames(anova.car.s.pheno.ps)[colAlls(anova.car.s.pheno.ps[c("Survival", "Day:Survival"), ] > 0.95)]
+insig.anova.car.s.pheno.class <- intersect(insig.anova.car.s.pheno.class, insig.anova.car.s.pheno.pre.class)
 anova.car.c.pheno <- t3ANOVA(data = ftd_c, random = ~1|Patient, formula = fml, use.corAR = TRUE, col.set = met_set, id.vars = c("Survival", "Day", "Patient"))
 anova.car.c.pheno.pre.ps <- anova.car.c.pheno$ps
 sig.anova.car.c.pheno.pre.class <- colnames(anova.car.c.pheno.pre.ps)[colAnys(anova.car.c.pheno.pre.ps[c("Survival", "Day:Survival"), ] <= 0.05)]
@@ -635,23 +645,6 @@ dev.off()
 png(filename = paste0(out_dir, "human_sepsis_S_day2_community_graph.png"), width = 800, height = 800)
 plot(S_d2_community, S_d2_igraph)
 dev.off()
-
-##Human, carnitine sequences
-hsd_carnit <- human_sepsis_data[, c(1:5, grep("^C[0-9]", colnames(human_sepsis_data)))]
-hsd_carnit_single_even <- hsd_carnit[, c("C0", "C2", "C4", "C6 (C4:1-DC)", "C8", "C10", "C12", "C14", "C16", "C18") ]
-hsd_carnit_single_odd <- hsd_carnit[, c("C3", "C5", "C7-DC", "C9") ]
-hsd_carnit_single_su <- hsd_carnit[, c("C3:1", "C4:1", "C5:1", "C6:1", "C10:1", "C12:1", "C14:1", "C16:1", "C18:1")]
-matplot(t(log(hsd_carnit_single_even)), type = "l", col = as.factor(hsd_carnit$Survival))
-matplot(t(log(hsd_carnit_single_odd)), type = "l", col = as.factor(hsd_carnit$Survival))
-matplot(t(log(hsd_carnit_single_su)), type = "l", col = as.factor(hsd_carnit$Survival))
-
-hnd_carnit <- human_nonsepsis_data[, c(1:5, grep("^C[0-9]", colnames(human_nonsepsis_data)))]
-hnd_carnit_single_even <- hnd_carnit[, c("C0", "C2", "C4", "C6 (C4:1-DC)", "C8", "C10", "C12", "C14", "C16", "C18") ]
-hnd_carnit_single_odd <- hnd_carnit[, c("C3", "C5", "C7-DC", "C9") ]
-hnd_carnit_single_su <- hnd_carnit[, c("C3:1", "C4:1", "C5:1", "C6:1", "C10:1", "C12:1", "C14:1", "C16:1", "C18:1")]
-matplot(t(log(hnd_carnit_single_even)), type = "l", col = as.factor(hnd_carnit$Survival))
-matplot(t(log(hnd_carnit_single_odd)), type = "l", col = as.factor(hnd_carnit$Survival))
-matplot(t(log(hnd_carnit_single_su)), type = "l", col = as.factor(hnd_carnit$Survival))
 
 ##Human, cluster-heatmap, all metabolites, but groups at the side
 x <- na.omit(data.frame(group = coarse_group_list[metab_sel - 5], human_sepsis_data_normal_conc_metab_cov));
@@ -1147,6 +1140,59 @@ for (n in seq_along(ss)[sapply(ss, length) > 0]){
     theme_bw()
   ggsave(plot = h_time_course_sig_diff_plot, filename = paste0("human_pheno_time_course_car_rm_anova_", fs[[n]], "_sig_diff.png"), path = out_dir, width = 12, height = 0.3 + 1.5 * ceiling(n_mets/5), units = "in")
 }
+
+
+
+
+
+
+##Human, metab concentration time course, only metabolites with p-val > 0.05 and FDR > 0.95 in Survival or Day:Survival from type III repeated measures ANOVA
+n_mets <- length(insig.anova.car.s.class)
+p <- ggplot(data = subset(melt(human_sepsis_data[, c(1:5, which(colnames(human_sepsis_data) %in% insig.anova.car.s.class))], id.vars = 1:5), Day %in% 0:3), mapping = aes(x = Day, y = value, group = Survival, colour = Survival)) + 
+  facet_wrap(facets = ~ variable, ncol = 4, nrow = ceiling(n_mets/4), scales = "free_y") +
+  geom_point(position = position_dodge(width = 0.2)) +
+  stat_summary(fun.ymin = "min", fun.ymax = "max", fun.y = "mean", geom = "line") +
+  ylab("Concentration, µM") +
+  xlab("Day") +
+  theme_bw()
+plot(p)
+
+##Human, metab concentration time course, only metabolites with p-val > 0.05 and FDR > 0.95 in Survival or Day:Survival from type III repeated measures ANOVA
+n_mets <- length(insig.anova.car.c.class)
+p <- ggplot(data = subset(melt(human_data[, c(1:5, which(colnames(human_data) %in% insig.anova.car.c.class))], id.vars = 1:5), Day %in% 0:3), mapping = aes(x = Day, y = value, group = Survival, colour = Survival)) + 
+  facet_wrap(facets = ~ variable, ncol = 4, nrow = ceiling(n_mets/4), scales = "free_y") +
+  geom_point(position = position_dodge(width = 0.2)) +
+  stat_summary(fun.ymin = "min", fun.ymax = "max", fun.y = "mean", geom = "line") +
+  ylab("Concentration, µM") +
+  xlab("Day") +
+  theme_bw()
+plot(p)
+
+##Human, metab concentration time course, only metabolites with p-val > 0.05 and FDR > 0.95 in Survival or Day:Survival from type III repeated measures ANOVA
+n_mets <- length(insig.anova.car.s.pheno.pre.class)
+p <- ggplot(data = subset(melt(human_sepsis_data[, c(1:5, which(colnames(human_sepsis_data) %in% insig.anova.car.s.pheno.pre.class))], id.vars = 1:5), Day %in% 0:3), mapping = aes(x = Day, y = value, group = Survival, colour = Survival)) + 
+  facet_wrap(facets = ~ variable, ncol = 4, nrow = ceiling(n_mets/4), scales = "free_y") +
+  geom_point(position = position_dodge(width = 0.2)) +
+  stat_summary(fun.ymin = "min", fun.ymax = "max", fun.y = "mean", geom = "line") +
+  ylab("Concentration, µM") +
+  xlab("Day") +
+  theme_bw()
+plot(p)
+
+##Human, metab concentration time course, only metabolites with p-val > 0.05 and FDR > 0.95 in Survival or Day:Survival from type III repeated measures ANOVA
+n_mets <- length(insig.anova.car.c.pheno.pre.class)
+p <- ggplot(data = subset(melt(human_data[, c(1:5, which(colnames(human_data) %in% insig.anova.car.c.pheno.pre.class))], id.vars = 1:5), Day %in% 0:3), mapping = aes(x = Day, y = value, group = Survival, colour = Survival)) + 
+  facet_wrap(facets = ~ variable, ncol = 4, nrow = ceiling(n_mets/4), scales = "free_y") +
+  geom_point(position = position_dodge(width = 0.2)) +
+  stat_summary(fun.ymin = "min", fun.ymax = "max", fun.y = "mean", geom = "line") +
+  ylab("Concentration, µM") +
+  xlab("Day") +
+  theme_bw()
+plot(p)
+
+
+
+
 
 ##Human, metabolite groups
 n_mets <- ncol(human_sepsis_data_grouped[, -group_pheno_sel]) - 5
