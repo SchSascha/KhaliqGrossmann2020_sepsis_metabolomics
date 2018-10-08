@@ -7,6 +7,8 @@
 get_human_sepsis_data <- function(){
   data <- read.csv(file = "../../data/measurements/Summary human sample data.csv", header = TRUE, sep = "\t", stringsAsFactors = FALSE, dec = ",", check.names = FALSE)
   data <- data[, -(which(colSds(as.matrix(data[, -1:-5])) == 0) + 5)] #remove columns with fixed values
+  pat_exclude <- c(2, 5, 10, 19, 27, 29, 37, 40)
+  data <- subset(data, !Patient %in% pat_exclude)
   return(data)
 }
 

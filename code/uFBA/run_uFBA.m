@@ -40,7 +40,8 @@ mo = cellfun(@(x) find(ismember({'iRno', 'iHsa', 'Recon3D'}, x)), mo, 'UniformOu
 
 uFBAmodels = cell(length(in_files), 1);
 
-neededSinks = {'ascb-L[c]', 'gthrd[e]', 'urate[e]'};
+%neededSinks = {'ascb_L[c]', 'urate[e]', 'gthrd[e]'}; from uFBA example
+neededSinks = {'10fthf5glu[c]'};
 
 % Run uFBA on input files
 for n = 1%:length(in_files)
@@ -49,6 +50,7 @@ for n = 1%:length(in_files)
     vars.metNames = mo_struct.mets; % order of metabolite critical, has to match order in model
     vars.changeSlopes = data.slope;
     vars.changeIntervals = data.confint;
+    vars.neededSinks = neededSinks;
     vars.ignoreSlopes = data.ignore;
     vars.ignoreSlopes(isnan(vars.ignoreSlopes)) = true;
     vars.solvingStrategy = 'case2';
