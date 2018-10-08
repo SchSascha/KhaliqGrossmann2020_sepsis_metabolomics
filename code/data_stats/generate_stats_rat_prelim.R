@@ -298,9 +298,13 @@ coarse_group_list <- rat_sepsis_legend[match(colnames(rat_sepsis_data)[-1:-4], r
 coarse_group_list[is.na(coarse_group_list)] <- "Plasma Creatinine"
 rat_sepsis_data_grouped <- cbind(rat_sepsis_data[,1:4], matrix(0, nrow = nrow(rat_sepsis_data), ncol=length(unique(coarse_group_list))))
 colnames(rat_sepsis_data_grouped)[-1:-4] <- unique(coarse_group_list)
+rsd <- rat_sepsis_data
+rsd[, pheno_sel] <- scale(rsd[, pheno_sel])
 for (n in 1:nrow(rat_sepsis_data)){
-  agg <- aggregate(t(as.matrix(rat_sepsis_data_normal[n,-1:-4])), by = list(coarse_group_list), FUN = mean, na.action = na.omit, na.rm = T) #output is disordered!
-  rat_sepsis_data_grouped[n, -1:-4] <- agg[match(colnames(rat_sepsis_data_grouped)[-1:-4], agg[,1]), 2]
+  m_agg <- tapply(X = t(rsd[n, metab_sel]), INDEX = factor(coarse_group_list[metab_sel - 4]), FUN = sum)
+  p_agg <- tapply(X = t(rsd[n, pheno_sel]), INDEX = factor(coarse_group_list[pheno_sel - 4]), FUN = mean)
+  b_agg <- c(m_agg, p_agg)
+  rat_sepsis_data_grouped[n, -1:-4] <- b_agg[match(colnames(rat_sepsis_data_grouped)[-1:-4], names(b_agg))]
 }
 cross_mat_group_corr <- list()
 for (comp in list(c("heart", "plasma"), c("heart", "liver"), c("plasma", "liver"))){
@@ -410,7 +414,7 @@ mat_sigs[["heart"]] <- as.matrix(colAnys(rat_heart_sig_diff_ctrl_surv_res$time_s
 mat_sigs <- lapply(mat_sigs, function(x){ c(NA, "Sig diff Surv", "Sig diff Nonsurv")[x + 1] })
 
 for (mat in unique(xm$material)){
-  h <- heatmaply(x = xmt[, xm$material == mat], dendrogram = "row", plot_method = "plotly", col_side_colors = subset(xm, material == mat, c("time point", "group")), row_side_colors = data.frame(sig_reg = mat_sigs[[mat]]), key.title = "fold change with\nrespect to control", margins = c(50,100,0,50), subplot_heights = c(0.03, 0.97))
+  h <- heatmaply(x = xmt[, xm$material == mat], dendrogram = "none", plot_method = "plotly", col_side_colors = subset(xm, material == mat, c("time point", "group")), row_side_colors = data.frame(sig_reg = mat_sigs[[mat]]), key.title = "fold change with\nrespect to control", margins = c(50,100,0,50), subplot_heights = c(0.03, 0.97))
   #png(filename = paste0(out_dir, "rat_fold_change_", mat, "_pheno.png"), width = 800, height = 1600)
   h$width <- 800
   h$height <- 1600
@@ -784,6 +788,118 @@ r_time_course_sig_diff_plot <- ggplot(na.omit(r_time_course_sig_diff_dat), aes_s
   ggtitle("Metabolites significantly differing for survival at any time point in liver") + 
   theme_bw()
 ggsave(plot = r_time_course_sig_diff_plot, filename = "rat_metab_liver_time_course_sig_diff.png", path = out_dir, width = 8, height = 2.5, units = "in")
+
+##rat, metabolite groups
+###Given groups
+for (mat in unique(rat_sepsis_data$material)){
+  rsg <- rat_sepsis_data_grouped[, -group_pheno_sel]
+  n_mets <- ncol(rsg) - 4
+  rsg$group <- factor(rsg$group, levels = c("septic non-survivor", "control", "septic survivor"))
+  p <- ggplot(data = subset(melt(rsg[, -group_pheno_sel], id.vars = 1:4), material %in% mat), mapping = aes_string(x = "`time point`", y = "value", group = "group", colour = "group")) + 
+    facet_wrap(facets = ~ variable, ncol = 4, nrow = ceiling(n_mets/4), scales = "free_y") +
+    geom_point(position = position_dodge(width = 0.2)) +
+    stat_summary(fun.ymin = "min", fun.ymax = "max", fun.y = "mean", geom = "line") +
+    scale_x_discrete(limits = c("6h", "24h", "72h")) +
+    ylab("Concentration, µM") +
+    xlab("Day") +
+    theme_bw()
+  ggsave(plot = p, filename = paste0("rat_metab_", mat, "_group_time_course.png"), path = out_dir, width = 12, height = 0.3 + 1.5 * ceiling(n_mets/4), units = "in")
+}
+
+###Acylcarnitine made up groups
+ac_transferase_grouped <- rat_sepsis_data[, c(1:4, which(rat_sepsis_legend$group == "aclycarnitine") + 4)]
+ac_transferase_grouped[, -1:-4] <- lapply(ac_transferase_grouped[, -1:-4], `/`, ac_transferase_grouped$C0)
+actg <- colnames(ac_transferase_grouped)
+ac_transferase_grouped <- transform(ac_transferase_grouped, 
+                                    ShortChainAC = C2 + C3 + C4, 
+                                    MediumChainAC = C5 + `C6 (C4:1-DC)` + C8 + C9 + C10 + C12, 
+                                    LongChainAC = C14 + C16 + C18)
+colnames(ac_transferase_grouped)[1:length(actg)] <- actg
+ac_transferase_grouped$group <- factor(ac_transferase_grouped$group, levels = c("septic non-survivor", "control", "septic survivor"))
+n_mets <- ncol(ac_transferase_grouped) - 1
+p_ncol <- 4
+for (mat in unique(rat_sepsis_data$material)){
+  p <- ggplot(data = subset(melt(ac_transferase_grouped[, -5], id.vars = 1:4), material %in% mat), mapping = aes_string(x = "`time point`", y = "value", group = "group", colour = "group")) + 
+    facet_wrap(facets = ~ variable, ncol = p_ncol, nrow = ceiling(n_mets/p_ncol), scales = "free_y") +
+    geom_point(position = position_dodge(width = 0.2)) +
+    stat_summary(fun.ymin = "min", fun.ymax = "max", fun.y = "mean", geom = "line") +
+    scale_x_discrete(limits = c("6h", "24h", "72h")) +
+    ylab("Concentration relative to L-Carnitine") +
+    xlab("Time point") +
+    theme_bw()
+  ggsave(plot = p, filename = paste0("rat_metab_", mat, "_AC_group_time_course.png"), path = out_dir, width = 12, height = 0.3 + 1.5 * ceiling(n_mets/p_ncol), units = "in")
+}
+
+###Fatty acid carrier ratios
+fa_type_grouped <- rat_sepsis_data[, c(1:4, grep(pattern = "PC|SM", x = rat_sepsis_legend[,1]) + 4)]
+fa_type_grouped$TotalPCaa <- rowSums(fa_type_grouped[, grep(pattern = "PC aa", x = colnames(fa_type_grouped))])
+fa_type_grouped$TotalPCae <- rowSums(fa_type_grouped[, grep(pattern = "PC ae", x = colnames(fa_type_grouped))])
+fa_type_grouped$TotalSM <- rowSums(fa_type_grouped[, grep(pattern = "SM ", x = colnames(fa_type_grouped))])
+fa_type_grouped$TotalLysoPC <- rowSums(fa_type_grouped[, grep(pattern = "lysoPC", x = colnames(fa_type_grouped))])
+fa_type_grouped$PCaaToSM <- fa_type_grouped$TotalPCaa / fa_type_grouped$TotalSM
+fa_type_grouped$PCaeToSM <- fa_type_grouped$TotalPCae / fa_type_grouped$TotalSM
+fa_type_grouped$PCaeToPCaa <- fa_type_grouped$TotalPCaa / fa_type_grouped$TotalPCae
+fa_type_grouped$lysoPCToPCaa <- fa_type_grouped$TotalLysoPC / fa_type_grouped$TotalPCaa
+fa_type_grouped$lysoPCToPCae <- fa_type_grouped$TotalLysoPC / fa_type_grouped$TotalPCae
+fa_type_grouped$lysoPCToSM <- fa_type_grouped$TotalLysoPC / fa_type_grouped$TotalSM
+fa_type_grouped <- fa_type_grouped[, c(1:5, which(colnames(fa_type_grouped) == "PCaaToSM"):ncol(fa_type_grouped))]
+fa_type_grouped$group <- factor(fa_type_grouped$group, levels = c("septic non-survivor", "control", "septic survivor"))
+n_mets <- ncol(fa_type_grouped)
+p_ncol <- 4
+for (mat in unique(rat_sepsis_data$material)){
+  p <- ggplot(data = subset(melt(fa_type_grouped, id.vars = 1:5), material %in% mat), mapping = aes_string(x = "`time point`", y = "value", group = "group", colour = "group")) + 
+    facet_wrap(facets = ~ variable, ncol = p_ncol, nrow = ceiling(n_mets/p_ncol), scales = "free_y") +
+    geom_point(position = position_dodge(width = 0.2)) +
+    stat_summary(fun.ymin = "min", fun.ymax = "max", fun.y = "mean", geom = "line") +
+    scale_x_discrete(limits = c("6h", "24h", "72h")) +
+    ylab("Concentration ratio") +
+    xlab("Time point") +
+    theme_bw()
+  ggsave(plot = p, filename = paste0("rat_metab_", mat, "_FA_carrier_group_time_course.png"), path = out_dir, width = 12, height = 0.3 + 1.5 * ceiling(n_mets/p_ncol), units = "in")
+}
+
+###PC UFA grouped
+ufa_grouped <- rat_sepsis_data[, c(1:4, which(rat_sepsis_legend$group == "phosphatidylcholine"))]
+ufas <- unique(sub(pattern = "C[0-9]{2}", replacement = "C..", x = colnames(ufa_grouped)[-1:-4]))
+ufa_sum <- as.data.frame(sapply(lapply(ufas, grep, x = colnames(ufa_grouped)), function(cols) rowSums(ufa_grouped[, cols])))
+colnames(ufa_sum) <- sub(pattern = "C..:", replacement = "CXX:", x = ufas, fixed = TRUE)
+ufa_sum <- cbind(ufa_grouped[, 1:4], ufa_sum)
+ufa_sum$group <- factor(ufa_sum$group, levels = c("septic non-survivor", "control", "septic survivor"))
+n_mets <- ncol(ufa_sum) - 4
+n_col <- 7
+for (mat in unique(ufa_sum$material)){
+  p <- ggplot(data = subset(melt(ufa_sum, id.vars = 1:4), material %in% mat), mapping = aes_string(x = "`time point`", y = "value", group = "group", colour = "group")) + 
+    facet_wrap(facets = ~ variable, ncol = n_col, nrow = ceiling(n_mets/n_col), scales = "free_y") +
+    geom_point(position = position_dodge(width = 0.2)) +
+    stat_summary(fun.ymin = "min", fun.ymax = "max", fun.y = "mean", geom = "line") +
+    ylab("Concentration, µM") +
+    xlab("Time point") +
+    scale_x_discrete(limits = c("6h", "24h", "72h")) +
+    theme_bw()
+  ggsave(plot = p, filename = paste0("rat_metab_PC_", mat, "_group_time_course.png"), path = out_dir, width = 12, height = 0.3 + 1.5 * ceiling(n_mets/n_col), units = "in")
+}
+
+###PC UFA grouped, ratio of aa to ae
+ufa_grouped <- rat_sepsis_data[, c(1:4, which(rat_sepsis_legend$group == "phosphatidylcholine"))]
+ufas <- unique(sub(pattern = "C[0-9]{2}", replacement = "C..", x = colnames(ufa_grouped)[-1:-4]))
+ufa_sum <- as.data.frame(sapply(lapply(ufas, grep, x = colnames(ufa_grouped)), function(cols) rowSums(ufa_grouped[, cols])))
+ufa_ratio <- as.data.frame(sapply(1:7, function(col) ufa_sum[, col] / ufa_sum[, col + 7]))
+colnames(ufa_ratio) <- sub(pattern = "PC aa C..:", replacement = "CXX:", x = ufas[1:7], fixed = TRUE)
+ufa_ratio <- cbind(ufa_grouped[, 1:4], ufa_ratio)
+ufa_ratio$group <- factor(ufa_ratio$group, levels = c("septic non-survivor", "control", "septic survivor"))
+n_mets <- ncol(ufa_ratio) - 4
+n_col <- 7
+for (mat in unique(ufa_ratio$material)){
+  p <- ggplot(data = subset(melt(ufa_ratio, id.vars = 1:4), material %in% mat), mapping = aes_string(x = "`time point`", y = "value", group = "group", colour = "group")) + 
+    facet_wrap(facets = ~ variable, ncol = n_col, nrow = ceiling(n_mets/n_col), scales = "free_y") +
+    geom_point(position = position_dodge(width = 0.2)) +
+    stat_summary(fun.ymin = "min", fun.ymax = "max", fun.y = "mean", geom = "line") +
+    ylab("Ratio PC aa/PCae") +
+    xlab("Time point") +
+    scale_x_discrete(limits = c("6h", "24h", "72h")) +
+    theme_bw()
+  ggsave(plot = p, filename = paste0("rat_metab_PC_rel_", mat, "_group_time_course.png"), path = out_dir, width = 12, height = 0.3 + 1.5 * ceiling(n_mets/n_col), units = "in")
+}
 
 ##Human, metabolites vs survival, p < 0.05, second day only, 
 # hp2 <- ggplot(data = subset(x = human_sepsis_data_long_form_sig, subset = Day == 0), mapping = aes(x = Survival, y = value)) + 

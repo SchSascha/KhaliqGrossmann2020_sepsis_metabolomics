@@ -43,7 +43,7 @@ human_nonsepsis_data <- human_sepsis_data[human_sepsis_data$`CAP / FP` == "-", ]
 human_sepsis_data <- human_sepsis_data[human_sepsis_data$`CAP / FP` != "-", ]
 
 ##Filter out unimportant rows and columns from validation data
-human_validation_data <- subset(human_validation_data, Day == 0, c(-1, -3, -4))
+human_validation_data <- subset(human_validation_data, Day == 0, c(-1, -2, -4))
 human_validation_data[,-1] <- human_validation_data[, -c(1, which(colAnyNAs(as.matrix(human_validation_data[,-1])))+1)]
 colnames(human_validation_data)[grep(x = colnames(human_validation_data), pattern = "Survival")] <- "Survival"
 human_validation_data <- subset(human_validation_data, select = intersect(colnames(human_sepsis_data), colnames(human_validation_data)))
@@ -95,17 +95,19 @@ human_validation_data[,-1] <- subset(human_validation_data[,-1], select = shared
 ###Scale values
 hsd_colmeans <- colMeans(as.matrix(human_sepsis_data_ml_full[,-1:-2]))
 hsd_colsds <- colSds(as.matrix(human_sepsis_data_ml_full[,-1:-2]))
+#hvd_colmeans <- colMeans(as.matrix(human_validation_datal[,-1:-3]))
 human_sepsis_data_ml_full[, -1:-2] <- scale(human_sepsis_data_ml_full[, -1:-2])
-human_validation_data[, -1] <- t((t(human_validation_data[, -1]) - hsd_colmeans) / hsd_colsds)
+human_validation_data[, -1] <- scale(human_validation_data[, -1])
+#human_validation_data[, -1] <- t((t(human_validation_data[, -1]) - hsd_colmeans) / hsd_colsds)
 ##Set important parameters
 fml <- Survival ~ .
 num_folds <- 5
-rg.num.trees <- 1000
+rg.num.trees <- 500
 ##Set up iteration
 num_repeats <- 20
 day_tab <- table(human_sepsis_data$Day[data_ml_subset])
 day_set <- rep(as.numeric(names(day_tab)), each = num_repeats)
-var_range <- c(2:6)
+var_range <- c(2:8)
 var_set <- rep(var_range, each = num_repeats)
 var_set_name_list <- list()
 tot_n_var <- ncol(human_sepsis_data_ml_full)-2
