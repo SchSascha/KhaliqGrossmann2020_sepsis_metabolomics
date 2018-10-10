@@ -53,18 +53,21 @@ annas_mets <- get_annas_rat_sig_diffs()
 ###########################
 
 #Impute missing data
+pheno_sel <- (which(colnames(rat_sepsis_data) == "H1")+1):ncol(rat_sepsis_data)
+metab_sel <- 5:which(colnames(rat_sepsis_data) == "H1")
 cols <- colnames(rat_sepsis_data)
 colnames(rat_sepsis_data) <- make.names(cols)
 for (mat in unique(rat_sepsis_data$material)){
-  idat <- subset(rat_sepsis_data, material == mat, 5:which(colnames(rat_sepsis_data) == "LCA"))
-  rat_sepsis_data[rat_sepsis_data$material == mat, 5:which(colnames(rat_sepsis_data) == "LCA")] <- missRanger(idat)
+  idat <- subset(rat_sepsis_data, material == mat, metab_sel)
+  rat_sepsis_data[rat_sepsis_data$material == mat, metab_sel] <- missRanger(idat)
 }
-idat <- subset(rat_sepsis_data, material == "plasma", (which(colnames(rat_sepsis_data) == "LCA")+1):length(cols))
-rat_sepsis_data[rat_sepsis_data$material == "plasma", (which(colnames(rat_sepsis_data) == "LCA")+1):length(cols)] <- missRanger(idat)
+idat <- subset(rat_sepsis_data, material == "plasma", c(metab_sel, pheno_sel))
+rat_sepsis_data[rat_sepsis_data$material == "plasma", c(metab_sel, pheno_sel)] <- missRanger(idat)
 colnames(rat_sepsis_data) <- cols
 
 #Remove dynamic physiological properties like heart rate
-rat_sepsis_data <- rat_sepsis_data[, -which(colnames(rat_sepsis_data) %in% c("HR", "SV", "CO", "EF", "Resp Rate", "Temperature"))]
+rat_sepsis_data <- rat_sepsis_data[, -which(colnames(rat_sepsis_data) %in% c("HR", "SV", "CO", "EF", "Resp Rate", "Temperature"))]#
+pheno_sel <- (which(colnames(rat_sepsis_data) == "H1")+1):ncol(rat_sepsis_data)
 
 #Get data overview
 ##Get overview of sample distribution along days
@@ -204,7 +207,7 @@ for (mat in unique(rat_sepsis_data$material)){
 
 #Find differences in pheno vars with ANOVA
 met_set <- colnames(rat_sepsis_data)
-met_set <- met_set[(which(met_set == "LCA") + 1):length(met_set)]
+met_set <- met_set[(which(met_set == "H1") + 1):length(met_set)]
 names(met_set) <- met_set
 fml <- concentration ~ group*time
 ##Split analysis into one for control vs sepsis and one for survival vs nonsurvival
@@ -807,7 +810,7 @@ for (mat in unique(rat_sepsis_data$material)){
 }
 
 ###Acylcarnitine made up groups
-ac_transferase_grouped <- rat_sepsis_data[, c(1:4, which(rat_sepsis_legend$group == "aclycarnitine") + 4)]
+ac_transferase_grouped <- rat_sepsis_data[, c(1:4, which(rat_sepsis_legend$group == "acylcarnitine") + 4)]
 ac_transferase_grouped[, -1:-4] <- lapply(ac_transferase_grouped[, -1:-4], `/`, ac_transferase_grouped$C0)
 actg <- colnames(ac_transferase_grouped)
 ac_transferase_grouped <- transform(ac_transferase_grouped, 

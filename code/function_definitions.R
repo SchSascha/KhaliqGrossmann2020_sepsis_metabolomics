@@ -521,7 +521,7 @@ get_annas_rat_sig_diffs <- function(){
 #' @export
 #'
 #' @examples
-fit_lin_mod_lme <- function(dvar, data, formula, id.vars, random, use.corAR = FALSE){
+fit_lin_mod_lme <- function(dvar, data, formula, id.vars, random, use.corAR = FALSE, control = lmeControl()){
   test_data <- data[, c(id.vars, dvar)]
   colnames(test_data)[ncol(test_data)] <- "concentration"
   for (s in id.vars){
@@ -533,11 +533,11 @@ fit_lin_mod_lme <- function(dvar, data, formula, id.vars, random, use.corAR = FA
     model.pre <- lme(fixed = formula, random = random, data = test_data)
     ac_val <- ACF(model.pre)[2,2] #autocorrelation value for a 1 day-lag
     ac_val <- max(min(ac_val, 0.99), -0.99) #value is in some cases >= 1
-    try(res <- bquote(lme(fixed = .(formula), random = .(random), correlation = corAR1(form = .(random), value = .(ac_val)), data = .(test_data), method = "REML", keep.data = TRUE)))
+    try(res <- bquote(lme(fixed = .(formula), random = .(random), correlation = corAR1(form = .(random), value = .(ac_val)), data = .(test_data), method = "REML", keep.data = TRUE, control = .(control))))
     #try(res <- lmer(formula = formula, data = test_data, REML = TRUE))
   }
   else{
-    try(res <- bquote(lme(fixed = .(formula), random = .(random), data = .(test_data), method = "REML", keep.data = TRUE)))
+    try(res <- bquote(lme(fixed = .(formula), random = .(random), data = .(test_data), method = "REML", keep.data = TRUE, control = .(control))))
   }
   return(res)
 }
@@ -570,8 +570,8 @@ model.matrix.lme <- function(object, data){
 #' @export
 #'
 #' @examples
-t3ANOVA <- function(data, random, formula, use.corAR, col.set, id.vars){
-  lin.models <- lapply(X = col.set, FUN = fit_lin_mod_lme, data = data, formula = formula, id.vars = id.vars, random = random, use.corAR = use.corAR)
+t3ANOVA <- function(data, random, formula, use.corAR, col.set, id.vars, control = lmeControl()){
+  lin.models <- lapply(X = col.set, FUN = fit_lin_mod_lme, data = data, formula = formula, id.vars = id.vars, random = random, use.corAR = use.corAR, control = control)
   lin.models <- lapply(lin.models, function(m) try(eval(m)))
   lin.models <- lin.models[sapply(lin.models, function(m) class(m) == "lme")]
   model.normality.p <- unlist(lapply(lin.models, function(e) shapiro.test(residuals(e))$p.value))

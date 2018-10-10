@@ -4,46 +4,46 @@ Day
 Survival	s:surivial; ns:non-survival		
 CAP / FP	CAP: community-acquired pneumonia; FP: Faecal peritonitis		
 Sample ID			
-C0	Carnitine 	aclycarnitine	µM
-C10	Decanoylcarnitine	aclycarnitine	µM
-C10:1	Decenoylcarnitine	aclycarnitine	µM
-C10:2	Decadienylcarnitine	aclycarnitine	µM
-C12	Dodecanoylcarnitine	aclycarnitine	µM
-C12-DC	Dodecenoylcarnitine	aclycarnitine	µM
-C12:1	Dodecanedioylcarnitine	aclycarnitine	µM
-C14	Tetradecanoylcarnitine	aclycarnitine	µM
-C14:1	Tetradecenoylcarnitine	aclycarnitine	µM
-C14:1-OH	Hydroxytetradecenoylcarnitine	aclycarnitine	µM
-C14:2	Tetradecadienylcarnitine	aclycarnitine	µM
-C14:2-OH	Hydroxytetradecadienylcarnitine	aclycarnitine	µM
-C16	Hexadecanoylcarnitine	aclycarnitine	µM
-C16-OH	Hexadecenoylcarnitine	aclycarnitine	µM
-C16:1	Hydroxyhexadecenoylcarnitine	aclycarnitine	µM
-C16:1-OH	Hexadecadienylcarnitine	aclycarnitine	µM
-C16:2	Hydroxyhexadecadienylcarnitine	aclycarnitine	µM
-C16:2-OH	Hydroxyhexadecanoylcarnitine	aclycarnitine	µM
-C18	Octadecanoylcarnitine	aclycarnitine	µM
-C18:1	Octadecenoylcarnitine	aclycarnitine	µM
-C18:1-OH	Hydroxyoctadecenoylcarnitine	aclycarnitine	µM
-C18:2	Octadecadienylcarnitine	aclycarnitine	µM
-C2	Acetylcarnitine	aclycarnitine	µM
-C3	Propionylcarnitine	aclycarnitine	µM
-C3-DC (C4-OH)	Hydroxybutyrylcarnitine	aclycarnitine	µM
-C5-OH (C3-DC-M)	Hydroxyvalerylcarnitine (Methylmalonylcarnitine)	aclycarnitine	µM
-C3-OH	Hydroxypropionylcarnitine	aclycarnitine	µM
-C3:1	Propenoylcarnitine	aclycarnitine	µM
-C4	Butyrylcarnitine	aclycarnitine	µM
-C4:1	Butenylcarnitine	aclycarnitine	µM
-C6 (C4:1-DC)	Hexanoylcarnitine (Fumarylcarnitine)	aclycarnitine	µM
-C5	Valerylcarnitine	aclycarnitine	µM
-C5-DC (C6-OH)	Glutarylcarnitine (Hydroxyhexanoylcarnitine)	aclycarnitine	µM
-C5-M-DC	Methylglutarylcarnitine	aclycarnitine	µM
-C5:1	Tiglylcarnitine	aclycarnitine	µM
-C5:1-DC	Glutaconylcarnitine	aclycarnitine	µM
-C6:1	Hexenoylcarnitine	aclycarnitine	µM
-C7-DC	Pimelylcarnitine	aclycarnitine	µM
-C8	Octanoylcarnitine	aclycarnitine	µM
-C9	Nonaylcarnitine	aclycarnitine	µM
+C0	Carnitine 	acylcarnitine	µM
+C10	Decanoylcarnitine	acylcarnitine	µM
+C10:1	Decenoylcarnitine	acylcarnitine	µM
+C10:2	Decadienylcarnitine	acylcarnitine	µM
+C12	Dodecanoylcarnitine	acylcarnitine	µM
+C12-DC	Dodecenoylcarnitine	acylcarnitine	µM
+C12:1	Dodecanedioylcarnitine	acylcarnitine	µM
+C14	Tetradecanoylcarnitine	acylcarnitine	µM
+C14:1	Tetradecenoylcarnitine	acylcarnitine	µM
+C14:1-OH	Hydroxytetradecenoylcarnitine	acylcarnitine	µM
+C14:2	Tetradecadienylcarnitine	acylcarnitine	µM
+C14:2-OH	Hydroxytetradecadienylcarnitine	acylcarnitine	µM
+C16	Hexadecanoylcarnitine	acylcarnitine	µM
+C16-OH	Hexadecenoylcarnitine	acylcarnitine	µM
+C16:1	Hydroxyhexadecenoylcarnitine	acylcarnitine	µM
+C16:1-OH	Hexadecadienylcarnitine	acylcarnitine	µM
+C16:2	Hydroxyhexadecadienylcarnitine	acylcarnitine	µM
+C16:2-OH	Hydroxyhexadecanoylcarnitine	acylcarnitine	µM
+C18	Octadecanoylcarnitine	acylcarnitine	µM
+C18:1	Octadecenoylcarnitine	acylcarnitine	µM
+C18:1-OH	Hydroxyoctadecenoylcarnitine	acylcarnitine	µM
+C18:2	Octadecadienylcarnitine	acylcarnitine	µM
+C2	Acetylcarnitine	acylcarnitine	µM
+C3	Propionylcarnitine	acylcarnitine	µM
+C3-DC (C4-OH)	Hydroxybutyrylcarnitine	acylcarnitine	µM
+C5-OH (C3-DC-M)	Hydroxyvalerylcarnitine (Methylmalonylcarnitine)	acylcarnitine	µM
+C3-OH	Hydroxypropionylcarnitine	acylcarnitine	µM
+C3:1	Propenoylcarnitine	acylcarnitine	µM
+C4	Butyrylcarnitine	acylcarnitine	µM
+C4:1	Butenylcarnitine	acylcarnitine	µM
+C6 (C4:1-DC)	Hexanoylcarnitine (Fumarylcarnitine)	acylcarnitine	µM
+C5	Valerylcarnitine	acylcarnitine	µM
+C5-DC (C6-OH)	Glutarylcarnitine (Hydroxyhexanoylcarnitine)	acylcarnitine	µM
+C5-M-DC	Methylglutarylcarnitine	acylcarnitine	µM
+C5:1	Tiglylcarnitine	acylcarnitine	µM
+C5:1-DC	Glutaconylcarnitine	acylcarnitine	µM
+C6:1	Hexenoylcarnitine	acylcarnitine	µM
+C7-DC	Pimelylcarnitine	acylcarnitine	µM
+C8	Octanoylcarnitine	acylcarnitine	µM
+C9	Nonaylcarnitine	acylcarnitine	µM
 Ala	Alanine	amino acid	µM
 Arg	Arginine	amino acid	µM
 Asn	Asparagine	amino acid	µM
@@ -208,7 +208,7 @@ TUDCA	Tauroursodeoxycholic acid	bile acid	µM
 GUDCA	Glycoursodeoxycholic acid	bile acid	µM
 LCA	Lithocholic acid	bile acid	µM
 Urea		phenomenological variable	mmol/l
-Creatinine		phenomenological variable	µmol/l
+Blood Creatinine		phenomenological variable	µmol/l
 ALT	Alanine transaminase	phenomenological variable	IU/l
 AST	Aspartate Aminotransferase	phenomenological variable	IU/l
 ALP	Alkaline phosphatase	phenomenological variable	IU/l

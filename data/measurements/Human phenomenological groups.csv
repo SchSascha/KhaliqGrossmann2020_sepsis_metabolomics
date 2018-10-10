@@ -1,6 +1,6 @@
 	name	group	Mervyn_group	unit	comment
 Urea		Catabolism-associated	Excluded	mmol/l	Product of protein catabolism
-Creatinine		Catabolism-associated	Kidney-associated	µmol/l	Product of catabolism in muscle
+Blood Creatinine		Catabolism-associated	Kidney-associated	µmol/l	Product of catabolism in muscle
 ALT	Alanine transaminase	Liver damage indicator	Liver damage indicator	IU/l	
 AST	Aspartate Aminotransferase	Liver damage indicator	Kidney-associated	IU/l	also elevated from hemolysis and antibiotic therapy
 ALP	Alkaline phosphatase	Liver damage indicator	Liver damage indicator	IU/l	also found in white blood cells

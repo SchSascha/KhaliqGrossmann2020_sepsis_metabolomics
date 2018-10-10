@@ -80,7 +80,7 @@ mSet<-Read.TextData(mSet, "metaboAnalyst_sepsis_temp.csv", "rowu", "disc") #migh
 
 #Set up mSetObj with the list of compounds
 ##first clean compound list
-pheno_legend_idx <- (which(human_sepsis_legend[,1] == "LCA") + 1):nrow(human_sepsis_legend)
+pheno_legend_idx <- (which(human_sepsis_legend[,1] == "H1") + 1):nrow(human_sepsis_legend)
 comp_i_list <- stri_trim_both(human_sepsis_legend[-c(1:5, pheno_legend_idx),1])
 comp_n_list <- stri_trim_both(human_sepsis_legend[-c(1:5, pheno_legend_idx),2])
 comp_n_list[comp_n_list == "Decenoylcarnitine"] <- "9-decenoylcarnitine"
@@ -136,22 +136,26 @@ match_hmdb_names[,1] <- match_hmdb_names[match(mSet1$dataSet$map.table[,1], comp
 match_hmdb_names[,2] <- match_hmdb_names[match(mSet2$dataSet$map.table[,1], comp_n_list),2] #metaboAnalyst mapping reorders metabolites
 match_inconsist <- which(match_hmdb_names[,1] != match_hmdb_names[,2] & match_hmdb_names[,1] != "NA" & match_hmdb_names[,2] != "NA") #negligible inconsistencies
 
-master_match_list <- c(match_hmdb_names[1:82, 2], match_hmdb_names[83:172, 1], match_hmdb_names[173:203, 2])
+master_match_list <- c(match_hmdb_names[1:82, 2], match_hmdb_names[83:172, 1], match_hmdb_names[173:nrow(match_hmdb_names), 2])
 master_match_list[188] <- match_hmdb_names[188,1]
 
 #mapping overlap for models and measured metabs
 match_hmdb_ids <- cbind(mSet1$dataSet$map.table[,3], mSet2$dataSet$map.table[,3])
-hmdb_id_match_list <- c(match_hmdb_ids[1:82, 2], match_hmdb_ids[83:172, 1], match_hmdb_ids[173:203, 2])
+hmdb_id_match_list <- c(match_hmdb_ids[1:82, 2], match_hmdb_ids[83:172, 1], match_hmdb_ids[173:nrow(match_hmdb_names), 2])
 hmdb_id_match_list[188] <- match_hmdb_ids[188,1]
 sum(hmdb_id_match_list %in% recon3D_hmdb_ids$HMDB.ID)
 
 match_kegg_ids <- cbind(mSet1$dataSet$map.table[,5], mSet2$dataSet$map.table[,5])
-kegg_id_match_list <- c(match_kegg_ids[1:82, 2], match_kegg_ids[83:172, 1], match_kegg_ids[173:203, 2])
+kegg_id_match_list <- c(match_kegg_ids[1:82, 2], match_kegg_ids[83:172, 1], match_kegg_ids[173:nrow(match_hmdb_names), 2])
 kegg_id_match_list[188] <- match_kegg_ids[188,1]
 sum(kegg_id_match_list %in% gsm_mets_list$Recon3D$`KEGG ID`) #all phosphatidylcholine like match to just one compound, hence the high match count
 
+##save KEGG ID mapping to disk
+kegg_map_table <- data.frame(Metabolite = human_sepsis_legend[-c(1:5, pheno_legend_idx),1], KEGG_ID = kegg_id_match_list)
+write.table(x = kegg_map_table, file = "../../data/id_maps/KEGG_map_all.csv", sep = "\t", quote = FALSE, row.names = FALSE)
+
 match_pubchem_ids <- cbind(mSet1$dataSet$map.table[,4], mSet2$dataSet$map.table[,4])
-pubchem_id_match_list <- c(match_pubchem_ids[1:82, 2], match_pubchem_ids[83:172, 1], match_pubchem_ids[173:203, 2])
+pubchem_id_match_list <- c(match_pubchem_ids[1:82, 2], match_pubchem_ids[83:172, 1], match_pubchem_ids[173:nrow(match_hmdb_names), 2])
 pubchem_id_match_list[188] <- match_pubchem_ids[188,1]
 sum(pubchem_id_match_list %in% gsm_mets_list$Recon3D$`PUBCHEM ID`)
 
