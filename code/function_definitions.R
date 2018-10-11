@@ -5,6 +5,7 @@
 #'
 #' @examples
 get_human_sepsis_data <- function(){
+  require(matrixStats)
   data <- read.csv(file = "../../data/measurements/Summary human sample data.csv", header = TRUE, sep = "\t", stringsAsFactors = FALSE, dec = ",", check.names = FALSE)
   data <- data[, -(which(colSds(as.matrix(data[, -1:-5])) == 0) + 5)] #remove columns with fixed values
   pat_exclude <- c(2, 5, 10, 19, 27, 29, 37, 40)
@@ -190,6 +191,7 @@ get_sig_var_pos <- function(diff_data, alpha = 0.05, time_var = "Time"){
 #'
 #' @examples
 max_norm <- function(x, subset = 1:ncol(x)){
+  require(matrixStats)
   x_max_norm <- x
   x_max_norm[, subset] <- t(t(x_max_norm[, subset]) / colMaxs(as.matrix(x_max_norm[, subset]), na.rm = TRUE))
   return(x_max_norm)
