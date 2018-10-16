@@ -897,6 +897,7 @@ pheno_day_var_df <- rbind(cbind(data.frame(Day = c(tanova_day_set, 5), Survival 
 colnames(pheno_day_var_df) <- c("Day", "Survival", colnames(human_sepsis_data)[pheno_sel])
 pheno_day_var_long_df <- melt(pheno_day_var_df, id.vars = c("Day", "Survival"))
 pheno_day_var_long_df$group <- human_sepsis_legend$group[match(pheno_day_var_long_df$variable, human_sepsis_legend[[1]])]
+pheno_day_var_long_df <- subset(pheno_day_var_long_df, group != "Excluded")
 pheno_day_var_plot <- ggplot(data = pheno_day_var_long_df, mapping = aes(x = factor(Day), y = value, fill = Survival)) +
   facet_wrap( ~ group, ncol = 5, nrow = 2, scales = "free_y") +
   geom_boxplot(outlier.size = 0.7) +
