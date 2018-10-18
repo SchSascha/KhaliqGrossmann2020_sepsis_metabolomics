@@ -525,7 +525,7 @@ get_annas_rat_sig_diffs <- function(){
 #' @examples
 fit_lin_mod_lme <- function(dvar, data, formula, id.vars, random, use.corAR = FALSE, control = lmeControl()){
   test_data <- data[, c(id.vars, dvar)]
-  colnames(test_data)[ncol(test_data)] <- "concentration"
+  colnames(test_data)[ncol(test_data)] <- as.character(formula[[2]])
   for (s in id.vars){
     test_data[[s]] <- factor(test_data[[s]]) #to re-level
   }
@@ -582,6 +582,31 @@ t3ANOVA <- function(data, random, formula, use.corAR, col.set, id.vars, control 
   rownames(anova.ps) <- anova.terms
   res <- list(models = lin.models, normality.p = model.normality.p, ps = anova.ps)
   return(res)
+}
+
+
+#' Generate contrast matrix specific for Sepsis vs Control and Sepsis S vs Sepsis NS
+#'
+#' @param num_seq measurement day vector with as many entries as factor levels for Day effect in linear model
+#'
+#' @return
+#' @export
+#'
+#' @examples
+get_S_NS_C_contrmat <- function(num_seq){
+  ld <- length(num_seq)
+  sd <- seq_along(num_seq)
+  contr.m <- matrix(0, ncol = ld * 2, nrow = ld * 3)
+  colnames(contr.m) <- c(paste0("Seps vs Comp, D", num_seq), paste0("S vs NS, D", num_seq))
+  #####Sepsis vs Nonsepsis
+  contr.m[sd, sd] <- diag(-2, nrow = ld, ncol = ld)
+  contr.m[sd + ld, sd] <- diag(1, nrow = ld, ncol = ld)
+  contr.m[sd + 2 * ld, sd] <- diag(1, nrow = ld, ncol = ld)
+  #####Septic survivors vs septic nonsurvivors
+  contr.m[sd + ld, sd + ld] <- diag(-1, nrow = ld, ncol = ld)
+  contr.m[sd + 2 * ld, sd + ld] <- diag(1, nrow = ld, ncol = ld)
+  
+  return(contr.m)
 }
 
 #' Return column and row coordinates of TRUE values in matrix

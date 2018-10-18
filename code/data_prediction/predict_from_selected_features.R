@@ -29,6 +29,9 @@ if (!dir.exists(out_dir_pred))
 ##Import clinical data
 human_sepsis_data <- get_human_sepsis_data()
 
+##Import clinicla legend
+human_sepsis_legend <- get_human_sepsis_legend()
+
 ##Import clinical validation data
 human_validation_data <- get_Ferrario_validation_data()
 
@@ -44,16 +47,16 @@ human_sepsis_data <- human_sepsis_data[human_sepsis_data$`CAP / FP` != "-", ]
 
 ##Filter out unimportant rows and columns from validation data
 human_validation_data <- subset(human_validation_data, Day == 0, c(-1, -2, -4))
-human_validation_data[,-1] <- human_validation_data[, -c(1, which(colAnyNAs(as.matrix(human_validation_data[,-1])))+1)]
+#human_validation_data[,-1] <- human_validation_data[, -c(1, which(colAnyNAs(as.matrix(human_validation_data[,-1])))+1)]
 colnames(human_validation_data)[grep(x = colnames(human_validation_data), pattern = "Survival")] <- "Survival"
-human_validation_data <- subset(human_validation_data, select = intersect(colnames(human_sepsis_data), colnames(human_validation_data)))
+#human_validation_data <- subset(human_validation_data, select = intersect(colnames(human_sepsis_data), colnames(human_validation_data)))
 
 ##Filter outlier in Ferrario data
-human_validation_data <- subset(human_validation_data, subset = C4 < 400)
+#human_validation_data <- subset(human_validation_data, subset = C4 < 400)
 
 ##Equalize median between Ferrario and UK data
-human_sepsis_data[,-1:-5] <- t(t(human_sepsis_data[,-1:-5]) - colMedians(as.matrix(human_sepsis_data[human_sepsis_data$Day == 1, -1:-5])))
-human_validation_data[,-1] <- t(t(human_validation_data[,-1]) - colMedians(as.matrix(human_validation_data[,-1])))
+#human_sepsis_data[,-1:-5] <- t(t(human_sepsis_data[,-1:-5]) - colMedians(as.matrix(human_sepsis_data[human_sepsis_data$Day == 0, -1:-5])))
+#human_validation_data[,-1] <- t(t(human_validation_data[,-1]) - colMedians(as.matrix(human_validation_data[,-1])))
 
 #Get significantly different classes
 human_sig_diff_res <- human_sig_diffs_along_days(human_sepsis_data, corr_fdr = FALSE)
@@ -107,7 +110,7 @@ rg.num.trees <- 500
 num_repeats <- 20
 day_tab <- table(human_sepsis_data$Day[data_ml_subset])
 day_set <- rep(as.numeric(names(day_tab)), each = num_repeats)
-var_range <- c(2:8)
+var_range <- c(2:min(8, length(shared_metabs)))
 var_set <- rep(var_range, each = num_repeats)
 var_set_name_list <- list()
 tot_n_var <- ncol(human_sepsis_data_ml_full)-2
@@ -297,10 +300,11 @@ r_count <- 1
     case_weights[human_sepsis_data_ml_red$Survival == 0] <- class_count[2]/class_count[1]
     case_weights_int <- class_count[match(human_sepsis_data_ml_red$Survival, names(class_count))]
     r_human_sepsis_data_ml_red <- human_sepsis_data_ml_red
+    #r_human_sepsis_data_ml_red <- human_validation_data[, colnames(human_validation_data) %in% colnames(human_sepsis_data_ml_red)]
     r_human_sepsis_data_ml_red$Survival <- as.factor(r_human_sepsis_data_ml_red$Survival)
-    rgFV <- ranger(data = r_human_sepsis_data_ml_red, dependent.variable.name = "Survival", num.trees = rg.num.trees, write.forest = T, save.memory = F, probability = TRUE, case.weights = case_weights)
+    rgFV <- ranger(data = human_sepsis_data_ml_red, dependent.variable.name = "Survival", num.trees = rg.num.trees, write.forest = T, save.memory = F, probability = TRUE)
     ksFV <- ksvm(fml, human_sepsis_data_ml_red, type = "C-svc", kernel = "vanilladot", scaled = FALSE)
-    lmFV <- glm(formula = fml, data = human_sepsis_data_ml_red, family = binomial(link = "probit"), weights = case_weights_int)
+    lmFV <- glm(formula = fml, data = human_sepsis_data_ml_red, family = binomial(link = "probit"), control = glm.control(maxit = 100))
     
     rg.red.npr.FVal.df[v,-1] <- ml.npr(predict(rgFV, human_validation_data)$predictions[, 2] > 0.5, human_validation_data$Survival)
     ks.red.npr.FVal.df[v,-1] <- ml.npr(predict(ksFV, human_validation_data), human_validation_data$Survival)

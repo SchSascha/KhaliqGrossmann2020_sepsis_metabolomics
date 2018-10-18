@@ -73,6 +73,7 @@ colnames(kmsm) <- c("N", "S")
 pathview(cpd.data = kmsm, pathway.id = "01100", species = "hsa", cpd.idtype = "kegg", match.data = FALSE, out.suffix = "survival")
 pathview(cpd.data = kmsm, pathway.id = "01230", species = "hsa", cpd.idtype = "kegg", match.data = FALSE, out.suffix = "survival")
 pathview(cpd.data = kmsm, pathway.id = "00330", species = "hsa", cpd.idtype = "kegg", match.data = FALSE, out.suffix = "survival")
+pathview(cpd.data = kmsm, pathway.id = "00071", species = "hsa", cpd.idtype = "kegg", match.data = FALSE, out.suffix = "survival")
 
 #Write to disk
 

@@ -6,6 +6,9 @@ library(missRanger)
 library(nscancor)
 library(TDAmapper)
 library(elasticnet)
+library(analogue)
+library(corpcor)
+library(vegan)
 
 source("../function_definitions.R")
 
@@ -13,32 +16,90 @@ out_dir <- "../../results/data_stats/"
 if (!dir.exists(out_dir))
   dir.create(out_dir)
 
-human_sepsis_data <- get_human_sepsis_data()
+human_data <- get_human_sepsis_data()
+
+metab_end <- which(colnames(human_data) == "H1")
+metab_sel <- 6:metab_end
+pheno_start <- metab_end + 1
+pheno_sel <- pheno_start:ncol(human_data)
+
+col <- colnames(human_data)
+colnames(human_data) <- make.names(col)
+human_data[, -1:-5] <- missRanger(human_data[, -1:-5])
+colnames(human_data) <- col
 
 #Seperate septic and nonseptic patients
-human_nonsepsis_data <- human_sepsis_data[human_sepsis_data$`CAP / FP` == "-", ]
-human_sepsis_data <- human_sepsis_data[human_sepsis_data$`CAP / FP` != "-", ]
+human_nonsepsis_data <- human_data[human_data$`CAP / FP` == "-", ]
+human_sepsis_data <- human_data[human_data$`CAP / FP` != "-", ]
 
 #human_sepsis_data <- na.omit(human_sepsis_data)
 human_sepsis_data_normal <- human_sepsis_data
 human_sepsis_data_normal[,-1:-5] <- scale(human_sepsis_data_normal[,-1:-5])
-
-metab_end <- which(colnames(human_sepsis_data) == "H1")
-metab_sel <- 6:metab_end
-pheno_start <- metab_end + 1
-pheno_sel <- pheno_start:ncol(human_sepsis_data)
-
-col <- colnames(human_sepsis_data_normal)
-colnames(human_sepsis_data_normal) <- make.names(col)
-human_sepsis_data_normal[, 6:metab_end] <- missRanger(human_sepsis_data_normal[,6:metab_end])
-colnames(human_sepsis_data_normal) <- col
 
 human_sepsis_data_metab <- subset(human_sepsis_data_normal, Day < 4, 6:metab_end)
 human_sepsis_data_pheno <- subset(human_sepsis_data_normal, Day < 4, pheno_start:ncol(human_sepsis_data))
 
 human_sepsis_data_normal <- human_sepsis_data_normal[,1:metab_end]
 
-#human_sepsis_data_normal <- cbind(human_sepsis_data_normal[,1:5], distance(x = human_sepsis_data_normal[, -1:-5], method = "chi.distance")) # distance() works on a per row basis
+human_sepsis_data_dist <- cbind(human_sepsis_data[,1:5], as.matrix(dist(x = human_sepsis_data[, metab_sel], method = "canberra"))) # distance() works on a per row basis
+# hsd <- human_sepsis_data[, metab_sel]
+# invcovmat <- as.matrix(invcor.shrink(x = hsd))
+# mu <- colMeans(hsd)
+# mahabpaireddist <- apply(hsd, 1, function(xs) mahalanobis(x = hsd, center = xs, cov = invcovmat, inverted = TRUE))
+# human_sepsis_data_dist <- cbind(human_sepsis_data[,1:5], mahabpaireddist)
+
+p <- prcomp(human_sepsis_data_dist[, -1:-5])
+sp <- summary(p)$importance[2, ]
+barplot(sp)
+pat_list <- human_sepsis_data[match(unique(human_sepsis_data$Patient), human_sepsis_data$Patient), 1:5]
+plot(p$x[,1:2], col = "white", main = "PCA biplot based on Canberra distance of samples", 
+     xlab = paste0("PC1 (", 100 * sp[1], " % expl. var.)"), ylab = paste0("PC2 (", 100 * sp[2], " % expl. var.)"))
+col <- as.numeric(as.factor(pat_list$Survival))
+col <- -1*col + 3
+for (n in seq_along(pat_list$Patient)){
+  ind <- which(human_sepsis_data_normal$Patient == pat_list$Patient[n])
+  x <- p$x[ind ,1]
+  y <- p$x[ind ,2]
+  arrows(x0 = x[-length(x)], y0 = y[-length(y)], x1 = x[-1], y1 = y[-1], length = 0.1, col = col[n])
+}
+legend(x = -125, y = -125, legend = c("Survivors", "Nonsurvivors"), lty = c(1, 1), col = c("black", "red"))
+
+human_data_dist <- cbind(human_data[,1:5], as.matrix(dist(x = human_data[, metab_sel], method = "canberra"))) # distance() works on a per row basis
+p <- prcomp(human_data_dist[, -1:-5])
+png(filename = paste0(out_dir, "PCA_all_samples_expl_var.png"))
+barplot(summary(p)$importance[2,], main = "Explained variance per principal component")
+dev.off()
+sp <- summary(p)$importance[2, ]
+pat_list <- human_data[match(unique(human_data$Patient), human_data$Patient), 1:5]
+pat_list$Survival[pat_list$`CAP / FP` == "-"] <- "Nonseptic"
+png(filename = paste0(out_dir, "PCA_biplot_all_samples.png"), width = 650, height = 650, units = "px")
+plot(p$x[,1:2], col = "white", main = "PCA biplot based on Canberra distance of samples", 
+     xlab = paste0("PC1 (", format(100 * sp[1], digits = 4), " % expl. var.)"), ylab = paste0("PC2 (", format(100 * sp[2], digits = 4), " % expl. var.)"))
+col <- factor(pat_list$Survival, levels = c("S", "NS", "Nonseptic"))
+for (n in seq_along(pat_list$Patient)){
+  ind <- which(human_data$Patient == pat_list$Patient[n])
+  x <- p$x[ind ,1]
+  y <- p$x[ind ,2]
+  arrows(x0 = x[-length(x)], y0 = y[-length(y)], x1 = x[-1], y1 = y[-1], length = 0.1, col = col[n])
+}
+legend(x = -250, y = -150, legend = c("Survivors", "Non-survivors", "Non-septic"), lty = c(1, 1, 1), col = c("black", "red", "green"))
+dev.off()
+
+ad_data <- human_data_dist
+ad_data$Survival[ad_data$`CAP / FP` == "-"] <- "Control"
+PCs <- p$x[, 1:2]
+take_CvsS <- ad_data$Survival %in% c("Control", "S")
+take_CvsNS <- ad_data$Survival %in% c("Control", "NS")
+take_SvsNS <- ad_data$Survival %in% c("S", "NS")
+Y1 <- PCs[take_CvsS,]
+Y2 <- PCs[take_CvsNS,]
+Y3 <- PCs[take_SvsNS,]
+ad_data1 <- ad_data[take_CvsS, ]
+ad_data2 <- ad_data[take_CvsNS, ]
+ad_data3 <- ad_data[take_SvsNS, ]
+ad_res1 <- adonis1(formula = Y1 ~ Survival, data = ad_data1, permutations = 1000, parallel = 6, method = "euclidean")
+ad_res2 <- adonis1(formula = Y2 ~ Survival, data = ad_data2, permutations = 1000, parallel = 6, method = "euclidean")
+ad_res3 <- adonis1(formula = Y3 ~ Survival, data = ad_data3, permutations = 1000, parallel = 6, method = "euclidean")
 
 pat_list <- human_sepsis_data_normal[match(unique(human_sepsis_data_normal$Patient), human_sepsis_data_normal$Patient), 1:5]
 pat_len <- table(human_sepsis_data_normal$Patient)
@@ -48,7 +109,7 @@ pat_len <- table(human_sepsis_data_normal$Patient)
 # pat_list <- subset(pat_list, Patient %in% names(pat_len[pat_len > 1]))
 # 
 # p <- prcomp(pd[, -1:-5])
-            
+
 pca_list <- lapply(pat_list$Patient, function(p){ prcomp(subset(human_sepsis_data_normal, Patient == p, -1:-5)) })
 for (n in seq_along(pca_list)){
   pca_list[[n]]$surv <- pat_list$Survival[n]
