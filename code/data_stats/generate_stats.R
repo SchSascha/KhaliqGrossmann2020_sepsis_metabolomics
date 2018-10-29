@@ -929,6 +929,33 @@ h$width <- 2200
 h$height <- lower_margin + round(sum(sel) * 1100/76) #1200 is a good height for 76 rows of metabolites
 export(p = h, file = paste0(out_dir, "human_heatmap_pheno.png"))
 
+##Human, variance of metabolites, diff of NS vs S, ordered by |diff|, lables colored by metabolite group, 
+for (d in unique(metab_day_var_df$Day)){
+  metab_day0_var_df <- cbind(subset(metab_day_var_df, Day == d), subset(pheno_day_var_df, Day == d, -1:-2))
+  metab_day_vardiff_df <- metab_day0_var_df[1, -1:-2] - metab_day0_var_df[2, -1:-2]
+  metab_day0_var_df <- metab_day0_var_df[, c(1, 2, 2 + order(metab_day_vardiff_df, decreasing = TRUE))]
+  metab_day0_var_df[, -1:-2] <- scale(metab_day0_var_df[, -1:-2], scale = FALSE, center = TRUE)
+  metab_day0_var_long_df <- melt(metab_day0_var_df, id.vars = c("Day", "Survival"))
+  metab_day0_var_long_df$group <- human_sepsis_legend$group[match(x = metab_day0_var_long_df$variable, table = human_sepsis_legend[, 1])]
+  metab_day0_var_long_df <- subset(metab_day0_var_long_df, !group %in% "Excluded")
+  metab_day0_group_df <- metab_day0_var_long_df
+  metab_day0_group_df$width <- 1
+  metab_day0_group_df$height <- 0.5
+  metab_day0_group_df$value <- -3.25
+  metab_day0_group_df$group[metab_day0_group_df$group %in% coarse_group_list[pheno_sel - 5]] <- "clinical parameter"
+  metab_day0_group_df$Metabolite_group <- metab_day0_group_df$group
+  metab_day0_group_df <- metab_day0_group_df[!duplicated(metab_day0_group_df$variable), ]
+  vardiffplot <- ggplot(data = metab_day0_var_long_df, mapping = aes(x = variable, y = value, group = Survival, color = Survival)) + 
+    geom_point() + 
+    geom_tile(mapping = aes(x = variable, y = value, fill = Metabolite_group, width = width, height = height), data = metab_day0_group_df, inherit.aes = FALSE) +
+    ylab("Mean-free difference of variance") +
+    xlab("Metabolite") +
+    scale_y_continuous(limits = c(-3.5, 3), expand = c(0, 0)) +
+    theme_bw() +
+    theme(axis.text.x = element_text(angle = 90, size = 4), panel.grid.major.x = element_line(linetype = 0))
+  ggsave(plot = vardiffplot, filename = paste0("human_var_diff_orderd_day", d, ".png"), path = out_dir, width = 12, height = 6, units = "in")
+}
+
 ##Human, variance of metabolites, NS vs. S
 metab_var_df <- human_sepsis_data_normal_conc_var[,c(2, metab_sel - 3)]
 colnames(metab_var_df)[-1] <- colnames(human_sepsis_data)[metab_sel]
