@@ -6,6 +6,7 @@ library(matrixStats)
 library(ranger)
 library(missRanger)
 library(kernlab)
+library(mixOmics)
 #library(ropls)
 #library(pROC)
 #library(caTools)
@@ -319,6 +320,22 @@ r_count <- 1
     lm.red.auc.FVal.df[v,-1] <- ml.auc(ref = human_validation_data$Survival, conf = predict(lmCV, human_validation_data[,-1]))
   }
 }
+
+hsd <- subset(human_sepsis_data, Day == 0)
+hvd <- human_validation_data
+cns1 <- make.names(colnames(human_sepsis_data))
+cns2 <- make.names(colnames(human_validation_data))
+colnames(hsd) <- cns1
+colnames(hvd) <- cns2
+hsd[, -1:-5] <- missRanger(hsd[, -1:-5])
+hvd[, -1] <- missRanger(hvd[, -1])
+smet <- intersect(cns1, cns2)
+mxOmX <- rbind(hsd[smet][, -1], hvd[smet][, -1])
+mxOmY <- c(hsd$Survival, c("NS", "S")[1 + hvd$Survival])
+study <- rep(1:2, times = c(nrow(hsd), nrow(hvd)))
+mxo_res <- mixOmics(X = as.matrix(mxOmX), Y = factor(mxOmY), study = study, ncomp = 3, scale = TRUE, keepX = c(60, 30, 5))
+mxo_perf <- perf(object = mxo_res, validation = "MFold", folds = 10, nrepeat = 5, auc = TRUE)
+lapply(lapply(mxo_perf$auc, `[[`, 1), `[[`, 1)
 
 rg.npr.repeat.df$Method <- "RF"
 ks.npr.repeat.df$Method <- "SVM"
