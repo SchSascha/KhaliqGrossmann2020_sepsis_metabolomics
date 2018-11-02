@@ -658,6 +658,33 @@ my.corr.test <- function(x, method = "pearson", adjust = "fdr"){
   return(list(r = cmat, p = pmat))
 }
 
+
+#' Compute the cubic root of x
+#'
+#' @param x real number x
+#'
+#' @return
+#' @export
+#'
+#' @examples
+cbrt_fun <- function(x){
+  x ^ 1/3
+}
+
+#' Compute the cubic power of x, hence the inverse of the cubic root
+#'
+#' @param x 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+cbrt_inv_fun <- function(x){
+  x ^ 3
+}
+
+cbrt_trans <- scales::trans_new(name = "cbrt", transform = cbrt_fun, inverse = cbrt_inv_fun)
+
 #' Compute one bootstrap sample of concentration correlations in Survivors. This is a dirty hack to reduce overhead in parralelization.
 #'
 #' @param n_S number of Survivor patients to sample
