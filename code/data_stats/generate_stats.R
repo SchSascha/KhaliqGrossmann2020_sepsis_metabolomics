@@ -1240,7 +1240,6 @@ human_data_patient_group_mean_all_days <- subset(human_data, Day %in% c(tanova_d
 hdpgmads <- human_data_patient_group_mean_all_days$Survival
 hdpgmads[human_data_patient_group_mean_all_days$`CAP / FP` == "-"] <- "Control"
 human_data_patient_group_mean_all_days <- aggregate(x = human_data_patient_group_mean_all_days[, -1:-5], by = list(hdpgmads), FUN = mean)
-human_data_patient_group_mean_all_days <- 
 human_data_patient_group_mean_all_days <- melt(human_data_patient_group_mean_all_days, id.vars = 1)
 
 ##Human, metabolite concentration time course, only metabolites with p-val < 0.05 at any day
