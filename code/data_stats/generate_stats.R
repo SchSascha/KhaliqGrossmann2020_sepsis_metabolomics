@@ -1,6 +1,8 @@
 #Load libraries
 library(reshape2)
 library(data.table)
+library(stringi)
+library(scales)
 library(ggplot2)
 library(gridExtra)
 library(matrixStats)
@@ -1149,7 +1151,7 @@ x <- na.omit(human_sepsis_data_normal_grouped_metab_pheno_cor)
 heatmaply(x = x[,-1:-5], row_side_colors = x[c("Survival", "CAP / FP")], col_side_colors = x["Patient"], file = paste0(out_dir, "human_normal_grouped_metab_and_pheno_cor.png"), main = "", key.title = "Cor", showticklabels = FALSE, margins = c(100,50,0,150), plot_method = "ggplot")
 rm("x")
 
-#TODO: switch to similarity for patient signature visualization
+#COMMENT: switch to similarity for patient signature visualization
 x <- as.matrix(na.omit(subset(human_sepsis_data_normal, TRUE, select = pheno_sel)))
 x <- cbind(human_sepsis_data_normal[,1:5], tcrossprod(x))
 heatmaply(x = x[,-1:-5], row_side_colors = x[c("Survival", "CAP / FP")], col_side_colors = x["Patient"], file = paste0(out_dir, "human_normal_metab_and_pheno_cov.png"), main = "", key.title = "Dist", showticklabels = FALSE, margins = c(100,50,0,150), plot_method = "ggplot")
@@ -1541,6 +1543,7 @@ for (pat in unique(subset(human_data_patient_group_mean_all_days, Survival == "N
   ggsave(filename = paste0("human_metab_nonsig_hormesis_single_plot_SD_pat_", pat, ".png"), path = out_dir, plot = p, width = 10, height = 7, units = "in")
 }
 ###Same as above but with all metabolites where the NS pat's concentration is outside the mean +/- 1 SD of the other groups
+#TODO: run
 human_data_patient_group_mean_all_days <- subset(human_data, Day %in% tanova_day_set)
 hdpgmads <- human_data_patient_group_mean_all_days$Survival
 hdpgmads[human_data_patient_group_mean_all_days$`CAP / FP` == "-"] <- "Control"
@@ -1563,28 +1566,43 @@ human_data_patient_group_mean_all_days$Group <- human_data_patient_group_mean_al
 metabolite_groups <- human_sepsis_legend$group[match(human_data_patient_group_mean_all_days$variable, human_sepsis_legend[, 1])]
 metabolite_groups[metabolite_groups %in% coarse_group_list[pheno_sel - 5]] <- "Clinical parameter"
 human_data_patient_group_mean_all_days$metabolite_group <- metabolite_groups
+var_keep <- list()
 for (pat in unique(subset(human_data_patient_group_mean_all_days, Survival == "NS")$Patient)){
   cntrl_and_s <- human_data_patient_group_mean_all_days
   pat_path <- subset(cntrl_and_s, Patient == pat)
   long_short_map <- match(pat_path$variable, colnames(hdpg_MNminusSD))
-  var_keep <- unique(pat_path$variable[pat_path$value < colMins(as.matrix(hdpg_MNminusSD[c(1, 3), long_short_map])) | pat_path$value > colMaxs(as.matrix(hdpg_MNplusSD[c(1, 3), long_short_map]))])
-  cntrl_and_s <- subset(cntrl_and_s, variable %in% var_keep)
-  pat_path <- subset(pat_path, variable %in% var_keep)
+  var_keep[[pat]] <- unique(pat_path$variable[pat_path$value < colMins(as.matrix(hdpg_MNminusSD[c(1, 3), long_short_map])) | pat_path$value > colMaxs(as.matrix(hdpg_MNplusSD[c(1, 3), long_short_map]))])
+  var_keep[[pat]] <- as.character(var_keep[[pat]])
+}
+var_keep_count <- table(unlist(var_keep))
+var_keep_count_df <- as.data.frame(var_keep_count)
+var_keep_count_df$color <- grey_pal()(length(unique(var_keep_count_df$Freq)))[var_keep_count_df$Freq]
+var_keep_union <- Reduce("union", var_keep)
+for (pat in unique(subset(human_data_patient_group_mean_all_days, Survival == "NS")$Patient)){
+  cntrl_and_s <- human_data_patient_group_mean_all_days
+  pat_path <- subset(cntrl_and_s, Patient == pat)
+  long_short_map <- match(pat_path$variable, colnames(hdpg_MNminusSD))
+  #var_keep <- unique(pat_path$variable[pat_path$value < colMins(as.matrix(hdpg_MNminusSD[c(1, 3), long_short_map])) | pat_path$value > colMaxs(as.matrix(hdpg_MNplusSD[c(1, 3), long_short_map]))])
+  cntrl_and_s <- subset(cntrl_and_s, variable %in% var_keep_union)
+  pat_path <- subset(pat_path, variable %in% var_keep_union)
   cns <- unique(cntrl_and_s$variable)
   pat_path$x <- match(pat_path$variable, cns)
   pat_path$x <- pat_path$x + rep(scale(seq_along(unique(pat_path$Day)))/3, times = length(unique(pat_path$variable)))
   p <- ggplot(data = subset(cntrl_and_s, Survival != "NS"), mapping = aes(y = value, x = variable, color = Group)) +
     stat_summary(fun.data = "mean_sdl", fun.args = list(mult = 1), position = position_dodge(width = 0.7), geom = "errorbar") +
     stat_summary(fun.y = "mean", fun.ymin = "mean", fun.ymax = "mean", position = position_dodge(width = 0.7), geom = "errorbar") +
-    geom_line(data = subset(pat_path, variable %in% var_keep), mapping = aes(y = value, x = x, color = Group, group = variable), inherit.aes = FALSE) +
+    geom_line(data = subset(pat_path, variable %in% var_keep_union), mapping = aes(y = value, x = x, color = Group, group = variable), inherit.aes = FALSE) +
     geom_tile(mapping = aes(x = variable, y = 1e-4, fill = metabolite_group, width = 1, height = 0.5), data = pat_path, inherit.aes = FALSE) +
+    geom_tile(mapping = aes(x = Var1, y = 3.5e-5), width = 1, height = 0.5, fill = var_keep_count_df$color, data = var_keep_count_df, inherit.aes = FALSE) +
+    geom_point(mapping = aes(x = Var1, y = 3.5e-5, shape = factor(Freq)), data = var_keep_count_df, inherit.aes = FALSE) +
+    guides(shape = guide_legend(title = "#Patients"), fill = "legend", group = "legend") +
     scale_color_discrete(drop = FALSE) +
     scale_y_log10(expand = c(0,0)) +
     ylab("Mean concentration +/- 1 standard deviations, µM") +
     xlab("Metabolite") +
     theme_bw() + 
     theme(axis.text.x = element_text(angle = 90, vjust = 0.5), panel.grid = element_line(colour = 0))
-  ggsave(filename = paste0("human_metab_nonsig_single_plot_SD_pat_", pat, ".png"), path = out_dir, plot = p, width = 10, height = 7, units = "in")
+  ggsave(filename = paste0("human_metab_nonsig_single_plot_SD_pat_", pat, ".png"), path = out_dir, plot = p, width = 14, height = 7, units = "in")
 }
 ##Human, mean metabolite and pheno var concentrations over days, ordered by concentration, all groups, seperate for each metabolite group
 human_data_patient_group_mean_all_days <- subset(human_data, Day %in% tanova_day_set)
