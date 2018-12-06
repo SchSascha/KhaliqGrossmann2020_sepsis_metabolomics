@@ -63,6 +63,7 @@ get_Ferrario_validation_data <- function(){
 #' @examples
 get_human_sepsis_legend <- function(){
   data <- read.csv(file = "../../data/measurements/Legend human sample data pheno class.csv", header = TRUE, sep = "\t", stringsAsFactors = FALSE, dec = ",", check.names = FALSE)
+  data$name[data$name == "Carnitine "] <- "Carnitine"
   data <- remove_bile_acids_from_legend(data)
   return(data)
 }
@@ -95,6 +96,36 @@ get_rat_sepsis_data <- function(){
   colns[colns == "Tot Cholesterol"] <- "Total Cholesterol"
   colns[colns == "LDL/VLDL"] <- "LDL"
   colnames(data) <- colns
+  return(data)
+}
+
+#' Read the plasma concentration range data on healthy french volunteers. Lipid concentrations are from FIA-MS/MS, hence not comparable to our data
+#'
+#' @return data.frame with mean, median
+#' @export
+#'
+#' @examples
+get_french_normal_data <- function(){
+  data <- fread(input = "../../data/measurements/normal_plasma_concentrations/normal_all_metabs_combined.csv", sep = "\t", data.table = FALSE)
+  data <- data[data$`Mean ± SD (µmol/L)` != "ND", ]
+  iqr <- data$`Inter-quartile Range`
+  iqr <- stri_sub(str = iqr, from = 2, to = stri_length(iqr) - 1)
+  iqrv <- strsplit(x = iqr, split = ";", fixed = TRUE)
+  iqrv <- sapply(iqrv, as.numeric)
+  data$LQ <- iqrv[1, ]
+  data$UQ <- iqrv[2, ]
+  msd <- data$`Mean ± SD (µmol/L)`
+  msd <- strsplit(x = msd, split = substr(msd[1], 6, 6))
+  msd <- sapply(msd, as.numeric)
+  data$Mean <- msd[1, ]
+  data$SD <- msd[2, ]
+  wol_met <- substr(data$Metabolite, 1, 2) == "L-"
+  wol_met[data$Metabolite == "N-Acetylornithine"] <- TRUE
+  data$Metabolite[wol_met] <- substring(data$Metabolite[wol_met], first = 3)
+  data$Metabolite[data$Metabolite == "Glutamic acid"] <- "Glutamate"
+  data$Metabolite[data$Metabolite == "Hexanoylcarnitine  (Fumarylcarnitine)"] <- "Hexanoylcarnitine (Fumarylcarnitine)"
+  data$Median <- as.numeric(data$Median)
+  data <- na.omit(data)
   return(data)
 }
 
@@ -729,4 +760,23 @@ bootstrap_S_corr_fun <- function(r, n_S, corr_dat){
 
 col.na.omit <- function(data){
   return(t(na.omit(t(data))))
+}
+
+#' Create a manual color scale to be used in a ggplot for a given set of levels where one is assigned a black color. Default levels are S, NS, Control and Healthy_Fr.
+#' Colors are generated as in ggplot with n-1 levels + black.
+#'
+#' @param name the title of the legend
+#' @param levels the levels for which to generate the colors
+#' @param black_pos the position in the levels vector that will be assigned black color
+#'
+#' @return an instance of scale_colour_manual()
+#' @export
+#'
+#' @examples
+human_col_scale <- function(name = "Group", levels = c("NS", "Control", "S", "Healthy_Fr"), black_pos = 4, black_color = "grey50"){
+  library(scales)
+  color_set <- hue_pal()(length(levels) - 1)
+  color_set <- c(color_set, black_color) #last is black (or grey)
+  names(color_set) <- c(levels[seq_along(levels)[-black_pos]], levels[black_pos]) #assign correct level to black (last)
+  return(scale_colour_manual(name = name, values = color_set))
 }

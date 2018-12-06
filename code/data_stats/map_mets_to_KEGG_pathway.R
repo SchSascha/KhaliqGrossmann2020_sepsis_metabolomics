@@ -49,6 +49,8 @@ colnames(kmcm) <- c("con", "exp")
 pathview(cpd.data = kmcm, pathway.id = "01100", species = "hsa", cpd.idtype = "kegg", match.data = FALSE, out.suffix = "control")
 pathview(cpd.data = kmcm, pathway.id = "01230", species = "hsa", cpd.idtype = "kegg", match.data = FALSE, out.suffix = "control")
 pathview(cpd.data = kmcm, pathway.id = "00330", species = "hsa", cpd.idtype = "kegg", match.data = FALSE, out.suffix = "control")
+pathview(cpd.data = kmcm, pathway.id = "00280", species = "hsa", cpd.idtype = "kegg", match.data = FALSE, out.suffix = "control")
+pathview(cpd.data = kmcm, pathway.id = "00640", species = "hsa", cpd.idtype = "kegg", match.data = FALSE, out.suffix = "control")
 
 kmd <- t(human_data[human_data$`CAP / FP` != "-", -1:-5])
 group <- human_data$Survival[human_data$`CAP / FP` != "-"]
@@ -74,6 +76,8 @@ pathview(cpd.data = kmsm, pathway.id = "01100", species = "hsa", cpd.idtype = "k
 pathview(cpd.data = kmsm, pathway.id = "01230", species = "hsa", cpd.idtype = "kegg", match.data = FALSE, out.suffix = "survival")
 pathview(cpd.data = kmsm, pathway.id = "00330", species = "hsa", cpd.idtype = "kegg", match.data = FALSE, out.suffix = "survival")
 pathview(cpd.data = kmsm, pathway.id = "00071", species = "hsa", cpd.idtype = "kegg", match.data = FALSE, out.suffix = "survival")
+pathview(cpd.data = kmsm, pathway.id = "00280", species = "hsa", cpd.idtype = "kegg", match.data = FALSE, out.suffix = "survival")
+pathview(cpd.data = kmsm, pathway.id = "00640", species = "hsa", cpd.idtype = "kegg", match.data = FALSE, out.suffix = "survival")
 
 #Write to disk
 

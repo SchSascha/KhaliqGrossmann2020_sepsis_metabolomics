@@ -294,7 +294,7 @@ for (comp in list(c("heart", "plasma"), c("heart", "liver"), c("plasma", "liver"
 }
 cross_mat_coeff <- lapply(cross_mat_corr, sapply, function(r){ r$estimate })
 cross_mat_p <- lapply(cross_mat_corr, sapply, function(r){ r$p.value })
-cross_mat_p <- lapply(cross_mat_p, p.adjust, method = "fdr")
+cross_mat_fdr <- lapply(cross_mat_p, p.adjust, method = "fdr")
 
 #Check correlations between tissue types on grouped metabolites
 coarse_group_list <- rat_sepsis_legend[match(colnames(rat_sepsis_data)[-1:-4], rat_sepsis_legend[,1]), 3] #lucky ... no col in data without match in legend
@@ -324,7 +324,16 @@ for (comp in list(c("heart", "plasma"), c("heart", "liver"), c("plasma", "liver"
 }
 cross_mat_group_coeff <- lapply(cross_mat_group_corr, sapply, function(r){ r$estimate })
 cross_mat_group_p <- lapply(cross_mat_group_corr, sapply, function(r){ r$p.value })
-cross_mat_group_p <- lapply(cross_mat_group_p, p.adjust, method = "fdr")
+cross_mat_group_fdr <- lapply(cross_mat_group_p, p.adjust, method = "fdr")
+
+cross_mat_df <- lapply(names(cross_mat_coeff), function(n) data.frame(Metabolite = names(cross_mat_p[[n]]), Corr = cross_mat_coeff[[n]], p = cross_mat_p[[n]], FDR = cross_mat_fdr[[n]]))
+names(cross_mat_df) <- names(cross_mat_coeff)
+cross_mat_group_df <- lapply(names(cross_mat_group_coeff), function(n) data.frame(Metabolite = names(cross_mat_group_p[[n]]), Corr = cross_mat_group_coeff[[n]], p = cross_mat_group_p[[n]], FDR = cross_mat_group_fdr[[n]]))
+names(cross_mat_group_df) <- names(cross_mat_group_p)
+for (n in names(cross_mat_df)){
+  path <- paste0(out_dir, "cross_material_correlation_", sub(pattern = " ~ ", replacement = "_", x = n), ".csv")
+  fwrite(x = cross_mat_df[[n]], file = path, sep = "\t")
+}
 
 #Build long format tables for plotting
 ##Scale measurement values at maximum concentration
