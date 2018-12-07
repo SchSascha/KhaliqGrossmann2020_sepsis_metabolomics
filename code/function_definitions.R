@@ -773,10 +773,10 @@ col.na.omit <- function(data){
 #' @export
 #'
 #' @examples
-human_col_scale <- function(name = "Group", levels = c("NS", "Control", "S", "Healthy_Fr"), black_pos = 4, black_color = "grey50"){
+human_col_scale <- function(name = "Group", levels = c("NS", "Control", "S", "Healthy_Fr"), black_pos = 4, black_color = "grey50", ...){
   library(scales)
   color_set <- hue_pal()(length(levels) - 1)
   color_set <- c(color_set, black_color) #last is black (or grey)
   names(color_set) <- c(levels[seq_along(levels)[-black_pos]], levels[black_pos]) #assign correct level to black (last)
-  return(scale_colour_manual(name = name, values = color_set))
+  return(scale_colour_manual(name = name, values = color_set, ...))
 }

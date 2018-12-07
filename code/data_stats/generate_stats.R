@@ -1594,15 +1594,17 @@ for (pat in unique(subset(human_data_patient_group_mean_all_days, Survival == "N
     geom_line(data = subset(pat_path, variable %in% var_keep_union), mapping = aes(y = value, x = x, color = Group, group = variable), inherit.aes = FALSE) +
     geom_tile(mapping = aes(x = variable, y = 1e-4, fill = metabolite_group, width = 1, height = 0.5), data = pat_path, inherit.aes = FALSE) +
     geom_tile(mapping = aes(x = Var1, y = 3.5e-5), width = 1, height = 0.5, fill = var_keep_count_df$color, data = var_keep_count_df, inherit.aes = FALSE) +
-    geom_point(mapping = aes(x = Var1, y = 3.5e-5, shape = factor(Freq)), data = var_keep_count_df, inherit.aes = FALSE) +
-    guides(shape = guide_legend(title = "#Patients"), fill = "legend", group = "legend") +
+    geom_point(mapping = aes(x = Var1, y = 3.5e-5, shape = factor(Freq)), color = var_keep_count_df$color, data = var_keep_count_df, inherit.aes = FALSE) +
+    guides(color = guide_legend(order = 1), 
+           fill = guide_legend(title = "Metabolite Group", order = 2),
+           shape = guide_legend(title = "#NS pats with deviation", override.aes = list(shape = 15, size = 6, color = sort(unique(var_keep_count_df$color))), order = 3)) +
     scale_color_discrete(drop = FALSE) +
     scale_y_log10(expand = c(0,0)) +
     ylab("Mean concentration +/- 1 standard deviations, µM") +
     xlab("Metabolite") +
     theme_bw() + 
-    theme(axis.text.x = element_text(angle = 90, vjust = 0.5), panel.grid = element_line(colour = 0))
-  ggsave(filename = paste0("human_metab_nonsig_single_plot_SD_pat_", pat, ".png"), path = out_dir, plot = p, width = 14, height = 7, units = "in")
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 6), panel.grid = element_line(colour = 0))
+  ggsave(filename = paste0("human_metab_nonsig_single_plot_SD_pat_", pat, ".png"), path = out_dir, plot = p, width = 16, height = 7, units = "in")
 }
 ##Human, mean metabolite and pheno var concentrations over days, ordered by concentration, all groups, seperate for each metabolite group
 human_data_patient_group_mean_all_days <- subset(human_data, Day %in% tanova_day_set)
