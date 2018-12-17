@@ -10,6 +10,8 @@ library(analogue)
 library(corpcor)
 library(vegan)
 library(ggplot2)
+library(ggfortify)
+library(parallel)
 
 source("../function_definitions.R")
 
@@ -18,6 +20,8 @@ if (!dir.exists(out_dir))
   dir.create(out_dir)
 
 human_data <- get_human_sepsis_data()
+
+human_data_legend <- get_human_sepsis_legend()
 
 metab_end <- which(colnames(human_data) == "H1")
 metab_sel <- 6:metab_end
@@ -61,6 +65,13 @@ for (n in seq_along(pat_list$Patient)){
 legend(x = -20, y = -20, legend = c("Survivors", "Nonsurvivors"), lty = c(1, 1), col = c("black", "red"))
 dev.off()
 
+ap <- autoplot(object = p, data = human_sepsis_data_pheno_dist, colour = "Survival", frame = TRUE, frame.type = "norm")
+ap <- ap + 
+  human_col_scale(name = "Survival") +
+  ggtitle("PCA biplot, Canberra distance, clinical params,\nseptic patients") +
+  theme_bw()
+ggsave(filename = paste0("PCA_biplot_sepsis_pheno_gg.png"), path = out_dir, plot = ap, width = 5, height = 4, units = "in")
+
 human_sepsis_data_metab_dist <- cbind(human_sepsis_data[,1:5], as.matrix(dist(x = human_sepsis_data[, metab_sel], method = "canberra"))) # distance() works on a per row basis
 p <- prcomp(human_sepsis_data_metab_dist[, -1:-5])
 sp <- summary(p)$importance[2, ]
@@ -79,6 +90,13 @@ for (n in seq_along(pat_list$Patient)){
 }
 legend(x = -180, y = -100, legend = c("Survivors", "Nonsurvivors"), lty = c(1, 1), col = c("black", "red"))
 dev.off()
+
+ap <- autoplot(object = p, data = human_sepsis_data_metab_dist, colour = "Survival", frame = TRUE, frame.type = "norm")
+ap <- ap + 
+  human_col_scale(name = "Survival") +
+  ggtitle("PCA biplot, Canberra distance, metabolites,\nseptic patients") +
+  theme_bw()
+ggsave(filename = paste0("PCA_biplot_sepsis_metab_gg.png"), path = out_dir, plot = ap, width = 5, height = 4, units = "in")
 
 human_data_dist <- cbind(human_data[,1:5], as.matrix(dist(x = human_data[, metab_sel], method = "canberra"))) # distance() works on a per row basis
 p <- prcomp(human_data_dist[, -1:-5])
@@ -101,21 +119,55 @@ for (n in seq_along(pat_list$Patient)){
 legend(x = -250, y = -150, legend = c("Survivors", "Non-survivors", "Non-septic"), lty = c(1, 1, 1), col = c("black", "red", "green"))
 dev.off()
 
+hdd <- human_data_dist
+hdd$Survival[hdd$`CAP / FP` == "-"] <- "Non-septic"
+ap <- autoplot(object = p, data = hdd, colour = "Survival", frame = TRUE, frame.type = "norm")
+ap <- ap + 
+  human_col_scale(name = "Survival", levels = c("NS", "Non-septic", "S", "Dummy"), aesthetics = c("colour", "fill")) +
+  guides(colour = guide_legend(title = "Group"), fill = "none", group = "none") +
+  ggtitle("PCA biplot, Canberra distance, metabolites,\nall samples") +
+  theme_bw()
+ggsave(filename = paste0("PCA_biplot_all_samples_gg.png"), path = out_dir, plot = ap, width = 5, height = 4, units = "in")
+
 ad_data <- human_data_dist
 ad_data$Survival[ad_data$`CAP / FP` == "-"] <- "Control"
 PCs <- p$x[, 1:2]
-take_CvsS <- ad_data$Survival %in% c("Control", "S")
-take_CvsNS <- ad_data$Survival %in% c("Control", "NS")
-take_SvsNS <- ad_data$Survival %in% c("S", "NS")
-Y1 <- PCs[take_CvsS,]
-Y2 <- PCs[take_CvsNS,]
-Y3 <- PCs[take_SvsNS,]
-ad_data1 <- ad_data[take_CvsS, ]
-ad_data2 <- ad_data[take_CvsNS, ]
-ad_data3 <- ad_data[take_SvsNS, ]
-ad_res1 <- adonis(formula = Y1 ~ Survival, data = ad_data1, permutations = 1000, parallel = 6, method = "euclidean")
-ad_res2 <- adonis(formula = Y2 ~ Survival, data = ad_data2, permutations = 1000, parallel = 6, method = "euclidean")
-ad_res3 <- adonis(formula = Y3 ~ Survival, data = ad_data3, permutations = 1000, parallel = 6, method = "euclidean")
+c_idx <- which(ad_data$Survival == "Control")
+s_idx <- which(ad_data$Survival == "S")
+ns_idx <- which(ad_data$Survival == "NS")
+ad_res1 <- list()
+ad_res2 <- list()
+ad_res3 <- list()
+tic()
+ad_res_mc <- mclapply(1:100, 
+                      function(dx, c_idx, s_idx, ns_idx, PCs, ad_data){
+                        num_c <- length(c_idx)
+                        num_s <- length(s_idx)
+                        num_ns <- length(ns_idx)
+                        num_c_vs_s <- min(num_c, num_s)
+                        num_c_vs_ns <- min(num_c, num_ns)
+                        num_s_vs_ns <- min(num_s, num_ns)
+                        take_CvsS <- c(sample(x = c_idx, size = num_c_vs_s), sample(x = s_idx, size = num_c_vs_s))
+                        take_CvsNS <- c(sample(x = c_idx, size = num_c_vs_ns), sample(x = ns_idx, size = num_c_vs_ns))
+                        take_SvsNS <- c(sample(x = s_idx, size = num_s_vs_ns), sample(x = ns_idx, size = num_s_vs_ns))
+                        Y1 <- PCs[take_CvsS,]
+                        Y2 <- PCs[take_CvsNS,]
+                        Y3 <- PCs[take_SvsNS,]
+                        ad_data1 <- ad_data[take_CvsS, ]
+                        ad_data2 <- ad_data[take_CvsNS, ]
+                        ad_data3 <- ad_data[take_SvsNS, ]
+                        ad_res1 <- adonis(formula = Y1 ~ Survival, data = ad_data1, permutations = 10000, parallel = 1, method = "euclidean")
+                        ad_res2 <- adonis(formula = Y2 ~ Survival, data = ad_data2, permutations = 10000, parallel = 1, method = "euclidean")
+                        ad_res3 <- adonis(formula = Y3 ~ Survival, data = ad_data3, permutations = 10000, parallel = 1, method = "euclidean")
+                        list(ad_res1 = ad_res1, ad_res2 = ad_res2, ad_res3 = ad_res3)
+                      }, 
+                      c_idx = c_idx, s_idx = s_idx, ns_idx = ns_idx, PCs = PCs, ad_data = ad_data,
+                      mc.cores = 7
+                      )
+toc()
+ad_r1_p <- sapply(lapply(lapply(lapply(ad_res_mc, `[[`, "ad_res1"), `[[`, "aov.tab"), `[[`, "Pr(>F)"), `[`, 1)
+ad_r2_p <- sapply(lapply(lapply(lapply(ad_res_mc, `[[`, "ad_res2"), `[[`, "aov.tab"), `[[`, "Pr(>F)"), `[`, 1)
+ad_r3_p <- sapply(lapply(lapply(lapply(ad_res_mc, `[[`, "ad_res3"), `[[`, "aov.tab"), `[[`, "Pr(>F)"), `[`, 1)
 
 #Compare step lengths of between patient groups
 pat_step_len <- list()
@@ -146,22 +198,28 @@ t_r2 <- list()
 t_r3 <- list()
 num_NS_vals <- sum(pat_step_len_df$Group == "NS")
 num_S_vals <- sum(pat_step_len_df$Group == "S")
-for (n in 1:100){
-  bootstr_dat <- rbind(subset(pat_step_len_df, Group == "NS"), subset(pat_step_len_df, Group == "S")[sample(num_S_vals, size = num_NS_vals), ])
-  bootstr_dat$Group <- factor(bootstr_dat$Group)
-  ad_step1[[n]] <- adonis(formula = step_len ~ Group, data = bootstr_dat, method = "euclidean", permutations = 10000)
-  ad_step2[[n]] <- adonis(formula = x_len ~ Group, data = bootstr_dat, method = "euclidean", permutations = 10000)
-  ad_step3[[n]] <- adonis(formula = y_len ~ Group, data = bootstr_dat, method = "euclidean", permutations = 10000)
-  t_r1[[n]] <- t.test(formula = step_len ~ Group, data = bootstr_dat, var.equal = FALSE)
-  t_r2[[n]] <- t.test(formula = x_len ~ Group, data = bootstr_dat, var.equal = FALSE)
-  t_r3[[n]] <- t.test(formula = y_len ~ Group, data = bootstr_dat, var.equal = FALSE)
-}
-ad_s1_p <- sapply(lapply(lapply(ad_step1, `[[`, "aov.tab"), `[[`, "Pr(>F)"), `[`, 1)
-ad_s2_p <- sapply(lapply(lapply(ad_step2, `[[`, "aov.tab"), `[[`, "Pr(>F)"), `[`, 1)
-ad_s3_p <- sapply(lapply(lapply(ad_step3, `[[`, "aov.tab"), `[[`, "Pr(>F)"), `[`, 1)
-t_r1_p <- sapply(t_r1, `[[`, "p.value")
-t_r2_p <- sapply(t_r2, `[[`, "p.value")
-t_r3_p <- sapply(t_r3, `[[`, "p.value")
+tic()
+bt_step_res <- mclapply(1:100,
+                        function(dx, pat_step_len_df, num_S_vals, num_NS_vals){
+                          bootstr_dat <- rbind(subset(pat_step_len_df, Group == "NS"), subset(pat_step_len_df, Group == "S")[sample(num_S_vals, size = num_NS_vals), ])
+                          bootstr_dat$Group <- factor(bootstr_dat$Group)
+                          ad_step1 <- adonis(formula = step_len ~ Group, data = bootstr_dat, method = "euclidean", permutations = 10000, parallel = 1)
+                          ad_step2 <- adonis(formula = x_len ~ Group, data = bootstr_dat, method = "euclidean", permutations = 10000, parallel = 1)
+                          ad_step3 <- adonis(formula = y_len ~ Group, data = bootstr_dat, method = "euclidean", permutations = 10000, parallel = 1)
+                          t_r1 <- t.test(formula = step_len ~ Group, data = bootstr_dat, var.equal = FALSE)
+                          t_r2 <- t.test(formula = x_len ~ Group, data = bootstr_dat, var.equal = FALSE)
+                          t_r3 <- t.test(formula = y_len ~ Group, data = bootstr_dat, var.equal = FALSE)
+                          list(ad_step1 = ad_step1, ad_step2 = ad_step2, ad_step3 = ad_step3, t_r1 = t_r1, t_r2 = t_r2, t_r3 = t_r3)
+                        },
+                        pat_step_len_df = pat_step_len_df, num_S_vals = num_S_vals, num_NS_vals = num_NS_vals,
+                        mc.cores = 7)
+toc()
+ad_s1_p <- sapply(lapply(lapply(lapply(bt_step_res, `[[`, "ad_step1"), `[[`, "aov.tab"), `[[`, "Pr(>F)"), `[`, 1)
+ad_s2_p <- sapply(lapply(lapply(lapply(bt_step_res, `[[`, "ad_step2"), `[[`, "aov.tab"), `[[`, "Pr(>F)"), `[`, 1)
+ad_s3_p <- sapply(lapply(lapply(lapply(bt_step_res, `[[`, "ad_step3"), `[[`, "aov.tab"), `[[`, "Pr(>F)"), `[`, 1)
+t_r1_p <- sapply(lapply(bt_step_res, `[[`, "t_r1"), `[[`, "p.value")
+t_r2_p <- sapply(lapply(bt_step_res, `[[`, "t_r2"), `[[`, "p.value")
+t_r3_p <- sapply(lapply(bt_step_res, `[[`, "t_r3"), `[[`, "p.value")
 
 pat_step_len_brkt <- data.frame(variable = "X only", x = c(1, 1, 2, 2), y = c(480, 490, 490, 480), stringsAsFactors = FALSE)
 pat_step_len_sig <- data.frame(variable = "X only", x = 1.5, y = 520, p = paste0("p = ", format(mean(ad_s2_p), digits = 2)), stringsAsFactors = FALSE)
@@ -179,6 +237,120 @@ p <- ggplot(data = pat_step_len_long_df, mapping = aes(x = as.numeric(Group), y 
   theme_bw() +
   theme(panel.grid = element_line(colour = NA))
 ggsave(filename = "PCA_metab_steplength_comparison.png", path = out_dir, plot = p, device = "png", width = 8, height = 3, units = "in")
+
+#Same but seperately for all metabolite groups
+#TODO: complete
+met_group_res <- list()
+for (met_group in unique(human_data_legend$group[metab_sel])){
+  met_group_idx <- which(human_data_legend$group == met_group)
+  human_data_dist <- cbind(human_data[,1:5], as.matrix(dist(x = human_data[, met_group_idx], method = "canberra"))) # distance() works on a per row basis
+  p <- prcomp(human_data_dist[, -1:-5])
+  
+  hdd <- human_data_dist
+  hdd$Survival[hdd$`CAP / FP` == "-"] <- "Non-septic"
+  ap <- autoplot(object = p, data = hdd, colour = "Survival", frame = TRUE, frame.type = "ellipse")
+  ap <- ap +
+    human_col_scale(name = "Survival", levels = c("NS", "Non-septic", "S", "Dummy"), aesthetics = c("colour", "fill")) +
+    guides(colour = guide_legend(title = "Group"), fill = "none", group = "none") +
+    ggtitle(paste0("PCA biplot, Canberra distance, ", met_group, "\nall samples")) +
+    theme_bw()
+  ggsave(filename = paste0("PCA_biplot_", met_group, "_all_samples.png"), path = out_dir, plot = ap, width = 6, height = 5, units = "in")
+  
+  # png(filename = paste0(out_dir, "PCA_biplot_all_samples.png"), width = 650, height = 650, units = "px")
+  # plot(p$x[,1:2], col = "white", main = "PCA biplot based on Canberra distance of samples,\nmetabolites only", 
+  #      xlab = paste0("PC1 (", format(100 * sp[1], digits = 4), " % expl. var.)"), ylab = paste0("PC2 (", format(100 * sp[2], digits = 4), " % expl. var.)"))
+  # col <- factor(pat_list$Survival, levels = c("S", "NS", "Nonseptic"))
+  # for (n in seq_along(pat_list$Patient)){
+  #   ind <- which(human_data$Patient == pat_list$Patient[n])
+  #   x <- p$x[ind ,1]
+  #   y <- p$x[ind ,2]
+  #   arrows(x0 = x[-length(x)], y0 = y[-length(y)], x1 = x[-1], y1 = y[-1], length = 0.1, col = col[n])
+  # }
+  # legend(x = -250, y = -150, legend = c("Survivors", "Non-survivors", "Non-septic"), lty = c(1, 1, 1), col = c("black", "red", "green"))
+  # dev.off()
+  
+  ad_data <- human_data_dist
+  ad_data$Survival[ad_data$`CAP / FP` == "-"] <- "Control"
+  PCs <- p$x[, 1:2]
+  c_idx <- which(ad_data$Survival == "Control")
+  s_idx <- which(ad_data$Survival == "S")
+  ns_idx <- which(ad_data$Survival == "NS")
+  ad_res_mc <- mclapply(1:100, 
+                        function(dx, c_idx, s_idx, ns_idx, PCs, ad_data){
+                          num_c <- length(c_idx)
+                          num_s <- length(s_idx)
+                          num_ns <- length(ns_idx)
+                          num_c_vs_s <- min(num_c, num_s)
+                          num_c_vs_ns <- min(num_c, num_ns)
+                          num_s_vs_ns <- min(num_s, num_ns)
+                          take_CvsS <- c(sample(x = c_idx, size = num_c_vs_s), sample(x = s_idx, size = num_c_vs_s))
+                          take_CvsNS <- c(sample(x = c_idx, size = num_c_vs_ns), sample(x = ns_idx, size = num_c_vs_ns))
+                          take_SvsNS <- c(sample(x = s_idx, size = num_s_vs_ns), sample(x = ns_idx, size = num_s_vs_ns))
+                          Y1 <- PCs[take_CvsS,]
+                          Y2 <- PCs[take_CvsNS,]
+                          Y3 <- PCs[take_SvsNS,]
+                          ad_data1 <- ad_data[take_CvsS, ]
+                          ad_data2 <- ad_data[take_CvsNS, ]
+                          ad_data3 <- ad_data[take_SvsNS, ]
+                          ad_res1 <- adonis(formula = Y1 ~ Survival, data = ad_data1, permutations = 10000, parallel = 1, method = "euclidean")
+                          ad_res2 <- adonis(formula = Y2 ~ Survival, data = ad_data2, permutations = 10000, parallel = 1, method = "euclidean")
+                          ad_res3 <- adonis(formula = Y3 ~ Survival, data = ad_data3, permutations = 10000, parallel = 1, method = "euclidean")
+                          list(ad_res1 = ad_res1, ad_res2 = ad_res2, ad_res3 = ad_res3)
+                        }, 
+                        c_idx = c_idx, s_idx = s_idx, ns_idx = ns_idx, PCs = PCs, ad_data = ad_data,
+                        mc.cores = 7
+  )
+
+  #Compare step lengths of between patient groups, compare PCA-transformed points
+  pat_step_len <- list()
+  pat_x_len <- list()
+  pat_y_len <- list()
+  for (pat in pat_list$Patient){
+    ind <- which(human_data$Patient == pat)
+    x <- p$x[ind, 1]
+    y <- p$x[ind, 2]
+    pat_step_len[[pat]] <- sapply(diff(x) ^ 2 + diff(y) ^ 2, sqrt)
+    pat_x_len[[pat]] <- abs(diff(x))
+    pat_y_len[[pat]] <- abs(diff(y))
+  }
+  names(pat_step_len) <- as.character(1:length(pat_step_len))
+  names(pat_x_len) <- names(pat_step_len)
+  names(pat_y_len) <- names(pat_step_len)
+  pat_step_len_df <- data.frame(Patient = rep(names(pat_step_len), times = sapply(pat_step_len, length)), step_len = unlist(pat_step_len), x_len = unlist(pat_x_len), y_len = unlist(pat_y_len))
+  pat_step_len_df$Group <- pat_list$Survival[match(pat_step_len_df$Patient, pat_list$Patient)]
+  pat_step_len_df$Group <- factor(pat_step_len_df$Group, levels = unique(pat_step_len_df$Group)[c(1, 3, 2)])
+  pat_step_len_long_df <- melt(pat_step_len_df, id.vars = c("Patient", "Group"))
+  pat_step_len_long_df$variable <- factor(pat_step_len_long_df$variable, labels = c("Euclidean step length", "X only", "Y only"))
+  
+  ad_step1 <- list()
+  ad_step2 <- list()
+  ad_step3 <- list()
+  t_r1 <- list()
+  t_r2 <- list()
+  t_r3 <- list()
+  num_NS_vals <- sum(pat_step_len_df$Group == "NS")
+  num_S_vals <- sum(pat_step_len_df$Group == "S")
+  bt_step_res <- mclapply(1:100,
+                          function(dx, pat_step_len_df, num_S_vals, num_NS_vals){
+                            bootstr_dat <- rbind(subset(pat_step_len_df, Group == "NS"), subset(pat_step_len_df, Group == "S")[sample(num_S_vals, size = num_NS_vals), ])
+                            bootstr_dat$Group <- factor(bootstr_dat$Group)
+                            ad_step1 <- adonis(formula = step_len ~ Group, data = bootstr_dat, method = "euclidean", permutations = 10000, parallel = 1)
+                            ad_step2 <- adonis(formula = x_len ~ Group, data = bootstr_dat, method = "euclidean", permutations = 10000, parallel = 1)
+                            ad_step3 <- adonis(formula = y_len ~ Group, data = bootstr_dat, method = "euclidean", permutations = 10000, parallel = 1)
+                            t_r1 <- t.test(formula = step_len ~ Group, data = bootstr_dat, var.equal = FALSE)
+                            t_r2 <- t.test(formula = x_len ~ Group, data = bootstr_dat, var.equal = FALSE)
+                            t_r3 <- t.test(formula = y_len ~ Group, data = bootstr_dat, var.equal = FALSE)
+                            list(ad_step1 = ad_step1, ad_step2 = ad_step2, ad_step3 = ad_step3, t_r1 = t_r1, t_r2 = t_r2, t_r3 = t_r3)
+                          },
+                          pat_step_len_df = pat_step_len_df, num_S_vals = num_S_vals, num_NS_vals = num_NS_vals,
+                          mc.cores = 7)
+  met_group_res[[met_group]] <- list(ad = ad_res_mc, 
+                                     bt = t_step_res)
+}
+toc()
+ad_mg_r1 <- lapply(lapply(lapply(lapply(met_group_res, lapply, `[[`, "ad_C_vs_S"), lapply, `[[`, "aov.tab"), lapply, `[[`, "Pr(>F)"), lapply, `[`, 1)
+ad_mg_r2 <- lapply(lapply(lapply(lapply(met_group_res, lapply, `[[`, "ad_C_vs_NS"), `[[`, "aov.tab"), "Pr(>F)"), `[`, 1)
+ad_mg_r3 <- lapply(lapply(lapply(lapply(met_group_res, lapply, `[[`, "ad_S_vs_NS"), `[[`, "aov.tab"), "Pr(>F)"), `[`, 1)
 
 pat_list <- human_sepsis_data_normal[match(unique(human_sepsis_data_normal$Patient), human_sepsis_data_normal$Patient), 1:5]
 pat_len <- table(human_sepsis_data_normal$Patient)
@@ -218,6 +390,15 @@ png(filename = paste0(out_dir, "pca_sepsis_pats_PC1_vs_PC2.png"), width = 40, he
 par(mfrow = c(3,6))
 lapply(pca_list, function(e){ plot(e$x[,1:min(2,ncol(e$x))], type = "p", col = 1:nrow(e$x), main = paste("Patient ", e$pat, ", ", e$surv, ", ", e$capfp, sep = "")); arrows(x0 = e$x[1:(nrow(e$x)-1),1], y0 = e$x[1:(nrow(e$x)-1),2], x1 = e$x[2:nrow(e$x),1], y1 = e$x[2:nrow(e$x),2], length = 0.1) })
 dev.off()
+
+long_pca_dat <- lapply(lapply(lapply(pca_list, `[[`, "x"), `[`, , 1:2), as.data.frame)
+long_pca_dat <- lapply(seq_along(long_pca_dat), function(n){ long_pca_dat[[n]]$Patient <- pca_list[[n]]$pat; long_pca_dat[[n]]$Survival <- pca_list[[n]]$surv; long_pca_dat[[n]]})
+long_pca_dat <- melt(long_pca_dat, id.vars = 1:4)
+
+ggplot(data = long_pca_dat, mapping = aes(x = PC1, y = PC2, group = Patient, color = Survival)) +
+  geom_path(linejoin = "mitre", arrow = arrow(length = unit(0.1, "inches"))) +
+  theme_bw()
+         
 
 s <- subset(human_sepsis_data_normal, Survival == "S")
 ns <- subset(human_sepsis_data_normal, Survival == "NS")
