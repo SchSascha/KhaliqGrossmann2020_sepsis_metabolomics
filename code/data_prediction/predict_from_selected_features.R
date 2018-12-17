@@ -7,6 +7,7 @@ library(ranger)
 library(missRanger)
 library(kernlab)
 library(mixOmics)
+library(corpcor)
 #library(ropls)
 #library(pROC)
 #library(caTools)
@@ -36,28 +37,16 @@ human_sepsis_legend <- get_human_sepsis_legend()
 ##Import clinical validation data
 human_validation_data <- get_Ferrario_validation_data()
 
-##Import experiment data
-rat_sepsis_data <- get_rat_sepsis_data()
-
-##Import viterbi path data
-#viterbi_path <- fread(input = "../HMM/tram_viterbi_paths_all_septic_samples_2LJHMM.csv", header = TRUE, data.table = FALSE)
-
 ##Filter out patients without sepsis
 human_nonsepsis_data <- human_sepsis_data[human_sepsis_data$`CAP / FP` == "-", ]
 human_sepsis_data <- human_sepsis_data[human_sepsis_data$`CAP / FP` != "-", ]
 
 ##Filter out unimportant rows and columns from validation data
 human_validation_data <- subset(human_validation_data, Day == 0, c(-1, -2, -4))
-#human_validation_data[,-1] <- human_validation_data[, -c(1, which(colAnyNAs(as.matrix(human_validation_data[,-1])))+1)]
 colnames(human_validation_data)[grep(x = colnames(human_validation_data), pattern = "Survival")] <- "Survival"
-#human_validation_data <- subset(human_validation_data, select = intersect(colnames(human_sepsis_data), colnames(human_validation_data)))
 
 ##Filter outlier in Ferrario data
-#human_validation_data <- subset(human_validation_data, subset = C4 < 400)
-
-##Equalize median between Ferrario and UK data
-#human_sepsis_data[,-1:-5] <- t(t(human_sepsis_data[,-1:-5]) - colMedians(as.matrix(human_sepsis_data[human_sepsis_data$Day == 0, -1:-5])))
-#human_validation_data[,-1] <- t(t(human_validation_data[,-1]) - colMedians(as.matrix(human_validation_data[,-1])))
+human_validation_data <- subset(human_validation_data, subset = C4 < 400)
 
 #Get significantly different classes
 human_sig_diff_res <- human_sig_diffs_along_days(human_sepsis_data, corr_fdr = FALSE)
@@ -71,50 +60,105 @@ sig_t_class <- na.omit(colnames(day_sig_t_diff[,-1])[colAnys(day_sig_t_diff[, -1
 #Try prediction
 ##On human
 ###Build data set for "vanilla" prediction
-human_sepsis_data_ml <- subset(x = human_sepsis_data, select = c(2,4,6:ncol(human_sepsis_data)))
-#strip_start <- strip_start <- which(colnames(human_sepsis_data) == "Urea")
-#human_sepsis_data_ml <- subset(human_sepsis_data_ml, select = -which(colnames(human_sepsis_data_ml) %in% colnames(human_sepsis_data)[strip_start:ncol(human_sepsis_data)]))
-human_sepsis_data_ml$Survival <- as.numeric(as.factor(human_sepsis_data_ml$Survival)) - 1 #Dependent variable transformation
-human_validation_data$Survival <- -as.numeric(as.factor(human_validation_data$Survival)) + 2
-###Add CAP and FP as independent variables
-#human_sepsis_data_ml <- cbind(human_sepsis_data_ml[,1:2], data.frame(CAP = human_sepsis_data$`CAP / FP` == "CAP"), data.frame(FP = human_sepsis_data$`CAP / FP` == "FP"), human_sepsis_data_ml[,-1:-2])
+human_sepsis_data_ml <- human_sepsis_data[, 1:which(colnames(human_sepsis_data) == "H1")]
+human_sepsis_data_ml <- subset(human_sepsis_data_ml, Day == 0)
+human_sepsis_data_ml <- subset(human_sepsis_data_ml, select = !(colnames(human_sepsis_data_ml) %in% c("Histamin", "PC aa C36:0", "DOPA"))) #remove metabs with questionable range
+human_sepsis_data_ml$Survival <- as.numeric(factor(human_sepsis_data_ml$Survival, levels = sort(unique(human_sepsis_data_ml$Survival)))) - 1 #Dependent variable transformation
+human_validation_data$Survival <- as.numeric(factor(human_validation_data$Survival, levels = sort(unique(human_validation_data$Survival)))) - 1
+human_sepsis_data_ml <- human_sepsis_data_ml[rowSums(is.na(human_sepsis_data_ml)) < 9, ]
+human_sepsis_data_ml <- human_sepsis_data_ml[, c(1:5, 5 + which(!colAnys(human_sepsis_data_ml == 0)[-1:-5]))]
 ###Strip phenomenological variables
-#strip_start <- which(colnames(human_sepsis_data_ml) == "Urea")
-#human_sepsis_data_ml <- human_sepsis_data_ml[,-strip_start:-ncol(human_sepsis_data_ml)]
-human_sepsis_data_ml <- subset(human_sepsis_data_ml, select = c(colnames(human_sepsis_data_ml)[1:2], intersect(sig_t_class, colnames(human_validation_data))))
-###No, strip metabolic variables
-#human_sepsis_data_ml <- human_sepsis_data_ml[,c(1:2,strip_start:ncol(human_sepsis_data_ml))]
-data_ml_subset <- apply(human_sepsis_data_ml, 1, function(x){ sum(!is.na(x)) > length(x) - 9})
-human_sepsis_data_ml <- human_sepsis_data_ml[data_ml_subset,]
-#human_sepsis_data_ml$`CAP / FP` <- as.factor(human_sepsis_data$`CAP / FP`)
+# human_sepsis_data_ml <- subset(human_sepsis_data_ml, select = c(colnames(human_sepsis_data_ml)[1:5], intersect(sig_t_class, colnames(human_sepsis_data_ml))))
 colnames(human_sepsis_data_ml) <- make.names(colnames(human_sepsis_data_ml))
 colnames(human_validation_data) <- make.names(colnames(human_validation_data))
 ###Impute missing values
-human_sepsis_data_ml_full <- missRanger(human_sepsis_data_ml, pmm.k = 3, num.trees = 100)
-human_validation_data <- missRanger(human_validation_data, pmm.k = 3, num.trees = 100)
+human_sepsis_data_ml[, -1:-5] <- missRanger(human_sepsis_data_ml[, -1:-5], pmm.k = 3, num.trees = 100)
+#human_validation_data[, -1] <- missRanger(human_validation_data[, -1], pmm.k = 3, num.trees = 100)
 ###Keep only common metabolites
 shared_metabs <- intersect(colnames(human_sepsis_data_ml)[-1:-2], colnames(human_validation_data)[-1])
-human_sepsis_data_ml_full[,-1:-2] <- subset(human_sepsis_data_ml_full[,-1:-2], select = shared_metabs)
-human_validation_data[,-1] <- subset(human_validation_data[,-1], select = shared_metabs)
-###Scale values
-hsd_colmeans <- colMeans(as.matrix(human_sepsis_data_ml_full[,-1:-2]))
-hsd_colsds <- colSds(as.matrix(human_sepsis_data_ml_full[,-1:-2]))
-#hvd_colmeans <- colMeans(as.matrix(human_validation_datal[,-1:-3]))
-human_sepsis_data_ml_full[, -1:-2] <- scale(human_sepsis_data_ml_full[, -1:-2])
-human_validation_data[, -1] <- scale(human_validation_data[, -1])
-#human_validation_data[, -1] <- t((t(human_validation_data[, -1]) - hsd_colmeans) / hsd_colsds)
+human_sepsis_data_ml_shared <- human_sepsis_data_ml[, c(colnames(human_sepsis_data_ml)[1:5], shared_metabs)]
+human_validation_data <- human_validation_data[, c("Survival", shared_metabs)]
+#human_sepsis_data_ml_shared[, -1:-5] <- human_sepsis_data_ml_shared[, 5 + order(colnames(human_sepsis_data_ml_shared[, -1:-5]))]
+#human_validation_data[, -1] <- human_validation_data[, 1 + order(colnames(human_validation_data[, -1]))]
+###Do CORAL
+####Get mean and cov without outliers
+tr_box_stats <- lapply(human_sepsis_data_ml_shared[, -1:-5], boxplot.stats)
+vl_box_stats <- lapply(human_validation_data[, -1], boxplot.stats)
+tr_in_idx <- lapply(1:(ncol(human_sepsis_data_ml_shared) - 5),
+                     function(x){
+                       d <- human_sepsis_data_ml_shared[, x + 5] 
+                       which(!(d %in% tr_box_stats[[x]]$out))
+                     })
+vl_in_idx <- lapply(1:(ncol(human_validation_data) - 1),
+                     function(x){
+                       d <- human_validation_data[, x + 1] 
+                       which(!(d %in% vl_box_stats[[x]]$out))
+                     })
+tr_means <- sapply(1:(ncol(human_sepsis_data_ml_shared) - 5), 
+                   function(x){ 
+                     d <- human_sepsis_data_ml_shared[, x + 5] 
+                     d <- d[tr_in_idx[[x]]]
+                     mean(d) 
+                   })
+vl_means <- sapply(1:(ncol(human_validation_data) - 1), 
+                   function(x){ 
+                     d <- human_validation_data[, x + 1]
+                     d <- d[vl_in_idx[[x]]]
+                     mean(d) 
+                   })
+tr_sds <- sapply(1:(ncol(human_sepsis_data_ml_shared) - 5), 
+                   function(x){ 
+                     d <- human_sepsis_data_ml_shared[, x + 5] 
+                     d <- d[tr_in_idx[[x]]]
+                     sd(d) 
+                   })
+vl_sds <- sapply(1:(ncol(human_validation_data) - 1), 
+                   function(x){ 
+                     d <- human_validation_data[, x + 1]
+                     d <- d[vl_in_idx[[x]]]
+                     sd(d) 
+                   })
+human_validation_data[, -1] <- scale(human_validation_data[, -1], center = vl_means, scale = vl_sds)
+human_sepsis_data_ml_shared[, -1:-5] <- scale(human_sepsis_data_ml_shared[, -1:-5], center = tr_means, scale = tr_sds)
+tr_cov <- lapply(seq_along(tr_in_idx),
+                  function(x){
+                    sapply(seq_along(tr_in_idx), 
+                           function(y){
+                             in_idx <- intersect(tr_in_idx[[x]], tr_in_idx[[y]])
+                             cov(x = human_sepsis_data_ml_shared[in_idx, x + 5], y = human_sepsis_data_ml_shared[in_idx, y + 5])
+                           })
+                  })
+vl_cov <- lapply(seq_along(vl_in_idx),
+                  function(x){
+                    sapply(seq_along(vl_in_idx), 
+                           function(y){
+                             in_idx <- intersect(vl_in_idx[[x]], vl_in_idx[[y]])
+                             cov(x = human_validation_data[in_idx, x + 1], y = human_validation_data[in_idx, y + 1])
+                           })
+                  })
+
+hsdms <- human_sepsis_data_ml_shared
+# C_source <- Reduce("rbind", tr_cov)
+# # C_source <- as.matrix(cov.shrink(hsdms[, -1:-5]))
+# svd_C_source <- svd(C_source)
+# isqrt_C_source <- with(svd_C_source, u %*% diag(1/sqrt(d)) %*% t(v))
+# C_target <- Reduce("rbind", vl_cov)
+# # C_target <- cov.shrink(human_validation_data[, -1])
+# svd_C_target <- svd(C_target)
+# sqrt_C_target <- with(svd_C_target, sqrt_C_target <- u %*% diag(sqrt(d)) %*% t(v))
+# human_sepsis_data_ml_shared[, -1:-5] <- as.matrix(hsdms[, -1:-5]) %*% isqrt_C_source %*% sqrt_C_target
 ##Set important parameters
 fml <- Survival ~ .
 num_folds <- 5
 rg.num.trees <- 500
 ##Set up iteration
 num_repeats <- 20
-day_tab <- table(human_sepsis_data$Day[data_ml_subset])
+day_tab <- table(human_sepsis_data_ml_shared$Day)
 day_set <- rep(as.numeric(names(day_tab)), each = num_repeats)
-var_range <- c(2:min(8, length(shared_metabs)))
+var_range <- c(2:min(6, length(shared_metabs)))
 var_set <- rep(var_range, each = num_repeats)
 var_set_name_list <- list()
-tot_n_var <- ncol(human_sepsis_data_ml_full)-2
+tot_n_var <- ncol(human_sepsis_data_ml_shared)-5
 rg.npr.repeat.df <- data.frame(var = rep(tot_n_var, num_repeats), tpr = 0, tnr = 0, fpr = 0, fnr = 0, ppv = 0, npv = 0)
 ks.npr.repeat.df <- data.frame(var = rep(tot_n_var, num_repeats), tpr = 0, tnr = 0, fpr = 0, fnr = 0, ppv = 0, npv = 0)
 lm.npr.repeat.df <- data.frame(var = rep(tot_n_var, num_repeats), tpr = 0, tnr = 0, fpr = 0, fnr = 0, ppv = 0, npv = 0)
@@ -152,13 +196,12 @@ ks.red.auc.FVal.df <- data.frame(var = var_set, auc = 0)
 lm.red.auc.FVal.df <- data.frame(var = var_set, auc = 0)
 ol.red.auc.FVal.df <- data.frame(var = var_set, auc = 0)
 ##Do the big CV loop
-d <- 2
+d <- 1
 r_count <- 1
 {
   ###Select data with Day <= x, remove Patient ID ("select = -1")
-  human_sepsis_data_ml <- subset(human_sepsis_data_ml_full, subset = human_sepsis_data$Day[data_ml_subset] <= day_set[d], select = -1)
-  ###Get Patient ID seperately
-  patient_number <- subset(human_sepsis_data_ml_full, subset = human_sepsis_data$Day[data_ml_subset] <= day_set[d], select = Patient)[[1]]
+  human_sepsis_data_ml <- subset(human_sepsis_data_ml_shared, subset = Day <= day_set[d])
+  hsdm_prop_cols <- which(colnames(human_sepsis_data_ml)[1:5] != "Survival")
   ###Repeat num_repeat times
   for (v in 1:num_repeats){
     ###Test performance with cross-validation
@@ -179,12 +222,12 @@ r_count <- 1
     #fold_set <- ml.split.folds.quasistrat(num_folds = num_folds, class = human_sepsis_data_ml$Survival, non_strat_class = patient_number)
     fold_set <- ml.split.folds.strat(num_folds = num_folds, class = human_sepsis_data_ml$Survival)
     for (fold in 1:num_folds){
-      fold_learn_set <- human_sepsis_data_ml[-fold_set[[fold]],]
-      fold_test_set <- human_sepsis_data_ml[fold_set[[fold]],]
+      fold_learn_set <- human_sepsis_data_ml[-fold_set[[fold]], -hsdm_prop_cols]
+      fold_test_set <- human_sepsis_data_ml[fold_set[[fold]], -hsdm_prop_cols]
       r_fold_learn_set <- fold_learn_set
       r_fold_test_set <- fold_test_set
-      r_fold_learn_set$Survival <- as.factor(r_fold_learn_set$Survival)
-      r_fold_test_set$Survival <- as.factor(r_fold_test_set$Survival)
+      r_fold_learn_set$Survival <- factor(r_fold_learn_set$Survival, levels = sort(unique(r_fold_learn_set$Survival)))
+      r_fold_test_set$Survival <- factor(r_fold_test_set$Survival, levels = sort(unique(r_fold_learn_set$Survival)))
       class_count <- table(fold_learn_set$Survival)
       case_weights <- rep(class_count[1]/class_count[2], nrow(fold_learn_set))
       case_weights[fold_learn_set$Survival == 0] <- class_count[2]/class_count[1]
@@ -226,12 +269,12 @@ r_count <- 1
   ###Repeat CV with selected features
   for (v in seq_along(var_set)){
     human_sepsis_data_ml_red <- human_sepsis_data_ml #kept as dummy to avoid variable renaming
-    rg <- ranger(data = human_sepsis_data_ml, dependent.variable.name = "Survival", num.trees = rg.num.trees * 3, write.forest = T, save.memory = F, classification = TRUE, importance = "permutation")
+    rg <- ranger(data = human_sepsis_data_ml[, -hsdm_prop_cols], dependent.variable.name = "Survival", num.trees = rg.num.trees * 3, write.forest = T, save.memory = F, classification = TRUE, importance = "permutation")
     var_importance <- rg$variable.importance
     ###Reduce data set to important variables
-    human_sepsis_data_ml_red[, 1 + which(var_importance < sort(var_importance, decreasing = TRUE)[var_set[v]])] <- NULL
+    human_sepsis_data_ml_red[, 5 + which(var_importance < sort(var_importance, decreasing = TRUE)[var_set[v]])] <- NULL
     ###Save variable set for later analysis
-    var_set_name_list[[v]] <- colnames(human_sepsis_data_ml_red)[-1]
+    var_set_name_list[[v]] <- colnames(human_sepsis_data_ml_red)[-1:-5]
     fold_set <- ml.split.folds.strat(num_folds = num_folds, class = human_sepsis_data_ml$Survival)
     v.rg.npr <- list()
     v.ks.npr <- list()
@@ -249,15 +292,15 @@ r_count <- 1
     yPredLM <- rep(0, nrow(human_sepsis_data_ml))
     for (fold in 1:num_folds){
       ###Build learn and test set
-      fold_learn_set <- human_sepsis_data_ml_red[-fold_set[[fold]],]
-      fold_test_set <- human_sepsis_data_ml_red[fold_set[[fold]],]
+      fold_learn_set <- human_sepsis_data_ml_red[-fold_set[[fold]], -hsdm_prop_cols]
+      fold_test_set <- human_sepsis_data_ml_red[fold_set[[fold]], -hsdm_prop_cols]
       ###Get variable importance and validate on special data subsets
       r_count <- r_count + 1
       ####Continue with the other stuff
       r_fold_learn_set <- fold_learn_set
       r_fold_test_set <- fold_test_set
-      r_fold_learn_set$Survival <- as.factor(r_fold_learn_set$Survival)
-      r_fold_test_set$Survival <- as.factor(r_fold_test_set$Survival)
+      r_fold_learn_set$Survival <- factor(r_fold_learn_set$Survival, levels = sort(unique(r_fold_learn_set$Survival)))
+      r_fold_test_set$Survival <- factor(r_fold_test_set$Survival, levels = sort(unique(r_fold_learn_set$Survival)))
       class_count <- table(fold_learn_set$Survival)
       case_weights <- rep(class_count[1]/class_count[2], nrow(fold_learn_set))
       case_weights[fold_learn_set$Survival == 0] <- class_count[2]/class_count[1]
@@ -300,12 +343,9 @@ r_count <- 1
     case_weights <- rep(class_count[1]/class_count[2], nrow(human_sepsis_data_ml_red))
     case_weights[human_sepsis_data_ml_red$Survival == 0] <- class_count[2]/class_count[1]
     case_weights_int <- class_count[match(human_sepsis_data_ml_red$Survival, names(class_count))]
-    r_human_sepsis_data_ml_red <- human_sepsis_data_ml_red
-    #r_human_sepsis_data_ml_red <- human_validation_data[, colnames(human_validation_data) %in% colnames(human_sepsis_data_ml_red)]
-    r_human_sepsis_data_ml_red$Survival <- as.factor(r_human_sepsis_data_ml_red$Survival)
-    rgFV <- ranger(data = human_sepsis_data_ml_red, dependent.variable.name = "Survival", num.trees = rg.num.trees, write.forest = T, save.memory = F, probability = TRUE)
-    ksFV <- ksvm(fml, human_sepsis_data_ml_red, type = "C-svc", kernel = "vanilladot", scaled = FALSE)
-    lmFV <- glm(formula = fml, data = human_sepsis_data_ml_red, family = binomial(link = "probit"), control = glm.control(maxit = 100))
+    rgFV <- ranger(data = human_sepsis_data_ml_red[, -hsdm_prop_cols], dependent.variable.name = "Survival", num.trees = rg.num.trees, write.forest = T, save.memory = F, probability = TRUE)
+    ksFV <- ksvm(fml, human_sepsis_data_ml_red[, -hsdm_prop_cols], type = "C-svc", kernel = "vanilladot", scaled = FALSE)
+    lmFV <- glm(formula = fml, data = human_sepsis_data_ml_red[, -hsdm_prop_cols], family = binomial(link = "probit"), control = glm.control(maxit = 100))
     
     rg.red.npr.FVal.df[v,-1] <- ml.npr(predict(rgFV, human_validation_data)$predictions[, 2] > 0.5, human_validation_data$Survival)
     ks.red.npr.FVal.df[v,-1] <- ml.npr(predict(ksFV, human_validation_data), human_validation_data$Survival)
@@ -321,21 +361,21 @@ r_count <- 1
   }
 }
 
-hsd <- subset(human_sepsis_data, Day == 0)
-hvd <- human_validation_data
-cns1 <- make.names(colnames(human_sepsis_data))
-cns2 <- make.names(colnames(human_validation_data))
-colnames(hsd) <- cns1
-colnames(hvd) <- cns2
-hsd[, -1:-5] <- missRanger(hsd[, -1:-5])
-hvd[, -1] <- missRanger(hvd[, -1])
-smet <- intersect(cns1, cns2)
-mxOmX <- rbind(hsd[smet][, -1], hvd[smet][, -1])
-mxOmY <- c(hsd$Survival, c("NS", "S")[1 + hvd$Survival])
-study <- rep(1:2, times = c(nrow(hsd), nrow(hvd)))
-mxo_res <- mixOmics(X = as.matrix(mxOmX), Y = factor(mxOmY), study = study, ncomp = 3, scale = TRUE, keepX = c(60, 30, 5))
-mxo_perf <- perf(object = mxo_res, validation = "MFold", folds = 10, nrepeat = 5, auc = TRUE)
-lapply(lapply(mxo_perf$auc, `[[`, 1), `[[`, 1)
+# hsd <- subset(human_sepsis_data, Day == 0)
+# hvd <- human_validation_data
+# cns1 <- make.names(colnames(human_sepsis_data))
+# cns2 <- make.names(colnames(human_validation_data))
+# colnames(hsd) <- cns1
+# colnames(hvd) <- cns2
+# hsd[, -1:-5] <- missRanger(hsd[, -1:-5])
+# hvd[, -1] <- missRanger(hvd[, -1])
+# smet <- intersect(cns1, cns2)
+# mxOmX <- rbind(hsd[smet][, -1], hvd[smet][, -1])
+# mxOmY <- c(hsd$Survival, c("NS", "S")[1 + hvd$Survival])
+# study <- rep(1:2, times = c(nrow(hsd), nrow(hvd)))
+# mxo_res <- mixOmics(X = as.matrix(mxOmX), Y = factor(mxOmY), study = study, ncomp = 3, scale = TRUE, keepX = c(60, 30, 5))
+# mxo_perf <- perf(object = mxo_res, validation = "MFold", folds = 10, nrepeat = 5, auc = TRUE)
+# lapply(lapply(mxo_perf$auc, `[[`, 1), `[[`, 1)
 
 rg.npr.repeat.df$Method <- "RF"
 ks.npr.repeat.df$Method <- "SVM"
