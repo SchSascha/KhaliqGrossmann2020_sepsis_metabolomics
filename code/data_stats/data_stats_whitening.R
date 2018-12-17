@@ -103,12 +103,18 @@ human_sepsis_data_normal_grouped[, -1:-5] <- scale(human_sepsis_data_normal_grou
 human_data_normal_grouped <- human_data_grouped
 human_data_normal_grouped[, -1:-5] <- scale(human_data_normal_grouped[, -1:-5])
 
+human_data$Survival[human_data$`CAP / FP` == "-"] <- "Nonseptic"
+
+#Remove questionable metabolites
+human_data_bck <- human_data
+human_data <- human_data_bck[, !(colnames(human_data_bck) %in% c("Histamin", "PC aa C36:0", "DOPA"))]
+
 #Whiten each patient
 pat_list <- human_data$Patient
-pat_list <- table(pat_list)[table(pat_list) > 1]
-max_pat_samples <- which(pat_list == max(pat_list))
+pat_list <- table(pat_list)[table(pat_list) > 2] #only keep patients with more than one sample
+max_pat_samples <- which(pat_list == max(pat_list)) #get index of patients with most samples
 pat_list <- names(pat_list)
-target_pat <- max_pat_samples[which(human_data$`CAP / FP`[match(pat_list, human_data$Patient)][max_pat_samples] != "-")]
+target_pat <- pat_list[max_pat_samples[which(human_data$`CAP / FP`[match(pat_list, human_data$Patient)][max_pat_samples] != "-")]]
 human_data <- subset(human_data, Patient %in% pat_list, c(1:5, metab_sel))
 excl_cols <- list()
 for (pat in pat_list){
@@ -121,20 +127,36 @@ for (pat in pat_list){
 ecol <- unique(unlist(excl_cols)) + 5
 human_data <- human_data[, -ecol]
 human_whitened_data <- human_data
-pat_list <- pat_list[-target_pat]
+pat_list <- pat_list[-which(target_pat == pat_list)]
 target_dat <- human_data[human_data$Patient == target_pat, -1:-5]
-target_dat <- as.matrix(scale(target_dat))
-C_t <- cov(target_dat) + diag(nrow = ncol(target_dat))
+target_dat <- as.matrix(scale(target_dat, scale = FALSE))
+#C_t <- cov(target_dat) + diag(nrow = ncol(target_dat))
+C_t <- cov.shrink(x = target_dat)
 svd_C_t <- svd(C_t)
-with(svd_C_t, sqrt_C_t <- u %*% diag(1/d) %*% t(v))
+sqrt_C_t <- with(svd_C_t, sqrt_C_t <- u %*% diag(sqrt(d)) %*% t(v))
 for (pat in pat_list){
   source_dat <- human_data[human_data$Patient == pat, -1:-5]
-  source_dat <- as.matrix(scale(source_dat))
-  C_s <- cov(source_dat) + diag(nrow = ncol(source_dat))
+  source_dat <- as.matrix(scale(source_dat, scale = FALSE))
+  #C_s <- cov(source_dat) + diag(nrow = ncol(source_dat))
+  C_s <- cov.shrink(source_dat)
   svd_C_s <- svd(C_s)
-  with(svd_C_s, isqrt_C_s <- u %*% diag(sqrt(1/d)) %*% t(v))
+  isqrt_C_s <- with(svd_C_s, u %*% diag(1/sqrt(d)) %*% t(v))
   whitened_dat <- source_dat %*% isqrt_C_s %*% sqrt_C_t
   human_whitened_data[human_data$Patient == pat, -1:-5] <- whitened_dat
 }
 p <- prcomp(human_whitened_data[, -1:-5])
-plot(p$x[, 1:2], col = factor(human_whitened_data$`CAP / FP`))
+plot(p$x[, 1:2], col = as.numeric(factor(human_whitened_data$`CAP / FP`)))
+plot(p$x[, 1:2], col = as.numeric(factor(human_whitened_data$Survival)))
+
+white2 <- whiteningMatrix(cov.shrink(x = target_dat), method = "ZCA-cor")
+white3 <- t(as.matrix(white2) %*% t(as.matrix(human_data[, -1:-5])))
+p <- prcomp(white3)
+plot(p$x[, 1:2], col = as.numeric(factor(human_whitened_data$Survival)))
+pat_prop <- human_data[match(unique(human_data$Patient), human_data$Patient), 1:5]
+col <- factor(pat_prop$Survival, levels = c("S", "NS", "Nonseptic"))
+for (n in seq_along(pat_prop$Patient)){
+  ind <- which(human_data$Patient == pat_prop$Patient[n])
+  x <- p$x[ind ,1]
+  y <- p$x[ind ,2]
+  arrows(x0 = x[-length(x)], y0 = y[-length(y)], x1 = x[-1], y1 = y[-1], length = 0.1, col = col[n])
+}
