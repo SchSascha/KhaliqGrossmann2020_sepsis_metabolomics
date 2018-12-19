@@ -12,6 +12,7 @@ library(vegan)
 library(ggplot2)
 library(ggfortify)
 library(parallel)
+library(tictoc)
 
 source("../function_definitions.R")
 
@@ -248,7 +249,7 @@ for (met_group in unique(human_data_legend$group[metab_sel])){
   
   hdd <- human_data_dist
   hdd$Survival[hdd$`CAP / FP` == "-"] <- "Non-septic"
-  ap <- autoplot(object = p, data = hdd, colour = "Survival", frame = TRUE, frame.type = "ellipse")
+  ap <- autoplot(object = p, data = hdd, colour = "Survival", frame = TRUE, frame.type = "norm")
   ap <- ap +
     human_col_scale(name = "Survival", levels = c("NS", "Non-septic", "S", "Dummy"), aesthetics = c("colour", "fill")) +
     guides(colour = guide_legend(title = "Group"), fill = "none", group = "none") +
@@ -322,12 +323,6 @@ for (met_group in unique(human_data_legend$group[metab_sel])){
   pat_step_len_long_df <- melt(pat_step_len_df, id.vars = c("Patient", "Group"))
   pat_step_len_long_df$variable <- factor(pat_step_len_long_df$variable, labels = c("Euclidean step length", "X only", "Y only"))
   
-  ad_step1 <- list()
-  ad_step2 <- list()
-  ad_step3 <- list()
-  t_r1 <- list()
-  t_r2 <- list()
-  t_r3 <- list()
   num_NS_vals <- sum(pat_step_len_df$Group == "NS")
   num_S_vals <- sum(pat_step_len_df$Group == "S")
   bt_step_res <- mclapply(1:100,
@@ -345,7 +340,7 @@ for (met_group in unique(human_data_legend$group[metab_sel])){
                           pat_step_len_df = pat_step_len_df, num_S_vals = num_S_vals, num_NS_vals = num_NS_vals,
                           mc.cores = 7)
   met_group_res[[met_group]] <- list(ad = ad_res_mc, 
-                                     bt = t_step_res)
+                                     bt = bt_step_res)
 }
 toc()
 ad_mg_r1 <- lapply(lapply(lapply(lapply(met_group_res, lapply, `[[`, "ad_C_vs_S"), lapply, `[[`, "aov.tab"), lapply, `[[`, "Pr(>F)"), lapply, `[`, 1)
