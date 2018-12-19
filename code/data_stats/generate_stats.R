@@ -349,6 +349,7 @@ human_sepsis_data_normal_S_grouped_conc_pheno_cov <- cov(subset(human_sepsis_dat
 
 ##Build variance vectors of metabolites from normalized concentrations
 ###One method: variance of metabolite seperately for each patient
+#TODO: get data frame with patients up to day 3 and variance without normalization
 pat_first <- match(unique(human_sepsis_data_normal$Patient), human_sepsis_data_normal$Patient)
 human_sepsis_data_normal_conc_var <- lapply(human_sepsis_data_normal[, -1:-5], aggregate, list(Patient = human_sepsis_data_normal$Patient), var, na.rm = T)
 human_sepsis_data_normal_conc_var <- data.frame(Patient = human_sepsis_data_normal_conc_var[[1]]$Patient, 
@@ -379,10 +380,10 @@ pheno_day_var_df <- rbind(cbind(data.frame(Day = c(tanova_day_set, 5), Survival 
 colnames(pheno_day_var_df) <- c("Day", "Survival", colnames(human_sepsis_data)[pheno_sel])
 pheno_day_var_long_df <- melt(pheno_day_var_df, id.vars = c("Day", "Survival"))
 pheno_day_var_long_df$group <- human_sepsis_legend$group[match(pheno_day_var_long_df$variable, human_sepsis_legend[[1]])]
-metab_day_var_df <- rbind(cbind(data.frame(Day = c(tanova_day_set, 5), Survival = "NS"), human_sepsis_data_normal_NS_conc_metab_day_var), 
+metab_normal_day_var_df <- rbind(cbind(data.frame(Day = c(tanova_day_set, 5), Survival = "NS"), human_sepsis_data_normal_NS_conc_metab_day_var), 
                           cbind(data.frame(Day = c(tanova_day_set, 5), Survival = "S"), human_sepsis_data_normal_S_conc_metab_day_var))
-colnames(metab_day_var_df) <- c("Day", "Survival", colnames(human_sepsis_data)[metab_sel])
-metab_day_var_long_df <- melt(metab_day_var_df, id.vars = c("Day", "Survival"))
+colnames(metab_normal_day_var_df) <- c("Day", "Survival", colnames(human_sepsis_data)[metab_sel])
+metab_day_var_long_df <- melt(metab_normal_day_var_df, id.vars = c("Day", "Survival"))
 metab_day_var_long_df$group <- human_sepsis_legend$group[match(metab_day_var_long_df$variable, human_sepsis_legend[[1]])]
 
 ##Calculate post hoc p-values for variance time course
@@ -942,8 +943,8 @@ h$height <- lower_margin + round(sum(sel) * 1100/76) #1200 is a good height for 
 export(p = h, file = paste0(out_dir, "human_heatmap_pheno.png"))
 
 ##Human, variance of metabolites, diff of NS vs S, ordered by |diff|, lables colored by metabolite group, 
-for (d in unique(metab_day_var_df$Day)){
-  metab_day0_var_df <- cbind(subset(metab_day_var_df, Day == d), subset(pheno_day_var_df, Day == d, -1:-2))
+for (d in unique(metab_normal_day_var_df$Day)){
+  metab_day0_var_df <- cbind(subset(metab_normal_day_var_df, Day == d), subset(pheno_day_var_df, Day == d, -1:-2))
   metab_day_vardiff_df <- metab_day0_var_df[1, -1:-2] - metab_day0_var_df[2, -1:-2]
   metab_day0_var_df <- metab_day0_var_df[, c(1, 2, 2 + order(metab_day_vardiff_df, decreasing = TRUE))]
   metab_day0_var_df[, -1:-2] <- scale(metab_day0_var_df[, -1:-2], scale = FALSE, center = TRUE)
@@ -1045,11 +1046,11 @@ pheno_day_var_plot <- ggplot(data = pheno_day_var_long_df, mapping = aes(x = as.
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ggsave(filename = "human_all_days_grouped_pheno_var.png", path = out_dir, plot = pheno_day_var_plot, width = 9, height = 3.5, units = "in")
 
-##Human, variance of metab vars, all days
-metab_day_var_df <- rbind(cbind(data.frame(Survival = "NS"), t(human_sepsis_data_normal_NS_conc_metab_var)), 
+##Human, variance of grouped metab vars, all days
+metab_normal_day_var_df <- rbind(cbind(data.frame(Survival = "NS"), t(human_sepsis_data_normal_NS_conc_metab_var)), 
                           cbind(data.frame(Survival = "S"), t(human_sepsis_data_normal_S_conc_metab_var)))
-colnames(metab_day_var_df) <- c("Survival", colnames(human_sepsis_data)[metab_sel])
-metab_day_var_long_df <- melt(metab_day_var_df, id.vars = c("Survival"))
+colnames(metab_normal_day_var_df) <- c("Survival", colnames(human_sepsis_data)[metab_sel])
+metab_day_var_long_df <- melt(metab_normal_day_var_df, id.vars = c("Survival"))
 metab_day_var_long_df$group <- human_sepsis_legend$group[match(metab_day_var_long_df$variable, human_sepsis_legend[[1]])]
 metab_day_var_plot <- ggplot(data = metab_day_var_long_df, mapping = aes(x = group, y = value, fill = Survival)) +
   geom_boxplot(outlier.size = 0.7) +
@@ -1059,6 +1060,22 @@ metab_day_var_plot <- ggplot(data = metab_day_var_long_df, mapping = aes(x = gro
   theme_bw() + 
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ggsave(filename = "human_all_days_grouped_metab_var.png", path = out_dir, plot = metab_day_var_plot, width = 8, height = 3.5, units = "in")
+
+##Human, variance of ungrouped metab vars, all days
+#TODO
+metab_normal_day_var_df <- human_sepsis_data_normal_conc_var
+colnames(metab_normal_day_var_df)[-1:-2] <- colnames(human_sepsis_data)[-1:-5]
+metab_normal_day_var_df <- metab_normal_day_var_df[, 1:which(colnames(metab_normal_day_var_df) == "H1")]
+metab_day_var_long_df <- melt(metab_normal_day_var_df, id.vars = c("Survival", "Patient"))
+metab_day_var_long_df$group <- human_sepsis_legend$group[match(metab_day_var_long_df$variable, human_sepsis_legend[[1]])]
+metab_day_var_long_df <- subset(metab_day_var_long_df, !(as.character(variable) %in% sig.anova.car.s.class))
+metab_day_var_plot <- ggplot(data = metab_day_var_long_df, mapping = aes(x = variable, y = value, fill = Survival)) +
+  geom_boxplot(outlier.size = 0.7) +
+  ylab("variance") +
+  xlab("metabolite") +
+  theme_bw() + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+ggsave(filename = "human_normal_all_days_ungrouped_metab_var.png", path = out_dir, plot = metab_day_var_plot, width = 8, height = 3.5, units = "in")
 
 ##Human, variance of pheno vars seperate by day
 pheno_day_var_df <- rbind(cbind(data.frame(Day = c(tanova_day_set, 5), Survival = "NS"), human_sepsis_data_normal_NS_conc_pheno_day_var), 
@@ -1107,7 +1124,7 @@ pheno_day_var_plot <- ggplot(data = pheno_day_var_long_df, mapping = aes(x = fac
 ggsave(filename = "human_seperate_days_grouped_pheno_var_PG.png", path = out_dir, plot = pheno_day_var_plot, width = 9, height = 2, units = "in")
 
 ##Human, variance of metab vars seperate by day
-metab_day_var_long_df <- melt(metab_day_var_df, id.vars = c("Day", "Survival"))
+metab_day_var_long_df <- melt(metab_normal_day_var_df, id.vars = c("Day", "Survival"))
 metab_day_var_long_df$group <- human_sepsis_legend$group[match(metab_day_var_long_df$variable, human_sepsis_legend[[1]])]
 metab_day_var_plot <- ggplot(data = metab_day_var_long_df, mapping = aes(x = factor(Day), y = value, fill = Survival)) +
   facet_wrap( ~ group, ncol = 4, nrow = 2, scales = "free_y") +
@@ -1119,7 +1136,7 @@ metab_day_var_plot <- ggplot(data = metab_day_var_long_df, mapping = aes(x = fac
 ggsave(filename = "human_seperate_days_grouped_metab_var.png", path = out_dir, plot = metab_day_var_plot, width = 8, height = 3.5, units = "in")
 
 ##Human, variance of metab vars seperate by day
-metab_day_var_long_df <- melt(metab_day_var_df, id.vars = c("Day", "Survival"))
+metab_day_var_long_df <- melt(metab_normal_day_var_df, id.vars = c("Day", "Survival"))
 metab_day_var_long_df$group <- human_sepsis_legend$group[match(metab_day_var_long_df$variable, human_sepsis_legend[[1]])]
 metab_day_var_sig <- melt(anova.car.ph.metab.group.sig.contr)
 metab_day_var_sig$Day <- c(tanova_day_set, 5)[metab_day_var_sig$value]
@@ -1620,12 +1637,12 @@ p <- ggplot(data = subset(cntrl_and_s, Survival != "NS"), mapping = aes(y = valu
   stat_summary(fun.data = "mean_sdl", fun.args = list(mult = 1), position = position_dodge(width = 0.7), geom = "errorbar") +
   stat_summary(fun.y = "mean", fun.ymin = "mean", fun.ymax = "mean", position = position_dodge(width = 0.7), geom = "errorbar") +
   geom_line(data = subset(pat_path, variable %in% var_keep_union), mapping = aes(y = value, x = x, color = Group, group = interaction(variable, Patient), linetype = factor(Patient)), inherit.aes = FALSE) +
-  geom_tile(mapping = aes(x = variable, y = 1e-4, fill = metabolite_group, width = 1, height = 0.5), data = pat_path, inherit.aes = FALSE) +
+  geom_tile(mapping = aes(x = variable, y = 1e-4, fill = metabolite_group), width = 1, height = 0.5, data = pat_path, inherit.aes = FALSE) +
+  geom_point(mapping = aes(x = Var1, y = 3.5e-5, shape = factor(Freq)), data = var_keep_count_df, inherit.aes = FALSE) +
   geom_tile(mapping = aes(x = Var1, y = 3.5e-5), width = 1, height = 0.5, fill = var_keep_count_df$color, data = var_keep_count_df, inherit.aes = FALSE) +
-  geom_point(mapping = aes(x = Var1, y = 3.5e-5, shape = factor(Freq)), color = var_keep_count_df$color, data = var_keep_count_df, inherit.aes = FALSE) +
   guides(color = guide_legend(order = 1), 
          fill = guide_legend(title = "Metabolite Group", order = 2),
-         shape = guide_legend(title = "#NS pats with deviation", override.aes = list(shape = 15, size = 6, color = sort(unique(var_keep_count_df$color))), order = 3),
+         shape = guide_legend(title = "#NS pats with deviation", override.aes = list(shape = 15, size = 6, colour = sort(unique(var_keep_count_df$color))), order = 3),
          linetype = guide_legend(title = "NS Patient", override.aes = list(color = hue_pal()(3)[1]), order = 4)) +
   scale_color_discrete(drop = FALSE) +
   scale_y_log10(expand = c(0,0)) +
