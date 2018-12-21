@@ -975,35 +975,35 @@ for (d in unique(metab_normal_day_var_df$Day)){
     theme(axis.text.x = element_text(angle = 90, size = 4, vjust = 0.5), panel.grid.major.x = element_line(linetype = 0))
   ggsave(plot = vardiffplot, filename = paste0("human_var_diff_orderd_day", d, ".png"), path = out_dir, width = 12, height = 6, units = "in")
 }
-##Same but all days combined
-#TODO: find error
-metab_all_days_var_df <- na.omit(human_sepsis_data_conc_var)
-metab_all_days_var_df <- rbind(data.frame(Survival = "NS", t(colMeans(subset(metab_all_days_var_df, Survival == "NS",-1:-2)))),
-                               data.frame(Survival = "S", t(colMeans(subset(metab_all_days_var_df, Survival == "S", -1:-2)))))
+##All days combined
+metab_all_days_var_df <- rbind(data.frame(Survival = "NS", t(colVars(as.matrix(subset(human_sepsis_data, Survival == "NS",-1:-5))))),
+                               data.frame(Survival = "S", t(colVars(as.matrix(subset(human_sepsis_data, Survival == "S", -1:-5))))))
+colnames(metab_all_days_var_df)[-1] <- colnames(human_sepsis_data)[-1:-5]
+metab_all_days_mean <- colMeans(human_sepsis_data[, -1:-5])
+metab_all_days_var_df[, -1] <- scale(metab_all_days_var_df[, -1], center = FALSE, scale = metab_all_days_mean)
 metab_day_vardiff_df <- metab_all_days_var_df[1, -1] - metab_all_days_var_df[2, -1]
 metab_all_days_var_df <- metab_all_days_var_df[c(1, 1 + order(metab_day_vardiff_df, decreasing = TRUE))]
 metab_all_days_var_df[, -1] <- scale(metab_all_days_var_df[, -1], scale = FALSE, center = TRUE)
-metab_all_days_var_df <- metab_all_days_var_df[, c(1, metab_all_days_var_df[1, -1] < 0)]
+metab_all_days_var_df <- metab_all_days_var_df[, c(1, 1 + which(metab_all_days_var_df[1, -1] < 0))]
 metab_all_days_var_long_df <- melt(metab_all_days_var_df, id.vars = c("Survival"))
-metab_all_days_var_long_df$group <- human_sepsis_legend$group[match(x = metab_all_days_var_long_df$variable, table = make.names(human_sepsis_legend[, 1]))]
+metab_all_days_var_long_df$group <- human_sepsis_legend$group[match(x = metab_all_days_var_long_df$variable, table = human_sepsis_legend[, 1])]
 metab_all_days_var_long_df <- subset(metab_all_days_var_long_df, !group %in% "Excluded")
 metab_all_days_group_df <- metab_all_days_var_long_df
 metab_all_days_group_df$width <- 1
-metab_all_days_group_df$height <- 0.5
-metab_all_days_group_df$value <- -3.25
+metab_all_days_group_df$height <- 1
+metab_all_days_group_df$value <- -800
 metab_all_days_group_df$group[metab_all_days_group_df$group %in% coarse_group_list[pheno_sel - 5]] <- "clinical parameter"
 metab_all_days_group_df$Metabolite_group <- metab_all_days_group_df$group
 metab_all_days_group_df <- metab_all_days_group_df[!duplicated(metab_all_days_group_df$variable), ]
 vardiffplot <- ggplot(data = metab_all_days_var_long_df, mapping = aes(x = variable, y = value, group = Survival, color = Survival)) + 
   geom_point() + 
-  #stat_summary(geom = "point", fun.y = "mean") +
   geom_tile(mapping = aes(x = variable, y = value, fill = Metabolite_group, width = width, height = height), data = metab_all_days_group_df, inherit.aes = FALSE) +
-  ylab("Mean-free difference of variance") +
+  ylab("Centered group variance rel. to metabolite mean") +
   xlab("Metabolite") +
   human_col_scale(name = "Survival", aesthetics = "colour") +
-  scale_y_continuous(limits = c(-3.5, 3), expand = c(0, 0)) +
+  scale_y_continuous(trans = pseudo_log_trans(sigma = 0.25, base = 2), expand = c(0, 0), limits = c(-1200, 800)) +
   theme_bw() +
-  theme(axis.text.x = element_text(angle = 90, size = 4, vjust = 0.5), panel.grid.major.x = element_line(linetype = 0))
+  theme(axis.text.x = element_text(angle = 90, size = 6, vjust = 0.5), panel.grid.major.x = element_line(linetype = 0))
 ggsave(plot = vardiffplot, filename = paste0("human_var_diff_ordered_all_days.png"), path = out_dir, width = 12, height = 6, units = "in")
 
 ##Human, variance of metabolites, NS vs. S
@@ -1412,6 +1412,16 @@ p <- ggplot(data = subset(melt(hsd, id.vars = 1:5), Day %in% 0:3), mapping = aes
   theme_bw()
 ggsave(plot = p, filename = paste0("human_metab_survival_time_course_NS_S_NS.png"), path = out_dir, width = 12/4*ncols, height = 0.3 + 1.5 * ceiling(n_mets/ncols), units = "in")
 
+##Human, Creatinie vs Blood Creatinine
+hsd <- human_sepsis_data
+hsd$Patient <- factor(hsd$Patient)
+p <- ggplot(data = hsd, mapping = aes_string(x = "Creatinine", y = "`Blood Creatinine`", colour = "Survival", shape = "`CAP / FP`")) +
+  geom_point() +
+  human_col_scale(name = "Survival") +
+  theme_bw() +
+  theme(panel.grid = element_blank())
+ggsave(plot = p, filename = "human_Creatinine_reliability.png", path = out_dir, width = 5, height = 4, units = "in")
+
 ##Human, metabolite concentration time course, only metabolites with p-val < 0.05 and FDR < 0.05 in Survival or Day:Survival from type III repeated measures ANOVA
 fs <- c("s", "c")
 gs <- c("by Sepsis survival", "between Sepsis and Control")
@@ -1683,17 +1693,17 @@ metab_day_var_long_df <- melt(met_nor_day_var_df, id.vars = c("Survival", "Patie
 metab_day_var_long_df$group <- human_sepsis_legend$group[match(metab_day_var_long_df$variable, human_sepsis_legend[[1]])]
 metab_day_var_long_df <- subset(metab_day_var_long_df, !(as.character(variable) %in% sig.anova.car.s.class))
 metab_day_var_long_df <- subset(metab_day_var_long_df, !(as.character(variable) %in% var_keep_count_df$Var1))
-gns <- colnames(met_nor_day_var_df)[-1:-5][colMeans(subset(met_nor_day_var_df, Survival == "NS", -1:-5)) > colMeans(subset(met_nor_day_var_df, Survival == "S", -1:-5))]
+gns <- colnames(met_nor_day_var_df)[-1:-5][colMedians(as.matrix(subset(met_nor_day_var_df, Survival == "NS", -1:-5))) > colMedians(as.matrix(subset(met_nor_day_var_df, Survival == "S", -1:-5)))]
 metab_day_var_long_df <- subset(metab_day_var_long_df, as.character(variable) %in% gns)
 metab_day_var_plot <- ggplot(data = metab_day_var_long_df, mapping = aes(x = variable, y = value, fill = Survival)) +
-  geom_boxplot(outlier.size = 0.7) +
+  geom_boxplot(outlier.size = 0.5) +
   #scale_y_log10() +
-  ylab("Patient-wise variance relative to metabolite mean") +
+  ylab("Patient-wise variance relative to metabolite total variance") +
   xlab("Metabolite") +
   human_col_scale(name = "Survival", aesthetics = "fill") +
   theme_bw() + 
-  theme(axis.text.x = element_text(angle = 90, hjust = 1))
-ggsave(filename = "human_all_days_ungrouped_metab_var_to_metab_mean.png", path = out_dir, plot = metab_day_var_plot, width = 10, height = 5, units = "in")
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5), panel.grid = element_blank())
+ggsave(filename = "human_all_days_ungrouped_metab_var_to_metab_mean.png", path = out_dir, plot = metab_day_var_plot, width = 10, height = 5.5, units = "in")
 ##Human, mean metabolite and pheno var concentrations over days, ordered by concentration, all groups, seperate for each metabolite group
 human_data_patient_group_mean_all_days <- subset(human_data, Day %in% tanova_day_set)
 hdpgmads <- human_data_patient_group_mean_all_days$Survival

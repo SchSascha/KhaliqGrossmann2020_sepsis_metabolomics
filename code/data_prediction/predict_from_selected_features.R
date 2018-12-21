@@ -6,7 +6,7 @@ library(matrixStats)
 library(ranger)
 library(missRanger)
 library(kernlab)
-library(mixOmics)
+#library(mixOmics)
 library(corpcor)
 #library(ropls)
 #library(pROC)
@@ -68,7 +68,7 @@ human_validation_data$Survival <- as.numeric(factor(human_validation_data$Surviv
 human_sepsis_data_ml <- human_sepsis_data_ml[rowSums(is.na(human_sepsis_data_ml)) < 9, ]
 human_sepsis_data_ml <- human_sepsis_data_ml[, c(1:5, 5 + which(!colAnys(human_sepsis_data_ml == 0)[-1:-5]))]
 ###Strip phenomenological variables
-# human_sepsis_data_ml <- subset(human_sepsis_data_ml, select = c(colnames(human_sepsis_data_ml)[1:5], intersect(sig_t_class, colnames(human_sepsis_data_ml))))
+human_sepsis_data_ml <- subset(human_sepsis_data_ml, select = c(colnames(human_sepsis_data_ml)[1:5], intersect(sig_t_class, colnames(human_sepsis_data_ml))))
 colnames(human_sepsis_data_ml) <- make.names(colnames(human_sepsis_data_ml))
 colnames(human_validation_data) <- make.names(colnames(human_validation_data))
 ###Impute missing values
@@ -120,6 +120,8 @@ vl_sds <- sapply(1:(ncol(human_validation_data) - 1),
                    })
 human_validation_data[, -1] <- scale(human_validation_data[, -1], center = vl_means, scale = vl_sds)
 human_sepsis_data_ml_shared[, -1:-5] <- scale(human_sepsis_data_ml_shared[, -1:-5], center = tr_means, scale = tr_sds)
+# human_validation_data[, -1] <- scale(human_validation_data[, -1], center = TRUE, scale = TRUE)
+# human_sepsis_data_ml_shared[, -1:-5] <- scale(human_sepsis_data_ml_shared[, -1:-5], center = TRUE, scale = TRUE)
 tr_cov <- lapply(seq_along(tr_in_idx),
                   function(x){
                     sapply(seq_along(tr_in_idx), 
