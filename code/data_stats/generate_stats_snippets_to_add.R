@@ -77,18 +77,6 @@ ad_res_mc <- mclapply(1:100,
 toc()
 ad_r_p <- sapply(lapply(lapply(lapply(ad_res_mc, `[[`, "ad_res"), `[[`, "aov.tab"), `[[`, "Pr(>F)"), `[`, 1)
 
-##Metabolites, sepsis patients
-human_sepsis_data_metab_dist <- cbind(human_sepsis_data[,1:5], as.matrix(dist(x = human_sepsis_data[, metab_sel], method = "canberra"))) # distance() works on a per row basis
-p <- prcomp(human_sepsis_data_metab_dist[, -1:-5])
-
-###Only plot
-ap <- autoplot(object = p, data = human_sepsis_data_metab_dist, colour = "Survival", frame = TRUE, frame.type = "norm")
-ap <- ap + 
-  human_col_scale(name = "Survival") +
-  ggtitle("PCA biplot, Canberra distance, metabolites,\nseptic patients") +
-  theme_bw()
-ggsave(filename = paste0("PCA_biplot_sepsis_metab_gg.png"), path = out_dir, plot = ap, width = 5, height = 4, units = "in")
-
 ##Metabolites in metabolite groups, all patients
 met_group_res <- list()
 tic()
@@ -317,7 +305,6 @@ rownames(ad_st_r_df) <- c("XY", "X", "Y")
 fwrite(x = ad_mg_r_df, file = paste0(out_dir, "human_met_group_PCA_step_diff_FDR.csv"), row.names = TRUE, sep = "\t")
 
 ##Actual plots for each metabolite group
-met_group_res <- list()
 tic()
 for (met_group in unique(human_data_legend$group[metab_sel])){
   met_group_idx <- which(human_data_legend$group == met_group)
@@ -326,7 +313,7 @@ for (met_group in unique(human_data_legend$group[metab_sel])){
   
   ad_rv <- ad_mg_r_df[[met_group]]
   ad_rv[ad_rv > 0.05] <- 0.05
-  text_v <- paste0(c(" C", "C", "S"), " vs ", c("S", "NS", "NS"), ", p ", c("> ", "< ")[1 + (ad_rv < 0.05)], format(ad_rv, digits = 3))
+  text_v <- paste0(c("C", "C", "S"), " vs ", c("S", "NS", "NS"), ", p ", c("> ", "< ")[1 + (ad_rv < 0.05)], sapply(ad_rv, format, digits = 2))
   
   hdd <- human_data_dist
   hdd$Survival[hdd$`CAP / FP` == "-"] <- "Non-septic"
@@ -360,6 +347,8 @@ ap <- ap +
 ggsave(filename = paste0("PCA_biplot_sepsis_pheno_gg.png"), path = out_dir, plot = ap, width = 5, height = 4, units = "in")
 
 ##Actual plot of all samples, metabolites
+human_data_dist <- cbind(human_data[,1:5], as.matrix(dist(x = human_data[, metab_sel], method = "canberra"))) # distance() works on a per row basis
+p <- prcomp(human_data_dist[, -1:-5])
 ad_rv <- ad_mg_r_df[["all"]]
 ad_rv[ad_rv > 0.05] <- 0.05
 text_v <- paste0(c("C", "C", "S"), " vs ", c("S", "NS", "NS"), ", p ", c("> ", "< ")[1 + (ad_rv < 0.05)], sapply(ad_rv, format, digits = 2))
@@ -376,7 +365,7 @@ xmin <- gobj$layout$panel_params[[1]]$x.range[1]
 ymin <- gobj$layout$panel_params[[1]]$y.range[1]
 ap <- ap +
   geom_text(x = 0.9 * xmin, y = 0.88 * ymin, label = paste0(text_v, collapse = "\n"), size = 2, hjust = "left")
-ggsave(filename = paste0("PCA_biplot_all_samples_gg.png"), path = out_dir, plot = ap, width = 5, height = 4, units = "in")
+ggsave(filename = paste0("PCA_biplot_metab_all_samples_gg.png"), path = out_dir, plot = ap, width = 5, height = 4, units = "in")
 
 #Patient-wise PCA plot
 pat_list <- human_sepsis_data_normal[match(unique(human_sepsis_data_normal$Patient), human_sepsis_data_normal$Patient), 1:5]
