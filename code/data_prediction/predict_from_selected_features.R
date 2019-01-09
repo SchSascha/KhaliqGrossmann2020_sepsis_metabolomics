@@ -363,6 +363,35 @@ r_count <- 1
   }
 }
 
+#Validate variable set only on Ferrario et al. data, use recent leave pair out cross validation for AUC and ROC generation (Perez et al., 2018)
+##Build sample pair list
+tlpo_s_df <- expand.grid(s1 = 1:nrow(human_validation_data), s2 = 1:nrow(human_validation_data))
+tlpo_s_df <- tlpo_s_df[tlpo_s_df$s1 != tlpo_s_df$s2, ]
+##Run classification
+tlpo_res <- list()
+u_var_set_name_list <- unique(var_set_name_list)
+for (n in seq_along(u_var_set_name_list)){ #only unique sets, bc. mostly deterministic results
+  dir_key <- paste0("dir_pset", n)
+  tlpo_s_df[[dir_key]] <- 0
+  for (p in 1:nrow(tlpo_s_df)){
+    hvd <- human_validation_data[c("Survival", u_var_set_name_list[[n]])]
+    hvd_tr <- hvd[-as.numeric(tlpo_s_df[p, 1:2]), ]
+    hvd_te <- hvd[as.numeric(tlpo_s_df[p, 1:2]), ]
+    rg_tlpo <- ranger(data = hvd_tr, dependent.variable.name = "Survival", num.trees = rg.num.trees, write.forest = T, save.memory = F, probability = TRUE)
+    rg_pred <- predict(rg_tlpo, hvd_te)
+    tlpo_s_df[[dir_key]][p] <- rg_pred$predictions[1, 1] > rg_pred$predictions[2, 1]
+  }
+}
+##Calculate tournament scores
+#TODO: find error, AUC is > 1
+tournament_score <- list()
+for (n in 3:ncol(tlpo_s_df)){
+  out_degree <- table(tlpo_s_df[, c(1, n)])[, 2]
+  tlpo_od <- apply(tlpo_s_df[, 1:2], 1:2, function(x) out_degree[x])
+  tlpo_h <- heaviside(tlpo_od[, 1], tlpo_od[, 2])
+  tournament_score[[n-2]] <- 1 / (sum(human_validation_data$Survival == 0) * sum(human_validation_data$Survival == 1)) * sum(tlpo_h)
+}
+
 # hsd <- subset(human_sepsis_data, Day == 0)
 # hvd <- human_validation_data
 # cns1 <- make.names(colnames(human_sepsis_data))

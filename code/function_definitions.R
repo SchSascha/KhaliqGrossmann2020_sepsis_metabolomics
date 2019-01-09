@@ -330,6 +330,19 @@ ml.auc <- function(ref, conf){
   return(auc)
 }
 
+#' Compute the Heaviside function H(x1, x2). Works on scalars and vectors
+#'
+#' @param x1 number or numeric vector
+#' @param x2 number or numeric vector of same length as x1
+#'
+#' @return numeric vector with length of x1 of Heaviside function values
+#' @export
+#'
+#' @examples
+heaviside <- function(x1, x2){
+  return(as.numeric((x1 < x2) + 0.5 * (x1 == x2)))
+}
+
 #' Generate folds for stratified cross-validation in a binary classification scenario
 #'
 #' @param num_folds number of folds
