@@ -16,7 +16,7 @@ library(tictoc)
 
 source("../function_definitions.R")
 
-out_dir <- "../../results/data_stats/"
+out_dir <- "../../results/data_stats_NS_high_var/"
 if (!dir.exists(out_dir))
   dir.create(out_dir)
 
@@ -40,6 +40,26 @@ colnames(human_data) <- col
 #Seperate septic and nonseptic patients
 human_nonsepsis_data <- human_data[human_data$`CAP / FP` == "-", ]
 human_sepsis_data <- human_data[human_data$`CAP / FP` != "-", ]
+
+#Reduce to data where variance is larger in Non-survivors as test
+metab_all_days_var_df <- rbind(data.frame(Survival = "NS", t(colVars(as.matrix(subset(human_sepsis_data, Survival == "NS",-1:-5))))),
+                               data.frame(Survival = "S", t(colVars(as.matrix(subset(human_sepsis_data, Survival == "S", -1:-5))))))
+colnames(metab_all_days_var_df)[-1] <- colnames(human_sepsis_data)[-1:-5]
+metab_all_days_mean <- colMeans(human_sepsis_data[, -1:-5])
+metab_all_days_var_df[, -1] <- scale(metab_all_days_var_df[, -1], center = FALSE, scale = metab_all_days_mean)
+metab_day_vardiff_df <- metab_all_days_var_df[1, -1] - metab_all_days_var_df[2, -1]
+metab_all_days_var_df <- metab_all_days_var_df[c(1, 1 + order(metab_day_vardiff_df, decreasing = TRUE))]
+metab_all_days_var_df[, -1] <- scale(metab_all_days_var_df[, -1], scale = FALSE, center = TRUE)
+metab_all_days_var_df <- metab_all_days_var_df[, c(1, 1 + which(metab_all_days_var_df[1, -1] > 0))]
+var_sel <- colnames(metab_all_days_var_df)[-1]
+
+human_sepsis_data <- subset(human_sepsis_data, select = c(1:5, which(colnames(human_sepsis_data) %in% var_sel)))
+human_data <- subset(human_data, select = c(1:5, which(colnames(human_data) %in% var_sel)))
+human_data_legend <- human_data_legend[c(1:5, which(human_data_legend[, 1] %in% var_sel)), ]
+
+metab_end <- ncol(human_sepsis_data)
+metab_sel <- 6:metab_end
+pheno_sel <- as.numeric()
 
 #Normalize data
 human_sepsis_data_normal <- human_sepsis_data
@@ -83,6 +103,7 @@ tic()
 for (met_group in unique(human_data_legend$group[metab_sel])){
   met_group_idx <- which(human_data_legend$group == met_group)
   human_data_dist <- cbind(human_data[,1:5], as.matrix(dist(x = human_data[, met_group_idx], method = "canberra"))) # distance() works on a per row basis
+  pat_list <- human_data[, 1:5]
   p <- prcomp(human_data_dist[, -1:-5])
   
   ###PERMANOVA with bootstrapping
@@ -300,9 +321,9 @@ ad_st_xy_m <- p.adjust(lapply(lapply(ad_st_r1, unlist), mean))
 ad_st_x_m <- p.adjust(lapply(lapply(ad_st_r2, unlist), mean))
 ad_st_y_m <- p.adjust(lapply(lapply(ad_st_r3, unlist), mean))
 
-ad_st_r_df <- t(data.frame(ad_st_xy_m, ad_st_x_m, ad_st_y_m))
+ad_st_r_df <- as.data.frame(t(data.frame(ad_st_xy_m, ad_st_x_m, ad_st_y_m)))
 rownames(ad_st_r_df) <- c("XY", "X", "Y")
-fwrite(x = ad_mg_r_df, file = paste0(out_dir, "human_met_group_PCA_step_diff_FDR.csv"), row.names = TRUE, sep = "\t")
+fwrite(x = ad_st_r_df, file = paste0(out_dir, "human_met_group_PCA_step_diff_FDR_varNS_geq_varS.csv"), row.names = TRUE, sep = "\t")
 
 ##Actual plots for each metabolite group
 tic()
