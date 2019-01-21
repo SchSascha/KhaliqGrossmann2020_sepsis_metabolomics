@@ -522,7 +522,8 @@ tlpocv_rfe_parallel <- function(data_x, data_y, train_fun, prob_fun, varimp_fun,
              write.forest = T, 
              probability = T, 
              save.memory = F, 
-             importance = "impurity")
+             importance = "impurity", 
+             num.threads = 1)
     }
     prob_fun <- function(classifier, te_x){
       predict(classifier, te_x)$predictions[, 1]
