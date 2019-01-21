@@ -68,164 +68,53 @@ colnames(human_sepsis_data_ml) <- make.names(colnames(human_sepsis_data_ml))
 human_sepsis_data_ml[, -1:-5] <- scale(missRanger(human_sepsis_data_ml[, -1:-5], pmm.k = 3, num.trees = 100))
 
 #Parralel nested TPLOCV-RFE
+##Ranger
 tic()
-tlpocv_res <- tlpocv_rfe_parallel(data_x = human_sepsis_data_ml[, -1:-5], data_y = human_sepsis_data_ml["Survival"], mc.cores = 7)
+rg_tlpocv_res <- tlpocv_rfe_parallel(data_x = human_sepsis_data_ml[, -1:-5], data_y = human_sepsis_data_ml["Survival"], mc.cores = 7)
 toc()
-
-##Build sample pair list
-tlpo_s_df <- t(combn(x = 1:nrow(human_sepsis_data_ml), m = 2))
-##Run Feature Selection
-feature_list <- list()
-feature_list[[1]] <- list()
-feature_list[[1]][[1]] <- colnames(human_sepsis_data_ml)[-1:-5]
-inner_AUC <- list()
-inner_AUC[[1]] <- rep(-100, length(feature_list[[1]]) - 1)
-inner_AUC[2:nrow(tlpo_s_df)] <- inner_AUC[1]
-outer_AUC <- rep(0, length(feature_list[[1]]) - 1)
-pair_dir <- list()
-pair_ext_dir <- list()
+##Logit
+lm_tr_fun <- function(tr_x, tr_y){
+  data <- data.frame(tr_y = tr_y[[1]], tr_x)
+  glm(formula = tr_y ~ ., data = data, family = binomial(link = "logit"))
+}
+lm_prob_fun <- function(glmod, te_x){
+  predict(glmod, te_x, type = "response")
+}
+lm_varimp_fun <- function(glmod){
+  abs(glmod$coefficients)
+}
 tic()
-###External LPOCV
-for (p_ext in 1:nrow(tlpo_s_df)){ #for each validation pair
-  tlpo_int_s_df <- tlpo_s_df[(!tlpo_s_df[, 1] %in% tlpo_s_df[p_ext, ]) & !(tlpo_s_df[, 2] %in% tlpo_s_df[p_ext, ]), ] #exclude samples in validation pair from training
-  ####Internal LPOCV/RFE
-  feature_list[[p_ext]] <- list()
-  pair_dir[[p_ext]] <- list()
-  pair_ext_dir[[p_ext]] <- list()
-  feature_list[[p_ext]][[1]] <- colnames(human_sepsis_data_ml)[-1:-5]
-  feat_start <- feature_list[[p_ext]][[1]] #start with all features
-  for (feat_count in seq_along(feat_start[-length(feat_start)])){ #the hard way: remove features one by one
-    feat_sel <- feature_list[[p_ext]][[feat_count]] #update feature selection
-    pair_dir[[p_ext]][[feat_count]] <- rep(-100, nrow(tlpo_int_s_df)) #edge direction in dominance graph
-    pair_ext_dir[[p_ext]][[feat_count]] <- rep(-100, nrow(tlpo_int_s_df)) #edge direction in dominance graph for validation pair
-    feat_imp <- matrix(0, nrow = nrow(tlpo_int_s_df), ncol = length(feat_sel)) #feature importance matrix for this run
-    for (p_int in 1:nrow(tlpo_int_s_df)){ #for each test pair
-      tr_x <- human_sepsis_data_ml[-c(tlpo_int_s_df[p_int, ], tlpo_s_df[p_ext, ]), feat_sel]
-      tr_y <- human_sepsis_data_ml[-c(tlpo_int_s_df[p_int, ], tlpo_s_df[p_ext, ]), "Survival"]
-      te_x <- human_sepsis_data_ml[tlpo_int_s_df[p_int, ], feat_sel]
-      te_y <- human_sepsis_data_ml[tlpo_int_s_df[p_int, ], "Survival"]
-      rg_te <- ranger(data = human_sepsis_data_ml[-c(tlpo_int_s_df[p_int, ], tlpo_s_df[p_ext, ]), c("Survival", feat_sel)], 
-                      dependent.variable.name = "Survival", 
-                      write.forest = T, 
-                      probability = T, 
-                      save.memory = F, 
-                      importance = "impurity")
-      pred_te <- predict(rg_te, te_x)
-      pair_dir[[p_ext]][[feat_count]][p_int] <- heaviside(pred_te$predictions[1, 1], pred_te$predictions[2, 1]) #determine edge direction
-      feat_imp[p_int, ] <- rg_te$variable.importance #collect variable importance
-    }
-    ####Calculate AUC as in Perez et al., 2018
-    #####Get out degree for each vertex (sample)
-    out_degree <- rep(0, max(tlpo_int_s_df[, 1:2]))
-    d1 <- aggregate(x = pair_dir[[p_ext]][[feat_count]], by = list(v = tlpo_int_s_df[, 1]), FUN = sum) 
-    d2 <- aggregate(x = 1 - pair_dir[[p_ext]][[feat_count]], by = list(v = tlpo_int_s_df[, 2]), FUN = sum)
-    out_degree[d1$v] <- d1$x
-    out_degree[d2$v] <- out_degree[d2$v] + d2$x
-    tlpo_od <- apply(tlpo_int_s_df[, 1:2], 1:2, function(x) out_degree[x])
-    tlpo_h <- heaviside(tlpo_od[, 1], tlpo_od[, 2])
-    #####use only the positive-negative pairs for AUC (positive first sample, negative second sample!)
-    pos1_idx <- human_sepsis_data_ml$Survival[tlpo_int_s_df[, 1]] == 1
-    pos2_idx <- human_sepsis_data_ml$Survival[tlpo_int_s_df[, 2]] == 1
-    neg1_idx <- human_sepsis_data_ml$Survival[tlpo_int_s_df[, 1]] == 0
-    neg2_idx <- human_sepsis_data_ml$Survival[tlpo_int_s_df[, 2]] == 0
-    sum_h <- sum(tlpo_h[pos1_idx & neg2_idx]) + sum(1 - tlpo_h[pos2_idx & neg1_idx])
-    inner_AUC[[p_ext]][feat_count] <- sum_h / (sum(pos1_idx & neg2_idx) + sum(pos2_idx & neg1_idx))
-    feat_imp <- colMeans(feat_imp) #rank features by importance
-    feature_list[[p_ext]][[feat_count + 1]] <- feat_sel[feat_imp > sort(feat_imp)[1]] #down-select feature set
-  }
-}
+lm_tlpocv_res <- tlpocv_rfe_parallel(data_x = human_sepsis_data_ml[, -1:-5], 
+                                     data_y = human_sepsis_data_ml["Survival"], 
+                                     mc.cores = 7, 
+                                     train_fun = lm_tr_fun, 
+                                     prob_fun = lm_prob_fun, 
+                                     varimp_fun = lm_varimp_fun)
 toc()
-###Find best feature set/most common feature combination for each feature set size
-best_feat_set <- list()
-for (feat_count in seq_along(feature_list[[1]])[-length(feature_list[[1]])]){
-  fls <- unlist(lapply(feature_list, `[[`, feat_count)) #gets all feature sets for a fixed set size from all validation pairs
-  fl_hist <- table(fls)
-  fl_hist <- sort(fl_hist, decreasing = TRUE) #beware! feature names are not in original order
-  best_feat_set[[feat_count]] <- names(fl_hist)[1:(length(feature_list[[1]][[feat_count]]))]
+##SVM
+sv_tr_fun <- function(tr_x, tr_y){
+  data <- data.frame(tr_y = tr_y[[1]], tr_x)
+  svm(formula = tr_y ~ ., data = data, scale = FALSE, type = "C-classification", kernel = "linear")
 }
-###Evaluate feature sets on external validation pairs
-for (p_ext in 1:nrow(tlpo_s_df)){ #for each validation pair
-  pair_ext_dir[[p_ext]] <- rep(0, length(best_feat_set))
-  tlpo_int_s_df <- tlpo_s_df[(!tlpo_s_df[, 1] %in% tlpo_s_df[p_ext, ]) & !(tlpo_s_df[, 2] %in% tlpo_s_df[p_ext, ]), ] #exclude samples in validation pair from training
-  for (feat_count in seq_along(best_feat_set)){
-    feat_sel <- best_feat_set[[feat_count]]
-    tr_x <- human_sepsis_data_ml[-tlpo_s_df[p_ext, ], feat_sel]
-    tr_y <- human_sepsis_data_ml[-tlpo_s_df[p_ext, ], "Survival"]
-    va_x <- human_sepsis_data_ml[tlpo_s_df[p_ext, ], feat_sel]
-    va_y <- human_sepsis_data_ml[tlpo_s_df[p_ext, ], "Survival"]
-    rg_va <- ranger(data = human_sepsis_data_ml[-tlpo_s_df[p_ext, ], c("Survival", feat_sel)], 
-                    dependent.variable.name = "Survival", 
-                    write.forest = T, 
-                    probability = T, 
-                    save.memory = F, 
-                    importance = "impurity")
-    pred_va <- predict(rg_va, va_x)
-    pair_ext_dir[[p_ext]][feat_count] <- heaviside(pred_va$predictions[1, 1], pred_va$predictions[2, 1]) #determine edge direction
-  }
+sv_prob_fun <- function(svmod, te_x){
+  p <- predict(svmod, te_x, decision.values = TRUE)
+  attr(p, "decision.value")
 }
-####Calculate AUC as in Perez et al., 2018
-#####Get out degree for each vertex (sample)
-for (feat_count in seq_along(pair_ext_dir[[1]])){
-  out_degree <- rep(0, max(tlpo_s_df[, 1:2]))
-  d1 <- aggregate(x = sapply(pair_ext_dir, `[[`, feat_count), by = list(v = tlpo_s_df[, 1]), FUN = sum) 
-  d2 <- aggregate(x = 1 - sapply(pair_ext_dir, `[[`, feat_count), by = list(v = tlpo_s_df[, 2]), FUN = sum)
-  out_degree[d1$v] <- d1$x
-  out_degree[d2$v] <- out_degree[d2$v] + d2$x
-  tlpo_od <- apply(tlpo_int_s_df[, 1:2], 1:2, function(x) out_degree[x])
-  tlpo_h <- heaviside(tlpo_od[, 1], tlpo_od[, 2])
-  #####use only the positive-negative pairs for AUC (positive first sample, negative second sample!)
-  pos1_idx <- human_sepsis_data_ml$Survival[tlpo_int_s_df[, 1]] == 1
-  pos2_idx <- human_sepsis_data_ml$Survival[tlpo_int_s_df[, 2]] == 1
-  neg1_idx <- human_sepsis_data_ml$Survival[tlpo_int_s_df[, 1]] == 0
-  neg2_idx <- human_sepsis_data_ml$Survival[tlpo_int_s_df[, 2]] == 0
-  sum_h <- sum(tlpo_h[pos1_idx & neg2_idx]) + sum(1 - tlpo_h[pos2_idx & neg1_idx])
-  outer_AUC[feat_count] <- sum_h / (sum(pos1_idx & neg2_idx) + sum(pos2_idx & neg1_idx))
+sv_varimp_fun <- function(svmod){
+  d <- data.frame(diag(1, nrow = length(svmod$scaled)))
+  colnames(d) <- attr(svmod$terms, "term.labels")
+  abs(sapply(d, function(r) attr(predict(svmod, t(r), decision.values = TRUE), "decision.values")[1]))
 }
-
+tic()
+sv_tlpocv_res <- tlpocv_rfe_parallel(data_x = human_sepsis_data_ml[, -1:-5], 
+                                     data_y = human_sepsis_data_ml["Survival"], 
+                                     mc.cores = 7, 
+                                     train_fun = sv_train_fun, 
+                                     prob_fun = sv_prob_fun, 
+                                     varimp_fun = sv_varimp_fun)
+toc()
 
 #-----------------------------
-
-#Validate variable set only on Ferrario et al. data, use recent leave pair out cross validation for AUC and ROC generation (Perez et al., 2018)
-##Build sample pair list
-#tlpo_s_df <- as.data.frame(t(combn(x = 1:nrow(human_sepsis_data_ml), m = 2)))
-tlpo_s_df <- expand.grid(s1 = which(human_validation_data$Survival == 1), s2 = which(human_validation_data$Survival == 0))
-##Run classification
-u_var_set_name_list <- unique(var_set_name_list)
-for (n in seq_along(u_var_set_name_list)){ #only unique sets, bc. mostly deterministic results
-  dir_key <- paste0("dir_pset", n)
-  tlpo_s_df[[dir_key]] <- 0
-  for (p in 1:nrow(tlpo_s_df)){
-    hvd <- human_sepsis_data_ml[c("Survival", u_var_set_name_list[[n]])]
-    hvd_tr <- hvd[-as.numeric(tlpo_s_df[p, 1:2]), ]
-    hvd_te <- hvd[as.numeric(tlpo_s_df[p, 1:2]), ]
-    rg_tlpo <- ranger(data = hvd_tr, dependent.variable.name = "Survival", num.trees = 500, write.forest = T, save.memory = F, probability = TRUE)
-    rg_pred <- predict(rg_tlpo, hvd_te)
-    rg_tlpo_s_df[[dir_key]][p] <- rg_pred$predictions[1, 1] > rg_pred$predictions[2, 1]
-  }
-}
-##Calculate AUC as in Airola et al., 2011
-tournament_score <- list()
-for (n in 3:ncol(tlpo_s_df)){
-  out_degree <- rep(0, max(tlpo_s_df[, 1:2]))
-  pos_out <- tapply(X = as.numeric(tlpo_s_df[, n] == 1), FUN = sum, INDEX = tlpo_s_df[, 1])
-  neg_out <- tapply(X = as.numeric(tlpo_s_df[, n] == 0), FUN = sum, INDEX = tlpo_s_df[, 2])
-  out_degree[as.numeric(names(pos_out))] <- pos_out
-  out_degree[as.numeric(names(neg_out))] <- neg_out
-  tlpo_od <- apply(tlpo_s_df[, 1:2], 1:2, function(x) out_degree[x])
-  tlpo_h <- heaviside(tlpo_od[, 1], tlpo_od[, 2])
-  tournament_score[[n-2]] <- sum(tlpo_h) / nrow(tlpo_s_df)
-}
-
-##Calculate tournament scores
-tournament_score <- list()
-for (n in 3:ncol(tlpo_s_df)){
-  out_degree <- c(table(tlpo_s_df[, c(1, n)])[, 2], 0) + c(0, table(tlpo_s_df[, c(2, n)])[, 1]) #shift with c() is necessary bc. first counts 1..n-1 and second 2..n
-  tlpo_od <- apply(tlpo_s_df[, 1:2], 1:2, function(x) out_degree[x])
-  tlpo_h <- heaviside(tlpo_od[, 1], tlpo_od[, 2])
-  tournament_score[[n-2]] <- 1 / (length(tlpo_h) + 1) * sum(tlpo_h)
-}
-
-
 
 
 rg.npr.repeat.df$Method <- "RF"
