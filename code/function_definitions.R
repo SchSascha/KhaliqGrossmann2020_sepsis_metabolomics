@@ -536,7 +536,7 @@ tlpocv_rfe_parallel <- function(data_x, data_y, train_fun, prob_fun, varimp_fun,
   ##Build sample pair list
   tlpo_s_df <- t(combn(x = 1:nrow(data_x), m = 2))
   ##Run Feature Selection
-  outer_AUC <- rep(0, length(ncol(data_x)) - 1)
+  outer_AUC <- rep(0, length(ncol(data_x)))
   ###Function for internal TLPOCV
   int_tlpocv_rfe <- function(p_ext, tlpo_s_df, data_x, data_y){
     tlpo_int_s_df <- tlpo_s_df[(!tlpo_s_df[, 1] %in% tlpo_s_df[p_ext, ]) & !(tlpo_s_df[, 2] %in% tlpo_s_df[p_ext, ]), ] #exclude samples in validation pair from training
@@ -560,11 +560,11 @@ tlpocv_rfe_parallel <- function(data_x, data_y, train_fun, prob_fun, varimp_fun,
         rg_te <- train_fun(tr_x = tr_x, tr_y = tr_y)
         pred_te <- prob_fun(classifier = rg_te, te_x = te_x)
         pair_dir[[feat_count]][p_int] <- heaviside(pred_te[1], pred_te[2]) #determine edge direction
-        feat_imp[p_int, ] <- varimp_fun(rg_te) #collect variable importance
+        feat_imp[p_int, ] <- varimp_fun(classifier = rg_te) #collect variable importance
       }
       ####Calculate AUC as in Perez et al., 2018
       #####Get out degree for each vertex (sample)
-      out_degree <- rep(0, length(data_y))
+      out_degree <- rep(0, nrow(data_y))
       d1 <- aggregate(x = pair_dir[[feat_count]], by = list(v = tlpo_int_s_df[, 1]), FUN = sum) 
       d2 <- aggregate(x = 1 - pair_dir[[feat_count]], by = list(v = tlpo_int_s_df[, 2]), FUN = sum)
       out_degree[d1$v] <- d1$x
@@ -579,9 +579,10 @@ tlpocv_rfe_parallel <- function(data_x, data_y, train_fun, prob_fun, varimp_fun,
       sum_h <- sum(tlpo_h[pos1_idx & neg2_idx]) + sum(1 - tlpo_h[pos2_idx & neg1_idx])
       inner_AUC[feat_count] <- sum_h / (sum(pos1_idx & neg2_idx) + sum(pos2_idx & neg1_idx))
       feat_imp <- colMeans(feat_imp) #rank features by importance
-      feature_list[[feat_count + 1]] <- feat_sel[feat_imp > sort(feat_imp)[1]] #down-select feature set
+      feature_list[[feat_count + 1]] <- feat_sel[-order(feat_imp)[1]] #down-select feature set
     }
-    return(list(inner_AUC = inner_AUC, feaure_list = feature_list))
+    feature_list[[length(feature_list)]] <- NULL
+    return(list(inner_AUC = inner_AUC, feature_list = feature_list))
   }
   ###External LPOCV
   int_tlpocv_res <- mclapply(1:nrow(tlpo_s_df), int_tlpocv_rfe, tlpo_s_df = tlpo_s_df, data_x = data_x, data_y = data_y, mc.cores = mc.cores)
@@ -590,7 +591,7 @@ tlpocv_rfe_parallel <- function(data_x, data_y, train_fun, prob_fun, varimp_fun,
   feature_list <- lapply(int_tlpocv_res, `[[`, "feature_list")
   ###Find best feature set/most common feature combination for each feature set size
   best_feat_set <- list()
-  for (feat_count in seq_along(feature_list[[1]])[-length(feature_list[[1]])]){
+  for (feat_count in seq_along(feature_list[[1]])){
     fls <- unlist(lapply(feature_list, `[[`, feat_count)) #gets all feature sets for a fixed set size from all validation pairs
     fl_hist <- table(fls)
     fl_hist <- sort(fl_hist, decreasing = TRUE) #beware! feature names are not in original order
@@ -610,18 +611,18 @@ tlpocv_rfe_parallel <- function(data_x, data_y, train_fun, prob_fun, varimp_fun,
       colnames(va_y) <- colnames(data_y)
       rg_va <- train_fun(tr_x = tr_x, tr_y = tr_y)
       pred_va <- prob_fun(classifier = rg_va, te_x = va_x)
-      pair_ext_dir[feat_count] <- heaviside(pred_te[1], pred_te[2]) #determine edge direction
+      pair_ext_dir[feat_count] <- heaviside(pred_va[1], pred_va[2]) #determine edge direction
     }
     return(list(pair_ext_dir = pair_ext_dir))
   }
   ###Evaluate feature sets on external validation pairs
-  ext_tlpocv_res <- mclapply(1:nrow(tlpo_s_df), ext_tlpocv_eval, tlpo_s_df = tlpo_s_df, data_x = data_x, data_y = data_y, mc.cores = mc.cores)
+  ext_tlpocv_res <- mclapply(1:nrow(tlpo_s_df), ext_tlpocv_eval, tlpo_s_df = tlpo_s_df, data_x = data_x, data_y = data_y, best_feat_set = best_feat_set, mc.cores = mc.cores)
   pair_ext_dir <- lapply(ext_tlpocv_res, `[[`, "pair_ext_dir")
   ####Calculate AUC as in Perez et al., 2018
   #####Get out degree for each vertex (sample)
   ext_sample_ranking <- list()
   for (feat_count in seq_along(pair_ext_dir[[1]])){
-    out_degree <- rep(0, length(data_y))
+    out_degree <- rep(0, nrow(data_y))
     d1 <- aggregate(x = sapply(pair_ext_dir, `[[`, feat_count), by = list(v = tlpo_s_df[, 1]), FUN = sum) 
     d2 <- aggregate(x = 1 - sapply(pair_ext_dir, `[[`, feat_count), by = list(v = tlpo_s_df[, 2]), FUN = sum)
     out_degree[d1$v] <- d1$x

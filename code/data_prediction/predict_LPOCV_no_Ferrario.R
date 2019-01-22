@@ -8,6 +8,7 @@ library(caret)
 library(missRanger)
 library(kernlab)
 library(C50)
+library(e1071)
 #library(mixOmics)
 library(corpcor)
 library(tictoc)
@@ -70,21 +71,23 @@ human_sepsis_data_ml[, -1:-5] <- scale(missRanger(human_sepsis_data_ml[, -1:-5],
 #Parralel nested TPLOCV-RFE
 ##Ranger
 tic()
-rg_tlpocv_res <- tlpocv_rfe_parallel(data_x = human_sepsis_data_ml[, -1:-5], data_y = human_sepsis_data_ml["Survival"], mc.cores = 7)
+rg_tlpocv_res <- tlpocv_rfe_parallel(data_x = human_sepsis_data_ml[, -1:-5], 
+                                     data_y = human_sepsis_data_ml["Survival"], 
+                                     mc.cores = 7)
 toc()
 ##Logit
 lm_tr_fun <- function(tr_x, tr_y){
   data <- data.frame(tr_y = tr_y[[1]], tr_x)
-  glm(formula = tr_y ~ ., data = data, family = binomial(link = "logit"))
+  glm(formula = tr_y ~ ., data = data, family = binomial(link = "gaussian"))
 }
-lm_prob_fun <- function(glmod, te_x){
-  predict(glmod, te_x, type = "response")
+lm_prob_fun <- function(classifier, te_x){
+  predict(classifier, te_x, type = "response")
 }
-lm_varimp_fun <- function(glmod){
-  abs(glmod$coefficients)
+lm_varimp_fun <- function(classifier){
+  abs(classifier$coefficients)
 }
 tic()
-lm_tlpocv_res <- tlpocv_rfe_parallel(data_x = human_sepsis_data_ml[, -1:-5], 
+lm_tlpocv_res <- tlpocv_rfe_parallel(data_x = human_sepsis_data_ml[-1:-5], 
                                      data_y = human_sepsis_data_ml["Survival"], 
                                      mc.cores = 7, 
                                      train_fun = lm_tr_fun, 
@@ -96,23 +99,24 @@ sv_tr_fun <- function(tr_x, tr_y){
   data <- data.frame(tr_y = tr_y[[1]], tr_x)
   svm(formula = tr_y ~ ., data = data, scale = FALSE, type = "C-classification", kernel = "linear")
 }
-sv_prob_fun <- function(svmod, te_x){
-  p <- predict(svmod, te_x, decision.values = TRUE)
+sv_prob_fun <- function(classifier, te_x){
+  p <- predict(classifier, te_x, decision.values = TRUE)
   attr(p, "decision.value")
 }
-sv_varimp_fun <- function(svmod){
-  d <- data.frame(diag(1, nrow = length(svmod$scaled)))
-  colnames(d) <- attr(svmod$terms, "term.labels")
-  abs(sapply(d, function(r) attr(predict(svmod, t(r), decision.values = TRUE), "decision.values")[1]))
+sv_varimp_fun <- function(classifier){
+  d <- data.frame(diag(1, nrow = length(classifier$scaled)))
+  colnames(d) <- attr(classifier$terms, "term.labels")
+  abs(sapply(d, function(r) attr(predict(classifier, t(r), decision.values = TRUE), "decision.values")[1]))
 }
 tic()
 sv_tlpocv_res <- tlpocv_rfe_parallel(data_x = human_sepsis_data_ml[, -1:-5], 
                                      data_y = human_sepsis_data_ml["Survival"], 
-                                     mc.cores = 7, 
-                                     train_fun = sv_train_fun, 
+                                     mc.cores = 40, 
+                                     train_fun = sv_tr_fun, 
                                      prob_fun = sv_prob_fun, 
                                      varimp_fun = sv_varimp_fun)
 toc()
+save.image()
 
 #-----------------------------
 
