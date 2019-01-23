@@ -71,29 +71,29 @@ human_sepsis_data_ml[, -1:-5] <- scale(missRanger(human_sepsis_data_ml[, -1:-5],
 #Parralel nested TPLOCV-RFE
 ##Ranger
 tic()
-rg_tlpocv_res <- tlpocv_rfe_parallel(data_x = human_sepsis_data_ml[, -1:-5], 
-                                     data_y = human_sepsis_data_ml["Survival"], 
+rg_tlpocv_res <- tlpocv_rfe_parallel(data_x = human_sepsis_data_ml[, -1:-5],
+                                     data_y = human_sepsis_data_ml["Survival"],
                                      mc.cores = 7)
 toc()
-##Logit
-lm_tr_fun <- function(tr_x, tr_y){
-  data <- data.frame(tr_y = tr_y[[1]], tr_x)
-  glm(formula = tr_y ~ ., data = data, family = binomial(link = "gaussian"))
-}
-lm_prob_fun <- function(classifier, te_x){
-  predict(classifier, te_x, type = "response")
-}
-lm_varimp_fun <- function(classifier){
-  abs(classifier$coefficients)
-}
-tic()
-lm_tlpocv_res <- tlpocv_rfe_parallel(data_x = human_sepsis_data_ml[-1:-5], 
-                                     data_y = human_sepsis_data_ml["Survival"], 
-                                     mc.cores = 7, 
-                                     train_fun = lm_tr_fun, 
-                                     prob_fun = lm_prob_fun, 
-                                     varimp_fun = lm_varimp_fun)
-toc()
+# ##Logit
+# lm_tr_fun <- function(tr_x, tr_y){
+#   data <- data.frame(tr_y = tr_y[[1]], tr_x)
+#   glm(formula = tr_y ~ ., data = data, family = binomial(link = "gaussian"))
+# }
+# lm_prob_fun <- function(classifier, te_x){
+#   predict(classifier, te_x, type = "response")
+# }
+# lm_varimp_fun <- function(classifier){
+#   abs(classifier$coefficients)
+# }
+# tic()
+# lm_tlpocv_res <- tlpocv_rfe_parallel(data_x = human_sepsis_data_ml[-1:-5], 
+#                                      data_y = human_sepsis_data_ml["Survival"], 
+#                                      mc.cores = 7, 
+#                                      train_fun = lm_tr_fun, 
+#                                      prob_fun = lm_prob_fun, 
+#                                      varimp_fun = lm_varimp_fun)
+# toc()
 ##SVM
 sv_tr_fun <- function(tr_x, tr_y){
   data <- data.frame(tr_y = tr_y[[1]], tr_x)
@@ -109,174 +109,106 @@ sv_varimp_fun <- function(classifier){
   abs(sapply(d, function(r) attr(predict(classifier, t(r), decision.values = TRUE), "decision.values")[1]))
 }
 tic()
-sv_tlpocv_res <- tlpocv_rfe_parallel(data_x = human_sepsis_data_ml[, -1:-5], 
+sv_tlpocv_res <- tlpocv_rfe_parallel(data_x = human_sepsis_data_ml[-1:-5], 
                                      data_y = human_sepsis_data_ml["Survival"], 
-                                     mc.cores = 40, 
+                                     mc.cores = 6, 
                                      train_fun = sv_tr_fun, 
                                      prob_fun = sv_prob_fun, 
                                      varimp_fun = sv_varimp_fun)
 toc()
 save.image()
 
-#-----------------------------
+#Plot AUCs and ROCs
 
-
-rg.npr.repeat.df$Method <- "RF"
-ks.npr.repeat.df$Method <- "SVM"
-lm.npr.repeat.df$Method <- "Probit"
-ol.npr.repeat.df$Method <- "OPLSDA"
-rg.red.npr.repeat.df$Method <- "RF"
-ks.red.npr.repeat.df$Method <- "SVM"
-lm.red.npr.repeat.df$Method <- "Probit"
-ol.red.npr.repeat.df$Method <- "OPLSDA"
-rg.red.npr.FVal.df$Method <- "RF"
-ks.red.npr.FVal.df$Method <- "SVM"
-lm.red.npr.FVal.df$Method <- "Probit"
-
-rg.auc.repeat.df$Method <- "RF"
-ks.auc.repeat.df$Method <- "SVM"
-lm.auc.repeat.df$Method <- "Probit"
-rg.red.auc.repeat.df$Method <- "RF"
-ks.red.auc.repeat.df$Method <- "SVM"
-lm.red.auc.repeat.df$Method <- "Probit"
-rg.red.auc.FVal.df$Method <- "RF"
-ks.red.auc.FVal.df$Method <- "SVM"
-lm.red.auc.FVal.df$Method <- "Probit"
-
-#Calculate accuracy
-rg.npr.repeat.df$accuracy <- rg.acc.repeat.df$acc
-ks.npr.repeat.df$accuracy <- ks.acc.repeat.df$acc
-lm.npr.repeat.df$accuracy <- lm.acc.repeat.df$acc
-ol.npr.repeat.df$accuracy <- ol.acc.repeat.df$acc
-rg.red.npr.repeat.df$accuracy <- rg.red.acc.repeat.df$acc
-ks.red.npr.repeat.df$accuracy <- ks.red.acc.repeat.df$acc
-lm.red.npr.repeat.df$accuracy <- lm.red.acc.repeat.df$acc
-ol.red.npr.repeat.df$accuracy <- ol.red.acc.repeat.df$acc
-rg.red.npr.FVal.df$accuracy <- rg.red.acc.FVal.df$acc
-ks.red.npr.FVal.df$accuracy <- ks.red.acc.FVal.df$acc
-lm.red.npr.FVal.df$accuracy <- lm.red.acc.FVal.df$acc
-ol.red.npr.FVal.df$accuracy <- ol.red.acc.FVal.df$acc
-
-#Calculate Negative/Positive Predictive Value
-
-#Melt to long table
-npr_by_day_data <- melt(rbindlist(list(rg.npr.repeat.df, ks.npr.repeat.df, lm.npr.repeat.df)), id.vars = c("var", "Method"))
-npr_red_by_day_data <- melt(rbindlist(list(rg.red.npr.repeat.df, ks.red.npr.repeat.df, lm.red.npr.repeat.df)), id.vars = c("var", "Method"))
-npr_FVal_data <- melt(rbindlist(list(rg.red.npr.FVal.df, ks.red.npr.FVal.df, lm.red.npr.FVal.df)), id.vars = c("var", "Method"))
-auc_data <- melt(rbindlist(list(rg.auc.repeat.df, ks.auc.repeat.df, lm.auc.repeat.df)), id.vars = c("var", "Method"))
-auc_red_data <- melt(rbindlist(list(rg.red.auc.repeat.df, ks.red.auc.repeat.df, lm.red.auc.repeat.df)), id.vars = c("var", "Method"))
-auc_FVal_data <- melt(rbindlist(list(rg.red.auc.FVal.df, ks.red.auc.FVal.df, lm.red.auc.FVal.df)), id.vars = c("var", "Method"))
-
-##Remove redundancy
-npr_by_day_data <- subset(npr_by_day_data, subset = variable %in% c("ppv", "npv", "accuracy"))
-npr_red_by_day_data <- subset(npr_red_by_day_data, subset = variable %in% c("ppv", "npv", "accuracy"))
-npr_FVal_data <- subset(npr_FVal_data, subset = variable %in% c("ppv", "npv", "accuracy"))
-
-#Combine for nice plot
-npr_by_day_data$dimensions <- "All variables"
-npr_red_by_day_data$dimensions <- "Important variables"
-npr_data <- rbind(npr_by_day_data, npr_red_by_day_data)
-npr_red_by_day_data$dimensions <- "UKJ data"
-npr_FVal_data$dimensions <- "Ferrario data (validation)"
-npr_red_FVal_data <- rbind(npr_red_by_day_data, npr_FVal_data)
-auc_data$dimensions <- "All variables"
-auc_red_data$dimensions <- "Important variables"
-auc_data_full <- rbind(auc_data, auc_red_data)
-auc_red_data$dimensions <- "UK data"
-auc_FVal_data$dimensions <- "Ferrario data (validation)"
-auc_red_FVal_data <- rbind(auc_red_data, auc_FVal_data)
-
-#Plot FPR and FNR
-npr_by_feat_num_plot <- ggplot(subset(npr_data, variable %in% c("ppv", "npv")), aes(x = var, y = value, color = Method)) +
-  stat_summary(fun.ymin = "min", fun.ymax = "max", fun.y = "mean", geom = "line") +
-  stat_summary(fun.ymin = "min", fun.ymax = "max", fun.y = "mean", size = 0.5, position = position_dodge(width = 0.4)) +
-  facet_grid(variable ~ dimensions, scales = "free_x") +
-  ylim(0, 1) +
-  scale_x_discrete(limits = c(var_range[seq(1, length(var_range), 4)], tot_n_var)) + 
-  xlab("Features included") +
-  ggtitle("") +
+rg_AUC_data <- data.frame(Reduce("rbind", rg_tlpocv_res$inner_AUC))
+rg_AUC_data <- rbind(rg_AUC_data, data.frame(t(rg_tlpocv_res$outer_AUC)))
+colnames(rg_AUC_data) <- (length(rg_tlpocv_res$inner_AUC[[1]]) + 1):2
+rg_AUC_data$stage <- c(rep("Test data", length(rg_tlpocv_res$inner_AUC)), "Validation data")
+rg_AUC_data_long <- melt(rg_AUC_data, id.vars = c("stage"))
+rg_AUC_data_long$variable <- as.numeric(rg_AUC_data_long$variable)
+rg_AUC_data_long$value <- 1 - rg_AUC_data_long$value
+p <- ggplot(data = rg_AUC_data_long, mapping = aes(x = variable, y = value, color = stage, fill = stage)) + 
+  stat_summary(fun.y = median, fun.ymax = function(x) quantile(x, p = 0.75), fun.ymin = function(x) quantile(x, p = 0.25), geom = "ribbon", alpha = 0.5, colour = NA) + 
+  stat_summary(fun.y = median, geom = "line") + 
+  ylim(0, 1) + 
+  ylab("Median AUC") +
+  xlab("Nubmer of features") +
+  ggtitle("RF: Test and Validation AUC of nested TLPOCV-RFE") +
   theme_bw()
-ggsave(filename = "npr_by_feat_num_isect_Ferrario.png", plot = npr_by_feat_num_plot, path = out_dir_pred, width = 8, height = 4, units = "in")
+ggsave(filename = "RF_TLPOCV_RFE_AUC.png", path = out_dir_pred, plot = p, width = 10, height = 5, units = "in")
 
-#Plot accuracy
-acc_by_feat_num_plot <- ggplot(subset(npr_data, variable == "accuracy"), aes(x = var, y = value, color = Method)) +
-  stat_summary(fun.ymin = "min", fun.ymax = "max", fun.y = "mean", geom = "line") +
-  stat_summary(fun.ymin = "min", fun.ymax = "max", fun.y = "mean", position = position_dodge(width = 0.4)) +
-  facet_grid( ~ dimensions, scales = "free_x") +
-  ylim(0, 1) +
-  scale_x_discrete(limits = c(var_range[seq(1, length(var_range), 4)], tot_n_var)) +
-  xlab("Features included") +
-  ylab("Accuracy") +
-  #ggtitle("Normal stratified Cross Validation may shows overfitting") +
-  #ggtitle("Quasi-stratified Cross Validation prevents overfitting") +
+sv_AUC_data <- data.frame(Reduce("rbind", sv_tlpocv_res$inner_AUC))
+sv_AUC_data <- rbind(sv_AUC_data, data.frame(t(sv_tlpocv_res$outer_AUC)))
+colnames(sv_AUC_data) <- (length(sv_tlpocv_res$inner_AUC[[1]]) + 1):2
+sv_AUC_data$stage <- c(rep("Test data", length(sv_tlpocv_res$inner_AUC)), "Validation data")
+sv_AUC_data_long <- melt(sv_AUC_data, id.vars = c("stage"))
+sv_AUC_data_long$variable <- as.numeric(sv_AUC_data_long$variable)
+p <- ggplot(data = sv_AUC_data_long, mapping = aes(x = variable, y = value, color = stage, fill = stage)) + 
+  stat_summary(fun.y = median, fun.ymax = function(x) quantile(x, p = 0.75), fun.ymin = function(x) quantile(x, p = 0.25), geom = "ribbon", alpha = 0.5, colour = NA) + 
+  stat_summary(fun.y = median, geom = "line") + 
+  ylim(0, 1) + 
+  ylab("Median AUC") +
+  xlab("Nubmer of features") +
+  ggtitle("SVM: Test and Validation AUC of nested TLPOCV-RFE") +
   theme_bw()
-ggsave(filename = "acc_by_feat_num_isect_Ferrario.png", plot = acc_by_feat_num_plot, path = out_dir_pred, width = 8, height = 2.5, units = "in")
+ggsave(filename = "SVM_TLPOCV_RFE_AUC.png", path = out_dir_pred, plot = p, width = 10, height = 5, units = "in")
 
-#Plot AUC
-auc_by_feat_num_plot <- ggplot(subset(auc_data_full, variable == "auc"), aes(x = var, y = value, color = Method)) +
-  stat_summary(fun.ymin = "min", fun.ymax = "max", fun.y = "mean", geom = "line") +
-  stat_summary(fun.ymin = "min", fun.ymax = "max", fun.y = "mean", position = position_dodge(width = 0.4)) +
-  facet_grid( ~ dimensions, scales = "free_x") +
-  scale_x_discrete(limits = c(var_range[seq(1, length(var_range), 4)], tot_n_var)) + 
-  ylim(0, 1) +
-  xlab("Features included") +
-  ylab("AUC") +
-  #ggtitle("Normal stratified Cross Validation may shows overfitting") +
-  #ggtitle("Quasi-stratified Cross Validation prevents overfitting") +
-  theme_bw()
-ggsave(filename = "auc_by_feat_num_isect_Ferrario.png", plot = auc_by_feat_num_plot, path = out_dir_pred, width = 8, height = 2.5, units = "in")
+sv_int_ROC_data <- lapply(sv_tlpocv_res$int_sample_ranking[[length(sv_tlpocv_res$int_sample_ranking)]], function(e) ml.roc(ref = e[, 1], conf = e[, 2]))
+sv_int_ROC_data <- lapply(sv_int_ROC_data, function(e) aggregate(x = e[, 2], by = list(FPR = e[, 1]), FUN = min))
+sv_int_ROC_data <- data.frame(Reduce("rbind", sv_int_ROC_data))
+if (min(sv_int_ROC_data[, 1]) != 0)
+  sv_int_ROC_data <- rbind(sv_int_ROC_data, c(0, 0))
+if (max(sv_int_ROC_data[, 2]) != 1)
+  sv_int_ROC_data <- rbind(sv_int_ROC_data, c(1, 1))
+colnames(sv_int_ROC_data) <- c("FPR", "TPR")
+sv_int_ROC_data$stage <- "Test data"
+ranks_2feat <- sv_tlpocv_res$ext_sample_ranking[[length(sv_tlpocv_res$ext_sample_ranking)]]
+sv_ext_ROC_data <- data.frame(ml.roc(ref = ranks_2feat[, 1], conf = ranks_2feat[, 2]))
+sv_ext_ROC_data <- aggregate(x = sv_ext_ROC_data[, 2], by = list(FPR = sv_ext_ROC_data[, 1]), FUN = min)
+if (min(sv_ext_ROC_data[, 1]) != 0)
+  sv_ext_ROC_data <- rbind(sv_ext_ROC_data, c(0, 0))
+if (max(sv_ext_ROC_data[, 2]) != 1)
+  sv_ext_ROC_data <- rbind(sv_ext_ROC_data, c(1, 1))
+colnames(sv_ext_ROC_data) <- c("FPR", "TPR")
+sv_ext_ROC_data$stage <- "Validation data"
+sv_ROC_data <- rbind(sv_int_ROC_data, sv_ext_ROC_data)
+p <- ggplot(data = sv_ROC_data, mapping = aes(x = FPR, y = TPR, color = stage, fill = stage)) + 
+  stat_summary(fun.y = median, fun.ymax = function(x) quantile(x, p = 0.75), fun.ymin = function(x) quantile(x, p = 0.25), geom = "ribbon", alpha = 0.5, colour = NA) + 
+  stat_summary(fun.y = median, geom = "line") + 
+  geom_abline(slope = 1, intercept = 0) +
+  scale_x_continuous(limits = c(0, 1), expand = c(0, 0)) +
+  scale_y_continuous(limits = c(0, 1), expand = c(0, 0)) +
+  ggtitle("SVM: Test and Validation ROC of nested TLPOCV RFE\nbest 2 feature set") +
+  theme_bw() + 
+  theme(panel.grid = element_blank())
+ggsave(filename = "SVM_TLPOCV_RFE_ROC_2feat.png", path = out_dir_pred, plot = p, width = 6, height = 5, units = "in")
 
-#Plot npr on validation data from Ferrario et al.
-npr_by_feat_num_FVal_plot <- ggplot(subset(npr_FVal_data, variable %in% c("ppv", "npv")), aes(x = var, y = value, color = Method)) +
-  stat_summary(fun.ymin = "min", fun.ymax = "max", fun.y = "mean", geom = "line") +
-  stat_summary(fun.ymin = "min", fun.ymax = "max", fun.y = "mean", size = 0.5, position = position_dodge(width = 0.4)) +
-  facet_grid( ~ variable, scales = "free_x") +
-  ylim(0, 1) +
-  scale_x_discrete(limits = c(var_range[seq(1, length(var_range), 4)], tot_n_var)) + 
-  xlab("Features included") +
-  ggtitle("") +
-  theme_bw()
-ggsave(filename = "npr_by_feat_num_Ferrario_validation.png", plot = npr_by_feat_num_FVal_plot, path = out_dir_pred, width = 4, height = 4, units = "in")
-
-#Plot accuracy on validation data from Ferrario et al.
-acc_by_feat_num_FVal_plot <- ggplot(subset(npr_FVal_data, variable == "accuracy"), aes(x = var, y = value, color = Method)) +
-  stat_summary(fun.ymin = "min", fun.ymax = "max", fun.y = "mean", geom = "line") +
-  stat_summary(fun.ymin = "min", fun.ymax = "max", fun.y = "mean", position = position_dodge(width = 0.4)) +
-  ylim(0, 1) +
-  scale_x_discrete(limits = c(var_range[seq(1, length(var_range), 4)], tot_n_var)) +
-  xlab("Features included") +
-  ylab("Accuracy") +
-  theme_bw()
-ggsave(filename = "acc_by_feat_num_Ferrario_validation.png", plot = acc_by_feat_num_FVal_plot, path = out_dir_pred, width = 4, height = 2.5, units = "in")
-
-#Plot auc on validation data from Ferrario et al.
-auc_by_feat_num_FVal_plot <- ggplot(subset(auc_FVal_data, variable == "auc"), aes(x = var, y = value, color = Method)) +
-  stat_summary(fun.ymin = "min", fun.ymax = "max", fun.y = "mean", geom = "line") +
-  stat_summary(fun.ymin = "min", fun.ymax = "max", fun.y = "mean", position = position_dodge(width = 0.4)) +
-  scale_x_discrete(limits = c(var_range[seq(1, length(var_range), 4)], tot_n_var)) + 
-  ylim(0, 1) +
-  xlab("Features included") +
-  ylab("AUC") +
-  theme_bw()
-ggsave(filename = "auc_by_feat_num_Ferrario_validation.png", plot = auc_by_feat_num_FVal_plot, path = out_dir_pred, width = 4, height = 2.5, units = "in")
-
-#Plot npr and acc on validation and test data
-npr_red_FVal_plot <- ggplot(subset(npr_red_FVal_data, variable %in% c("accuracy", "ppv", "npv")), aes(x = var, y = value, color = Method)) +
-  stat_summary(fun.ymin = "min", fun.ymax = "max", fun.y = "mean", geom = "line") +
-  stat_summary(fun.ymin = "min", fun.ymax = "max", fun.y = "mean", size = 0.5, position = position_dodge(width = 0.4)) +
-  facet_grid(variable ~ dimensions) +
-  ylim(0, 1) +
-  xlab("Features included") +
-  ggtitle("") +
-  theme_bw()
-ggsave(filename = "acc_npr_test_and_Ferrario_validation.png", plot = npr_red_FVal_plot, path = out_dir_pred, width = 6, height = 6, units = "in")
-
-#Plot metabs against metabs for six most important variables
-# selection <- unique(na.omit(unlist(var_set_name_list[1:10])))
-# plot(as.formula(paste0("~ ", paste0(selection, collapse = "+"))), data = human_sepsis_data_ml[,selection], col = human_sepsis_data_ml$Survival + 1)
-# 
-# hsiclasso_set <- c('Leptin', 'PC aa C30:2', 'TSH', 'PC aa C30:0', 'FT4', 'C5-M-DC', 'C4', 'C16', 'GH', 't4-OH-Pro', 'PC aa C38:3', 'Prolactin', 'DHEA', 'Leu', 'SM C24:1')
-# selection <- na.omit(match(hsiclasso_set, colnames(human_sepsis_data)))
-# hsd <- subset(human_sepsis_data, Day == 0)
-# colnames(hsd) <- make.names(colnames(hsd))
-# plot(as.formula(paste0("~ ", paste0(colnames(hsd)[selection], collapse = "+"))), data = hsd[,selection], col = as.numeric(as.factor(hsd$Survival)) + 1)
+rg_int_ROC_data <- lapply(rg_tlpocv_res$int_sample_ranking[[length(rg_tlpocv_res$int_sample_ranking)]], function(e) ml.roc(ref = e[, 1], conf = e[, 2]))
+rg_int_ROC_data <- lapply(rg_int_ROC_data, function(e) aggregate(x = e[, 2], by = list(FPR = e[, 1]), FUN = min))
+rg_int_ROC_data <- data.frame(Reduce("rbind", rg_int_ROC_data))
+if (min(rg_int_ROC_data[, 1]) != 0)
+  rg_int_ROC_data <- rbind(rg_int_ROC_data, c(0, 0))
+if (max(rg_int_ROC_data[, 2]) != 1)
+  rg_int_ROC_data <- rbind(rg_int_ROC_data, c(1, 1))
+colnames(rg_int_ROC_data) <- c("FPR", "TPR")
+rg_int_ROC_data$stage <- "Test data"
+ranks_2feat <- rg_tlpocv_res$ext_sample_ranking[[length(rg_tlpocv_res$ext_sample_ranking)]]
+rg_ext_ROC_data <- data.frame(ml.roc(ref = ranks_2feat[, 1], conf = ranks_2feat[, 2]))
+rg_ext_ROC_data <- aggregate(x = rg_ext_ROC_data[, 2], by = list(FPR = rg_ext_ROC_data[, 1]), FUN = min)
+if (min(rg_ext_ROC_data[, 1]) != 0)
+  rg_ext_ROC_data <- rbind(rg_ext_ROC_data, c(0, 0))
+if (max(rg_ext_ROC_data[, 2]) != 1)
+  rg_ext_ROC_data <- rbind(rg_ext_ROC_data, c(1, 1))
+colnames(rg_ext_ROC_data) <- c("FPR", "TPR")
+rg_ext_ROC_data$stage <- "Validation data"
+rg_ROC_data <- rbind(rg_int_ROC_data, rg_ext_ROC_data)
+p <- ggplot(data = rg_ROC_data, mapping = aes(x = FPR, y = TPR, color = stage, fill = stage)) + 
+  stat_summary(fun.y = median, fun.ymax = function(x) quantile(x, p = 0.75), fun.ymin = function(x) quantile(x, p = 0.25), geom = "ribbon", alpha = 0.5, colour = NA) + 
+  stat_summary(fun.y = median, geom = "line") + 
+  geom_abline(slope = 1, intercept = 0) +
+  scale_x_continuous(limits = c(0, 1), expand = c(0, 0)) +
+  scale_y_continuous(limits = c(0, 1), expand = c(0, 0)) +
+  ggtitle("RF: Test and Validation ROC of nested TLPOCV RFE\nbest 2 feature set") +
+  theme_bw() + 
+  theme(panel.grid = element_blank())
+ggsave(filename = "RF_TLPOCV_RFE_ROC_2feat.png", path = out_dir_pred, plot = p, width = 6, height = 5, units = "in")
