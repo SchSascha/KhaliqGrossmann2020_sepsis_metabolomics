@@ -1786,10 +1786,15 @@ metab_sig_sel <- mclapply(unique(metab_day_var_long_df$variable),
                           })
 # metab_sig_sel <- metab_sig_sel_a
 # metab_sig_sel <- sapply(lapply(metab_sig_sel, sapply, function(e) e$aov.tab[["Pr(>F)"]][1]), mean)
-metab_sig_sel<- sapply(lapply(metab_sig_sel, `[[`, "p.value"), `<`, 0.05)
-metab_day_var_long_df <- subset(metab_day_var_long_df, as.character(variable) %in% gns & as.character(variable) %in% unique(variable)[metab_sig_sel])
+metab_sig <- sapply(metab_sig_sel, `[[`, "p.value")
+metab_sig_sel<- metab_sig < 0.05
+metab_sig_sel_name <- unique(metab_day_var_long_df$variable)[metab_sig_sel]
+#metab_day_var_long_df <- subset(metab_day_var_long_df, as.character(variable) %in% gns & as.character(variable) %in% unique(variable)[metab_sig_sel])
+metab_sig_rect <- data.frame(x = unique(metab_day_var_long_df$variable)[metab_sig_sel], y = max(metab_day_var_long_df$value) / 2, width = 1, height = max(metab_day_var_long_df$value))
 metab_day_var_long_df <- subset(metab_day_var_long_df, as.character(variable) %in% gns)
+metab_sig_rect <- subset(metab_sig_rect, x %in% gns)
 metab_day_var_plot <- ggplot(data = metab_day_var_long_df, mapping = aes(x = variable, y = value, fill = Survival)) + #a.k.a. Figure 4 in Sepsis variance manuscript
+  geom_tile(data = metab_sig_rect, mapping = aes(x = x, y = y, width = width, height = height), fill = "grey", size = 1, inherit.aes = FALSE) +
   geom_boxplot(outlier.size = 0.5) +
   #scale_y_log10() +
   ylab("Patient-wise variance relative to metabolite mean") +
