@@ -71,9 +71,9 @@ human_sepsis_data_ml[, -1:-5] <- scale(missRanger(human_sepsis_data_ml[, -1:-5],
 #Parralel nested TPLOCV-RFE
 ##Ranger
 tic()
-rg_tlpocv_res <- tlpocv_rfe_parallel(data_x = human_sepsis_data_ml[, -1:-5],
+rg_tlpocv_res <- tlpocv_rfe_parallel(data_x = human_sepsis_data_ml[-1:-5],
                                      data_y = human_sepsis_data_ml["Survival"],
-                                     mc.cores = 7)
+                                     mc.cores = 6)
 toc()
 # ##Logit
 # lm_tr_fun <- function(tr_x, tr_y){
@@ -95,27 +95,27 @@ toc()
 #                                      varimp_fun = lm_varimp_fun)
 # toc()
 ##SVM
-sv_tr_fun <- function(tr_x, tr_y){
-  data <- data.frame(tr_y = tr_y[[1]], tr_x)
-  svm(formula = tr_y ~ ., data = data, scale = FALSE, type = "C-classification", kernel = "linear")
-}
-sv_prob_fun <- function(classifier, te_x){
-  p <- predict(classifier, te_x, decision.values = TRUE)
-  attr(p, "decision.value")
-}
-sv_varimp_fun <- function(classifier){
-  d <- data.frame(diag(1, nrow = length(classifier$scaled)))
-  colnames(d) <- attr(classifier$terms, "term.labels")
-  abs(sapply(d, function(r) attr(predict(classifier, t(r), decision.values = TRUE), "decision.values")[1]))
-}
-tic()
-sv_tlpocv_res <- tlpocv_rfe_parallel(data_x = human_sepsis_data_ml[-1:-5], 
-                                     data_y = human_sepsis_data_ml["Survival"], 
-                                     mc.cores = 6, 
-                                     train_fun = sv_tr_fun, 
-                                     prob_fun = sv_prob_fun, 
-                                     varimp_fun = sv_varimp_fun)
-toc()
+# sv_tr_fun <- function(tr_x, tr_y){
+#   data <- data.frame(tr_y = tr_y[[1]], tr_x)
+#   svm(formula = tr_y ~ ., data = data, scale = FALSE, type = "C-classification", kernel = "linear")
+# }
+# sv_prob_fun <- function(classifier, te_x){
+#   p <- predict(classifier, te_x, decision.values = TRUE)
+#   attr(p, "decision.value")
+# }
+# sv_varimp_fun <- function(classifier){
+#   d <- data.frame(diag(1, nrow = length(classifier$scaled)))
+#   colnames(d) <- attr(classifier$terms, "term.labels")
+#   abs(sapply(d, function(r) attr(predict(classifier, t(r), decision.values = TRUE), "decision.values")[1]))
+# }
+# tic()
+# sv_tlpocv_res <- tlpocv_rfe_parallel(data_x = human_sepsis_data_ml[-1:-5], 
+#                                      data_y = human_sepsis_data_ml["Survival"], 
+#                                      mc.cores = 6, 
+#                                      train_fun = sv_tr_fun, 
+#                                      prob_fun = sv_prob_fun, 
+#                                      varimp_fun = sv_varimp_fun)
+# toc()
 save.image()
 
 #Plot AUCs and ROCs
@@ -137,16 +137,52 @@ p <- ggplot(data = rg_AUC_data_long, mapping = aes(x = variable, y = value, colo
   theme_bw()
 ggsave(filename = "RF_TLPOCV_RFE_AUC.png", path = out_dir_pred, plot = p, width = 10, height = 5, units = "in")
 
+rg_int_ROC_data <- lapply(rg_tlpocv_res$int_sample_ranking[[length(rg_tlpocv_res$int_sample_ranking)]], function(e) ml.roc(ref = e[, 1], conf = e[, 2]))
+rg_int_ROC_data <- lapply(rg_int_ROC_data, function(e) aggregate(x = e[, 2], by = list(FPR = e[, 1]), FUN = min))
+rg_int_ROC_data <- data.frame(Reduce("rbind", rg_int_ROC_data))
+if (min(rg_int_ROC_data[, 1]) != 0)
+  rg_int_ROC_data <- rbind(rg_int_ROC_data, c(0, 0))
+if (max(rg_int_ROC_data[, 2]) != 1)
+  rg_int_ROC_data <- rbind(rg_int_ROC_data, c(1, 1))
+colnames(rg_int_ROC_data) <- c("FPR", "TPR")
+rg_int_ROC_data$stage <- "Test data"
+ranks_2feat <- rg_tlpocv_res$ext_sample_ranking[[length(rg_tlpocv_res$ext_sample_ranking)]]
+rg_ext_ROC_data <- data.frame(ml.roc(ref = ranks_2feat[, 1], conf = ranks_2feat[, 2]))
+rg_ext_ROC_data <- aggregate(x = rg_ext_ROC_data[, 2], by = list(FPR = rg_ext_ROC_data[, 1]), FUN = min)
+if (min(rg_ext_ROC_data[, 1]) != 0)
+  rg_ext_ROC_data <- rbind(rg_ext_ROC_data, c(0, 0))
+if (max(rg_ext_ROC_data[, 2]) != 1)
+  rg_ext_ROC_data <- rbind(rg_ext_ROC_data, c(1, 1))
+colnames(rg_ext_ROC_data) <- c("FPR", "TPR")
+rg_ext_ROC_data$stage <- "Validation data"
+rg_ROC_data <- rbind(rg_int_ROC_data, rg_ext_ROC_data)
+rg_ROC_data[1:2] <- 1 - rg_ROC_data[1:2]
+p <- ggplot(data = rg_ROC_data, mapping = aes(x = FPR, y = TPR, color = stage, fill = stage)) + 
+  stat_summary(fun.y = median, fun.ymax = function(x) quantile(x, p = 0.75), fun.ymin = function(x) quantile(x, p = 0.25), geom = "ribbon", alpha = 0.5, colour = NA) + 
+  stat_summary(fun.y = median, geom = "line") + 
+  geom_abline(slope = 1, intercept = 0) +
+  geom_text(x = 0.95, y = 0.15, hjust = "right", color = scales::hue_pal()(2)[1],
+            label = paste0("Training AUC = ", format(median(subset(rg_AUC_data_long, variable == 2 & stage == "Test data", "value")[[1]]), digits = 3))) +
+  geom_text(x = 0.95, y = 0.10, hjust = "right", color = scales::hue_pal()(2)[2],
+            label = paste0("Validation AUC = ", format(subset(rg_AUC_data_long, variable == 2 & stage == "Validation data", "value"), digits = 3))) +
+  scale_x_continuous(limits = c(0, 1), expand = c(0, 0)) +
+  scale_y_continuous(limits = c(0, 1), expand = c(0, 0)) +
+  ggtitle("RF: Test and Validation ROC of nested TLPOCV RFE\nbest 2 feature set") +
+  theme_bw() + 
+  theme(panel.grid = element_blank())
+ggsave(filename = "RF_TLPOCV_RFE_ROC_2feat.png", path = out_dir_pred, plot = p, width = 6, height = 5, units = "in")
+
 sv_AUC_data <- data.frame(Reduce("rbind", sv_tlpocv_res$inner_AUC))
 sv_AUC_data <- rbind(sv_AUC_data, data.frame(t(sv_tlpocv_res$outer_AUC)))
 colnames(sv_AUC_data) <- (length(sv_tlpocv_res$inner_AUC[[1]]) + 1):2
 sv_AUC_data$stage <- c(rep("Test data", length(sv_tlpocv_res$inner_AUC)), "Validation data")
 sv_AUC_data_long <- melt(sv_AUC_data, id.vars = c("stage"))
 sv_AUC_data_long$variable <- as.numeric(sv_AUC_data_long$variable)
-p <- ggplot(data = sv_AUC_data_long, mapping = aes(x = variable, y = value, color = stage, fill = stage)) + 
-  stat_summary(fun.y = median, fun.ymax = function(x) quantile(x, p = 0.75), fun.ymin = function(x) quantile(x, p = 0.25), geom = "ribbon", alpha = 0.5, colour = NA) + 
-  stat_summary(fun.y = median, geom = "line") + 
-  ylim(0, 1) + 
+sv_AUC_data_long$value <- 1 - sv_AUC_data_long$value
+p <- ggplot(data = sv_AUC_data_long, mapping = aes(x = variable, y = value, color = stage, fill = stage)) +
+  stat_summary(fun.y = median, fun.ymax = function(x) quantile(x, p = 0.75), fun.ymin = function(x) quantile(x, p = 0.25), geom = "ribbon", alpha = 0.5, colour = NA) +
+  stat_summary(fun.y = median, geom = "line") +
+  ylim(0, 1) +
   ylab("Median AUC") +
   xlab("Nubmer of features") +
   ggtitle("SVM: Test and Validation AUC of nested TLPOCV-RFE") +
@@ -172,43 +208,18 @@ if (max(sv_ext_ROC_data[, 2]) != 1)
 colnames(sv_ext_ROC_data) <- c("FPR", "TPR")
 sv_ext_ROC_data$stage <- "Validation data"
 sv_ROC_data <- rbind(sv_int_ROC_data, sv_ext_ROC_data)
-p <- ggplot(data = sv_ROC_data, mapping = aes(x = FPR, y = TPR, color = stage, fill = stage)) + 
-  stat_summary(fun.y = median, fun.ymax = function(x) quantile(x, p = 0.75), fun.ymin = function(x) quantile(x, p = 0.25), geom = "ribbon", alpha = 0.5, colour = NA) + 
-  stat_summary(fun.y = median, geom = "line") + 
+sv_ROC_data[1:2] <- 1 - sv_ROC_data[1:2]
+p <- ggplot(data = sv_ROC_data, mapping = aes(x = FPR, y = TPR, color = stage, fill = stage)) +
+  stat_summary(fun.y = median, fun.ymax = function(x) quantile(x, p = 0.75), fun.ymin = function(x) quantile(x, p = 0.25), geom = "ribbon", alpha = 0.5, colour = NA) +
+  stat_summary(fun.y = median, geom = "line") +
   geom_abline(slope = 1, intercept = 0) +
+  geom_text(x = 0.95, y = 0.15, hjust = "right", color = scales::hue_pal()(2)[1],
+            label = paste0("Training AUC = ", format(median(subset(sv_AUC_data_long, variable == 2 & stage == "Test data", "value")[[1]]), digits = 3))) +
+  geom_text(x = 0.95, y = 0.10, hjust = "right", color = scales::hue_pal()(2)[2],
+            label = paste0("Validation AUC = ", format(subset(sv_AUC_data_long, variable == 2 & stage == "Validation data", "value"), digits = 3))) +
   scale_x_continuous(limits = c(0, 1), expand = c(0, 0)) +
   scale_y_continuous(limits = c(0, 1), expand = c(0, 0)) +
   ggtitle("SVM: Test and Validation ROC of nested TLPOCV RFE\nbest 2 feature set") +
-  theme_bw() + 
+  theme_bw() +
   theme(panel.grid = element_blank())
 ggsave(filename = "SVM_TLPOCV_RFE_ROC_2feat.png", path = out_dir_pred, plot = p, width = 6, height = 5, units = "in")
-
-rg_int_ROC_data <- lapply(rg_tlpocv_res$int_sample_ranking[[length(rg_tlpocv_res$int_sample_ranking)]], function(e) ml.roc(ref = e[, 1], conf = e[, 2]))
-rg_int_ROC_data <- lapply(rg_int_ROC_data, function(e) aggregate(x = e[, 2], by = list(FPR = e[, 1]), FUN = min))
-rg_int_ROC_data <- data.frame(Reduce("rbind", rg_int_ROC_data))
-if (min(rg_int_ROC_data[, 1]) != 0)
-  rg_int_ROC_data <- rbind(rg_int_ROC_data, c(0, 0))
-if (max(rg_int_ROC_data[, 2]) != 1)
-  rg_int_ROC_data <- rbind(rg_int_ROC_data, c(1, 1))
-colnames(rg_int_ROC_data) <- c("FPR", "TPR")
-rg_int_ROC_data$stage <- "Test data"
-ranks_2feat <- rg_tlpocv_res$ext_sample_ranking[[length(rg_tlpocv_res$ext_sample_ranking)]]
-rg_ext_ROC_data <- data.frame(ml.roc(ref = ranks_2feat[, 1], conf = ranks_2feat[, 2]))
-rg_ext_ROC_data <- aggregate(x = rg_ext_ROC_data[, 2], by = list(FPR = rg_ext_ROC_data[, 1]), FUN = min)
-if (min(rg_ext_ROC_data[, 1]) != 0)
-  rg_ext_ROC_data <- rbind(rg_ext_ROC_data, c(0, 0))
-if (max(rg_ext_ROC_data[, 2]) != 1)
-  rg_ext_ROC_data <- rbind(rg_ext_ROC_data, c(1, 1))
-colnames(rg_ext_ROC_data) <- c("FPR", "TPR")
-rg_ext_ROC_data$stage <- "Validation data"
-rg_ROC_data <- rbind(rg_int_ROC_data, rg_ext_ROC_data)
-p <- ggplot(data = rg_ROC_data, mapping = aes(x = FPR, y = TPR, color = stage, fill = stage)) + 
-  stat_summary(fun.y = median, fun.ymax = function(x) quantile(x, p = 0.75), fun.ymin = function(x) quantile(x, p = 0.25), geom = "ribbon", alpha = 0.5, colour = NA) + 
-  stat_summary(fun.y = median, geom = "line") + 
-  geom_abline(slope = 1, intercept = 0) +
-  scale_x_continuous(limits = c(0, 1), expand = c(0, 0)) +
-  scale_y_continuous(limits = c(0, 1), expand = c(0, 0)) +
-  ggtitle("RF: Test and Validation ROC of nested TLPOCV RFE\nbest 2 feature set") +
-  theme_bw() + 
-  theme(panel.grid = element_blank())
-ggsave(filename = "RF_TLPOCV_RFE_ROC_2feat.png", path = out_dir_pred, plot = p, width = 6, height = 5, units = "in")
