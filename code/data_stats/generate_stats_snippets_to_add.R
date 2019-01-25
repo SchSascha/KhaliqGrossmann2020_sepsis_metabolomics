@@ -42,24 +42,25 @@ human_nonsepsis_data <- human_data[human_data$`CAP / FP` == "-", ]
 human_sepsis_data <- human_data[human_data$`CAP / FP` != "-", ]
 
 #Reduce to data where variance is larger in Non-survivors as test
-metab_all_days_var_df <- rbind(data.frame(Survival = "NS", t(colVars(as.matrix(subset(human_sepsis_data, Survival == "NS",-1:-5))))),
-                               data.frame(Survival = "S", t(colVars(as.matrix(subset(human_sepsis_data, Survival == "S", -1:-5))))))
-colnames(metab_all_days_var_df)[-1] <- colnames(human_sepsis_data)[-1:-5]
-metab_all_days_mean <- colMeans(human_sepsis_data[, -1:-5])
-metab_all_days_var_df[, -1] <- scale(metab_all_days_var_df[, -1], center = FALSE, scale = metab_all_days_mean)
-metab_day_vardiff_df <- metab_all_days_var_df[1, -1] - metab_all_days_var_df[2, -1]
-metab_all_days_var_df <- metab_all_days_var_df[c(1, 1 + order(metab_day_vardiff_df, decreasing = TRUE))]
-metab_all_days_var_df[, -1] <- scale(metab_all_days_var_df[, -1], scale = FALSE, center = TRUE)
-metab_all_days_var_df <- metab_all_days_var_df[, c(1, 1 + which(metab_all_days_var_df[1, -1] > 0))]
-var_sel <- colnames(metab_all_days_var_df)[-1]
+# metab_all_days_var_df <- rbind(data.frame(Survival = "NS", t(colVars(as.matrix(subset(human_sepsis_data, Survival == "NS",-1:-5))))),
+#                                data.frame(Survival = "S", t(colVars(as.matrix(subset(human_sepsis_data, Survival == "S", -1:-5))))))
+# colnames(metab_all_days_var_df)[-1] <- colnames(human_sepsis_data)[-1:-5]
+# metab_all_days_mean <- colMeans(human_sepsis_data[, -1:-5])
+# metab_all_days_var_df[, -1] <- scale(metab_all_days_var_df[, -1], center = FALSE, scale = metab_all_days_mean)
+# metab_day_vardiff_df <- metab_all_days_var_df[1, -1] - metab_all_days_var_df[2, -1]
+# metab_all_days_var_df <- metab_all_days_var_df[c(1, 1 + order(metab_day_vardiff_df, decreasing = TRUE))]
+# metab_all_days_var_df[, -1] <- scale(metab_all_days_var_df[, -1], scale = FALSE, center = TRUE)
+# metab_all_days_var_df <- metab_all_days_var_df[, c(1, 1 + which(metab_all_days_var_df[1, -1] > 0))]
+# var_sel <- colnames(metab_all_days_var_df)[-1]
+var_sel <- colnames(human_data)[-1:-5]
 
 human_sepsis_data <- subset(human_sepsis_data, select = c(1:5, which(colnames(human_sepsis_data) %in% var_sel)))
 human_data <- subset(human_data, select = c(1:5, which(colnames(human_data) %in% var_sel)))
 human_data_legend <- human_data_legend[c(1:5, which(human_data_legend[, 1] %in% var_sel)), ]
 
-metab_end <- ncol(human_sepsis_data)
+metab_end <- which(colnames(human_data) == "H1")
 metab_sel <- 6:metab_end
-pheno_sel <- as.numeric()
+pheno_sel <- (metab_end + 1):ncol(human_data)
 
 #Normalize data
 human_sepsis_data_normal <- human_sepsis_data
@@ -279,10 +280,49 @@ t_r1_p <- sapply(lapply(bt_step_res, `[[`, "t_r1"), `[[`, "p.value")
 t_r2_p <- sapply(lapply(bt_step_res, `[[`, "t_r2"), `[[`, "p.value")
 t_r3_p <- sapply(lapply(bt_step_res, `[[`, "t_r3"), `[[`, "p.value")
 
-pat_step_len_brkt <- data.frame(variable = "X only", x = c(1, 1, 2, 2), y = c(480, 490, 490, 480), stringsAsFactors = FALSE)
-pat_step_len_sig <- data.frame(variable = "X only", x = 1.5, y = 520, p = paste0("p = ", format(mean(ad_s2_p), digits = 2)), stringsAsFactors = FALSE)
+###Compare beta diversity
+####Get centroids per patient
+pat_centroids <- lapply(unique(pat_list$Patient), function(pat) apply(as.matrix(p$x[which(pat_list$Patient == pat), 1:2]), 2, mean))
+pat_centroids <- Reduce("rbind", pat_centroids)
+pat_list_centroids <- pat_list[match(unique(pat_list$Patient), pat_list$Patient), ]
+####Get pairwise centroid distances
+pat_pw_dist <- as.matrix(dist(pat_centroids, method = "euclidean"))
+####Get within-group distances
+p_s_sel <- which(pat_list_centroids$Survival == "S" & pat_list_centroids$`CAP / FP` != "-")
+pat_S_pw_dist <- pat_pw_dist[p_s_sel, p_s_sel]
+pat_S_pw_dist <- pat_S_pw_dist[lower.tri(x = pat_S_pw_dist)]
+p_ns_sel <- which(pat_list_centroids$Survival == "NS" & pat_list_centroids$`CAP / FP` != "-")
+pat_NS_pw_dist <- pat_pw_dist[p_ns_sel, p_ns_sel]
+pat_NS_pw_dist <- pat_NS_pw_dist[lower.tri(x = pat_NS_pw_dist)]
+p_c_sel <- which(pat_list_centroids$`CAP / FP` == "-")
+pat_C_pw_dist <- pat_pw_dist[p_c_sel, p_c_sel]
+pat_C_pw_dist <- pat_C_pw_dist[lower.tri(x = pat_C_pw_dist)]
+####Compare distance distributions
+betadiv_S_NS <- t.test(x = pat_S_pw_dist, y = pat_NS_pw_dist, var.equal = FALSE)
+betadiv_S_C <- t.test(x = pat_S_pw_dist, y = pat_C_pw_dist, var.equal = FALSE)
+betadiv_NS_C <- t.test(x = pat_NS_pw_dist, y = pat_C_pw_dist, var.equal = FALSE)
+####Plot
+pat_pw_group_dat <- data.frame(distance = c(pat_C_pw_dist, pat_S_pw_dist, pat_NS_pw_dist), 
+                               Group = c(rep("C", length(pat_C_pw_dist)), rep("S", length(pat_S_pw_dist)), rep("NS", length(pat_NS_pw_dist))))
+p <- ggplot(data = pat_pw_group_dat, mapping = aes(x = Group, y = distance, color = Group)) +
+  geom_boxplot() +
+  geom_path(data = data.frame(x = c(1, 1, 1.95, 1.95), y = c(380, 390, 390, 380)), mapping = aes(x = x, y = y), inherit.aes = FALSE) +
+  geom_path(data = data.frame(x = c(2.05, 2.05, 3, 3), y = c(380, 390, 390, 380)), mapping = aes(x = x, y = y), inherit.aes = FALSE) +
+  geom_path(data = data.frame(x = c(1, 1, 3, 3), y = c(440, 450, 450, 440)), mapping = aes(x = x, y = y), inherit.aes = FALSE) +
+  geom_text(x = 1.5, y = 410, label = paste0("p < ", format(betadiv_S_NS$p.value, digits = 4)), size = 2, inherit.aes = FALSE) +
+  geom_text(x = 2.5, y = 410, label = paste0("p < ", format(betadiv_NS_C$p.value, digits = 2)), size = 2, inherit.aes = FALSE) +
+  geom_text(x = 2, y = 470, label = "p > 0.05", size = 2, inherit.aes = FALSE) +
+  human_col_scale(levels = c("NS", "C", "S", "Dummy")) +
+  scale_x_discrete(limits = c("S", "NS", "C")) +
+  guides(color = "none") +
+  ylim(0, 480) +
+  theme_bw() + 
+  theme(panel.grid = element_blank())
+ggsave(filename = "PCA_metab_betadiv_comparison.png", path = out_dir, width = 2.5, height = 4, units = "in")
 
 ###Plot step lengths, metabolites, all patients
+pat_step_len_brkt <- data.frame(variable = "X only", x = c(1, 1, 2, 2), y = c(480, 490, 490, 480), stringsAsFactors = FALSE)
+pat_step_len_sig <- data.frame(variable = "X only", x = 1.5, y = 520, p = paste0("p = ", format(mean(ad_s2_p), digits = 2)), stringsAsFactors = FALSE)
 p <- ggplot(data = pat_step_len_long_df, mapping = aes(x = as.numeric(Group), y = value, fill = Group, color = Group, group = Group)) +
   facet_wrap(~ variable) +
   geom_path(data = pat_step_len_brkt, mapping = aes(x = x, y = y), color = "black", inherit.aes = FALSE) +
