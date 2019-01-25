@@ -951,8 +951,14 @@ export(p = h, file = paste0(out_dir, "human_heatmap_metab_sig_s.png"))
 
 ###Try with pheatmap
 x <- human_data
-# x <- subset(rbind(human_sepsis_data, human_nonsepsis_data))
-x[, -1:-5] <- (tanh(scale(x[, -1:-5])) + 1) / 2
+# x[, -1:-5] <- (tanh(scale(x[, -1:-5])) + 1) / 2 #tanh(z-score)
+x[, -1:-5] <- apply(scale(x[, -1:-5]), 2, 
+                    function(col){ 
+                      q <- quantile(x = col, probs = c(0.05, 0.95), na.rm = TRUE) #cut at 5th and 95th percentile
+                      col[col > q[2]] <- q[2]
+                      col[col < q[1]] <- q[1]
+                      return(col)
+                    })
 x$Day <- as.numeric(as.character(x$Day))
 x$Survival <- as.character(x$Survival)
 x$Survival[x$`CAP / FP` == "-"] <- "Control"
@@ -971,6 +977,7 @@ xmtc <- xmt[rownames(xmt) %in% sig.anova.car.c.class, ]
 
 anno_col <- xm[c("Day", "Survival")]
 rownames(anno_col) <- xm$`Sample ID`
+anno_col$Day <- as.numeric(as.character(anno_col$Day))
 anno_row <- data.frame(metab_group = human_sepsis_legend$group[match(rownames(xmts), human_sepsis_legend[, 1])])
 anno_row$metab_group <- c(as.character(anno_row$metab_group[1:(which(rownames(xmts) == "Albumin") - 1)]), rep("clinical parameter", nrow(anno_row) - which(rownames(xmts) == "Albumin") + 1))
 anno_row$metab_group <- factor(anno_row$metab_group)
@@ -986,7 +993,7 @@ pheatmap(mat = xmts[, pat_order],
          annotation_colors = list(Survival = c(NS = hue_pal()(3)[1], Control = hue_pal()(3)[2], S = hue_pal()(3)[3])),
          gaps_col = which(diff(as.numeric(anno_col$Survival[pat_order])) != 0),
          gaps_row = which(diff(as.numeric(anno_row$`Metab. group`)) != 0),
-         filename = paste0(out_dir, "human_heatmap_metab_sig_s_pheat_tanh.png"),
+         filename = paste0(out_dir, "human_heatmap_metab_sig_s_pheat_thresh005.png"),
          silent = TRUE,
          width = 21,
          height = 9)
@@ -1400,6 +1407,7 @@ p <- ggplot(data = subset(melt(hd, id.vars = 1:5), Day %in% 0:3), mapping = aes(
 ggsave(plot = p, filename = paste0("human_metab_control_time_course_all.png"), path = out_dir, width = 12/4*ncols, height = 0.3 + 1.5 * ceiling(n_mets/ncols), units = "in")
 
 ##Human, metabolite concentration time course, all metabolites, all groups, with normal ranges
+#JUMP: FROM
 hd <- human_data[, -pheno_sel]
 hd$Survival[hd$`CAP / FP` == "-"] <- "Control"
 hd$Survival <- factor(hd$Survival, levels = c(unique(hd$Survival)[c(1,3,2)], "Healthy_Fr"))
@@ -1495,6 +1503,7 @@ p <- ggplot(data = hsd, mapping = aes_string(x = "Creatinine", y = "`Blood Creat
 ggsave(plot = p, filename = "human_Creatinine_reliability.png", path = out_dir, width = 5, height = 4, units = "in")
 
 ##Human, metabolite concentration time course, only metabolites with p-val < 0.05 and FDR < 0.05 in Survival or Day:Survival from type III repeated measures ANOVA
+#JUMP: TO
 fs <- c("s", "c")
 gs <- c("by Sepsis survival", "between Sepsis and Control")
 ts <- list((length(tanova_day_set)+1):(length(tanova_day_set)*3), seq_along(tanova_day_set))
@@ -1505,8 +1514,7 @@ for (n in seq_along(ss)[sapply(ss, length) > 0]){
   if (n == 1){
     h_time_course_sig_diff_dat <- subset(h_time_course_sig_diff_dat, subset = Survival != "Nonsep")
     cms <- colMaxs(as.matrix(subset(full_tanova_data, !grepl(pattern = "Nonsep", x = Survival), -1:-5)))
-  }
-  else{
+  }else{
     h_time_course_sig_diff_dat$Survival <- factor(c("Sepsis", "Nonsepsis")[1 + (h_time_course_sig_diff_dat$Survival == "Nonsep")])
     cms <- colMaxs(as.matrix(full_tanova_data[, -1:-5]))
   }
@@ -1524,15 +1532,32 @@ for (n in seq_along(ss)[sapply(ss, length) > 0]){
   h_time_course_sig_times <- subset(h_time_course_sig_times, variable %in% h_time_course_sig_diff_dat$variable & t %in% ts[[n]])
   h_time_course_sig_times$value <- cms[match(h_time_course_sig_times$variable, colnames(full_tanova_data)[-1:-5])]
   h_time_course_sig_times$value <- h_time_course_sig_times$value * 1.1
+  hhr <- human_healthy_ranges
+  orig_nrow_hhr <- nrow(hhr)
+  hhr <- hhr[rep(1:orig_nrow_hhr, each = length(0:3)), ]
+  hhr$Day <- rep(0:3, times = orig_nrow_hhr)
+  hhr$variable <- hhr$ID
+  hhr$Survival <- "Healthy_Fr"
+  hhr$value <- hhr$Median
+  hhr <- hhr[hhr$variable %in% h_time_course_sig_diff_dat$variable, ]
+  hhr <- hhr[order(match(hhr$ID, h_time_course_sig_diff_dat$variable)), ]
+  hhr$variable <- factor(hhr$variable)
   h_time_course_sig_diff_plot <- ggplot(h_time_course_sig_diff_dat, aes(x = factor(Day), y = value, group = Survival, color = Survival)) +
     facet_wrap(facets = ~ variable, ncol = 5, nrow = ceiling(n_mets/5), scales = "free_y") +
-    geom_point(position = position_dodge(width = 0.2)) +
-    #geom_boxplot(mapping = aes(x = factor(Day), color = Survival, y = value), inherit.aes = FALSE) + 
     stat_summary(fun.ymin = "min", fun.ymax = "max", fun.y = "mean", geom = "line") +
     geom_text(data = h_time_course_group, mapping = aes(x = Day, y = value, label = text), inherit.aes = FALSE, size = 2.8) +
+    geom_rect(data = hhr, mapping = aes(xmin = -Inf, xmax = Inf, ymin = LQ, ymax = UQ, colour = Survival), fill = "grey70", linetype = 0, alpha = 0.2, inherit.aes = FALSE) +
+    geom_hline(data = hhr, mapping = aes(yintercept = Median), colour = "grey40") +
     geom_point(data = h_time_course_sig_times, mapping = aes(x = Day, y = value), inherit.aes = FALSE, shape = 8, size = 2.5) +
-    #ylim(c(-0.05, 1.4)) +
-    #ylab("Concentration relative to max value") +
+    geom_point(position = position_dodge(width = 0.2))
+  if (n == 1){
+    h_time_course_sig_diff_plot <- h_time_course_sig_diff_plot +
+      human_col_scale(black_color = "grey40", levels = c("NS", "", "S", "Healthy_Fr"), black_pos = 4)
+  }else{
+    h_time_course_sig_diff_plot <- h_time_course_sig_diff_plot + 
+      human_col_scale(black_color = "grey40", levels = c("Sepsis", "Nonsepsis", "", "Healthy_Fr"), black_pos = 4)
+  }
+  h_time_course_sig_diff_plot <- h_time_course_sig_diff_plot +
     ylab("Concentration, µM") + 
     xlab("Day") + 
     ggtitle(paste0("Metabolites significantly differing ", gs[n], " by repeated measures ANOVA")) + 
@@ -1758,7 +1783,6 @@ p <- ggplot(data = subset(cntrl_and_s, Survival != "NS"), mapping = aes(y = valu
 ggsave(filename = paste0("human_metab_nonsig_single_plot_SD_all_pats.png"), path = out_dir, plot = p, width = 16, height = 8, units = "in")
 ###plot metab variance, only nonsig, nondeviation metabs
 ##Human, variance of ungrouped metab vars, all days
-#TODO: apply Gianni's comments
 met_nor_day_var_df <- na.omit(human_sepsis_data_conc_var)
 met_nor_day_var_df[, -1:-5] <- scale(met_nor_day_var_df[, -1:-5], center = FALSE, scale = colMeans(met_nor_day_var_df[, -1:-5]))
 colnames(met_nor_day_var_df)[-1:-2] <- colnames(human_sepsis_data)[-1:-5]
@@ -1787,7 +1811,7 @@ metab_sig_sel <- mclapply(unique(metab_day_var_long_df$variable),
 # metab_sig_sel <- metab_sig_sel_a
 # metab_sig_sel <- sapply(lapply(metab_sig_sel, sapply, function(e) e$aov.tab[["Pr(>F)"]][1]), mean)
 metab_sig <- sapply(metab_sig_sel, `[[`, "p.value")
-metab_sig_sel<- metab_sig < 0.05
+metab_sig_sel <- metab_sig < 0.05
 metab_sig_sel_name <- unique(metab_day_var_long_df$variable)[metab_sig_sel]
 #metab_day_var_long_df <- subset(metab_day_var_long_df, as.character(variable) %in% gns & as.character(variable) %in% unique(variable)[metab_sig_sel])
 metab_sig_rect <- data.frame(x = unique(metab_day_var_long_df$variable)[metab_sig_sel], y = max(metab_day_var_long_df$value) / 2, width = 1, height = max(metab_day_var_long_df$value))
