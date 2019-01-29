@@ -63,7 +63,7 @@ human_sepsis_data_ml <- subset(human_sepsis_data_ml, select = !(colnames(human_s
 human_sepsis_data_ml$Survival <- as.numeric(factor(human_sepsis_data_ml$Survival, levels = sort(unique(human_sepsis_data_ml$Survival)))) - 1 #Dependent variable transformation
 human_sepsis_data_ml <- human_sepsis_data_ml[, c(1:5, 5 + which(!colAnys(human_sepsis_data_ml == 0)[-1:-5]))]
 ###Strip phenomenological variables
-human_sepsis_data_ml <- subset(human_sepsis_data_ml, select = c(colnames(human_sepsis_data_ml)[1:5], intersect(sig_t_class, colnames(human_sepsis_data_ml))))
+#human_sepsis_data_ml <- subset(human_sepsis_data_ml, select = c(colnames(human_sepsis_data_ml)[1:5], intersect(sig_t_class, colnames(human_sepsis_data_ml))))
 colnames(human_sepsis_data_ml) <- make.names(colnames(human_sepsis_data_ml))
 ###Impute missing values
 human_sepsis_data_ml[, -1:-5] <- scale(missRanger(human_sepsis_data_ml[, -1:-5], pmm.k = 3, num.trees = 100))
@@ -73,7 +73,7 @@ human_sepsis_data_ml[, -1:-5] <- scale(missRanger(human_sepsis_data_ml[, -1:-5],
 tic()
 rg_tlpocv_res <- tlpocv_rfe_parallel(data_x = human_sepsis_data_ml[-1:-5],
                                      data_y = human_sepsis_data_ml["Survival"],
-                                     mc.cores = 6)
+                                     mc.cores = 30)
 toc()
 # ##Logit
 # lm_tr_fun <- function(tr_x, tr_y){
@@ -95,27 +95,27 @@ toc()
 #                                      varimp_fun = lm_varimp_fun)
 # toc()
 ##SVM
-# sv_tr_fun <- function(tr_x, tr_y){
-#   data <- data.frame(tr_y = tr_y[[1]], tr_x)
-#   svm(formula = tr_y ~ ., data = data, scale = FALSE, type = "C-classification", kernel = "linear")
-# }
-# sv_prob_fun <- function(classifier, te_x){
-#   p <- predict(classifier, te_x, decision.values = TRUE)
-#   attr(p, "decision.value")
-# }
-# sv_varimp_fun <- function(classifier){
-#   d <- data.frame(diag(1, nrow = length(classifier$scaled)))
-#   colnames(d) <- attr(classifier$terms, "term.labels")
-#   abs(sapply(d, function(r) attr(predict(classifier, t(r), decision.values = TRUE), "decision.values")[1]))
-# }
-# tic()
-# sv_tlpocv_res <- tlpocv_rfe_parallel(data_x = human_sepsis_data_ml[-1:-5], 
-#                                      data_y = human_sepsis_data_ml["Survival"], 
-#                                      mc.cores = 6, 
-#                                      train_fun = sv_tr_fun, 
-#                                      prob_fun = sv_prob_fun, 
-#                                      varimp_fun = sv_varimp_fun)
-# toc()
+sv_tr_fun <- function(tr_x, tr_y){
+  data <- data.frame(tr_y = tr_y[[1]], tr_x)
+  svm(formula = tr_y ~ ., data = data, scale = FALSE, type = "C-classification", kernel = "linear")
+}
+sv_prob_fun <- function(classifier, te_x){
+  p <- predict(classifier, te_x, decision.values = TRUE)
+  attr(p, "decision.value")
+}
+sv_varimp_fun <- function(classifier){
+  d <- data.frame(diag(1, nrow = length(classifier$scaled)))
+  colnames(d) <- attr(classifier$terms, "term.labels")
+  abs(sapply(d, function(r) attr(predict(classifier, t(r), decision.values = TRUE), "decision.values")[1]))
+}
+tic()
+sv_tlpocv_res <- tlpocv_rfe_parallel(data_x = human_sepsis_data_ml[-1:-5],
+                                     data_y = human_sepsis_data_ml["Survival"],
+                                     mc.cores = 30,
+                                     train_fun = sv_tr_fun,
+                                     prob_fun = sv_prob_fun,
+                                     varimp_fun = sv_varimp_fun)
+toc()
 save.image()
 
 #Plot AUCs and ROCs
@@ -175,6 +175,11 @@ p <- ggplot(data = rg_ROC_data, mapping = aes(x = FPR, y = TPR, color = stage, f
   theme(panel.grid = element_blank())
 ggsave(filename = "RF_TLPOCV_RFE_ROC_2feat.png", path = out_dir_pred, plot = p, width = 6, height = 5, units = "in")
 
+p <- ggplot(data = subset(human_sepsis_data_ml, Day == 0, c("Survival", rg_tlpocv_res$best_features[[75]])), mapping = aes_string(x = rg_tlpocv_res$best_features[[75]][1], y = rg_tlpocv_res$best_features[[75]][2], color = quote(factor(Survival)))) + 
+  geom_point() + 
+  theme_bw()
+ggsave(plot = p, filename = "RF_class_separation_2feat.png", width = 5, height = 4, units = "in", path = out_dir_pred)
+
 sv_AUC_data <- data.frame(Reduce("rbind", sv_tlpocv_res$inner_AUC))
 sv_AUC_data <- rbind(sv_AUC_data, data.frame(t(sv_tlpocv_res$outer_AUC)))
 colnames(sv_AUC_data) <- (length(sv_tlpocv_res$inner_AUC[[1]]) + 1):2
@@ -211,11 +216,11 @@ if (max(sv_ext_ROC_data[, 1]) != 1)
 colnames(sv_ext_ROC_data) <- c("FPR", "TPR")
 sv_ext_ROC_data$stage <- "Validation data"
 sv_ROC_data <- rbind(sv_int_ROC_data, sv_ext_ROC_data)
-p <- ggplot(data = sv_ROC_data, mapping = aes(x = FPR, y = TPR, color = stage, fill = stage)) + 
-  stat_summary(data = sv_int_ROC_data, 
-               fun.y = mean, fun.ymax = function(x) quantile(x, p = 0.75), fun.ymin = function(x) quantile(x, p = 0.25), 
-               geom = "ribbon", alpha = 0.5, colour = NA) + 
-  stat_summary(data = sv_int_ROC_data, 
+p <- ggplot(data = sv_ROC_data, mapping = aes(x = FPR, y = TPR, color = stage, fill = stage)) +
+  stat_summary(data = sv_int_ROC_data,
+               fun.y = mean, fun.ymax = function(x) quantile(x, p = 0.75), fun.ymin = function(x) quantile(x, p = 0.25),
+               geom = "ribbon", alpha = 0.5, colour = NA) +
+  stat_summary(data = sv_int_ROC_data,
                fun.y = median, geom = "line") +
   geom_line(data = sv_ext_ROC_data) +
   geom_segment(x = 0, y = 0, xend = 1, yend = 1, size = 0.25, inherit.aes = FALSE) +
@@ -226,6 +231,11 @@ p <- ggplot(data = sv_ROC_data, mapping = aes(x = FPR, y = TPR, color = stage, f
   scale_x_continuous(limits = c(-0.01, 1.01), expand = c(0, 0)) +
   scale_y_continuous(limits = c(-0.01, 1.01), expand = c(0, 0)) +
   ggtitle("SVM: Test and Validation ROC of nested TLPOCV RFE\nbest 2 feature set") +
-  theme_bw() + 
+  theme_bw() +
   theme(panel.grid = element_blank())
 ggsave(filename = "SVM_TLPOCV_RFE_ROC_2feat.png", path = out_dir_pred, plot = p, width = 6, height = 5, units = "in")
+
+p <- ggplot(data = subset(human_sepsis_data_ml, Day == 0, c("Survival", sv_tlpocv_res$best_features[[75]])), mapping = aes_string(x = sv_tlpocv_res$best_features[[75]][1], y = sv_tlpocv_res$best_features[[75]][2], color = quote(factor(Survival)))) + 
+  geom_point() + 
+  theme_bw()
+ggsave(plot = p, filename = "SVM_class_separation_2feat.png", width = 5, height = 4, units = "in", path = out_dir_pred)
