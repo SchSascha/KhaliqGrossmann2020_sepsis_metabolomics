@@ -770,8 +770,9 @@ model.matrix.lme <- function(object, data){
 #'
 #' @examples
 t3ANOVA <- function(data, random, formula, use.corAR, col.set, id.vars, control = lmeControl()){
-  lin.models <- lapply(X = col.set, FUN = fit_lin_mod_lme, data = data, formula = formula, id.vars = id.vars, random = random, use.corAR = use.corAR, control = control)
-  lin.models <- lapply(lin.models, function(m) try(eval(m)))
+  library(parallel)
+  lin.models <- mclapply(X = col.set, FUN = fit_lin_mod_lme, data = data, formula = formula, id.vars = id.vars, random = random, use.corAR = use.corAR, control = control)
+  lin.models <- mclapply(lin.models, function(m) try(eval(m)))
   lin.models <- lin.models[sapply(lin.models, function(m) class(m) == "lme")]
   model.normality.p <- unlist(lapply(lin.models, function(e) shapiro.test(residuals(e))$p.value))
   anova.terms <- rownames(Anova(lin.models[[1]], type = 3))

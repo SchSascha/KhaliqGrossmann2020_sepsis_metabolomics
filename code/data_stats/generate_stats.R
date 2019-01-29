@@ -172,14 +172,14 @@ insig.anova.car.s.class <- intersect(insig.anova.car.s.class, insig.anova.car.s.
 fml <- concentration ~ DaySurv - 1 #without intercept because Anova(..., type = 3) gives an error with intercept
 ftd_ph <- full_tanova_data
 ftd_ph$DaySurv <- interaction(ftd_ph$Day, ftd_ph$Survival, drop = TRUE)
-anova.car.ph.models <- lapply(met_set, fit_lin_mod_lme, data = ftd_ph, formula = fml, id.vars = c("Day", "Patient", "DaySurv"), random = ~1|Patient, use.corAR = TRUE, control = lmeControl(msMaxIter = 100))
-anova.car.ph.models <- lapply(anova.car.ph.models, eval)
+anova.car.ph.models <- mclapply(met_set, fit_lin_mod_lme, data = ftd_ph, formula = fml, id.vars = c("Day", "Patient", "DaySurv"), random = ~1|Patient, use.corAR = TRUE, control = lmeControl(msMaxIter = 100))
+anova.car.ph.models <- mclapply(anova.car.ph.models, eval)
 ####Construct constrast matrix
 contr.m <- get_S_NS_C_contrmat(tanova_day_set)
 daySurv <- interaction(factor(full_tanova_data$Day), factor(full_tanova_data$Survival), drop = TRUE)
 rownames(contr.m) <- levels(daySurv)
 ####Actual post hoc test
-anova.car.ph.res <- lapply(anova.car.ph.models, function(e) summary(glht(e, linfct = mcp(DaySurv = t(contr.m)))))
+anova.car.ph.res <- mclapply(anova.car.ph.models, function(e) summary(glht(e, linfct = mcp(DaySurv = t(contr.m)))))
 anova.car.ph.ps <- sapply(anova.car.ph.res, function(e) e$test$pvalues)
 anova.car.ph.sig.contr <- lapply(data.frame(anova.car.ph.ps), function(col) which(col <= 0.05))
 names(anova.car.ph.ps) <- names(anova.car.ph.models)
@@ -205,14 +205,14 @@ insig.anova.car.s.pheno.class <- intersect(insig.anova.car.s.pheno.class, insig.
 fml <- concentration ~ DaySurv - 1
 ftd_ph <- subset(full_tanova_data[full_tanova_data$`CAP / FP` != "-", ], Day %in% tanova_day_set)
 ftd_ph$DaySurv <- interaction(ftd_ph$Day, ftd_ph$Survival, drop = TRUE)
-anova.car.ph.pheno.models <- lapply(met_set, fit_lin_mod_lme, data = ftd_ph, formula = fml, id.vars = c("Day", "Patient", "DaySurv"), random = ~1|Patient, use.corAR = TRUE, control = lmeControl(msMaxIter = 100))
-anova.car.ph.pheno.models <- lapply(anova.car.ph.pheno.models, function(e) try(eval(e)))
+anova.car.ph.pheno.models <- mclapply(met_set, fit_lin_mod_lme, data = ftd_ph, formula = fml, id.vars = c("Day", "Patient", "DaySurv"), random = ~1|Patient, use.corAR = TRUE, control = lmeControl(msMaxIter = 100))
+anova.car.ph.pheno.models <- mclapply(anova.car.ph.pheno.models, function(e) try(eval(e)))
 ####Construct constrast matrix
 contr.m <- get_S_NS_C_contrmat(tanova_day_set)[-1:-length(tanova_day_set), 5:8] #pheno vars only for septic patients, so skip nonseptic comparisons
 daySurv <- interaction(factor(full_tanova_data$Day), factor(full_tanova_data$Survival), drop = TRUE)
 rownames(contr.m) <- levels(daySurv)[-1:-4]
 ####Actual post hoc test
-anova.car.ph.pheno.res <- lapply(anova.car.ph.pheno.models, function(e) summary(glht(e, linfct = mcp(DaySurv = t(contr.m)))))
+anova.car.ph.pheno.res <- mclapply(anova.car.ph.pheno.models, function(e) summary(glht(e, linfct = mcp(DaySurv = t(contr.m)))))
 anova.car.ph.pheno.ps <- sapply(anova.car.ph.pheno.res, function(e) e$test$pvalues)
 anova.car.ph.pheno.sig.contr <- lapply(data.frame(anova.car.ph.pheno.ps), function(col) which(col <= 0.05))
 names(anova.car.ph.pheno.ps) <- names(anova.car.ph.pheno.models)
@@ -400,15 +400,15 @@ group_set <- unique(ftd_ph$group)
 group_set <- group_set[group_set != "sugar"]
 ftd_ph <- lapply(group_set, function(gr) subset(ftd_ph, group == gr))
 names(ftd_ph) <- group_set
-anova.car.ph.metab.variance.models <- lapply(ftd_ph, function(dat) fit_lin_mod_lme(dvar = "value", data = dat, formula = fml, id.vars = c("Survival", "DaySurv"), random = ~1|Survival, use.corAR = TRUE, lmeControl(msMaxIter = 100)))
-anova.car.ph.metab.variance.models <- lapply(anova.car.ph.metab.variance.models, function(e) try(eval(e)))
+anova.car.ph.metab.variance.models <- mclapply(ftd_ph, function(dat) fit_lin_mod_lme(dvar = "value", data = dat, formula = fml, id.vars = c("Survival", "DaySurv"), random = ~1|Survival, use.corAR = TRUE, lmeControl(msMaxIter = 100)))
+anova.car.ph.metab.variance.models <- mclapply(anova.car.ph.metab.variance.models, function(e) try(eval(e)))
 ####Construct constrast matrix
 contr.m <- get_S_NS_C_contrmat(tanova_day_set)
 daySurv <- interaction(factor(ftd_ph$Day), factor(ftd_ph$Survival), drop = TRUE)
 rownames(contr.m) <- levels(daySurv)
 contr.m <- contr.m[-1:-4, -1:-4]
 ####Actual post hoc test
-anova.car.ph.metab.variance.res <- lapply(anova.car.ph.metab.variance.models, function(e) summary(glht(e, linfct = mcp(DaySurv = t(contr.m)))))
+anova.car.ph.metab.variance.res <- mclapply(anova.car.ph.metab.variance.models, function(e) summary(glht(e, linfct = mcp(DaySurv = t(contr.m)))))
 anova.car.ph.metab.variance.ps <- sapply(anova.car.ph.metab.variance.res, function(e) e$test$pvalues)
 anova.car.ph.metab.variance.sig.contr <- lapply(data.frame(anova.car.ph.metab.variance.ps), function(col) which(col <= 0.05))
 names(anova.car.ph.metab.variance.ps) <- names(anova.car.ph.metab.variance.models)
@@ -421,15 +421,15 @@ group_set <- unique(ftd_ph$group)
 group_set <- group_set[group_set != "sugar"]
 ftd_ph <- lapply(group_set, function(gr) subset(ftd_ph, group == gr))
 names(ftd_ph) <- group_set
-anova.car.ph.pheno.variance.models <- lapply(ftd_ph, function(dat) fit_lin_mod_lme(dvar = "value", data = dat, formula = fml, id.vars = c("Survival", "DaySurv"), random = ~1|Survival, use.corAR = TRUE, lmeControl(msMaxIter = 100)))
-anova.car.ph.pheno.variance.models <- lapply(anova.car.ph.pheno.variance.models, function(e) try(eval(e)))
+anova.car.ph.pheno.variance.models <- mclapply(ftd_ph, function(dat) fit_lin_mod_lme(dvar = "value", data = dat, formula = fml, id.vars = c("Survival", "DaySurv"), random = ~1|Survival, use.corAR = TRUE, lmeControl(msMaxIter = 100)))
+anova.car.ph.pheno.variance.models <- mclapply(anova.car.ph.pheno.variance.models, function(e) try(eval(e)))
 ####Construct constrast matrix
 contr.m <- get_S_NS_C_contrmat(tanova_day_set)
 daySurv <- interaction(factor(ftd_ph$Day), factor(ftd_ph$Survival), drop = TRUE)
 rownames(contr.m) <- levels(daySurv)
-contr.m <- contr.m[-1:-5, -1:-5]
+contr.m <- contr.m[-1:-4, -1:-4]
 ####Actual post hoc test
-anova.car.ph.pheno.variance.res <- lapply(anova.car.ph.pheno.variance.models, function(e) summary(glht(e, linfct = mcp(DaySurv = t(contr.m)))))
+anova.car.ph.pheno.variance.res <- mclapply(anova.car.ph.pheno.variance.models, function(e) summary(glht(e, linfct = mcp(DaySurv = t(contr.m)))))
 anova.car.ph.pheno.variance.ps <- sapply(anova.car.ph.pheno.variance.res, function(e) e$test$pvalues)
 anova.car.ph.pheno.variance.sig.contr <- lapply(data.frame(anova.car.ph.pheno.variance.ps), function(col) which(col <= 0.05))
 names(anova.car.ph.pheno.variance.ps) <- names(anova.car.ph.pheno.variance.models)
