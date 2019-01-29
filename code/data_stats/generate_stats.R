@@ -1649,7 +1649,6 @@ p <- ggplot(data = human_data_patient_group_mean_all_days, mapping = aes(y = val
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5), panel.grid = element_line(colour = 0))
 ggsave(filename = "human_metab_nonsig_hormesis_single_plot.png", path = out_dir, plot = p, width = 10, height = 7, units = "in")
 ##Human, mean metabolite concentrations over days, ordered by concentration, all groups, reuse metabolite set from above
-#TODO: rerun
 human_data_patient_group_mean_all_days <- subset(human_data, Day %in% tanova_day_set, c(1:5, which(colnames(human_data) %in% keep_set)))
 hdpgmads <- human_data_patient_group_mean_all_days$Survival
 hdpgmads[human_data_patient_group_mean_all_days$`CAP / FP` == "-"] <- "Control"
@@ -1982,21 +1981,26 @@ p <- ggplot(data = subset(melt(hdg, id.vars = 1:5), Day %in% 0:3), mapping = aes
 ggsave(plot = p, filename = paste0("human_metab_group_control_time_course.png"), path = out_dir, width = 12, height = 0.3 + 1.5 * ceiling(n_mets/ncols), units = "in")
 
 ###Acylcarnitine made up groups
-ac_transferase_grouped <- human_sepsis_data[, c(1:5, which(human_sepsis_legend$group == "acylcarnitine") + 5)]
+ac_transferase_grouped <- human_data[, c(1:5, which(human_sepsis_legend$group == "acylcarnitine") + 5)]
 ac_transferase_grouped[, -1:-5] <- lapply(ac_transferase_grouped[, -1:-5], `/`, ac_transferase_grouped$C0)
 ac_transferase_grouped <- transform(ac_transferase_grouped, 
                                     ShortChainAC = C2 + C3 + C4, 
                                     MediumChainAC = C5 + `C6 (C4:1-DC)` + C8 + C9 + C10 + C12, 
                                     LongChainAC = C14 + C16 + C18)
+ac_transferase_grouped$Group <- ac_transferase_grouped$Survival
+ac_transferase_grouped$Group[ac_transferase_grouped$CAP...FP == "-"] <- "Control"
+ac_transferase_grouped <- ac_transferase_grouped[c(1:3, ncol(ac_transferase_grouped), 5, 7:(ncol(ac_transferase_grouped) - 1))]
 n_mets <- ncol(ac_transferase_grouped) - 1
-p <- ggplot(data = subset(melt(ac_transferase_grouped[, -6], id.vars = 1:5), Day %in% 0:3), mapping = aes(x = Day, y = value, group = Survival, colour = Survival)) + 
-  facet_wrap(facets = ~ variable, ncol = 4, nrow = ceiling(n_mets/4), scales = "free_y") +
+n_cols <- 5
+p <- ggplot(data = subset(melt(ac_transferase_grouped, id.vars = 1:5), Day %in% 0:3), mapping = aes(x = Day, y = value, group = Group, colour = Group)) + 
+  facet_wrap(facets = ~ variable, ncol = n_cols, nrow = ceiling(n_mets/n_cols), scales = "free_y") +
   geom_point(position = position_dodge(width = 0.2)) +
   stat_summary(fun.ymin = "min", fun.ymax = "max", fun.y = "mean", geom = "line") +
+  human_col_scale() +
   ylab("Concentration relative to C0") +
   xlab("Day") +
   theme_bw()
-ggsave(plot = p, filename = paste0("human_metab_AC_group_time_course.png"), path = out_dir, width = 12, height = 0.3 + 1.5 * ceiling(n_mets/4), units = "in")
+ggsave(plot = p, filename = paste0("human_metab_AC_group_time_course.png"), path = out_dir, width = 12, height = 0.3 + 1.5 * ceiling(n_mets/n_cols), units = "in")
 
 ###PCaa UFA grouped
 ufa_grouped <- human_sepsis_data[, c(1:5, which(human_sepsis_legend$group == "phosphatidylcholine") + 1)]
