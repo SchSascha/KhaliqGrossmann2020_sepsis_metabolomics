@@ -8,9 +8,14 @@ get_human_sepsis_data <- function(){
   require(matrixStats)
   data <- read.csv(file = "../../data/measurements/Summary human sample data.csv", header = TRUE, sep = "\t", stringsAsFactors = FALSE, dec = ",", check.names = FALSE)
   data <- data[, -(which(colSds(as.matrix(data[, -1:-5])) == 0) + 5)] #remove columns with fixed values
-  pat_exclude <- c(2, 5, 10, 19, 27, 29, 37, 40)
-  data <- subset(data, !Patient %in% pat_exclude)
-  data <- remove_bile_acids_from_measurements(data)
+  group <- data[["CAP / FP"]] #add group column with combinations of Survival and Sepsis/Nonsepsis
+  group[group == "-"] <- "Nonsep"
+  group[group %in% c("CAP", "FP")] <- "Septic"
+  group <- paste0(group, "-", data$Survival)
+  data <- cbind(data[, 1:5], data.frame(Group = group, stringsAsFactors = FALSE), data[, -1:-5])
+  pat_exclude <- c(2, 5, 10, 19, 27, 29, 37, 40) 
+  data <- subset(data, !Patient %in% pat_exclude) #remove patients we later found to be conceptually too close to sepsis
+  data <- remove_bile_acids_from_measurements(data) #remove bile acids because wrong mesaurement technique for them
   return(data)
 }
 
@@ -63,7 +68,8 @@ get_Ferrario_validation_data <- function(){
 #' @examples
 get_human_sepsis_legend <- function(){
   data <- read.csv(file = "../../data/measurements/Legend human sample data pheno class.csv", header = TRUE, sep = "\t", stringsAsFactors = FALSE, dec = ",", check.names = FALSE)
-  data$name[data$name == "Carnitine "] <- "Carnitine"
+  data <- rbind(data[1:5, ], c("Group", "Combined Sepsis status and Survival", rep("", ncol(data)-2)), data[-1:-5, ])
+  data$name[data$name == "Carnitine "] <- "Carnitine" #beware the random space
   data <- remove_bile_acids_from_legend(data)
   return(data)
 }
@@ -608,7 +614,7 @@ ml.split.folds.quasistrat <- function(num_folds, class, non_strat_class, num_opt
 #' @export
 #'
 #' @examples
-human_sig_diffs_along_days <- function(data, corr_fdr = TRUE, time_var = "Day", status_var = "Survival", case_var = "Patient", descr_till_col = 5){
+human_sig_diffs_along_days <- function(data, corr_fdr = TRUE, time_var = "Day", status_var = "Survival", case_var = "Patient", descr_till_col = 6){
   day_survival_tab <- table(data[c(time_var, status_var)])
   ##Keep days with large enough sample count
   day_survival_tab <- day_survival_tab[rowMins(day_survival_tab) >= 3,]
@@ -895,8 +901,8 @@ cbrt_trans <- scales::trans_new(name = "cbrt", transform = cbrt_fun, inverse = c
 bootstrap_S_corr_fun <- function(r, n_S, corr_dat){
   set.seed(r)
   rand_subset <- sample.int(n = n_S, size = n_NS)
-  S_corr <- my.corr.test(x = subset(subset(human_sepsis_data_normal, Survival == "S" & Day == d, select = -1:-5), 1:n_S %in% rand_subset), adjust = "fdr")
-  S_grouped_corr <- my.corr.test(x = subset(human_sepsis_data_normal_grouped, Survival == "S" & Day == d, select = -1:-5), adjust = "fdr")
+  S_corr <- my.corr.test(x = subset(subset(human_sepsis_data_normal, Survival == "S" & Day == d, select = -1:-6), 1:n_S %in% rand_subset), adjust = "fdr")
+  S_grouped_corr <- my.corr.test(x = subset(human_sepsis_data_normal_grouped, Survival == "S" & Day == d, select = -1:-6), adjust = "fdr")
   ###Get significant metabolite pairs in survivors
   xy <- which.xy(S_grouped_corr$p <= 0.05)
   xy <- subset(xy, x < y)
@@ -940,7 +946,7 @@ col.na.omit <- function(data){
 #' @export
 #'
 #' @examples
-human_col_scale <- function(name = "Group", levels = c("NS", "Control", "S", "Healthy_Fr"), black_pos = 4, black_color = "grey50", ...){
+human_col_scale <- function(name = "Group", levels = c("Septic-NS", "Nonsep-S", "Septic-S", "Nonsep-NS", "Healthy_Fr"), black_pos = 5, black_color = "grey50", ...){
   library(scales)
   color_set <- hue_pal()(length(levels) - 1)
   color_set <- c(color_set, black_color) #last is black (or grey)

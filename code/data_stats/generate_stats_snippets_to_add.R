@@ -27,7 +27,7 @@ human_data_legend <- get_human_sepsis_legend()
 
 #Get variable types
 metab_end <- which(colnames(human_data) == "H1")
-metab_sel <- 6:metab_end
+metab_sel <- 7:metab_end
 pheno_start <- metab_end + 1
 pheno_sel <- pheno_start:ncol(human_data)
 
@@ -52,34 +52,34 @@ human_sepsis_data <- human_data[human_data$`CAP / FP` != "-", ]
 # metab_all_days_var_df[, -1] <- scale(metab_all_days_var_df[, -1], scale = FALSE, center = TRUE)
 # metab_all_days_var_df <- metab_all_days_var_df[, c(1, 1 + which(metab_all_days_var_df[1, -1] > 0))]
 # var_sel <- colnames(metab_all_days_var_df)[-1]
-var_sel <- colnames(human_data)[-1:-5]
+var_sel <- colnames(human_data)[-1:-6]
 
-human_sepsis_data <- subset(human_sepsis_data, select = c(1:5, which(colnames(human_sepsis_data) %in% var_sel)))
-human_data <- subset(human_data, select = c(1:5, which(colnames(human_data) %in% var_sel)))
-human_data_legend <- human_data_legend[c(1:5, which(human_data_legend[, 1] %in% var_sel)), ]
+human_sepsis_data <- subset(human_sepsis_data, select = c(1:6, which(colnames(human_sepsis_data) %in% var_sel)))
+human_data <- subset(human_data, select = c(1:6, which(colnames(human_data) %in% var_sel)))
+human_data_legend <- human_data_legend[c(1:6, which(human_data_legend[, 1] %in% var_sel)), ]
 
 metab_end <- which(colnames(human_data) == "H1")
-metab_sel <- 6:metab_end
+metab_sel <- 7:metab_end
 pheno_sel <- (metab_end + 1):ncol(human_data)
 
 #Normalize data
 human_sepsis_data_normal <- human_sepsis_data
-human_sepsis_data_normal[,-1:-5] <- scale(human_sepsis_data_normal[,-1:-5])
-human_sepsis_data_metab <- subset(human_sepsis_data_normal, Day < 4, 6:metab_end)
-human_sepsis_data_pheno <- subset(human_sepsis_data_normal, Day < 4, pheno_start:ncol(human_sepsis_data))
+human_sepsis_data_normal[,-1:-6] <- scale(human_sepsis_data_normal[,-1:-6])
+human_sepsis_data_metab <- subset(human_sepsis_data_normal, Day < 4, metab_sel)
+human_sepsis_data_pheno <- subset(human_sepsis_data_normal, Day < 4, pheno_sel)
 human_sepsis_data_normal <- human_sepsis_data_normal[,1:metab_end]
 
 #Generate PCA biplots
 ##Clinical params, sepsis patients
-human_sepsis_data_pheno_dist <- cbind(subset(human_sepsis_data, Day < 4, 1:5), as.matrix(dist(x = subset(human_sepsis_data, Day < 4, pheno_sel), method = "canberra"))) # distance() works on a per row basis
-p <- prcomp(human_sepsis_data_pheno_dist[, -1:-5])
+human_sepsis_data_pheno_dist <- cbind(subset(human_sepsis_data, Day < 4, 1:6), as.matrix(dist(x = subset(human_sepsis_data, Day < 4, pheno_sel), method = "canberra"))) # distance() works on a per row basis
+p <- prcomp(human_sepsis_data_pheno_dist[, -1:-6])
 
 ###PERMANOVA with bootstrapping
 ad_data <- human_sepsis_data_pheno_dist
-pat_list <- human_sepsis_data_pheno_dist[, 1:5]
+pat_list <- human_sepsis_data_pheno_dist[, 1:6]
 PCs <- p$x[, 1:2]
-s_idx <- which(ad_data$Survival == "S")
-ns_idx <- which(ad_data$Survival == "NS")
+s_idx <- which(ad_data$Group == "Septic-S")
+ns_idx <- which(ad_data$Group == "Septic-NS")
 tic()
 ad_res_mc <- mclapply(1:100, 
                       function(dx, s_idx, ns_idx, PCs, ad_data){
@@ -103,17 +103,17 @@ met_group_res <- list()
 tic()
 for (met_group in unique(human_data_legend$group[metab_sel])){
   met_group_idx <- which(human_data_legend$group == met_group)
-  human_data_dist <- cbind(human_data[,1:5], as.matrix(dist(x = human_data[, met_group_idx], method = "canberra"))) # distance() works on a per row basis
-  pat_list <- human_data[, 1:5]
-  p <- prcomp(human_data_dist[, -1:-5])
+  human_data_dist <- cbind(human_data[,1:6], as.matrix(dist(x = human_data[, met_group_idx], method = "canberra"))) # distance() works on a per row basis
+  pat_list <- human_data[, 1:6]
+  p <- prcomp(human_data_dist[, -1:-6])
   
   ###PERMANOVA with bootstrapping
   ad_data <- human_data_dist
-  ad_data$Survival[ad_data$`CAP / FP` == "-"] <- "Control"
   PCs <- p$x[, 1:2]
-  c_idx <- which(ad_data$Survival == "Control")
-  s_idx <- which(ad_data$Survival == "S")
-  ns_idx <- which(ad_data$Survival == "NS")
+  ad_data$Survival[grep("Nonsep", ad_data$Group)] <- "Nonsep"
+  c_idx <- which(grepl(pattern = "Nonsep", x = ad_data$Group))
+  s_idx <- which(ad_data$Group == "Septic-S")
+  ns_idx <- which(ad_data$Group == "Septic-NS")
   ad_res_mc <- mclapply(1:100, 
                         function(dx, c_idx, s_idx, ns_idx, PCs, ad_data){
                           num_c <- length(c_idx)
@@ -156,16 +156,16 @@ for (met_group in unique(human_data_legend$group[metab_sel])){
   names(pat_x_len) <- names(pat_step_len)
   names(pat_y_len) <- names(pat_step_len)
   pat_step_len_df <- data.frame(Patient = rep(names(pat_step_len), times = sapply(pat_step_len, length)), step_len = unlist(pat_step_len), x_len = unlist(pat_x_len), y_len = unlist(pat_y_len))
-  pat_step_len_df$Group <- pat_list$Survival[match(pat_step_len_df$Patient, pat_list$Patient)]
-  pat_step_len_df$Group <- factor(pat_step_len_df$Group, levels = unique(pat_step_len_df$Group)[c(1, 3, 2)])
+  pat_step_len_df$Group <- pat_list$Group[match(pat_step_len_df$Patient, pat_list$Patient)]
+  pat_step_len_df$Group <- factor(pat_step_len_df$Group, levels = unique(pat_step_len_df$Group))
   pat_step_len_long_df <- melt(pat_step_len_df, id.vars = c("Patient", "Group"))
   pat_step_len_long_df$variable <- factor(pat_step_len_long_df$variable, labels = c("Euclidean step length", "X only", "Y only"))
   
-  num_NS_vals <- sum(pat_step_len_df$Group == "NS")
-  num_S_vals <- sum(pat_step_len_df$Group == "S")
+  num_NS_vals <- sum(pat_step_len_df$Group == "Septic-NS")
+  num_S_vals <- sum(pat_step_len_df$Group == "Septic-S")
   bt_step_res <- mclapply(1:100,
                           function(dx, pat_step_len_df, num_S_vals, num_NS_vals){
-                            bootstr_dat <- rbind(subset(pat_step_len_df, Group == "NS"), subset(pat_step_len_df, Group == "S")[sample(num_S_vals, size = num_NS_vals), ])
+                            bootstr_dat <- rbind(subset(pat_step_len_df, Group == "Septic-NS"), subset(pat_step_len_df, Group == "Septic-S")[sample(num_S_vals, size = num_NS_vals), ])
                             bootstr_dat$Group <- factor(bootstr_dat$Group)
                             ad_step1 <- adonis(formula = step_len ~ Group, data = bootstr_dat, method = "euclidean", permutations = 10000, parallel = 1)
                             ad_step2 <- adonis(formula = x_len ~ Group, data = bootstr_dat, method = "euclidean", permutations = 10000, parallel = 1)
@@ -183,17 +183,17 @@ for (met_group in unique(human_data_legend$group[metab_sel])){
 toc()
 
 ##Metabolites, all patients
-human_data_dist <- cbind(human_data[,1:5], as.matrix(dist(x = human_data[, metab_sel], method = "canberra"))) # distance() works on a per row basis
-p <- prcomp(human_data_dist[, -1:-5])
+human_data_dist <- cbind(human_data[,1:6], as.matrix(dist(x = human_data[, metab_sel], method = "canberra"))) # distance() works on a per row basis
+p <- prcomp(human_data_dist[, -1:-6])
 
 ###PERMANOVA with bootstrapping, only contrast 1-vs-1
 ad_data <- human_data_dist
-pat_list <- human_data_dist[, 1:5]
-ad_data$Survival[ad_data$`CAP / FP` == "-"] <- "Control"
+pat_list <- human_data_dist[, 1:6]
+ad_data$Survival[grep(pattern = "Nonep", x = ad_data$Group)] <- "Nonsep"
 PCs <- p$x[, 1:2]
-c_idx <- which(ad_data$Survival == "Control")
-s_idx <- which(ad_data$Survival == "S")
-ns_idx <- which(ad_data$Survival == "NS")
+c_idx <- which(grepl(pattern = "Nonsep", x = ad_data$Group))
+s_idx <- which(ad_data$Group == "Septic-S")
+ns_idx <- which(ad_data$Group == "Septic-NS")
 ad_res1 <- list()
 ad_res2 <- list()
 ad_res3 <- list()
@@ -244,8 +244,8 @@ names(pat_step_len) <- as.character(1:length(pat_step_len))
 names(pat_x_len) <- names(pat_step_len)
 names(pat_y_len) <- names(pat_step_len)
 pat_step_len_df <- data.frame(Patient = rep(names(pat_step_len), times = sapply(pat_step_len, length)), step_len = unlist(pat_step_len), x_len = unlist(pat_x_len), y_len = unlist(pat_y_len))
-pat_step_len_df$Group <- pat_list$Survival[match(pat_step_len_df$Patient, pat_list$Patient)]
-pat_step_len_df$Group <- factor(pat_step_len_df$Group, levels = unique(pat_step_len_df$Group)[c(1, 3, 2)])
+pat_step_len_df$Group <- pat_list$Group[match(pat_step_len_df$Patient, pat_list$Patient)]
+pat_step_len_df$Group <- factor(pat_step_len_df$Group, levels = unique(pat_step_len_df$Group))
 pat_step_len_long_df <- melt(pat_step_len_df, id.vars = c("Patient", "Group"))
 pat_step_len_long_df$variable <- factor(pat_step_len_long_df$variable, labels = c("Euclidean step length", "X only", "Y only"))
 
@@ -255,12 +255,12 @@ ad_step3 <- list()
 t_r1 <- list()
 t_r2 <- list()
 t_r3 <- list()
-num_NS_vals <- sum(pat_step_len_df$Group == "NS")
-num_S_vals <- sum(pat_step_len_df$Group == "S")
+num_NS_vals <- sum(pat_step_len_df$Group == "Septic-NS")
+num_S_vals <- sum(pat_step_len_df$Group == "Septic-S")
 tic()
 bt_step_res <- mclapply(1:100,
                         function(dx, pat_step_len_df, num_S_vals, num_NS_vals){
-                          bootstr_dat <- rbind(subset(pat_step_len_df, Group == "NS"), subset(pat_step_len_df, Group == "S")[sample(num_S_vals, size = num_NS_vals), ])
+                          bootstr_dat <- rbind(subset(pat_step_len_df, Group == "Septic-NS"), subset(pat_step_len_df, Group == "Septic-S")[sample(num_S_vals, size = num_NS_vals), ])
                           bootstr_dat$Group <- factor(bootstr_dat$Group)
                           ad_step1 <- adonis(formula = step_len ~ Group, data = bootstr_dat, method = "euclidean", permutations = 10000, parallel = 1)
                           ad_step2 <- adonis(formula = x_len ~ Group, data = bootstr_dat, method = "euclidean", permutations = 10000, parallel = 1)
@@ -288,36 +288,54 @@ pat_list_centroids <- pat_list[match(unique(pat_list$Patient), pat_list$Patient)
 ####Get pairwise centroid distances
 pat_pw_dist <- as.matrix(dist(pat_centroids, method = "euclidean"))
 ####Get within-group distances
-p_s_sel <- which(pat_list_centroids$Survival == "S" & pat_list_centroids$`CAP / FP` != "-")
+p_s_sel <- which(pat_list_centroids$Group == "Septic-S")
 pat_S_pw_dist <- pat_pw_dist[p_s_sel, p_s_sel]
 pat_S_pw_dist <- pat_S_pw_dist[lower.tri(x = pat_S_pw_dist)]
-p_ns_sel <- which(pat_list_centroids$Survival == "NS" & pat_list_centroids$`CAP / FP` != "-")
+p_ns_sel <- which(pat_list_centroids$Group == "Septic-NS")
 pat_NS_pw_dist <- pat_pw_dist[p_ns_sel, p_ns_sel]
 pat_NS_pw_dist <- pat_NS_pw_dist[lower.tri(x = pat_NS_pw_dist)]
-p_c_sel <- which(pat_list_centroids$`CAP / FP` == "-")
+p_c_sel <- which(grepl(x = pat_list_centroids$Group, pattern = "Nonsep"))
 pat_C_pw_dist <- pat_pw_dist[p_c_sel, p_c_sel]
 pat_C_pw_dist <- pat_C_pw_dist[lower.tri(x = pat_C_pw_dist)]
+p_cs_sel <- which(pat_list_centroids$Group == "Nonsep-S")
+pat_CS_pw_dist <- pat_pw_dist[p_cs_sel, p_cs_sel]
+pat_CS_pw_dist <- pat_CS_pw_dist[lower.tri(x = pat_CS_pw_dist)]
+p_cns_sel <- which(pat_list_centroids$Group == "Nonsep-NS")
+pat_CNS_pw_dist <- pat_pw_dist[p_cns_sel, p_cns_sel]
+pat_CNS_pw_dist <- pat_CNS_pw_dist[lower.tri(x = pat_CNS_pw_dist)]
 ####Compare distance distributions
 betadiv_S_NS <- t.test(x = pat_S_pw_dist, y = pat_NS_pw_dist, var.equal = FALSE)
+betadiv_S_CS <- t.test(x = pat_S_pw_dist, y = pat_CS_pw_dist, var.equal = FALSE)
+betadiv_S_CNS <- t.test(x = pat_S_pw_dist, y = pat_CNS_pw_dist, var.equal = FALSE)
+betadiv_NS_CS <- t.test(x = pat_NS_pw_dist, y = pat_CS_pw_dist, var.equal = FALSE)
+betadiv_NS_CNS <- t.test(x = pat_NS_pw_dist, y = pat_CNS_pw_dist, var.equal = FALSE)
+betadiv_CS_CNS <- t.test(x = pat_CNS_pw_dist, y = pat_CS_pw_dist, var.equal = FALSE)
 betadiv_S_C <- t.test(x = pat_S_pw_dist, y = pat_C_pw_dist, var.equal = FALSE)
 betadiv_NS_C <- t.test(x = pat_NS_pw_dist, y = pat_C_pw_dist, var.equal = FALSE)
 ####Plot
-pat_pw_group_dat <- data.frame(distance = c(pat_C_pw_dist, pat_S_pw_dist, pat_NS_pw_dist), 
-                               Group = c(rep("C", length(pat_C_pw_dist)), rep("S", length(pat_S_pw_dist)), rep("NS", length(pat_NS_pw_dist))))
+pat_pw_group_dat <- data.frame(distance = c(pat_CS_pw_dist, pat_CNS_pw_dist, pat_C_pw_dist, pat_S_pw_dist, pat_NS_pw_dist), 
+                               Group = c(rep("Nonsep-S", length(pat_CS_pw_dist)), 
+                                         rep("Nonsep-NS", length(pat_CNS_pw_dist)), 
+                                         rep("Nonsep", length(pat_C_pw_dist)),
+                                         rep("Septic-S", length(pat_S_pw_dist)), 
+                                         rep("Septic-NS", length(pat_NS_pw_dist))))
 p <- ggplot(data = pat_pw_group_dat, mapping = aes(x = Group, y = distance, color = Group)) +
   geom_boxplot() +
   geom_path(data = data.frame(x = c(1, 1, 1.95, 1.95), y = c(380, 390, 390, 380)), mapping = aes(x = x, y = y), inherit.aes = FALSE) +
-  geom_path(data = data.frame(x = c(2.05, 2.05, 3, 3), y = c(380, 390, 390, 380)), mapping = aes(x = x, y = y), inherit.aes = FALSE) +
-  geom_path(data = data.frame(x = c(1, 1, 3, 3), y = c(440, 450, 450, 440)), mapping = aes(x = x, y = y), inherit.aes = FALSE) +
-  geom_text(x = 1.5, y = 410, label = paste0("p < ", format(betadiv_S_NS$p.value, digits = 4)), size = 2, inherit.aes = FALSE) +
-  geom_text(x = 2.5, y = 410, label = paste0("p < ", format(betadiv_NS_C$p.value, digits = 2)), size = 2, inherit.aes = FALSE) +
-  geom_text(x = 2, y = 470, label = "p > 0.05", size = 2, inherit.aes = FALSE) +
-  human_col_scale(levels = c("NS", "C", "S", "Dummy")) +
-  scale_x_discrete(limits = c("S", "NS", "C")) +
+  geom_path(data = data.frame(x = 2 + c(1, 1, 1.95, 1.95), y = c(380, 390, 390, 380)), mapping = aes(x = x, y = y), inherit.aes = FALSE) +
+  geom_path(data = data.frame(x = 2 + c(2.05, 2.05, 3, 3), y = c(380, 390, 390, 380)), mapping = aes(x = x, y = y), inherit.aes = FALSE) +
+  geom_path(data = data.frame(x = 2 + c(1, 1, 3, 3), y = c(440, 450, 450, 440)), mapping = aes(x = x, y = y), inherit.aes = FALSE) +
+  geom_text(x = 1.5, y = 410, label = "p > 0.05", size = 1.5, inherit.aes = FALSE) +
+  geom_text(x = 2 + 1.5, y = 410, label = paste0("p < ", format(betadiv_S_NS$p.value, digits = 4)), size = 1.5, inherit.aes = FALSE) +
+  geom_text(x = 2 + 2.5, y = 410, label = paste0("p < ", format(betadiv_NS_C$p.value, digits = 2)), size = 1.5, inherit.aes = FALSE) +
+  geom_text(x = 2 + 2, y = 470, label = "p > 0.05", size = 1.5, inherit.aes = FALSE) +
+  human_col_scale(levels = as.character(unique(pat_pw_group_dat$Group))[c(5, 1, 4, 2, 3)], black_color = "green", black_pos = 5) +
+  scale_x_discrete(limits = as.character(unique(pat_pw_group_dat$Group))) +
+  geom_vline(xintercept = 2.5, size = 0.25) +
   guides(color = "none") +
   ylim(0, 480) +
   theme_bw() + 
-  theme(panel.grid = element_blank())
+  theme(panel.grid = element_blank(), axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
 ggsave(filename = "PCA_metab_betadiv_comparison.png", path = out_dir, width = 2.5, height = 4, units = "in")
 
 ###Plot step lengths, metabolites, all patients
@@ -330,11 +348,11 @@ p <- ggplot(data = pat_step_len_long_df, mapping = aes(x = as.numeric(Group), y 
   geom_violin() + 
   xlab("Group") +
   ylab("Step length") +
-  scale_x_discrete(limits = 1:3, labels = c("NS", "S", "Nonseptic")) +
+  scale_x_discrete(limits = 1:4, labels = unique(pat_step_len_long_df$Group)) +
   scale_y_continuous(limits = c(0,550)) +
   guides(fill = "none", color = "none", size = "none") +
   theme_bw() +
-  theme(panel.grid = element_line(colour = NA))
+  theme(panel.grid = element_line(colour = NA), axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
 ggsave(filename = "PCA_metab_steplength_comparison.png", path = out_dir, plot = p, device = "png", width = 8, height = 3, units = "in")
 
 ###Aggregate all p-values
@@ -369,18 +387,17 @@ fwrite(x = ad_st_r_df, file = paste0(out_dir, "human_met_group_PCA_step_diff_FDR
 tic()
 for (met_group in unique(human_data_legend$group[metab_sel])){
   met_group_idx <- which(human_data_legend$group == met_group)
-  human_data_dist <- cbind(human_data[,1:5], as.matrix(dist(x = human_data[, met_group_idx], method = "canberra"))) # distance() works on a per row basis
-  p <- prcomp(human_data_dist[, -1:-5])
+  human_data_dist <- cbind(human_data[,1:6], as.matrix(dist(x = human_data[, met_group_idx], method = "canberra"))) # distance() works on a per row basis
+  p <- prcomp(human_data_dist[, -1:-6])
   
   ad_rv <- ad_mg_r_df[[met_group]]
   ad_rv[ad_rv > 0.05] <- 0.05
-  text_v <- paste0(c("C", "C", "S"), " vs ", c("S", "NS", "NS"), ", p ", c("> ", "< ")[1 + (ad_rv < 0.05)], sapply(ad_rv, format, digits = 2))
+  text_v <- paste0(c("Nonsep", "Nonsep", "Septic-S"), " vs ", c("Septic-S", "Septic-NS", "Septic-NS"), ", p ", c("> ", "< ")[1 + (ad_rv < 0.05)], sapply(ad_rv, format, digits = 2))
   
   hdd <- human_data_dist
-  hdd$Survival[hdd$`CAP / FP` == "-"] <- "Non-septic"
-  ap <- autoplot(object = p, data = hdd, colour = "Survival", frame = TRUE, frame.type = "norm")
+  ap <- autoplot(object = p, data = hdd, colour = "Group", frame = TRUE, frame.type = "norm")
   ap <- ap +
-    human_col_scale(name = "Survival", levels = c("NS", "Non-septic", "S", "Dummy"), aesthetics = c("colour", "fill")) +
+    human_col_scale(aesthetics = c("colour", "fill")) +
     guides(colour = guide_legend(title = "Group"), fill = "none", group = "none") +
     ggtitle(paste0("PCA biplot, Canberra distance, ", met_group, "\nall samples")) +
     theme_bw()
@@ -391,15 +408,22 @@ for (met_group in unique(human_data_legend$group[metab_sel])){
     geom_text(x = 0.9 * xmin, y = 0.85 * ymin, label = paste0(text_v, collapse = "\n"), size = 2, hjust = "left")
   ggsave(filename = paste0("PCA_biplot_", met_group, "_all_samples.png"), path = out_dir, plot = ap, width = 6, height = 5, units = "in")
 }
+toc()
+
+#TODO: continue from here with switch from {S, NS, Control} to {Sepsis x Survival}
 
 ###Actual plot of sepsis samples, clinical params
-human_sepsis_data_pheno_dist <- cbind(subset(human_sepsis_data, Day < 4, 1:5), as.matrix(dist(x = subset(human_sepsis_data, Day < 4, pheno_sel), method = "canberra"))) # distance() works on a per row basis
-p <- prcomp(human_sepsis_data_pheno_dist[, -1:-5])
-ap <- autoplot(object = p, data = human_sepsis_data_pheno_dist, colour = "Survival", frame = TRUE, frame.type = "norm")
+human_sepsis_data_pheno_dist <- cbind(subset(human_sepsis_data, Day < 4, 1:6), as.matrix(dist(x = subset(human_sepsis_data, Day < 4, pheno_sel), method = "canberra"))) # distance() works on a per row basis
+human_sepsis_data_pheno_dist$Patient <- factor(human_sepsis_data_pheno_dist$Patient, levels = seq_along(unique(human_sepsis_data_pheno_dist$Patient)))
+p <- prcomp(human_sepsis_data_pheno_dist[, -1:-6])
+ap <- autoplot(object = p, data = human_sepsis_data_pheno_dist, colour = "Group", frame = FALSE, frame.type = "norm")
 ap <- ap + 
-  human_col_scale(name = "Survival") +
+  geom_text(label = paste0(vars(Patient), "-", vars(Day)), x = p$x[, 1] + 0.01, y = p$x[, 2] - 0.01) +
+  human_col_scale() +
   ggtitle("PCA biplot, Canberra distance, clinical params,\nseptic patients") +
-  theme_bw()
+  guides(shape = "none") +
+  theme_bw() + 
+  theme(panel.grid = element_blank())
 gobj <- ggplot_build(ap)
 xmin <- gobj$layout$panel_params[[1]]$x.range[1]
 ymin <- gobj$layout$panel_params[[1]]$y.range[1]
