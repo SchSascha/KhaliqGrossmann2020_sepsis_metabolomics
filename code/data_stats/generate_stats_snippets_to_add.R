@@ -11,6 +11,7 @@ library(corpcor)
 library(vegan)
 library(ggplot2)
 library(ggfortify)
+library(ggrepel)
 library(parallel)
 library(tictoc)
 
@@ -321,14 +322,14 @@ pat_pw_group_dat <- data.frame(distance = c(pat_CS_pw_dist, pat_CNS_pw_dist, pat
                                          rep("Septic-NS", length(pat_NS_pw_dist))))
 p <- ggplot(data = pat_pw_group_dat, mapping = aes(x = Group, y = distance, color = Group)) +
   geom_boxplot() +
-  geom_path(data = data.frame(x = c(1, 1, 1.95, 1.95), y = c(380, 390, 390, 380)), mapping = aes(x = x, y = y), inherit.aes = FALSE) +
+  geom_path(data = data.frame(x = c(1, 1, 2, 2), y = c(380, 390, 390, 380)), mapping = aes(x = x, y = y), inherit.aes = FALSE) +
   geom_path(data = data.frame(x = 2 + c(1, 1, 1.95, 1.95), y = c(380, 390, 390, 380)), mapping = aes(x = x, y = y), inherit.aes = FALSE) +
   geom_path(data = data.frame(x = 2 + c(2.05, 2.05, 3, 3), y = c(380, 390, 390, 380)), mapping = aes(x = x, y = y), inherit.aes = FALSE) +
   geom_path(data = data.frame(x = 2 + c(1, 1, 3, 3), y = c(440, 450, 450, 440)), mapping = aes(x = x, y = y), inherit.aes = FALSE) +
   geom_text(x = 1.5, y = 410, label = "p > 0.05", size = 1.5, inherit.aes = FALSE) +
-  geom_text(x = 2 + 1.5, y = 410, label = paste0("p < ", format(betadiv_S_NS$p.value, digits = 4)), size = 1.5, inherit.aes = FALSE) +
-  geom_text(x = 2 + 2.5, y = 410, label = paste0("p < ", format(betadiv_NS_C$p.value, digits = 2)), size = 1.5, inherit.aes = FALSE) +
-  geom_text(x = 2 + 2, y = 470, label = "p > 0.05", size = 1.5, inherit.aes = FALSE) +
+  geom_text(x = 2 + 1.5, y = 410, label = "p > 0.05", size = 1.5, inherit.aes = FALSE) +
+  geom_text(x = 2 + 2.5, y = 410, label = paste0("p < ", format(betadiv_S_NS$p.value, digits = 2)), size = 1.5, inherit.aes = FALSE) +
+  geom_text(x = 2 + 2, y = 470, label = paste0("p < ", format(betadiv_NS_C$p.value, digits = 2)), size = 1.5, inherit.aes = FALSE) +
   human_col_scale(levels = as.character(unique(pat_pw_group_dat$Group))[c(5, 1, 4, 2, 3)], black_color = "green", black_pos = 5) +
   scale_x_discrete(limits = as.character(unique(pat_pw_group_dat$Group))) +
   geom_vline(xintercept = 2.5, size = 0.25) +
@@ -395,12 +396,13 @@ for (met_group in unique(human_data_legend$group[metab_sel])){
   text_v <- paste0(c("Nonsep", "Nonsep", "Septic-S"), " vs ", c("Septic-S", "Septic-NS", "Septic-NS"), ", p ", c("> ", "< ")[1 + (ad_rv < 0.05)], sapply(ad_rv, format, digits = 2))
   
   hdd <- human_data_dist
-  ap <- autoplot(object = p, data = hdd, colour = "Group", frame = TRUE, frame.type = "norm")
+  ap <- autoplot(object = p, data = hdd, colour = "Group", frame = TRUE, frame.type = "norm", size = 0.5)
   ap <- ap +
     human_col_scale(aesthetics = c("colour", "fill")) +
     guides(colour = guide_legend(title = "Group"), fill = "none", group = "none") +
     ggtitle(paste0("PCA biplot, Canberra distance, ", met_group, "\nall samples")) +
-    theme_bw()
+    theme_bw() + 
+    theme(panel.grid = element_blank())
   gobj <- ggplot_build(ap)
   xmin <- gobj$layout$panel_params[[1]]$x.range[1]
   ymin <- gobj$layout$panel_params[[1]]$y.range[1]
@@ -410,15 +412,16 @@ for (met_group in unique(human_data_legend$group[metab_sel])){
 }
 toc()
 
-#TODO: continue from here with switch from {S, NS, Control} to {Sepsis x Survival}
-
 ###Actual plot of sepsis samples, clinical params
 human_sepsis_data_pheno_dist <- cbind(subset(human_sepsis_data, Day < 4, 1:6), as.matrix(dist(x = subset(human_sepsis_data, Day < 4, pheno_sel), method = "canberra"))) # distance() works on a per row basis
-human_sepsis_data_pheno_dist$Patient <- factor(human_sepsis_data_pheno_dist$Patient, levels = seq_along(unique(human_sepsis_data_pheno_dist$Patient)))
+human_sepsis_data_pheno_dist$Patient <- factor(human_sepsis_data_pheno_dist$Patient, levels = unique(human_sepsis_data_pheno_dist$Patient))
 p <- prcomp(human_sepsis_data_pheno_dist[, -1:-6])
-ap <- autoplot(object = p, data = human_sepsis_data_pheno_dist, colour = "Group", frame = FALSE, frame.type = "norm")
+hsdpd <- human_sepsis_data_pheno_dist
+hsdpd$label <- paste0("P", hsdpd$Patient, "-D", hsdpd$Day)
+lam <- p$sdev[1:2] * sqrt(nrow(p$x))
+ap <- autoplot(object = p, data = hsdpd, colour = "Group", frame = FALSE, frame.type = "norm", size = 0.6)
 ap <- ap + 
-  geom_text(label = paste0(vars(Patient), "-", vars(Day)), x = p$x[, 1] + 0.01, y = p$x[, 2] - 0.01) +
+  geom_text_repel(label = hsdpd$label, x = p$x[, 1] / lam[1], y = p$x[, 2] / lam[2], size = 1, mapping = aes(color = Group), segment.size = 0.3) +
   human_col_scale() +
   ggtitle("PCA biplot, Canberra distance, clinical params,\nseptic patients") +
   guides(shape = "none") +
@@ -428,23 +431,23 @@ gobj <- ggplot_build(ap)
 xmin <- gobj$layout$panel_params[[1]]$x.range[1]
 ymin <- gobj$layout$panel_params[[1]]$y.range[1]
 ap <- ap +
-  geom_text(x = 0.9 * xmin, y = 0.88 * ymin, label = paste0("S vs NS, p < ", format(ad_mg_r_df$pheno[3], digits = 3)), size = 2, hjust = "left")
+  geom_text(x = 0.9 * xmin, y = 0.95 * ymin, label = paste0("S vs NS, p < ", format(ad_mg_r_df$pheno[3], digits = 3)), size = 2, hjust = "left")
 ggsave(filename = paste0("PCA_biplot_sepsis_pheno_gg.png"), path = out_dir, plot = ap, width = 5, height = 4, units = "in")
 
 ##Actual plot of all samples, metabolites
-human_data_dist <- cbind(human_data[,1:5], as.matrix(dist(x = human_data[, metab_sel], method = "canberra"))) # distance() works on a per row basis
-p <- prcomp(human_data_dist[, -1:-5])
+human_data_dist <- cbind(human_data[,1:6], as.matrix(dist(x = human_data[, metab_sel], method = "canberra"))) # distance() works on a per row basis
+p <- prcomp(human_data_dist[, -1:-6])
 ad_rv <- ad_mg_r_df[["all"]]
 ad_rv[ad_rv > 0.05] <- 0.05
-text_v <- paste0(c("C", "C", "S"), " vs ", c("S", "NS", "NS"), ", p ", c("> ", "< ")[1 + (ad_rv < 0.05)], sapply(ad_rv, format, digits = 2))
+text_v <- paste0(c("Nonsep", "Nonsep", "Septic-S"), " vs ", c("Septic-S", "Septic-NS", "Septic-NS"), ", p ", c("> ", "< ")[1 + (ad_rv < 0.05)], sapply(ad_rv, format, digits = 2))
 hdd <- human_data_dist
-hdd$Survival[hdd$`CAP / FP` == "-"] <- "Non-septic"
-ap <- autoplot(object = p, data = hdd, colour = "Survival", frame = TRUE, frame.type = "norm")
+ap <- autoplot(object = p, data = hdd, colour = "Group", frame = TRUE, frame.type = "norm", size = 0.5)
 ap <- ap + 
-  human_col_scale(name = "Survival", levels = c("NS", "Non-septic", "S", "Dummy"), aesthetics = c("colour", "fill")) +
+  human_col_scale(aesthetics = c("colour", "fill")) +
   guides(colour = guide_legend(title = "Group"), fill = "none", group = "none") +
   ggtitle("PCA biplot, Canberra distance, metabolites,\nall samples") +
-  theme_bw()
+  theme_bw() + 
+  theme(panel.grid = element_blank())
 gobj <- ggplot_build(ap)
 xmin <- gobj$layout$panel_params[[1]]$x.range[1]
 ymin <- gobj$layout$panel_params[[1]]$y.range[1]
@@ -452,10 +455,12 @@ ap <- ap +
   geom_text(x = 0.9 * xmin, y = 0.88 * ymin, label = paste0(text_v, collapse = "\n"), size = 2, hjust = "left")
 ggsave(filename = paste0("PCA_biplot_metab_all_samples_gg.png"), path = out_dir, plot = ap, width = 5, height = 4, units = "in")
 
+#TODO: continue from here with switch from {S, NS, Control} to {Sepsis x Survival}
+
 #Patient-wise PCA plot
-pat_list <- human_sepsis_data_normal[match(unique(human_sepsis_data_normal$Patient), human_sepsis_data_normal$Patient), 1:5]
+pat_list <- human_sepsis_data_normal[match(unique(human_sepsis_data_normal$Patient), human_sepsis_data_normal$Patient), 1:6]
 pat_len <- table(human_sepsis_data_normal$Patient)
-pca_list <- lapply(pat_list$Patient, function(p){ prcomp(subset(human_sepsis_data_normal, Patient == p, -1:-5)) })
+pca_list <- lapply(pat_list$Patient, function(p){ prcomp(subset(human_sepsis_data_normal, Patient == p, -1:-6)) })
 for (n in seq_along(pca_list)){
   pca_list[[n]]$surv <- pat_list$Survival[n]
   pca_list[[n]]$pat <- pat_list$Patient[n]
