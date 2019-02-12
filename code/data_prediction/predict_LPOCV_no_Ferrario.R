@@ -61,17 +61,17 @@ human_sepsis_data_ml <- human_sepsis_data[, 1:which(colnames(human_sepsis_data) 
 human_sepsis_data_ml <- subset(human_sepsis_data_ml, Day == 0)
 human_sepsis_data_ml <- subset(human_sepsis_data_ml, select = !(colnames(human_sepsis_data_ml) %in% c("Histamin", "PC aa C36:0", "DOPA"))) #remove metabs with questionable range
 human_sepsis_data_ml$Survival <- as.numeric(factor(human_sepsis_data_ml$Survival, levels = sort(unique(human_sepsis_data_ml$Survival)))) - 1 #Dependent variable transformation
-human_sepsis_data_ml <- human_sepsis_data_ml[, c(1:5, 5 + which(!colAnys(human_sepsis_data_ml == 0)[-1:-5]))]
+human_sepsis_data_ml <- human_sepsis_data_ml[, c(1:6, 6 + which(!colAnys(human_sepsis_data_ml == 0)[-1:-6]))]
 ###Strip phenomenological variables
 #human_sepsis_data_ml <- subset(human_sepsis_data_ml, select = c(colnames(human_sepsis_data_ml)[1:5], intersect(sig_t_class, colnames(human_sepsis_data_ml))))
 colnames(human_sepsis_data_ml) <- make.names(colnames(human_sepsis_data_ml))
 ###Impute missing values
-human_sepsis_data_ml[, -1:-5] <- scale(missRanger(human_sepsis_data_ml[, -1:-5], pmm.k = 3, num.trees = 100))
+human_sepsis_data_ml[, -1:-6] <- scale(missRanger(human_sepsis_data_ml[, -1:-6], pmm.k = 3, num.trees = 100))
 
 #Parralel nested TPLOCV-RFE
 ##Ranger
 tic()
-rg_tlpocv_res <- tlpocv_rfe_parallel(data_x = human_sepsis_data_ml[-1:-5],
+rg_tlpocv_res <- tlpocv_rfe_parallel(data_x = human_sepsis_data_ml[-1:-6],
                                      data_y = human_sepsis_data_ml["Survival"],
                                      mc.cores = 30)
 toc()
@@ -109,7 +109,7 @@ sv_varimp_fun <- function(classifier){
   abs(sapply(d, function(r) attr(predict(classifier, t(r), decision.values = TRUE), "decision.values")[1]))
 }
 tic()
-sv_tlpocv_res <- tlpocv_rfe_parallel(data_x = human_sepsis_data_ml[-1:-5],
+sv_tlpocv_res <- tlpocv_rfe_parallel(data_x = human_sepsis_data_ml[-1:-6],
                                      data_y = human_sepsis_data_ml["Survival"],
                                      mc.cores = 30,
                                      train_fun = sv_tr_fun,

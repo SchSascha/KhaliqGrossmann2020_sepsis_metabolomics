@@ -349,7 +349,7 @@ heaviside <- function(x1, x2){
   return(as.numeric((x1 < x2) + 0.5 * (x1 == x2)))
 }
 
-#' Perform (nested) Tournament Leave Pair Out Cross Validation (TLPOCV) with Recursive Feature Elimination (RFE) in parralel via parallel::mclapply. Currently only with Random Forest package 'ranger'
+#' Perform (nested) Tournament Leave Pair Out Cross Validation (TLPOCV) with Recursive Feature Elimination (RFE) in parralel via parallel::mclapply. Requires at least 5 samples from each class. Default model is from Random Forest package 'ranger'.
 #' TLPOCV is implemented after Perez et al., 2018:
 #' @Article{Perez2018,
 #'   author    = {Ileana Montoya Perez and Antti Airola and Peter J Boström and Ivan Jambor and Tapio Pahikkala},
@@ -363,8 +363,12 @@ heaviside <- function(x1, x2){
 #'
 #' @param data_x data.frame of predictors, samples in rows and features in columns
 #' @param data_y data.frame, univariate, classes coded as [0, 1]
+#' @param train_fun function with arguments tr_x (predictors) and tr_y (classes), returns a model trained on tr_x and tr_y
+#' @param prob_fun function with arguments classifier (model returned by train_fun) and te_x (test set predictors), returns the class probabilities or class scores of samples for the first class as a numeric vector
+#' @param varimp_fun function with argument classifier (model returned by train_fun), returns the variable importance in classifier as a numeric vector
+#' @param mc.cores number of cores to use in parallel processing of pairs, cf. parallel::mclapply
 #'
-#' @return list of lists: AUC values of the inner LPOCV iterations, AUC values of the outer LPOCV iterations, selected best features for each feature set size with the order corresponding to that in the outer AUC list, sample ranks combined with classes for each feature set size corresponding to validation, sample ranks combined with classes for each feature set size corresponding to testing
+#' @return list of lists: AUC values of the inner LPOCV iterations, AUC values of the outer TLPOCV iterations, selected best features for each feature set size with the order corresponding to that in the outer AUC list, sample ranks combined with classes for each feature set size corresponding to validation, sample ranks combined with classes for each feature set size corresponding to testing
 #' @export
 #'
 #' @examples
@@ -396,7 +400,6 @@ tlpocv_rfe_parallel <- function(data_x, data_y, train_fun, prob_fun, varimp_fun,
   ###Function for internal TLPOCV
   int_tlpocv_rfe <- function(p_ext, tlpo_s_df, data_x, data_y){
     tlpo_int_s_df <- tlpo_s_df[(!tlpo_s_df[, 1] %in% tlpo_s_df[p_ext, ]) & !(tlpo_s_df[, 2] %in% tlpo_s_df[p_ext, ]), ] #exclude samples in validation pair from training
-    ####Internal LPOCV/RFE
     feature_list <- list()
     feature_list[[1]] <- colnames(data_x)
     pair_dir <- list()
