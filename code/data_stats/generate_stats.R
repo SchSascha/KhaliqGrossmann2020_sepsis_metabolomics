@@ -281,8 +281,6 @@ p <- ggplot(data = subset(melt(hd, id.vars = 1:6), Day %in% 0:3), mapping = aes(
   theme_bw()
 ggsave(plot = p, filename = "human_metab_survival_nonsig_C_overlap_S_sig.png", path = out_dir, width = 12/4*ncols, height = 0.3 + 1.5 * ceiling(n_mets/ncols), units = "in")
 
-
-
 #Save everything ANOVA to file
 anova_complete_res <- grep(pattern = "anova.car", x = names(environment()), value = TRUE)
 anova_complete_res <- grep(pattern = "models|res|terms|normality", x = anova_complete_res, invert = TRUE, value = TRUE)
@@ -1686,11 +1684,11 @@ for (pat in unique(subset(human_data_patient_group_mean_all_days, Survival == "N
   pat_path <- subset(cntrl_and_s, Patient == pat)
   long_short_map <- match(pat_path$variable, colnames(hdpg_MNminusSD))
   var_keep[[pat]] <- unique(pat_path$variable[pat_path$value < colMins(as.matrix(hdpg_MNminusSD[c(2, 4), long_short_map])) | pat_path$value > colMaxs(as.matrix(hdpg_MNplusSD[c(2, 4), long_short_map]))])
-  var_keep[[pat]] <- as.character(var_keep[[pat]])
+  var_keep[[pat]] <- setdiff(as.character(var_keep[[pat]]), sig.anova.car.s.class)
 }
 var_keep_count <- table(unlist(var_keep))
 var_keep_count_df <- as.data.frame(var_keep_count)
-var_keep_count_df$color <- grey_pal()(length(unique(var_keep_count_df$Freq)))[var_keep_count_df$Freq]
+var_keep_count_df$color <- grey_pal()(length(unique(var_keep_count_df$Freq)) - 3)[sapply(var_keep_count_df$Freq - 3, max, 1)]
 var_keep_union <- Reduce("union", var_keep)
 for (pat in unique(subset(human_data_patient_group_mean_all_days, Survival == "NS")$Patient)){
   cntrl_and_s <- human_data_patient_group_mean_all_days
