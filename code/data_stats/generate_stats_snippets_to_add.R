@@ -313,6 +313,20 @@ betadiv_NS_CNS <- t.test(x = pat_NS_pw_dist, y = pat_CNS_pw_dist, var.equal = FA
 betadiv_CS_CNS <- t.test(x = pat_CNS_pw_dist, y = pat_CS_pw_dist, var.equal = FALSE)
 betadiv_S_C <- t.test(x = pat_S_pw_dist, y = pat_C_pw_dist, var.equal = FALSE)
 betadiv_NS_C <- t.test(x = pat_NS_pw_dist, y = pat_C_pw_dist, var.equal = FALSE)
+env <- environment()
+env_names <- names(env)
+betadiv_names <- env_names[grep(pattern = "betadiv", x = env_names)]
+bdiv_p <- sapply(lapply(betadiv_names, function(e) eval(as.symbol(e))), function(e) e$p.value)
+g1 <- sub("betadiv", "", betadiv_names)
+g1 <- sub("_CS", "_Nonsep-S", g1)
+g1 <- sub("_CNS", "_Nonsep-NS", g1)
+g1 <- sub("_C", "_Nonsep", g1)
+g1 <- sub("_S", "_Septic-S", g1)
+g1 <- sub("_NS", "_Septic-NS", g1)
+g1 <- substring(g1, 2)
+g1 <- strsplit(g1, "_", fixed = TRUE)
+betadiv_df <- data.frame(Group1 = sapply(g1, `[`, 1), Group2 = sapply(g1, `[`, 2), p = bdiv_p, FDR = p.adjust(bdiv_p, method = "fdr"))
+write.csv(x = betadiv_df, file = paste0(out_dir, "betadiversity_comparison_pvals.csv"), row.names = FALSE)
 ####Plot
 pat_pw_group_dat <- data.frame(distance = c(pat_CS_pw_dist, pat_CNS_pw_dist, pat_C_pw_dist, pat_S_pw_dist, pat_NS_pw_dist), 
                                Group = c(rep("Nonsep-S", length(pat_CS_pw_dist)), 
