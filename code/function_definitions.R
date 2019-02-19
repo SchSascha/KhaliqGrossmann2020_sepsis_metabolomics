@@ -367,12 +367,13 @@ heaviside <- function(x1, x2){
 #' @param prob_fun function with arguments classifier (model returned by train_fun) and te_x (test set predictors), returns the class probabilities or class scores of samples for the first class as a numeric vector
 #' @param varimp_fun function with argument classifier (model returned by train_fun), returns the variable importance in classifier as a numeric vector
 #' @param mc.cores number of cores to use in parallel processing of pairs, cf. parallel::mclapply
+#' @param set_sizes numerical vector of feature set sizes to try, default is all possible set sizes
 #'
 #' @return list of lists: AUC values of the inner LPOCV iterations, AUC values of the outer TLPOCV iterations, selected best features for each feature set size with the order corresponding to that in the outer AUC list, sample ranks combined with classes for each feature set size corresponding to validation, sample ranks combined with classes for each feature set size corresponding to testing
 #' @export
 #'
 #' @examples
-tlpocv_rfe_parallel <- function(data_x, data_y, train_fun, prob_fun, varimp_fun, mc.cores = 7){
+tlpocv_rfe_parallel <- function(data_x, data_y, train_fun, prob_fun, varimp_fun, set_sizes = ncol(data_x):2, mc.cores = 7){
   if (missing(train_fun) | missing(prob_fun) | missing(varimp_fun)){
     warning("train_fun, prob_fun or varimp_fun is missing, using ranger")
     library(ranger)
@@ -392,21 +393,25 @@ tlpocv_rfe_parallel <- function(data_x, data_y, train_fun, prob_fun, varimp_fun,
       classifier$variable.importance
     }
   }
+  if (max(set_sizes) >= ncol(data_x)){
+    set_sizes <- set_sizes[set_sizes < ncol(data_x)]
+  }
+  set_sizes <- c(1, set_sizes) #include 1 as "buffer" in RFE loop even if already in set_sizes
+  set_sizes <- sort(set_sizes, decreasing = TRUE)
   library(parallel)
   ##Build sample pair list
   tlpo_s_df <- t(combn(x = 1:nrow(data_x), m = 2))
   ##Run Feature Selection
   outer_AUC <- rep(0, length(ncol(data_x)))
   ###Function for internal TLPOCV
-  int_tlpocv_rfe <- function(p_ext, tlpo_s_df, data_x, data_y){
+  int_tlpocv_rfe <- function(p_ext, tlpo_s_df, data_x, data_y, set_sizes){
     tlpo_int_s_df <- tlpo_s_df[(!tlpo_s_df[, 1] %in% tlpo_s_df[p_ext, ]) & !(tlpo_s_df[, 2] %in% tlpo_s_df[p_ext, ]), ] #exclude samples in validation pair from training
     feature_list <- list()
-    feature_list[[1]] <- colnames(data_x)
+    feature_list[[1]] <- colnames(data_x) #start with all features
     pair_dir <- list()
     inner_AUC <- rep(-100, length(feature_list[[1]]) - 1)
     int_sample_ranking <- list()
-    feat_start <- feature_list[[1]] #start with all features
-    for (feat_count in seq_along(feat_start[-length(feat_start)])){ #the hard way: remove features one by one
+    for (feat_count in seq_along(set_sizes)){
       feat_sel <- feature_list[[feat_count]] #update feature selection
       pair_dir[[feat_count]] <- rep(-100, nrow(tlpo_int_s_df)) #edge direction in dominance graph
       feat_imp <- matrix(0, nrow = nrow(tlpo_int_s_df), ncol = length(feat_sel)) #feature importance matrix for this run
@@ -415,6 +420,8 @@ tlpocv_rfe_parallel <- function(data_x, data_y, train_fun, prob_fun, varimp_fun,
         tr_y <- data.frame(data_y[-c(tlpo_int_s_df[p_int, ], tlpo_s_df[p_ext, ]), 1])
         te_x <- data.frame(data_x[tlpo_int_s_df[p_int, ], feat_sel])
         te_y <- data.frame(data_y[tlpo_int_s_df[p_int, ], 1])
+        colnames(tr_x) <- feat_sel
+        colnames(te_x) <- feat_sel
         colnames(tr_y) <- colnames(data_y)
         colnames(te_y) <- colnames(data_y)
         rg_te <- train_fun(tr_x = tr_x, tr_y = tr_y)
@@ -440,13 +447,13 @@ tlpocv_rfe_parallel <- function(data_x, data_y, train_fun, prob_fun, varimp_fun,
       sum_h <- sum(tlpo_h[pos1_idx & neg2_idx]) + sum(1 - tlpo_h[pos2_idx & neg1_idx])
       inner_AUC[feat_count] <- sum_h / (sum(pos1_idx & neg2_idx) + sum(pos2_idx & neg1_idx))
       feat_imp <- colMeans(feat_imp) #rank features by importance
-      feature_list[[feat_count + 1]] <- feat_sel[-order(feat_imp)[1]] #down-select feature set
+      feature_list[[feat_count + 1]] <- feat_sel[order(feat_imp, decreasing = TRUE)[1:set_sizes[feat_count]]] #down-select feature set
     }
     feature_list[[length(feature_list)]] <- NULL
     return(list(inner_AUC = inner_AUC, feature_list = feature_list, int_sample_ranking = int_sample_ranking))
   }
   ###External LPOCV
-  int_tlpocv_res <- mclapply(1:nrow(tlpo_s_df), int_tlpocv_rfe, tlpo_s_df = tlpo_s_df, data_x = data_x, data_y = data_y, mc.cores = mc.cores)
+  int_tlpocv_res <- mclapply(1:nrow(tlpo_s_df), int_tlpocv_rfe, tlpo_s_df = tlpo_s_df, data_x = data_x, data_y = data_y, set_sizes = set_sizes, mc.cores = mc.cores)
   ###Extract fields
   inner_AUC <- lapply(int_tlpocv_res, `[[`, "inner_AUC")
   feature_list <- lapply(int_tlpocv_res, `[[`, "feature_list")
@@ -469,6 +476,8 @@ tlpocv_rfe_parallel <- function(data_x, data_y, train_fun, prob_fun, varimp_fun,
       tr_y <- data.frame(data_y[-tlpo_s_df[p_ext, ], 1])
       va_x <- data.frame(data_x[tlpo_s_df[p_ext, ], feat_sel])
       va_y <- data.frame(data_y[tlpo_s_df[p_ext, ], 1])
+      colnames(tr_x) <- feat_sel
+      colnames(va_x) <- feat_sel
       colnames(tr_y) <- colnames(data_y)
       colnames(va_y) <- colnames(data_y)
       rg_va <- train_fun(tr_x = tr_x, tr_y = tr_y)
@@ -503,7 +512,6 @@ tlpocv_rfe_parallel <- function(data_x, data_y, train_fun, prob_fun, varimp_fun,
   ext_sample_ranking <- lapply(ext_sample_ranking, function(e) return(cbind(data_y, e)))
   return(list(inner_AUC = inner_AUC, outer_AUC = outer_AUC, best_features = best_feat_set, ext_sample_ranking = ext_sample_ranking, int_sample_ranking = int_sample_ranking))
 }
-
 
 #' Generate folds for stratified cross-validation in a binary classification scenario
 #'

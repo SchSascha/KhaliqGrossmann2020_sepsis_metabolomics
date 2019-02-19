@@ -68,12 +68,17 @@ colnames(human_sepsis_data_ml) <- make.names(colnames(human_sepsis_data_ml))
 ###Impute missing values
 human_sepsis_data_ml[, -1:-6] <- scale(missRanger(human_sepsis_data_ml[, -1:-6], pmm.k = 3, num.trees = 100))
 
+##Set number of features to try in RFE
+set_sizes <- c(1:20, 25, 30, 40, 50, 60, 80, 100, 120, 150, 180)
+set_sizes <- set_sizes[set_sizes < (ncol(human_sepsis_data_ml) - 6)]
+
 #Parralel nested TPLOCV-RFE
 ##Ranger
 tic()
-rg_tlpocv_res <- tlpocv_rfe_parallel(data_x = human_sepsis_data_ml[-1:-6],
+rg_tlpocv_res <- tlpocv_rfe_parallel(data_x = human_sepsis_data_ml[-1:-178],
                                      data_y = human_sepsis_data_ml["Survival"],
-                                     mc.cores = 30)
+                                     set_sizes = set_sizes,
+                                     mc.cores = 6)
 toc()
 # ##Logit
 # lm_tr_fun <- function(tr_x, tr_y){
@@ -111,7 +116,8 @@ sv_varimp_fun <- function(classifier){
 tic()
 sv_tlpocv_res <- tlpocv_rfe_parallel(data_x = human_sepsis_data_ml[-1:-6],
                                      data_y = human_sepsis_data_ml["Survival"],
-                                     mc.cores = 30,
+                                     set_sizes = set_sizes,
+                                     mc.cores = 6,
                                      train_fun = sv_tr_fun,
                                      prob_fun = sv_prob_fun,
                                      varimp_fun = sv_varimp_fun)
