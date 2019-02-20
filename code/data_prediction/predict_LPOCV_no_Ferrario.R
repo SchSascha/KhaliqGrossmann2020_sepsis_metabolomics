@@ -111,7 +111,12 @@ sv_prob_fun <- function(classifier, te_x){
 sv_varimp_fun <- function(classifier){
   d <- data.frame(diag(1, nrow = length(classifier$scaled)))
   colnames(d) <- attr(classifier$terms, "term.labels")
-  abs(sapply(d, function(r) attr(predict(classifier, t(r), decision.values = TRUE), "decision.values")[1]))
+  rownames(d) <- colnames(d)
+  empty <- data.frame(d[1, ])
+  empty[1:length(empty)] <- 0
+  colnames(empty) <- colnames(d)
+  intercept <- attr(predict(classifier, empty, decision.values = TRUE), "decision.values")[1]
+  t(abs(attr(predict(classifier, d, decision.values = TRUE), "decision.values") + intercept))
 }
 tic()
 sv_tlpocv_res <- tlpocv_rfe_parallel(data_x = human_sepsis_data_ml[-1:-6],
