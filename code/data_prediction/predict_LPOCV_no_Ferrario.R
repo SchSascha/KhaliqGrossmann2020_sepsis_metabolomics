@@ -75,7 +75,7 @@ set_sizes <- set_sizes[set_sizes < (ncol(human_sepsis_data_ml) - 6)]
 #Parralel nested TPLOCV-RFE
 ##Ranger
 tic()
-rg_tlpocv_res <- tlpocv_rfe_parallel(data_x = human_sepsis_data_ml[-1:-178],
+rg_tlpocv_res <- tlpocv_rfe_parallel(data_x = human_sepsis_data_ml[-1:-6],
                                      data_y = human_sepsis_data_ml["Survival"],
                                      set_sizes = set_sizes,
                                      mc.cores = 6)
