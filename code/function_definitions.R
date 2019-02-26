@@ -286,33 +286,10 @@ ml.roc <- function(ref, conf){
   ref <- ref[conf_order]
   roc <- matrix(0, ncol = 2, nrow = length(conf))
   colnames(roc) <- c("FPR", "TPR")
-  #hit <- names(u) == "TRUE"
-  #fnr <- cumsum(hit) / sum(hit)
-  #tpr <- 1-fnr
-  #tnr <- cumsum(!hit) / sum(!hit)
-  #fpr <- 1-tnr
-  
   tp <- ref > 0
   fp <- ref <= 0
   tpr <- cumsum(tp) / sum(tp)
   fpr <- cumsum(fp) / sum(fp)
-  # 
-  # for (n in 1:nrow(roc)){
-  #   if (sum(ref[1:n] > 0) > 0){
-  #     tpr <- sum(pred[1:n] > 0 & ref[1:n] > 0) / sum(ref[1:n] > 0)
-  #   }
-  #   else{
-  #     tpr <- 0
-  #   }
-  #   if (sum(ref[1:n] <= 0) > 0)  {
-  #     fpr <- sum(pred[1:n] > 0 & ref[1:n] <= 0) / sum(ref[1:n] <= 0)
-  #   }
-  #   else{
-  #     fpr = 0
-  #   }
-  #   roc[n,1] <- fpr
-  #   roc[n,2] <- tpr
-  # }
   roc[,1] <- fpr
   roc[,2] <- tpr
   return(roc)
@@ -341,7 +318,7 @@ ml.auc <- function(ref, conf){
 #' @param x1 number or numeric vector
 #' @param x2 number or numeric vector of same length as x1
 #'
-#' @return numeric vector with length of x1 of Heaviside function values
+#' @return numeric vector with length of x1 (or x2 if x1 is a number) of Heaviside function values
 #' @export
 #'
 #' @examples
@@ -403,7 +380,7 @@ tlpocv_rfe_parallel <- function(data_x, data_y, train_fun, prob_fun, varimp_fun,
   tlpo_s_df <- t(combn(x = 1:nrow(data_x), m = 2))
   ##Run Feature Selection
   outer_AUC <- rep(0, length(ncol(data_x)))
-  ###Function for internal TLPOCV
+  ###Function for internal TLPOCV with RFE
   int_tlpocv_rfe <- function(p_ext, tlpo_s_df, data_x, data_y, set_sizes){
     tlpo_int_s_df <- tlpo_s_df[(!tlpo_s_df[, 1] %in% tlpo_s_df[p_ext, ]) & !(tlpo_s_df[, 2] %in% tlpo_s_df[p_ext, ]), ] #exclude samples in validation pair from training
     feature_list <- list()
@@ -452,7 +429,7 @@ tlpocv_rfe_parallel <- function(data_x, data_y, train_fun, prob_fun, varimp_fun,
     feature_list[[length(feature_list)]] <- NULL
     return(list(inner_AUC = inner_AUC, feature_list = feature_list, int_sample_ranking = int_sample_ranking))
   }
-  ###External LPOCV
+  ###Internal TLPOCV
   int_tlpocv_res <- mclapply(1:nrow(tlpo_s_df), int_tlpocv_rfe, tlpo_s_df = tlpo_s_df, data_x = data_x, data_y = data_y, set_sizes = set_sizes, mc.cores = mc.cores)
   ###Extract fields
   inner_AUC <- lapply(int_tlpocv_res, `[[`, "inner_AUC")
@@ -466,7 +443,7 @@ tlpocv_rfe_parallel <- function(data_x, data_y, train_fun, prob_fun, varimp_fun,
     fl_hist <- sort(fl_hist, decreasing = TRUE) #beware! feature names are not in original order
     best_feat_set[[feat_count]] <- names(fl_hist)[1:(length(feature_list[[1]][[feat_count]]))]
   }
-  ###Function for external AUC calculation
+  ###Function for external TLPOCV
   ext_tlpocv_eval <- function(p_ext, tlpo_s_df, data_x, data_y, best_feat_set){
     pair_ext_dir <- rep(0, length(best_feat_set))
     tlpo_int_s_df <- tlpo_s_df[(!tlpo_s_df[, 1] %in% tlpo_s_df[p_ext, ]) & !(tlpo_s_df[, 2] %in% tlpo_s_df[p_ext, ]), ] #exclude samples in validation pair from training
@@ -511,6 +488,92 @@ tlpocv_rfe_parallel <- function(data_x, data_y, train_fun, prob_fun, varimp_fun,
   }
   ext_sample_ranking <- lapply(ext_sample_ranking, function(e) return(cbind(data_y, e)))
   return(list(inner_AUC = inner_AUC, outer_AUC = outer_AUC, best_features = best_feat_set, ext_sample_ranking = ext_sample_ranking, int_sample_ranking = int_sample_ranking))
+}
+
+#' Plot the training and validation AUC from nested TLPOCV-RFE along feature set sizes. If a feature set is of size 2 plot training and validation ROC curves and a dot graph of both features.
+#'
+#' @param tlpocv_rfe_res list output from tlpocv_rfe_parallel()
+#' @param file_prefix prefix to append to plot files
+#' @param plot_dir directory to plot into
+#'
+#' @return built ggplot plots ready for saving to file
+#' @export
+#'
+#' @examples
+plot_tlpocv_rfe_res <- function(tlpocv_rfe_res, file_prefix, plot_dir){
+  library(ggplot2)
+  res <- list()
+  AUC_data <- data.frame(Reduce("rbind", tlpocv_rfe_res$inner_AUC))
+  AUC_data <- rbind(AUC_data, data.frame(t(tlpocv_rfe_res$outer_AUC)))
+  colnames(AUC_data) <- sapply(tlpocv_rfe_res$best_features, length)
+  AUC_data$stage <- c(rep("Test data", length(tlpocv_rfe_res$inner_AUC)), "Validation data")
+  AUC_data_long <- melt(AUC_data, id.vars = c("stage"))
+  AUC_data_long$variable <- as.numeric(as.character(AUC_data_long$variable))
+  AUC_data_long$value <- 1 - AUC_data_long$value
+  p_AUC_RFE <- ggplot(data = AUC_data_long, mapping = aes(x = variable, y = value, color = stage, fill = stage)) + 
+    stat_summary(fun.y = median, fun.ymax = function(x) quantile(x, p = 0.75), fun.ymin = function(x) quantile(x, p = 0.25), geom = "ribbon", alpha = 0.5, colour = NA) + 
+    stat_summary(fun.y = median, geom = "line") + 
+    ylim(0, 1) + 
+    ylab("Median AUC") +
+    xlab("Nubmer of features") +
+    ggtitle("Test and Validation AUC of nested TLPOCV-RFE") +
+    theme_bw()
+  ggsave(filename = paste0(file_prefix, "TLPOCV_RFE_AUC.png"), path = plot_dir, plot = p_AUC_RFE, width = 10, height = 5, units = "in")
+  
+  res[[1]] <- ggplot_build(p_AUC_RFE)
+  
+  set_sizes <- sapply(tlpocv_rfe_res$best_features, length)
+  if (2 %in% set_sizes){
+    f2_pos <- which(sapply(tlpocv_rfe_res$best_features, length) == 2)
+    int_ROC_data <- lapply(lapply(tlpocv_rfe_res$int_sample_ranking, `[[`, f2_pos), function(e) ml.roc(ref = 1 - e[, 1], conf = e[, 2]))
+    int_ROC_data <- lapply(int_ROC_data, function(e) stepfun(e[, 1], c(0, e[, 2])))
+    int_ROC_data <- lapply(int_ROC_data, function(f) data.frame(FPR = seq(0, 1, by = 0.01), TPR = f(seq(0, 1, by = 0.01))))
+    int_ROC_data <- data.frame(Reduce("rbind", int_ROC_data))
+    if (min(int_ROC_data[, 1]) != 0)
+      int_ROC_data <- rbind(c(0, 0), int_ROC_data)
+    if (max(int_ROC_data[, 1]) != 1)
+      int_ROC_data <- rbind(int_ROC_data, c(1, 1))
+    colnames(int_ROC_data) <- c("FPR", "TPR")
+    int_ROC_data$stage <- "Test data"
+    ranks_2feat <- tlpocv_rfe_res$ext_sample_ranking[[f2_pos]]
+    ext_ROC_data <- data.frame(ml.roc(ref = 1 - ranks_2feat[, 1], conf = ranks_2feat[, 2]))
+    if (min(ext_ROC_data[, 2]) != 0)
+      ext_ROC_data <- rbind(c(0, 0), ext_ROC_data)
+    if (max(ext_ROC_data[, 1]) != 1)
+      ext_ROC_data <- rbind(ext_ROC_data, c(1, 1))
+    colnames(ext_ROC_data) <- c("FPR", "TPR")
+    ext_ROC_data$stage <- "Validation data"
+    ROC_data <- rbind(int_ROC_data, ext_ROC_data)
+    p <- ggplot(data = ROC_data, mapping = aes(x = FPR, y = TPR, color = stage, fill = stage)) + 
+      stat_summary(data = int_ROC_data, 
+                   fun.y = mean, fun.ymax = function(x) quantile(x, p = 0.75), fun.ymin = function(x) quantile(x, p = 0.25), 
+                   geom = "ribbon", alpha = 0.5, colour = NA) + 
+      stat_summary(data = int_ROC_data, 
+                   fun.y = median, geom = "line") +
+      geom_line(data = ext_ROC_data) +
+      geom_segment(x = 0, y = 0, xend = 1, yend = 1, size = 0.25, inherit.aes = FALSE) +
+      geom_text(x = 0.95, y = 0.15, hjust = "right", color = scales::hue_pal()(2)[1],
+                label = paste0("Training AUC = ", format(mean(subset(AUC_data_long, variable == 2 & stage == "Test data", "value")[[1]]), digits = 3))) +
+      geom_text(x = 0.95, y = 0.10, hjust = "right", color = scales::hue_pal()(2)[2],
+                label = paste0("Validation AUC = ", format(subset(AUC_data_long, variable == 2 & stage == "Validation data", "value"), digits = 3))) +
+      scale_x_continuous(limits = c(-0.01, 1.01), expand = c(0, 0)) +
+      scale_y_continuous(limits = c(-0.01, 1.01), expand = c(0, 0)) +
+      ggtitle("Test and Validation ROC of nested TLPOCV RFE\nbest 2 feature set") +
+      theme_bw() + 
+      theme(panel.grid = element_blank())
+    ggsave(filename = paste0(file_prefix, "TLPOCV_RFE_ROC_2feat.png"), path = plot_dir, plot = p, width = 6, height = 5, units = "in")
+    
+    res[[2]] <- ggplot_build(p)
+    
+    f2 <- tlpocv_rfe_res$best_features[[which(sapply(tlpocv_rfe_res$best_features, length) == 2)]]
+    p <- ggplot(data = subset(human_sepsis_data_ml, Day == 0, c("Survival", f2)), mapping = aes_string(x = f2[1], y = f2[2], color = quote(factor(Survival)))) + 
+      geom_point() + 
+      theme_bw()
+    ggsave(plot = p, filename = paste0(file_prefix, "class_separation_2feat.png"), width = 5, height = 4, units = "in", path = plot_dir)
+    
+    res[[3]] <- ggplot_build(p)
+  }
+  return(res)
 }
 
 #' Generate folds for stratified cross-validation in a binary classification scenario
