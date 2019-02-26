@@ -2,8 +2,10 @@
 library(reshape2)
 library(data.table)
 library(ggplot2)
+library(ggrepel)
 library(matrixStats)
 library(kernlab)
+library(pairwiseCI)
 library(heatmaply)
 library(missRanger)
 library(webshot)
@@ -33,7 +35,7 @@ human_sepsis_data <- get_human_sepsis_data()
 ##Import corresponding group assignment
 human_sepsis_legend <- get_human_sepsis_legend()
 human_sepsis_legend$group[human_sepsis_legend$group == ""] <- human_sepsis_legend[human_sepsis_legend$group == "", 1]
-human_sepsis_legend <- human_sepsis_legend[-1:-5, ]
+human_sepsis_legend <- human_sepsis_legend[-1:-6, ]
 
 ##Import experiment data
 rat_sepsis_data <- get_rat_sepsis_data()
@@ -57,7 +59,7 @@ pheno_sel <- (which(colnames(rat_sepsis_data) == "H1")+1):ncol(rat_sepsis_data)
 metab_sel <- 5:which(colnames(rat_sepsis_data) == "H1")
 cols <- colnames(rat_sepsis_data)
 colnames(rat_sepsis_data) <- make.names(cols)
-for (mat in unique(rat_sepsis_data$material)){
+for (mat in setdiff(unique(rat_sepsis_data$material), "plasma")){
   idat <- subset(rat_sepsis_data, material == mat, metab_sel)
   rat_sepsis_data[rat_sepsis_data$material == mat, metab_sel] <- missRanger(idat)
 }
@@ -68,6 +70,18 @@ colnames(rat_sepsis_data) <- cols
 #Remove dynamic physiological properties like heart rate
 rat_sepsis_data <- rat_sepsis_data[, -which(colnames(rat_sepsis_data) %in% c("HR", "SV", "CO", "EF", "Resp Rate", "Temperature"))]#
 pheno_sel <- (which(colnames(rat_sepsis_data) == "H1")+1):ncol(rat_sepsis_data)
+
+#Calculate concentration ratios for survivors/non-survivors
+rat_only_sepsis_data <- subset(rat_sepsis_data, group != "control" & `time point` != "72h", c(1:9, 11:30, 32:44))
+rosdm <- na.omit(melt(rat_only_sepsis_data, id.vars = 1:4))
+#rosdm$variable <- as.character(rosdm$variable)
+rat_ratio_ci <- pairwiseCI(formula = value ~ group, by = c("material", "time point", "variable"), data = rosdm, method = "Param.ratio")
+rrci <- melt(rat_ratio_ci$byout)
+rrci <- subset(rrci, !L2 %in% c("method", "compnames"))
+rrci[c("material", "time", "metabolite")] <- tstrsplit(rrci$L1, split = ".", fixed = TRUE)
+rrci <- dcast(data = rrci, metabolite ~ material + time + L2)
+#rrci <- rrci[, -which(colnames(rrci) == "L1")]
+rat_ratio_ci <- rrci
 
 #Get data overview
 ##Get overview of sample distribution along days
@@ -576,7 +590,7 @@ colnames(x)[-1:-4] <- paste0(x$`Sample Identification`, ", ", x$`time point`)
 heatmaply(x = x[,-1:-4], row_side_colors = x[c("group")], file = paste0(out_dir, "rat_normal_pheno_cor.png"), main = "Phenomenological profile correlation gives survival/control clusters")
 rm("x")
 
-##Human, cluster-heatmat of patient correlation matrix, coarse grouped metabolites, survival and CAP/FP marked
+##Rat, cluster-heatmat of patient correlation matrix, coarse grouped metabolites, survival and CAP/FP marked
 x <- na.omit(rat_sepsis_data_normal_grouped_metab_cor)
 rownames(x) <- paste0(x$`Sample Identification`, ", ", x$`time point`)
 colnames(x)[-1:-4] <- paste0(x$`Sample Identification`, ", ", x$`time point`)
@@ -913,16 +927,137 @@ for (mat in unique(ufa_ratio$material)){
   ggsave(plot = p, filename = paste0("rat_metab_PC_rel_", mat, "_group_time_course.png"), path = out_dir, width = 12, height = 0.3 + 1.5 * ceiling(n_mets/n_col), units = "in")
 }
 
-##Human, metabolites vs survival, p < 0.05, second day only, 
-# hp2 <- ggplot(data = subset(x = human_sepsis_data_long_form_sig, subset = Day == 0), mapping = aes(x = Survival, y = value)) + 
-#   facet_wrap(facets = ~ variable, nrow = 5, ncol = 10) +
-#   geom_boxplot(outlier.size = 0.5) + 
-#   ylab("Scaled concentration") +
-#   ggtitle("Human data from second day; metabolites differing by U-test with p < 0.05 after FDR correction") +
-#   theme_bw()
-# ggsave(plot = hp2, filename = "human_day0_metab_conc_vs_survival_sig.png", path = out_dir, width = 13, height = 7)
-# 
-# ##Rat, metabolites vs survival, first measurement only
+##rat, concentration ratios survivor vs nonsurvivor
+# n_col <- 10
+# n_mets <- length(unique(rat_ratio_ci$metabolite))
+# p <- ggplot(data = rat_ratio_ci, mapping = aes(x = interaction(material, time), y = estimate)) + 
+#   facet_wrap(facets = ~ metabolite, nrow = ceiling(n_mets / n_col), ncol = n_col) +
+#   geom_point() +
+#   theme_bw() +
+#   theme(axis.text.x = element_text(angle = 90))
+# ggsave(plot = p, file = "rat_ac_snsratios_all_mats.png", path = out_dir, width = 12, height = 0.3 + 1.5 * ceiling(n_mets / n_col), units = "in")
+
+p <- ggplot(data = subset(rat_ratio_ci, metabolite %in% c("C0", "C2", "C4", "C4:1", "C3-DC (C4-OH)", "C6 (C4:1-DC)", "C5-DC (C6-OH)", "C6:1", "C8", "C10", "C10:1", "C12", "C12:1", "C12-OH", "C14", "C14:1", "C14-OH", "C16", "C16:1", "C16-OH")), 
+            mapping = aes(x = liver_6h_estimate, 
+                          xmin = liver_6h_lower, 
+                          xmax = liver_6h_upper, 
+                          y = plasma_6h_estimate, 
+                          ymin = plasma_6h_lower, 
+                          ymax = plasma_6h_upper)) +
+  geom_abline(slope = 1, intercept = 0, size = 0.2) +
+  geom_point(shape = 5, size = 0.1) +
+  geom_errorbar(size = 0.1) +
+  geom_errorbarh(size = 0.1) +
+  geom_text(mapping = aes(label = metabolite), size = 2, hjust = 0, vjust = 0) +
+  geom_text(x = 1.45, y = 1.465, label = "Ideal correspondence", angle = 46, size = 2) +
+  xlab("AC ratio + CI, S vs NS in Liver at 6h") +
+  ylab("AC ratio + CI, S vs NS in Plasma at 6h") + 
+  coord_cartesian(xlim = c(0.75, 2), ylim = c(0.4, 1.5)) +
+  theme_bw() +
+  theme(panel.grid = element_blank())
+ggsave(plot = p, filename = "rat_ac_ratios_liver_vs_plasma_6h.png", path = out_dir)
+
+p <- ggplot(data = subset(rat_ratio_ci, metabolite %in% c("C0", "C2", "C4", "C4:1", "C3-DC (C4-OH)", "C6 (C4:1-DC)", "C5-DC (C6-OH)", "C6:1", "C8", "C10", "C10:1", "C12", "C12:1", "C12-OH", "C14", "C14:1", "C14-OH", "C16", "C16:1", "C16-OH")), 
+            mapping = aes(x = liver_24h_estimate, 
+                          xmin = liver_24h_lower, 
+                          xmax = liver_24h_upper, 
+                          y = plasma_24h_estimate, 
+                          ymin = plasma_24h_lower, 
+                          ymax = plasma_24h_upper)) +
+  geom_abline(slope = 1, intercept = 0, size = 0.2) +
+  geom_point(shape = 5, size = 0.1) +
+  geom_errorbar(size = 0.1) +
+  geom_errorbarh(size = 0.1) +
+  geom_text(mapping = aes(label = metabolite), size = 2, hjust = 0, vjust = 0) +
+  geom_text(x = 1.45, y = 1.465, label = "Ideal correspondence", angle = 46, size = 2) +
+  xlab("AC ratio + CI, S vs NS in Liver at 24h") +
+  ylab("AC ratio + CI, S vs NS in Plasma at 24h") + 
+  coord_cartesian(xlim = c(0.75, 2), ylim = c(0.4, 1.5)) +
+  theme_bw() +
+  theme(panel.grid = element_blank())
+ggsave(plot = p, filename = "rat_ac_ratios_liver_vs_plasma_24h.png", path = out_dir)
+
+p <- ggplot(data = subset(rat_ratio_ci, metabolite %in% c("C0", "C2", "C4", "C4:1", "C3-DC (C4-OH)", "C6 (C4:1-DC)", "C5-DC (C6-OH)", "C6:1", "C8", "C10", "C10:1", "C12", "C12:1", "C12-OH", "C14", "C14:1", "C14-OH", "C16", "C16:1", "C16-OH")), 
+            mapping = aes(x = heart_6h_estimate, 
+                          xmin = heart_6h_lower, 
+                          xmax = heart_6h_upper, 
+                          y = plasma_6h_estimate, 
+                          ymin = plasma_6h_lower, 
+                          ymax = plasma_6h_upper)) +
+  geom_abline(slope = 1, intercept = 0, size = 0.2) +
+  geom_point(shape = 5, size = 0.1) +
+  geom_errorbar(size = 0.1) +
+  geom_errorbarh(size = 0.1) +
+  geom_text(mapping = aes(label = metabolite), size = 2, hjust = 0, vjust = 0) +
+  geom_text(x = 1.445, y = 1.465, label = "Ideal correspondence", angle = 68, size = 2) +
+  xlab("AC ratio + CI, S vs NS in Heart at 6h") +
+  ylab("AC ratio + CI, S vs NS in Plasma at 6h") + 
+  coord_cartesian(xlim = c(0, 3), ylim = c(0.4, 1.5)) +
+  theme_bw() +
+  theme(panel.grid = element_blank())
+ggsave(plot = p, filename = "rat_ac_ratios_heart_vs_plasma_6h.png", path = out_dir)
+
+p <- ggplot(data = subset(rat_ratio_ci, metabolite %in% c("C0", "C2", "C4", "C4:1", "C3-DC (C4-OH)", "C6 (C4:1-DC)", "C5-DC (C6-OH)", "C6:1", "C8", "C10", "C10:1", "C12", "C12:1", "C12-OH", "C14", "C14:1", "C14-OH", "C16", "C16:1", "C16-OH")), 
+            mapping = aes(x = heart_24h_estimate, 
+                          xmin = heart_24h_lower, 
+                          xmax = heart_24h_upper, 
+                          y = plasma_24h_estimate, 
+                          ymin = plasma_24h_lower, 
+                          ymax = plasma_24h_upper)) +
+  geom_abline(slope = 1, intercept = 0, size = 0.2) +
+  geom_point(shape = 5, size = 0.1) +
+  geom_errorbar(size = 0.1) +
+  geom_errorbarh(size = 0.1) +
+  geom_text(mapping = aes(label = metabolite), size = 2, hjust = 0, vjust = 0) +
+  geom_text(x = 1.445, y = 1.465, label = "Ideal correspondence", angle = 68, size = 2) +
+  xlab("AC ratio + CI, S vs NS in Heart at 24h") +
+  ylab("AC ratio + CI, S vs NS in Plasma at 24h") + 
+  coord_cartesian(xlim = c(0, 3), ylim = c(0.4, 1.5)) +
+  theme_bw() +
+  theme(panel.grid = element_blank())
+ggsave(plot = p, filename = "rat_ac_ratios_heart_vs_plasma_24h.png", path = out_dir)
+
+p <- ggplot(data = subset(rat_ratio_ci, metabolite %in% c("C0", "C2", "C4", "C4:1", "C3-DC (C4-OH)", "C6 (C4:1-DC)", "C5-DC (C6-OH)", "C6:1", "C8", "C10", "C10:1", "C12", "C12:1", "C12-OH", "C14", "C14:1", "C14-OH", "C16", "C16:1", "C16-OH")), 
+            mapping = aes(x = heart_6h_estimate, 
+                          xmin = heart_6h_lower, 
+                          xmax = heart_6h_upper, 
+                          y = liver_6h_estimate, 
+                          ymin = liver_6h_lower, 
+                          ymax = liver_6h_upper)) +
+  geom_abline(slope = 1, intercept = 0, size = 0.2) +
+  geom_point(shape = 5, size = 0.1) +
+  geom_errorbar(size = 0.1) +
+  geom_errorbarh(size = 0.1) +
+  geom_text(mapping = aes(label = metabolite), size = 2, hjust = 0, vjust = 0) +
+  geom_text(x = 0.445, y = 0.465, label = "Ideal correspondence", angle = 60, size = 2) +
+  xlab("AC ratio + CI, S vs NS in Heart at 6h") +
+  ylab("AC ratio + CI, S vs NS in Liver at 6h") + 
+  coord_cartesian(xlim = c(0, 3), ylim = c(0.4, 2)) +
+  theme_bw() +
+  theme(panel.grid = element_blank())
+ggsave(plot = p, filename = "rat_ac_ratios_heart_vs_liver_6h.png", path = out_dir)
+
+p <- ggplot(data = subset(rat_ratio_ci, metabolite %in% c("C0", "C2", "C4", "C4:1", "C3-DC (C4-OH)", "C6 (C4:1-DC)", "C5-DC (C6-OH)", "C6:1", "C8", "C10", "C10:1", "C12", "C12:1", "C12-OH", "C14", "C14:1", "C14-OH", "C16", "C16:1", "C16-OH")), 
+            mapping = aes(x = heart_24h_estimate, 
+                          xmin = heart_24h_lower, 
+                          xmax = heart_24h_upper, 
+                          y = liver_24h_estimate, 
+                          ymin = liver_24h_lower, 
+                          ymax = liver_24h_upper)) +
+  geom_abline(slope = 1, intercept = 0, size = 0.2) +
+  geom_point(shape = 5, size = 0.1) +
+  geom_errorbar(size = 0.1) +
+  geom_errorbarh(size = 0.1) +
+  geom_text(mapping = aes(label = metabolite), size = 2, hjust = 0, vjust = 0) +
+  geom_text(x = 0.445, y = 0.465, label = "Ideal correspondence", angle = 60, size = 2) +
+  xlab("AC ratio + CI, S vs NS in Heart at 24h") +
+  ylab("AC ratio + CI, S vs NS in Liver at 24h") + 
+  coord_cartesian(xlim = c(0, 3), ylim = c(0.4, 2)) +
+  theme_bw() +
+  theme(panel.grid = element_blank())
+ggsave(plot = p, filename = "rat_ac_ratios_heart_vs_liver_24h.png", path = out_dir)
+
+##Rat, metabolites vs survival, first measurement only
 # rp1 <- ggplot(data = subset(x = rat_sepsis_data_long_form, subset = `time point` == "6h"), mapping = aes(x = group, y = value)) +
 #   facet_wrap(facets = ~ variable, nrow = 17, ncol = 16) +
 #   geom_boxplot(outlier.size = 0.5) +
