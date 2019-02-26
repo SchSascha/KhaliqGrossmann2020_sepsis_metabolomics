@@ -133,7 +133,7 @@ save.image()
 
 rg_AUC_data <- data.frame(Reduce("rbind", rg_tlpocv_res$inner_AUC))
 rg_AUC_data <- rbind(rg_AUC_data, data.frame(t(rg_tlpocv_res$outer_AUC)))
-colnames(rg_AUC_data) <- (length(rg_tlpocv_res$inner_AUC[[1]]) + 1):2
+colnames(rg_AUC_data) <- sapply(rg_tlpocv_res$best_features, length)
 rg_AUC_data$stage <- c(rep("Test data", length(rg_tlpocv_res$inner_AUC)), "Validation data")
 rg_AUC_data_long <- melt(rg_AUC_data, id.vars = c("stage"))
 rg_AUC_data_long$variable <- as.numeric(as.character(rg_AUC_data_long$variable))
@@ -148,7 +148,8 @@ p <- ggplot(data = rg_AUC_data_long, mapping = aes(x = variable, y = value, colo
   theme_bw()
 ggsave(filename = "RF_TLPOCV_RFE_AUC.png", path = out_dir_pred, plot = p, width = 10, height = 5, units = "in")
 
-rg_int_ROC_data <- lapply(lapply(rg_tlpocv_res$int_sample_ranking, `[[`, length(rg_tlpocv_res$int_sample_ranking[[1]])), function(e) ml.roc(ref = 1 - e[, 1], conf = e[, 2]))
+f2_pos <- which(sapply(rg_tlpocv_res$best_features, length) == 2)
+rg_int_ROC_data <- lapply(lapply(rg_tlpocv_res$int_sample_ranking, `[[`, f2_pos), function(e) ml.roc(ref = 1 - e[, 1], conf = e[, 2]))
 rg_int_ROC_data <- lapply(rg_int_ROC_data, function(e) stepfun(e[, 1], c(0, e[, 2])))
 rg_int_ROC_data <- lapply(rg_int_ROC_data, function(f) data.frame(FPR = seq(0, 1, by = 0.01), TPR = f(seq(0, 1, by = 0.01))))
 rg_int_ROC_data <- data.frame(Reduce("rbind", rg_int_ROC_data))
@@ -158,7 +159,7 @@ if (max(rg_int_ROC_data[, 1]) != 1)
   rg_int_ROC_data <- rbind(rg_int_ROC_data, c(1, 1))
 colnames(rg_int_ROC_data) <- c("FPR", "TPR")
 rg_int_ROC_data$stage <- "Test data"
-ranks_2feat <- rg_tlpocv_res$ext_sample_ranking[[length(rg_tlpocv_res$ext_sample_ranking)]]
+ranks_2feat <- rg_tlpocv_res$ext_sample_ranking[[f2_pos]]
 rg_ext_ROC_data <- data.frame(ml.roc(ref = 1 - ranks_2feat[, 1], conf = ranks_2feat[, 2]))
 if (min(rg_ext_ROC_data[, 2]) != 0)
   rg_ext_ROC_data <- rbind(c(0, 0), rg_ext_ROC_data)
@@ -186,14 +187,15 @@ p <- ggplot(data = rg_ROC_data, mapping = aes(x = FPR, y = TPR, color = stage, f
   theme(panel.grid = element_blank())
 ggsave(filename = "RF_TLPOCV_RFE_ROC_2feat.png", path = out_dir_pred, plot = p, width = 6, height = 5, units = "in")
 
-p <- ggplot(data = subset(human_sepsis_data_ml, Day == 0, c("Survival", rg_tlpocv_res$best_features[[75]])), mapping = aes_string(x = rg_tlpocv_res$best_features[[75]][1], y = rg_tlpocv_res$best_features[[75]][2], color = quote(factor(Survival)))) + 
+f2 <- rg_tlpocv_res$best_features[[which(sapply(rg_tlpocv_res$best_features, length) == 2)]]
+p <- ggplot(data = subset(human_sepsis_data_ml, Day == 0, c("Survival", f2)), mapping = aes_string(x = f2[1], y = f2[2], color = quote(factor(Survival)))) + 
   geom_point() + 
   theme_bw()
 ggsave(plot = p, filename = "RF_class_separation_2feat.png", width = 5, height = 4, units = "in", path = out_dir_pred)
 
 sv_AUC_data <- data.frame(Reduce("rbind", sv_tlpocv_res$inner_AUC))
 sv_AUC_data <- rbind(sv_AUC_data, data.frame(t(sv_tlpocv_res$outer_AUC)))
-colnames(sv_AUC_data) <- (length(sv_tlpocv_res$inner_AUC[[1]]) + 1):2
+colnames(sv_AUC_data) <- sapply(sv_tlpocv_res$best_features, length)
 sv_AUC_data$stage <- c(rep("Test data", length(sv_tlpocv_res$inner_AUC)), "Validation data")
 sv_AUC_data_long <- melt(sv_AUC_data, id.vars = c("stage"))
 sv_AUC_data_long$variable <- as.numeric(as.character(sv_AUC_data_long$variable))
@@ -208,7 +210,8 @@ p <- ggplot(data = sv_AUC_data_long, mapping = aes(x = variable, y = value, colo
   theme_bw()
 ggsave(filename = "SVM_TLPOCV_RFE_AUC.png", path = out_dir_pred, plot = p, width = 10, height = 5, units = "in")
 
-sv_int_ROC_data <- lapply(lapply(sv_tlpocv_res$int_sample_ranking, `[[`, length(sv_tlpocv_res$int_sample_ranking[[1]])), function(e) ml.roc(ref = 1 - e[, 1], conf = e[, 2]))
+f2_pos <- which(sapply(sv_tlpocv_res$best_features, length) == 2)
+sv_int_ROC_data <- lapply(lapply(sv_tlpocv_res$int_sample_ranking, `[[`, f2_pos), function(e) ml.roc(ref = 1 - e[, 1], conf = e[, 2]))
 sv_int_ROC_data <- lapply(sv_int_ROC_data, function(e) stepfun(e[, 1], c(0, e[, 2])))
 sv_int_ROC_data <- lapply(sv_int_ROC_data, function(f) data.frame(FPR = seq(0, 1, by = 0.01), TPR = f(seq(0, 1, by = 0.01))))
 sv_int_ROC_data <- data.frame(Reduce("rbind", sv_int_ROC_data))
@@ -218,7 +221,7 @@ if (max(sv_int_ROC_data[, 1]) != 1)
   sv_int_ROC_data <- rbind(sv_int_ROC_data, c(1, 1))
 colnames(sv_int_ROC_data) <- c("FPR", "TPR")
 sv_int_ROC_data$stage <- "Test data"
-ranks_2feat <- sv_tlpocv_res$ext_sample_ranking[[length(sv_tlpocv_res$ext_sample_ranking)]]
+ranks_2feat <- sv_tlpocv_res$ext_sample_ranking[[f2_pos]]
 sv_ext_ROC_data <- data.frame(ml.roc(ref = 1 - ranks_2feat[, 1], conf = ranks_2feat[, 2]))
 if (min(sv_ext_ROC_data[, 2]) != 0)
   sv_ext_ROC_data <- rbind(c(0, 0), sv_ext_ROC_data)
@@ -246,7 +249,8 @@ p <- ggplot(data = sv_ROC_data, mapping = aes(x = FPR, y = TPR, color = stage, f
   theme(panel.grid = element_blank())
 ggsave(filename = "SVM_TLPOCV_RFE_ROC_2feat.png", path = out_dir_pred, plot = p, width = 6, height = 5, units = "in")
 
-p <- ggplot(data = subset(human_sepsis_data_ml, Day == 0, c("Survival", sv_tlpocv_res$best_features[[75]])), mapping = aes_string(x = sv_tlpocv_res$best_features[[75]][1], y = sv_tlpocv_res$best_features[[75]][2], color = quote(factor(Survival)))) + 
+f2 <- sv_tlpocv_res$best_features[[which(sapply(sv_tlpocv_res$best_features, length) == 2)]]
+p <- ggplot(data = subset(human_sepsis_data_ml, Day == 0, c("Survival", f2)), mapping = aes_string(x = f2[1], y = f2[2], color = quote(factor(Survival)))) + 
   geom_point() + 
   theme_bw()
 ggsave(plot = p, filename = "SVM_class_separation_2feat.png", width = 5, height = 4, units = "in", path = out_dir_pred)

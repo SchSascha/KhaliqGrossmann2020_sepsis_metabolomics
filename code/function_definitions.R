@@ -409,7 +409,7 @@ tlpocv_rfe_parallel <- function(data_x, data_y, train_fun, prob_fun, varimp_fun,
     feature_list <- list()
     feature_list[[1]] <- colnames(data_x) #start with all features
     pair_dir <- list()
-    inner_AUC <- rep(-100, length(feature_list[[1]]) - 1)
+    inner_AUC <- rep(-100, length(set_sizes) - 1)
     int_sample_ranking <- list()
     for (feat_count in seq_along(set_sizes)){
       feat_sel <- feature_list[[feat_count]] #update feature selection
