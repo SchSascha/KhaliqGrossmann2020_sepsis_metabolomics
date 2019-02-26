@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- generated with COPASI 4.24 (Build 197) (http://www.copasi.org) at 2019-02-19 12:17:10 UTC -->
+<!-- generated with COPASI 4.24 (Build 197) (http://www.copasi.org) at 2019-02-22 13:06:29 UTC -->
 <?oxygen RNGSchema="http://www.copasi.org/static/schema/CopasiML.rng" type="xml"?>
 <COPASI xmlns="http://www.copasi.org/static/schema" versionMajor="4" versionMinor="24" versionDevel="197" copasiSourcesModified="0">
   <ListOfFunctions>
@@ -3195,7 +3195,9 @@
       </Metabolite>
       <Metabolite key="Metabolite_46" name="AcetylCoAMAT" simulationType="reactions" compartment="Compartment_1" addNoise="false">
         <MiriamAnnotation>
-<rdf:RDF xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<rdf:RDF
+   xmlns:dcterms="http://purl.org/dc/terms/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
   <rdf:Description rdf:about="#Metabolite_46">
     <dcterms:created>
       <rdf:Description>
@@ -3204,6 +3206,7 @@
     </dcterms:created>
   </rdf:Description>
 </rdf:RDF>
+
         </MiriamAnnotation>
       </Metabolite>
       <Metabolite key="Metabolite_47" name="FADHMAT" simulationType="reactions" compartment="Compartment_1" addNoise="false">
@@ -3603,7 +3606,9 @@
       </Metabolite>
       <Metabolite key="Metabolite_100" name="AcetylCoAMAT" simulationType="reactions" compartment="Compartment_3" addNoise="false">
         <MiriamAnnotation>
-<rdf:RDF xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<rdf:RDF
+   xmlns:dcterms="http://purl.org/dc/terms/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
   <rdf:Description rdf:about="#Metabolite_100">
     <dcterms:created>
       <rdf:Description>
@@ -3612,6 +3617,7 @@
     </dcterms:created>
   </rdf:Description>
 </rdf:RDF>
+
         </MiriamAnnotation>
       </Metabolite>
       <Metabolite key="Metabolite_101" name="FADHMAT" simulationType="reactions" compartment="Compartment_3" addNoise="false">
@@ -5682,7 +5688,9 @@
       </ModelValue>
       <ModelValue key="ModelValue_294" name="AcetylCoA_ratio" simulationType="assignment" addNoise="false">
         <MiriamAnnotation>
-<rdf:RDF xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<rdf:RDF
+   xmlns:dcterms="http://purl.org/dc/terms/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
   <rdf:Description rdf:about="#ModelValue_294">
     <dcterms:created>
       <rdf:Description>
@@ -5691,6 +5699,7 @@
     </dcterms:created>
   </rdf:Description>
 </rdf:RDF>
+
         </MiriamAnnotation>
         <Expression>
           &lt;CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[AcetylCoAMAT],Reference=Concentration>/(&lt;CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[AcetylCoAMAT],Reference=Concentration>+&lt;CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[AcetylCoAMAT],Reference=Concentration>)
@@ -6360,7 +6369,7 @@
           <Constant key="Parameter_5108" name="Kmcpt2C8AcylCoAMAT" value="38"/>
           <Constant key="Parameter_5109" name="Kmcpt2CarMAT" value="350"/>
           <Constant key="Parameter_5114" name="Kmcpt2CoAMAT" value="30"/>
-          <Constant key="Parameter_5111" name="Vcpt2" value="1.955"/>
+          <Constant key="Parameter_5111" name="Vcpt2" value="0.207056"/>
         </ListOfConstants>
         <KineticLaw function="Function_84" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -6527,7 +6536,7 @@
           <Constant key="Parameter_5177" name="Kmcpt2C8AcylCoAMAT" value="38"/>
           <Constant key="Parameter_5172" name="Kmcpt2CarMAT" value="350"/>
           <Constant key="Parameter_5174" name="Kmcpt2CoAMAT" value="30"/>
-          <Constant key="Parameter_5173" name="Vcpt2" value="1.955"/>
+          <Constant key="Parameter_5173" name="Vcpt2" value="0.207056"/>
         </ListOfConstants>
         <KineticLaw function="Function_83" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -6692,7 +6701,7 @@
           <Constant key="Parameter_5017" name="Kmcpt2C8AcylCoAMAT" value="38"/>
           <Constant key="Parameter_5010" name="Kmcpt2CarMAT" value="350"/>
           <Constant key="Parameter_5011" name="Kmcpt2CoAMAT" value="30"/>
-          <Constant key="Parameter_5016" name="Vcpt2" value="1.955"/>
+          <Constant key="Parameter_5016" name="Vcpt2" value="0.207056"/>
         </ListOfConstants>
         <KineticLaw function="Function_85" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -6860,7 +6869,7 @@
           <Constant key="Parameter_4862" name="Kmcpt2C8AcylCoAMAT" value="38"/>
           <Constant key="Parameter_4861" name="Kmcpt2CarMAT" value="350"/>
           <Constant key="Parameter_4860" name="Kmcpt2CoAMAT" value="30"/>
-          <Constant key="Parameter_4859" name="Vcpt2" value="1.955"/>
+          <Constant key="Parameter_4859" name="Vcpt2" value="0.207056"/>
         </ListOfConstants>
         <KineticLaw function="Function_56" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -7028,7 +7037,7 @@
           <Constant key="Parameter_4843" name="Kmcpt2C8AcylCoAMAT" value="38"/>
           <Constant key="Parameter_4842" name="Kmcpt2CarMAT" value="350"/>
           <Constant key="Parameter_4841" name="Kmcpt2CoAMAT" value="30"/>
-          <Constant key="Parameter_4840" name="Vcpt2" value="1.955"/>
+          <Constant key="Parameter_4840" name="Vcpt2" value="0.207056"/>
         </ListOfConstants>
         <KineticLaw function="Function_60" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -7196,7 +7205,7 @@
           <Constant key="Parameter_4824" name="Kmcpt2C8AcylCoAMAT" value="38"/>
           <Constant key="Parameter_4823" name="Kmcpt2CarMAT" value="350"/>
           <Constant key="Parameter_4822" name="Kmcpt2CoAMAT" value="30"/>
-          <Constant key="Parameter_4821" name="Vcpt2" value="1.955"/>
+          <Constant key="Parameter_4821" name="Vcpt2" value="0.207056"/>
         </ListOfConstants>
         <KineticLaw function="Function_58" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -7364,7 +7373,7 @@
           <Constant key="Parameter_4805" name="Kmcpt2C8AcylCoAMAT" value="38"/>
           <Constant key="Parameter_4804" name="Kmcpt2CarMAT" value="350"/>
           <Constant key="Parameter_4803" name="Kmcpt2CoAMAT" value="30"/>
-          <Constant key="Parameter_4802" name="Vcpt2" value="1.955"/>
+          <Constant key="Parameter_4802" name="Vcpt2" value="0.207056"/>
         </ListOfConstants>
         <KineticLaw function="Function_63" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -7512,7 +7521,7 @@
           <Constant key="Parameter_4796" name="KmscadC6EnoylCoAMAT" value="1.08"/>
           <Constant key="Parameter_4795" name="KmscadFAD" value="0.100638"/>
           <Constant key="Parameter_4794" name="KmscadFADH" value="24.2"/>
-          <Constant key="Parameter_4793" name="Vscad" value="0.103914"/>
+          <Constant key="Parameter_4793" name="Vscad" value="0.00867598"/>
         </ListOfConstants>
         <KineticLaw function="Function_61" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -7600,7 +7609,7 @@
           <Constant key="Parameter_4787" name="KmscadC6EnoylCoAMAT" value="1.08"/>
           <Constant key="Parameter_4786" name="KmscadFAD" value="0.100638"/>
           <Constant key="Parameter_4785" name="KmscadFADH" value="24.2"/>
-          <Constant key="Parameter_4784" name="Vscad" value="0.103914"/>
+          <Constant key="Parameter_4784" name="Vscad" value="0.00867598"/>
         </ListOfConstants>
         <KineticLaw function="Function_64" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -7706,7 +7715,7 @@
           <Constant key="Parameter_4769" name="KmcrotC6HydroxyacylCoAMAT" value="45"/>
           <Constant key="Parameter_4768" name="KmcrotC8EnoylCoAMAT" value="25"/>
           <Constant key="Parameter_4767" name="KmcrotC8HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_4766" name="Vcrot" value="0.72"/>
+          <Constant key="Parameter_4766" name="Vcrot" value="1.25412"/>
         </ListOfConstants>
         <KineticLaw function="Function_59" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -7866,7 +7875,7 @@
           <Constant key="Parameter_4751" name="KmcrotC6HydroxyacylCoAMAT" value="45"/>
           <Constant key="Parameter_4750" name="KmcrotC8EnoylCoAMAT" value="25"/>
           <Constant key="Parameter_4749" name="KmcrotC8HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_4748" name="Vcrot" value="0.72"/>
+          <Constant key="Parameter_4748" name="Vcrot" value="1.25412"/>
         </ListOfConstants>
         <KineticLaw function="Function_62" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -8026,7 +8035,7 @@
           <Constant key="Parameter_4733" name="KmcrotC6HydroxyacylCoAMAT" value="45"/>
           <Constant key="Parameter_4732" name="KmcrotC8EnoylCoAMAT" value="25"/>
           <Constant key="Parameter_4731" name="KmcrotC8HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_4730" name="Vcrot" value="0.72"/>
+          <Constant key="Parameter_4730" name="Vcrot" value="1.25412"/>
         </ListOfConstants>
         <KineticLaw function="Function_66" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -8186,7 +8195,7 @@
           <Constant key="Parameter_4715" name="KmcrotC6HydroxyacylCoAMAT" value="45"/>
           <Constant key="Parameter_4714" name="KmcrotC8EnoylCoAMAT" value="25"/>
           <Constant key="Parameter_4713" name="KmcrotC8HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_4712" name="Vcrot" value="0.72"/>
+          <Constant key="Parameter_4712" name="Vcrot" value="1.25412"/>
         </ListOfConstants>
         <KineticLaw function="Function_87" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -8346,7 +8355,7 @@
           <Constant key="Parameter_4697" name="KmcrotC6HydroxyacylCoAMAT" value="45"/>
           <Constant key="Parameter_4696" name="KmcrotC8EnoylCoAMAT" value="25"/>
           <Constant key="Parameter_4695" name="KmcrotC8HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_4694" name="Vcrot" value="0.72"/>
+          <Constant key="Parameter_4694" name="Vcrot" value="1.25412"/>
         </ListOfConstants>
         <KineticLaw function="Function_88" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -8506,7 +8515,7 @@
           <Constant key="Parameter_4679" name="KmcrotC6HydroxyacylCoAMAT" value="45"/>
           <Constant key="Parameter_4678" name="KmcrotC8EnoylCoAMAT" value="25"/>
           <Constant key="Parameter_4677" name="KmcrotC8HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_4676" name="Vcrot" value="0.72"/>
+          <Constant key="Parameter_4676" name="Vcrot" value="1.25412"/>
         </ListOfConstants>
         <KineticLaw function="Function_89" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -8666,7 +8675,7 @@
           <Constant key="Parameter_4661" name="KmcrotC6HydroxyacylCoAMAT" value="45"/>
           <Constant key="Parameter_4660" name="KmcrotC8EnoylCoAMAT" value="25"/>
           <Constant key="Parameter_4659" name="KmcrotC8HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_4658" name="Vcrot" value="0.72"/>
+          <Constant key="Parameter_4658" name="Vcrot" value="1.25412"/>
         </ListOfConstants>
         <KineticLaw function="Function_90" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -8817,7 +8826,7 @@
           <Constant key="Parameter_4642" name="KmmschadC8KetoacylCoAMAT" value="4.1"/>
           <Constant key="Parameter_4641" name="KmmschadNADHMAT" value="5.4"/>
           <Constant key="Parameter_4640" name="KmmschadNADMAT" value="58.5"/>
-          <Constant key="Parameter_4639" name="Vmschad" value="0.274874"/>
+          <Constant key="Parameter_4639" name="Vmschad" value="2.73383"/>
         </ListOfConstants>
         <KineticLaw function="Function_92" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -8974,7 +8983,7 @@
           <Constant key="Parameter_4623" name="KmmschadC8KetoacylCoAMAT" value="4.1"/>
           <Constant key="Parameter_4622" name="KmmschadNADHMAT" value="5.4"/>
           <Constant key="Parameter_4621" name="KmmschadNADMAT" value="58.5"/>
-          <Constant key="Parameter_4620" name="Vmschad" value="0.274874"/>
+          <Constant key="Parameter_4620" name="Vmschad" value="2.73383"/>
         </ListOfConstants>
         <KineticLaw function="Function_91" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -9131,7 +9140,7 @@
           <Constant key="Parameter_4604" name="KmmschadC8KetoacylCoAMAT" value="4.1"/>
           <Constant key="Parameter_4603" name="KmmschadNADHMAT" value="5.4"/>
           <Constant key="Parameter_4602" name="KmmschadNADMAT" value="58.5"/>
-          <Constant key="Parameter_4601" name="Vmschad" value="0.274874"/>
+          <Constant key="Parameter_4601" name="Vmschad" value="2.73383"/>
         </ListOfConstants>
         <KineticLaw function="Function_68" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -9299,7 +9308,7 @@
           <Constant key="Parameter_4585" name="KmmschadC8KetoacylCoAMAT" value="4.1"/>
           <Constant key="Parameter_4584" name="KmmschadNADHMAT" value="5.4"/>
           <Constant key="Parameter_4583" name="KmmschadNADMAT" value="58.5"/>
-          <Constant key="Parameter_4582" name="Vmschad" value="0.274874"/>
+          <Constant key="Parameter_4582" name="Vmschad" value="2.73383"/>
         </ListOfConstants>
         <KineticLaw function="Function_69" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -9456,7 +9465,7 @@
           <Constant key="Parameter_4566" name="KmmschadC8KetoacylCoAMAT" value="4.1"/>
           <Constant key="Parameter_4565" name="KmmschadNADHMAT" value="5.4"/>
           <Constant key="Parameter_4564" name="KmmschadNADMAT" value="58.5"/>
-          <Constant key="Parameter_4563" name="Vmschad" value="0.274874"/>
+          <Constant key="Parameter_4563" name="Vmschad" value="2.73383"/>
         </ListOfConstants>
         <KineticLaw function="Function_71" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -9613,7 +9622,7 @@
           <Constant key="Parameter_4547" name="KmmschadC8KetoacylCoAMAT" value="4.1"/>
           <Constant key="Parameter_4546" name="KmmschadNADHMAT" value="5.4"/>
           <Constant key="Parameter_4545" name="KmmschadNADMAT" value="58.5"/>
-          <Constant key="Parameter_4544" name="Vmschad" value="0.274874"/>
+          <Constant key="Parameter_4544" name="Vmschad" value="2.73383"/>
         </ListOfConstants>
         <KineticLaw function="Function_67" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -9770,7 +9779,7 @@
           <Constant key="Parameter_4528" name="KmmschadC8KetoacylCoAMAT" value="4.1"/>
           <Constant key="Parameter_4527" name="KmmschadNADHMAT" value="5.4"/>
           <Constant key="Parameter_4526" name="KmmschadNADMAT" value="58.5"/>
-          <Constant key="Parameter_4525" name="Vmschad" value="0.274874"/>
+          <Constant key="Parameter_4525" name="Vmschad" value="2.73383"/>
         </ListOfConstants>
         <KineticLaw function="Function_70" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -9927,7 +9936,7 @@
           <Constant key="Parameter_4509" name="KmmckatC8AcylCoAMAT" value="23.4696"/>
           <Constant key="Parameter_4508" name="KmmckatC8KetoacylCoAMAT" value="3.2"/>
           <Constant key="Parameter_4507" name="KmmckatCoAMAT" value="26.6"/>
-          <Constant key="Parameter_4506" name="Vmckat" value="0.393215"/>
+          <Constant key="Parameter_4506" name="Vmckat" value="2.2387"/>
         </ListOfConstants>
         <KineticLaw function="Function_65" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -10084,7 +10093,7 @@
           <Constant key="Parameter_4490" name="KmmckatC8AcylCoAMAT" value="23.4696"/>
           <Constant key="Parameter_4489" name="KmmckatC8KetoacylCoAMAT" value="3.2"/>
           <Constant key="Parameter_4488" name="KmmckatCoAMAT" value="26.6"/>
-          <Constant key="Parameter_4487" name="Vmckat" value="0.393215"/>
+          <Constant key="Parameter_4487" name="Vmckat" value="2.2387"/>
         </ListOfConstants>
         <KineticLaw function="Function_73" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -10241,7 +10250,7 @@
           <Constant key="Parameter_4471" name="KmmckatC8AcylCoAMAT" value="23.4696"/>
           <Constant key="Parameter_4470" name="KmmckatC8KetoacylCoAMAT" value="3.2"/>
           <Constant key="Parameter_4469" name="KmmckatCoAMAT" value="26.6"/>
-          <Constant key="Parameter_4468" name="Vmckat" value="0.393215"/>
+          <Constant key="Parameter_4468" name="Vmckat" value="2.2387"/>
         </ListOfConstants>
         <KineticLaw function="Function_74" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -10409,7 +10418,7 @@
           <Constant key="Parameter_4452" name="KmmckatC8AcylCoAMAT" value="23.4696"/>
           <Constant key="Parameter_4451" name="KmmckatC8KetoacylCoAMAT" value="3.2"/>
           <Constant key="Parameter_4450" name="KmmckatCoAMAT" value="26.6"/>
-          <Constant key="Parameter_4449" name="Vmckat" value="0.393215"/>
+          <Constant key="Parameter_4449" name="Vmckat" value="2.2387"/>
         </ListOfConstants>
         <KineticLaw function="Function_72" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -10566,7 +10575,7 @@
           <Constant key="Parameter_4433" name="KmmckatC8AcylCoAMAT" value="23.4696"/>
           <Constant key="Parameter_4432" name="KmmckatC8KetoacylCoAMAT" value="3.2"/>
           <Constant key="Parameter_4431" name="KmmckatCoAMAT" value="26.6"/>
-          <Constant key="Parameter_4430" name="Vmckat" value="0.393215"/>
+          <Constant key="Parameter_4430" name="Vmckat" value="2.2387"/>
         </ListOfConstants>
         <KineticLaw function="Function_76" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -10723,7 +10732,7 @@
           <Constant key="Parameter_4414" name="KmmckatC8AcylCoAMAT" value="23.4696"/>
           <Constant key="Parameter_4413" name="KmmckatC8KetoacylCoAMAT" value="3.2"/>
           <Constant key="Parameter_4412" name="KmmckatCoAMAT" value="26.6"/>
-          <Constant key="Parameter_4411" name="Vmckat" value="0.393215"/>
+          <Constant key="Parameter_4411" name="Vmckat" value="2.2387"/>
         </ListOfConstants>
         <KineticLaw function="Function_75" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -10880,7 +10889,7 @@
           <Constant key="Parameter_4395" name="KmmckatC8AcylCoAMAT" value="23.4696"/>
           <Constant key="Parameter_4394" name="KmmckatC8KetoacylCoAMAT" value="3.2"/>
           <Constant key="Parameter_4393" name="KmmckatCoAMAT" value="26.6"/>
-          <Constant key="Parameter_4392" name="Vmckat" value="0.393215"/>
+          <Constant key="Parameter_4392" name="Vmckat" value="2.2387"/>
         </ListOfConstants>
         <KineticLaw function="Function_78" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -11037,7 +11046,7 @@
           <Constant key="Parameter_4376" name="KmmtpCoAMAT" value="30"/>
           <Constant key="Parameter_4375" name="KmmtpNADHMAT" value="50"/>
           <Constant key="Parameter_4374" name="KmmtpNADMAT" value="60"/>
-          <Constant key="Parameter_4373" name="Vmtp" value="0.993008"/>
+          <Constant key="Parameter_4373" name="Vmtp" value="0.100014"/>
         </ListOfConstants>
         <KineticLaw function="Function_80" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -11194,7 +11203,7 @@
           <Constant key="Parameter_4357" name="KmmtpCoAMAT" value="30"/>
           <Constant key="Parameter_4356" name="KmmtpNADHMAT" value="50"/>
           <Constant key="Parameter_4355" name="KmmtpNADMAT" value="60"/>
-          <Constant key="Parameter_4354" name="Vmtp" value="0.993008"/>
+          <Constant key="Parameter_4354" name="Vmtp" value="0.100014"/>
         </ListOfConstants>
         <KineticLaw function="Function_94" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -11351,7 +11360,7 @@
           <Constant key="Parameter_4338" name="KmmtpCoAMAT" value="30"/>
           <Constant key="Parameter_4337" name="KmmtpNADHMAT" value="50"/>
           <Constant key="Parameter_4336" name="KmmtpNADMAT" value="60"/>
-          <Constant key="Parameter_4335" name="Vmtp" value="0.993008"/>
+          <Constant key="Parameter_4335" name="Vmtp" value="0.100014"/>
         </ListOfConstants>
         <KineticLaw function="Function_93" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -11508,7 +11517,7 @@
           <Constant key="Parameter_4319" name="KmmtpCoAMAT" value="30"/>
           <Constant key="Parameter_4318" name="KmmtpNADHMAT" value="50"/>
           <Constant key="Parameter_4317" name="KmmtpNADMAT" value="60"/>
-          <Constant key="Parameter_4316" name="Vmtp" value="0.993008"/>
+          <Constant key="Parameter_4316" name="Vmtp" value="0.100014"/>
         </ListOfConstants>
         <KineticLaw function="Function_95" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -11665,7 +11674,7 @@
           <Constant key="Parameter_4300" name="KmmtpCoAMAT" value="30"/>
           <Constant key="Parameter_4299" name="KmmtpNADHMAT" value="50"/>
           <Constant key="Parameter_4298" name="KmmtpNADMAT" value="60"/>
-          <Constant key="Parameter_4297" name="Vmtp" value="0.993008"/>
+          <Constant key="Parameter_4297" name="Vmtp" value="0.100014"/>
         </ListOfConstants>
         <KineticLaw function="Function_79" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -11922,7 +11931,7 @@
         </ListOfModifiers>
         <ListOfConstants>
           <Constant key="Parameter_4290" name="sfvlcadC16" value="0.51"/>
-          <Constant key="Parameter_4289" name="parameter_1" value="0.019026"/>
+          <Constant key="Parameter_4289" name="parameter_1" value="0.166552"/>
           <Constant key="Parameter_4288" name="parameter_10" value="1.08"/>
           <Constant key="Parameter_4287" name="parameter_11" value="1.08"/>
           <Constant key="Parameter_4286" name="parameter_12" value="1.08"/>
@@ -12074,7 +12083,7 @@
         </ListOfModifiers>
         <ListOfConstants>
           <Constant key="Parameter_4273" name="sfvlcadC14" value="0.57"/>
-          <Constant key="Parameter_4272" name="parameter_1" value="0.019026"/>
+          <Constant key="Parameter_4272" name="parameter_1" value="0.166552"/>
           <Constant key="Parameter_4271" name="parameter_10" value="1.08"/>
           <Constant key="Parameter_4270" name="parameter_11" value="1.08"/>
           <Constant key="Parameter_4269" name="parameter_12" value="1.08"/>
@@ -12226,7 +12235,7 @@
         </ListOfModifiers>
         <ListOfConstants>
           <Constant key="Parameter_4256" name="sfvlcadC12" value="1"/>
-          <Constant key="Parameter_4255" name="parameter_1" value="0.019026"/>
+          <Constant key="Parameter_4255" name="parameter_1" value="0.166552"/>
           <Constant key="Parameter_4254" name="parameter_10" value="1.08"/>
           <Constant key="Parameter_4253" name="parameter_11" value="1.08"/>
           <Constant key="Parameter_4252" name="parameter_12" value="1.08"/>
@@ -12378,7 +12387,7 @@
         </ListOfModifiers>
         <ListOfConstants>
           <Constant key="Parameter_4239" name="sfvlcadC10" value="1"/>
-          <Constant key="Parameter_4238" name="parameter_1" value="0.019026"/>
+          <Constant key="Parameter_4238" name="parameter_1" value="0.166552"/>
           <Constant key="Parameter_4237" name="parameter_10" value="1.08"/>
           <Constant key="Parameter_4236" name="parameter_11" value="1.08"/>
           <Constant key="Parameter_4235" name="parameter_12" value="1.08"/>
@@ -12530,7 +12539,7 @@
         </ListOfModifiers>
         <ListOfConstants>
           <Constant key="Parameter_4222" name="sfvlcadC8" value="0.64"/>
-          <Constant key="Parameter_4221" name="parameter_1" value="0.019026"/>
+          <Constant key="Parameter_4221" name="parameter_1" value="0.166552"/>
           <Constant key="Parameter_4220" name="parameter_10" value="1.08"/>
           <Constant key="Parameter_4219" name="parameter_11" value="1.08"/>
           <Constant key="Parameter_4218" name="parameter_12" value="1.08"/>
@@ -12682,7 +12691,7 @@
         </ListOfModifiers>
         <ListOfConstants>
           <Constant key="Parameter_4205" name="sfvlcadC6" value="0.54"/>
-          <Constant key="Parameter_4204" name="parameter_1" value="0.019026"/>
+          <Constant key="Parameter_4204" name="parameter_1" value="0.166552"/>
           <Constant key="Parameter_4203" name="parameter_10" value="1.08"/>
           <Constant key="Parameter_4202" name="parameter_11" value="1.08"/>
           <Constant key="Parameter_4201" name="parameter_12" value="1.08"/>
@@ -12849,7 +12858,7 @@
           <Constant key="Parameter_4177" name="KmmcadC8EnoylCoAMAT" value="1.08"/>
           <Constant key="Parameter_4176" name="KmmcadFAD" value="0.100638"/>
           <Constant key="Parameter_4175" name="KmmcadFADH" value="24.2"/>
-          <Constant key="Parameter_4174" name="Vmcad" value="0.01346"/>
+          <Constant key="Parameter_4174" name="Vmcad" value="0.00103896"/>
           <Constant key="Parameter_4173" name="parameter_17" value="24.393"/>
           <Constant key="Parameter_4172" name="parameter_18" value="5"/>
           <Constant key="Parameter_4171" name="parameter_19" value="1.08"/>
@@ -13017,7 +13026,7 @@
           <Constant key="Parameter_4158" name="KmmcadC8EnoylCoAMAT" value="1.08"/>
           <Constant key="Parameter_4157" name="KmmcadFAD" value="0.100638"/>
           <Constant key="Parameter_4156" name="KmmcadFADH" value="24.2"/>
-          <Constant key="Parameter_4155" name="Vmcad" value="0.01346"/>
+          <Constant key="Parameter_4155" name="Vmcad" value="0.00103896"/>
           <Constant key="Parameter_4154" name="parameter_17" value="24.393"/>
           <Constant key="Parameter_4153" name="parameter_18" value="5"/>
           <Constant key="Parameter_4152" name="parameter_19" value="1.08"/>
@@ -13185,7 +13194,7 @@
           <Constant key="Parameter_4139" name="KmmcadC8EnoylCoAMAT" value="1.08"/>
           <Constant key="Parameter_4138" name="KmmcadFAD" value="0.100638"/>
           <Constant key="Parameter_4137" name="KmmcadFADH" value="24.2"/>
-          <Constant key="Parameter_4136" name="Vmcad" value="0.01346"/>
+          <Constant key="Parameter_4136" name="Vmcad" value="0.00103896"/>
           <Constant key="Parameter_4135" name="parameter_17" value="24.393"/>
           <Constant key="Parameter_4134" name="parameter_18" value="5"/>
           <Constant key="Parameter_4133" name="parameter_19" value="1.08"/>
@@ -13353,7 +13362,7 @@
           <Constant key="Parameter_4120" name="KmmcadC8EnoylCoAMAT" value="1.08"/>
           <Constant key="Parameter_4119" name="KmmcadFAD" value="0.100638"/>
           <Constant key="Parameter_4118" name="KmmcadFADH" value="24.2"/>
-          <Constant key="Parameter_4117" name="Vmcad" value="0.01346"/>
+          <Constant key="Parameter_4117" name="Vmcad" value="0.00103896"/>
           <Constant key="Parameter_4116" name="parameter_17" value="24.393"/>
           <Constant key="Parameter_4115" name="parameter_18" value="5"/>
           <Constant key="Parameter_4114" name="parameter_19" value="1.08"/>
@@ -13521,7 +13530,7 @@
           <Constant key="Parameter_4101" name="KmmcadC8EnoylCoAMAT" value="1.08"/>
           <Constant key="Parameter_4100" name="KmmcadFAD" value="0.100638"/>
           <Constant key="Parameter_4099" name="KmmcadFADH" value="24.2"/>
-          <Constant key="Parameter_4098" name="Vmcad" value="0.01346"/>
+          <Constant key="Parameter_4098" name="Vmcad" value="0.00103896"/>
           <Constant key="Parameter_4097" name="parameter_17" value="24.393"/>
           <Constant key="Parameter_4096" name="parameter_18" value="5"/>
           <Constant key="Parameter_4095" name="parameter_19" value="1.08"/>
@@ -13689,7 +13698,7 @@
           <Constant key="Parameter_4082" name="KmmcadC8EnoylCoAMAT" value="1.08"/>
           <Constant key="Parameter_4081" name="KmmcadFAD" value="0.100638"/>
           <Constant key="Parameter_4080" name="KmmcadFADH" value="24.2"/>
-          <Constant key="Parameter_4079" name="Vmcad" value="0.01346"/>
+          <Constant key="Parameter_4079" name="Vmcad" value="0.00103896"/>
           <Constant key="Parameter_4078" name="parameter_17" value="24.393"/>
           <Constant key="Parameter_4077" name="parameter_18" value="5"/>
           <Constant key="Parameter_4076" name="parameter_19" value="1.08"/>
@@ -13857,7 +13866,7 @@
           <Constant key="Parameter_4063" name="KmmcadC8EnoylCoAMAT" value="1.08"/>
           <Constant key="Parameter_4062" name="KmmcadFAD" value="0.100638"/>
           <Constant key="Parameter_4061" name="KmmcadFADH" value="24.2"/>
-          <Constant key="Parameter_4060" name="Vmcad" value="0.01346"/>
+          <Constant key="Parameter_4060" name="Vmcad" value="0.00103896"/>
           <Constant key="Parameter_4059" name="parameter_17" value="24.393"/>
           <Constant key="Parameter_4058" name="parameter_18" value="5"/>
           <Constant key="Parameter_4057" name="parameter_19" value="1.08"/>
@@ -14637,7 +14646,7 @@
           <Constant key="Parameter_3969" name="Kmcpt2C8AcylCoAMAT" value="38"/>
           <Constant key="Parameter_3968" name="Kmcpt2CarMAT" value="350"/>
           <Constant key="Parameter_3967" name="Kmcpt2CoAMAT" value="30"/>
-          <Constant key="Parameter_3966" name="Vcpt2" value="1.955"/>
+          <Constant key="Parameter_3966" name="Vcpt2" value="0.2"/>
           <Constant key="Parameter_3965" name="sfcpt2C16" value="0.85"/>
         </ListOfConstants>
         <KineticLaw function="Function_84" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
@@ -14804,7 +14813,7 @@
           <Constant key="Parameter_3951" name="Kmcpt2C8AcylCoAMAT" value="38"/>
           <Constant key="Parameter_3950" name="Kmcpt2CarMAT" value="350"/>
           <Constant key="Parameter_3949" name="Kmcpt2CoAMAT" value="30"/>
-          <Constant key="Parameter_3948" name="Vcpt2" value="1.955"/>
+          <Constant key="Parameter_3948" name="Vcpt2" value="0.2"/>
           <Constant key="Parameter_3947" name="sfcpt2C14" value="1"/>
         </ListOfConstants>
         <KineticLaw function="Function_83" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
@@ -14969,7 +14978,7 @@
           <Constant key="Parameter_3932" name="Kmcpt2C8AcylCoAMAT" value="38"/>
           <Constant key="Parameter_3931" name="Kmcpt2CarMAT" value="350"/>
           <Constant key="Parameter_3930" name="Kmcpt2CoAMAT" value="30"/>
-          <Constant key="Parameter_3929" name="Vcpt2" value="1.955"/>
+          <Constant key="Parameter_3929" name="Vcpt2" value="0.2"/>
           <Constant key="Parameter_3928" name="sfcpt2C12" value="0.95"/>
         </ListOfConstants>
         <KineticLaw function="Function_85" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
@@ -15137,7 +15146,7 @@
           <Constant key="Parameter_3913" name="Kmcpt2C8AcylCoAMAT" value="38"/>
           <Constant key="Parameter_3912" name="Kmcpt2CarMAT" value="350"/>
           <Constant key="Parameter_3911" name="Kmcpt2CoAMAT" value="30"/>
-          <Constant key="Parameter_3910" name="Vcpt2" value="1.955"/>
+          <Constant key="Parameter_3910" name="Vcpt2" value="0.2"/>
           <Constant key="Parameter_3909" name="sfcpt2C10" value="0.95"/>
         </ListOfConstants>
         <KineticLaw function="Function_56" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
@@ -15305,7 +15314,7 @@
           <Constant key="Parameter_3894" name="Kmcpt2C8AcylCoAMAT" value="38"/>
           <Constant key="Parameter_3893" name="Kmcpt2CarMAT" value="350"/>
           <Constant key="Parameter_3892" name="Kmcpt2CoAMAT" value="30"/>
-          <Constant key="Parameter_3891" name="Vcpt2" value="1.955"/>
+          <Constant key="Parameter_3891" name="Vcpt2" value="0.2"/>
           <Constant key="Parameter_3890" name="sfcpt2C8" value="0.35"/>
         </ListOfConstants>
         <KineticLaw function="Function_60" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
@@ -15473,7 +15482,7 @@
           <Constant key="Parameter_3875" name="Kmcpt2C8AcylCoAMAT" value="38"/>
           <Constant key="Parameter_3874" name="Kmcpt2CarMAT" value="350"/>
           <Constant key="Parameter_3873" name="Kmcpt2CoAMAT" value="30"/>
-          <Constant key="Parameter_3872" name="Vcpt2" value="1.955"/>
+          <Constant key="Parameter_3872" name="Vcpt2" value="0.2"/>
           <Constant key="Parameter_3871" name="sfcpt2C6" value="0.15"/>
         </ListOfConstants>
         <KineticLaw function="Function_58" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
@@ -15641,7 +15650,7 @@
           <Constant key="Parameter_3856" name="Kmcpt2C8AcylCoAMAT" value="38"/>
           <Constant key="Parameter_3855" name="Kmcpt2CarMAT" value="350"/>
           <Constant key="Parameter_3854" name="Kmcpt2CoAMAT" value="30"/>
-          <Constant key="Parameter_3853" name="Vcpt2" value="1.955"/>
+          <Constant key="Parameter_3853" name="Vcpt2" value="0.2"/>
           <Constant key="Parameter_3852" name="sfcpt2C4" value="0.01"/>
         </ListOfConstants>
         <KineticLaw function="Function_63" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
@@ -15789,7 +15798,7 @@
           <Constant key="Parameter_3847" name="KmscadC6EnoylCoAMAT" value="1.08"/>
           <Constant key="Parameter_3846" name="KmscadFAD" value="0.100638"/>
           <Constant key="Parameter_3845" name="KmscadFADH" value="24.2"/>
-          <Constant key="Parameter_3844" name="Vscad" value="0.103914"/>
+          <Constant key="Parameter_3844" name="Vscad" value="0.0042941"/>
           <Constant key="Parameter_3843" name="sfscadC6" value="0.79"/>
         </ListOfConstants>
         <KineticLaw function="Function_61" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
@@ -15877,7 +15886,7 @@
           <Constant key="Parameter_3838" name="KmscadC6EnoylCoAMAT" value="1.08"/>
           <Constant key="Parameter_3837" name="KmscadFAD" value="0.100638"/>
           <Constant key="Parameter_3836" name="KmscadFADH" value="24.2"/>
-          <Constant key="Parameter_3835" name="Vscad" value="0.103914"/>
+          <Constant key="Parameter_3835" name="Vscad" value="0.0042941"/>
           <Constant key="Parameter_3834" name="sfscadC4" value="1"/>
         </ListOfConstants>
         <KineticLaw function="Function_64" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
@@ -15983,7 +15992,7 @@
           <Constant key="Parameter_3820" name="KmcrotC6HydroxyacylCoAMAT" value="45"/>
           <Constant key="Parameter_3819" name="KmcrotC8EnoylCoAMAT" value="25"/>
           <Constant key="Parameter_3818" name="KmcrotC8HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_3817" name="Vcrot" value="0.72"/>
+          <Constant key="Parameter_3817" name="Vcrot" value="7"/>
           <Constant key="Parameter_3816" name="sfcrotC16" value="0.13"/>
         </ListOfConstants>
         <KineticLaw function="Function_59" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
@@ -16143,7 +16152,7 @@
           <Constant key="Parameter_3802" name="KmcrotC6HydroxyacylCoAMAT" value="45"/>
           <Constant key="Parameter_3801" name="KmcrotC8EnoylCoAMAT" value="25"/>
           <Constant key="Parameter_3800" name="KmcrotC8HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_3799" name="Vcrot" value="0.72"/>
+          <Constant key="Parameter_3799" name="Vcrot" value="7"/>
           <Constant key="Parameter_3798" name="sfcrotC14" value="0.2"/>
         </ListOfConstants>
         <KineticLaw function="Function_62" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
@@ -16303,7 +16312,7 @@
           <Constant key="Parameter_3784" name="KmcrotC6HydroxyacylCoAMAT" value="45"/>
           <Constant key="Parameter_3783" name="KmcrotC8EnoylCoAMAT" value="25"/>
           <Constant key="Parameter_3782" name="KmcrotC8HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_3781" name="Vcrot" value="0.72"/>
+          <Constant key="Parameter_3781" name="Vcrot" value="7"/>
           <Constant key="Parameter_3780" name="sfcrotC12" value="0.25"/>
         </ListOfConstants>
         <KineticLaw function="Function_66" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
@@ -16463,7 +16472,7 @@
           <Constant key="Parameter_3766" name="KmcrotC6HydroxyacylCoAMAT" value="45"/>
           <Constant key="Parameter_3765" name="KmcrotC8EnoylCoAMAT" value="25"/>
           <Constant key="Parameter_3764" name="KmcrotC8HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_3763" name="Vcrot" value="0.72"/>
+          <Constant key="Parameter_3763" name="Vcrot" value="7"/>
           <Constant key="Parameter_3762" name="sfcrotC10" value="0.33"/>
         </ListOfConstants>
         <KineticLaw function="Function_87" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
@@ -16623,7 +16632,7 @@
           <Constant key="Parameter_3748" name="KmcrotC6HydroxyacylCoAMAT" value="45"/>
           <Constant key="Parameter_3747" name="KmcrotC8EnoylCoAMAT" value="25"/>
           <Constant key="Parameter_3746" name="KmcrotC8HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_3745" name="Vcrot" value="0.72"/>
+          <Constant key="Parameter_3745" name="Vcrot" value="7"/>
           <Constant key="Parameter_3744" name="sfcrotC8" value="0.58"/>
         </ListOfConstants>
         <KineticLaw function="Function_88" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
@@ -16783,7 +16792,7 @@
           <Constant key="Parameter_3730" name="KmcrotC6HydroxyacylCoAMAT" value="45"/>
           <Constant key="Parameter_3729" name="KmcrotC8EnoylCoAMAT" value="25"/>
           <Constant key="Parameter_3728" name="KmcrotC8HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_3727" name="Vcrot" value="0.72"/>
+          <Constant key="Parameter_3727" name="Vcrot" value="7"/>
           <Constant key="Parameter_3726" name="sfcrotC6" value="0.83"/>
         </ListOfConstants>
         <KineticLaw function="Function_89" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
@@ -16943,7 +16952,7 @@
           <Constant key="Parameter_3712" name="KmcrotC6HydroxyacylCoAMAT" value="45"/>
           <Constant key="Parameter_3711" name="KmcrotC8EnoylCoAMAT" value="25"/>
           <Constant key="Parameter_3710" name="KmcrotC8HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_3709" name="Vcrot" value="0.72"/>
+          <Constant key="Parameter_3709" name="Vcrot" value="7"/>
           <Constant key="Parameter_3708" name="sfcrotC4" value="1"/>
         </ListOfConstants>
         <KineticLaw function="Function_90" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
@@ -17094,7 +17103,7 @@
           <Constant key="Parameter_3693" name="KmmschadC8KetoacylCoAMAT" value="4.1"/>
           <Constant key="Parameter_3692" name="KmmschadNADHMAT" value="5.4"/>
           <Constant key="Parameter_3691" name="KmmschadNADMAT" value="58.5"/>
-          <Constant key="Parameter_3690" name="Vmschad" value="0.274874"/>
+          <Constant key="Parameter_3690" name="Vmschad" value="0.0649152"/>
           <Constant key="Parameter_3689" name="sfmschadC16" value="0.6"/>
         </ListOfConstants>
         <KineticLaw function="Function_92" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
@@ -17251,7 +17260,7 @@
           <Constant key="Parameter_3674" name="KmmschadC8KetoacylCoAMAT" value="4.1"/>
           <Constant key="Parameter_3673" name="KmmschadNADHMAT" value="5.4"/>
           <Constant key="Parameter_3672" name="KmmschadNADMAT" value="58.5"/>
-          <Constant key="Parameter_3671" name="Vmschad" value="0.274874"/>
+          <Constant key="Parameter_3671" name="Vmschad" value="0.0649152"/>
           <Constant key="Parameter_3670" name="sfmschadC14" value="0.5"/>
         </ListOfConstants>
         <KineticLaw function="Function_91" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
@@ -17408,7 +17417,7 @@
           <Constant key="Parameter_3655" name="KmmschadC8KetoacylCoAMAT" value="4.1"/>
           <Constant key="Parameter_3654" name="KmmschadNADHMAT" value="5.4"/>
           <Constant key="Parameter_3653" name="KmmschadNADMAT" value="58.5"/>
-          <Constant key="Parameter_3652" name="Vmschad" value="0.274874"/>
+          <Constant key="Parameter_3652" name="Vmschad" value="0.0649152"/>
           <Constant key="Parameter_3651" name="sfmschadC12" value="0.43"/>
         </ListOfConstants>
         <KineticLaw function="Function_68" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
@@ -17576,7 +17585,7 @@
           <Constant key="Parameter_3636" name="KmmschadC8KetoacylCoAMAT" value="4.1"/>
           <Constant key="Parameter_3635" name="KmmschadNADHMAT" value="5.4"/>
           <Constant key="Parameter_3634" name="KmmschadNADMAT" value="58.5"/>
-          <Constant key="Parameter_3633" name="Vmschad" value="0.274874"/>
+          <Constant key="Parameter_3633" name="Vmschad" value="0.0649152"/>
           <Constant key="Parameter_3632" name="sfmschadC10" value="0.64"/>
         </ListOfConstants>
         <KineticLaw function="Function_69" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
@@ -17733,7 +17742,7 @@
           <Constant key="Parameter_3617" name="KmmschadC8KetoacylCoAMAT" value="4.1"/>
           <Constant key="Parameter_3616" name="KmmschadNADHMAT" value="5.4"/>
           <Constant key="Parameter_3615" name="KmmschadNADMAT" value="58.5"/>
-          <Constant key="Parameter_3614" name="Vmschad" value="0.274874"/>
+          <Constant key="Parameter_3614" name="Vmschad" value="0.0649152"/>
           <Constant key="Parameter_3613" name="sfmschadC8" value="0.89"/>
         </ListOfConstants>
         <KineticLaw function="Function_71" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
@@ -17890,7 +17899,7 @@
           <Constant key="Parameter_3598" name="KmmschadC8KetoacylCoAMAT" value="4.1"/>
           <Constant key="Parameter_3597" name="KmmschadNADHMAT" value="5.4"/>
           <Constant key="Parameter_3596" name="KmmschadNADMAT" value="58.5"/>
-          <Constant key="Parameter_3595" name="Vmschad" value="0.274874"/>
+          <Constant key="Parameter_3595" name="Vmschad" value="0.0649152"/>
           <Constant key="Parameter_3594" name="sfmschadC6" value="1"/>
         </ListOfConstants>
         <KineticLaw function="Function_67" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
@@ -18047,7 +18056,7 @@
           <Constant key="Parameter_3579" name="KmmschadC8KetoacylCoAMAT" value="4.1"/>
           <Constant key="Parameter_3578" name="KmmschadNADHMAT" value="5.4"/>
           <Constant key="Parameter_3577" name="KmmschadNADMAT" value="58.5"/>
-          <Constant key="Parameter_3576" name="Vmschad" value="0.274874"/>
+          <Constant key="Parameter_3576" name="Vmschad" value="0.0649152"/>
           <Constant key="Parameter_3575" name="sfmschadC4" value="0.67"/>
         </ListOfConstants>
         <KineticLaw function="Function_70" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
@@ -18204,7 +18213,7 @@
           <Constant key="Parameter_3560" name="KmmckatC8AcylCoAMAT" value="23.4696"/>
           <Constant key="Parameter_3559" name="KmmckatC8KetoacylCoAMAT" value="3.2"/>
           <Constant key="Parameter_3558" name="KmmckatCoAMAT" value="26.6"/>
-          <Constant key="Parameter_3557" name="Vmckat" value="0.393215"/>
+          <Constant key="Parameter_3557" name="Vmckat" value="4"/>
           <Constant key="Parameter_3556" name="sfmckatC16" value="0"/>
         </ListOfConstants>
         <KineticLaw function="Function_65" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
@@ -18361,7 +18370,7 @@
           <Constant key="Parameter_3541" name="KmmckatC8AcylCoAMAT" value="23.4696"/>
           <Constant key="Parameter_3540" name="KmmckatC8KetoacylCoAMAT" value="3.2"/>
           <Constant key="Parameter_3539" name="KmmckatCoAMAT" value="26.6"/>
-          <Constant key="Parameter_3538" name="Vmckat" value="0.393215"/>
+          <Constant key="Parameter_3538" name="Vmckat" value="4"/>
           <Constant key="Parameter_3537" name="sfmckatC14" value="0.2"/>
         </ListOfConstants>
         <KineticLaw function="Function_73" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
@@ -18518,7 +18527,7 @@
           <Constant key="Parameter_3522" name="KmmckatC8AcylCoAMAT" value="23.4696"/>
           <Constant key="Parameter_3521" name="KmmckatC8KetoacylCoAMAT" value="3.2"/>
           <Constant key="Parameter_3520" name="KmmckatCoAMAT" value="26.6"/>
-          <Constant key="Parameter_3519" name="Vmckat" value="0.393215"/>
+          <Constant key="Parameter_3519" name="Vmckat" value="4"/>
           <Constant key="Parameter_3518" name="sfmckatC12" value="0.38"/>
         </ListOfConstants>
         <KineticLaw function="Function_74" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
@@ -18686,7 +18695,7 @@
           <Constant key="Parameter_3503" name="KmmckatC8AcylCoAMAT" value="23.4696"/>
           <Constant key="Parameter_3502" name="KmmckatC8KetoacylCoAMAT" value="3.2"/>
           <Constant key="Parameter_3501" name="KmmckatCoAMAT" value="26.6"/>
-          <Constant key="Parameter_3500" name="Vmckat" value="0.393215"/>
+          <Constant key="Parameter_3500" name="Vmckat" value="4"/>
           <Constant key="Parameter_3499" name="sfmckatC10" value="0.65"/>
         </ListOfConstants>
         <KineticLaw function="Function_72" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
@@ -18843,7 +18852,7 @@
           <Constant key="Parameter_3484" name="KmmckatC8AcylCoAMAT" value="23.4696"/>
           <Constant key="Parameter_3483" name="KmmckatC8KetoacylCoAMAT" value="3.2"/>
           <Constant key="Parameter_3482" name="KmmckatCoAMAT" value="26.6"/>
-          <Constant key="Parameter_3481" name="Vmckat" value="0.393215"/>
+          <Constant key="Parameter_3481" name="Vmckat" value="4"/>
           <Constant key="Parameter_3480" name="sfmckatC8" value="0.81"/>
         </ListOfConstants>
         <KineticLaw function="Function_76" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
@@ -19000,7 +19009,7 @@
           <Constant key="Parameter_3465" name="KmmckatC8AcylCoAMAT" value="23.4696"/>
           <Constant key="Parameter_3464" name="KmmckatC8KetoacylCoAMAT" value="3.2"/>
           <Constant key="Parameter_3463" name="KmmckatCoAMAT" value="26.6"/>
-          <Constant key="Parameter_3462" name="Vmckat" value="0.393215"/>
+          <Constant key="Parameter_3462" name="Vmckat" value="4"/>
           <Constant key="Parameter_3461" name="sfmckatC6" value="1"/>
         </ListOfConstants>
         <KineticLaw function="Function_75" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
@@ -19157,7 +19166,7 @@
           <Constant key="Parameter_3446" name="KmmckatC8AcylCoAMAT" value="23.4696"/>
           <Constant key="Parameter_3445" name="KmmckatC8KetoacylCoAMAT" value="3.2"/>
           <Constant key="Parameter_3444" name="KmmckatCoAMAT" value="26.6"/>
-          <Constant key="Parameter_3443" name="Vmckat" value="0.393215"/>
+          <Constant key="Parameter_3443" name="Vmckat" value="4"/>
           <Constant key="Parameter_3442" name="sfmckatC4" value="0.49"/>
         </ListOfConstants>
         <KineticLaw function="Function_78" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
@@ -19314,7 +19323,7 @@
           <Constant key="Parameter_3427" name="KmmtpCoAMAT" value="30"/>
           <Constant key="Parameter_3426" name="KmmtpNADHMAT" value="50"/>
           <Constant key="Parameter_3425" name="KmmtpNADMAT" value="60"/>
-          <Constant key="Parameter_3424" name="Vmtp" value="0.993008"/>
+          <Constant key="Parameter_3424" name="Vmtp" value="0.1"/>
           <Constant key="Parameter_3423" name="sfmtpC16" value="1"/>
         </ListOfConstants>
         <KineticLaw function="Function_80" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
@@ -19471,7 +19480,7 @@
           <Constant key="Parameter_3408" name="KmmtpCoAMAT" value="30"/>
           <Constant key="Parameter_3407" name="KmmtpNADHMAT" value="50"/>
           <Constant key="Parameter_3406" name="KmmtpNADMAT" value="60"/>
-          <Constant key="Parameter_3405" name="Vmtp" value="0.993008"/>
+          <Constant key="Parameter_3405" name="Vmtp" value="0.1"/>
           <Constant key="Parameter_3404" name="sfmtpC14" value="0.9"/>
         </ListOfConstants>
         <KineticLaw function="Function_94" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
@@ -19628,7 +19637,7 @@
           <Constant key="Parameter_3389" name="KmmtpCoAMAT" value="30"/>
           <Constant key="Parameter_3388" name="KmmtpNADHMAT" value="50"/>
           <Constant key="Parameter_3387" name="KmmtpNADMAT" value="60"/>
-          <Constant key="Parameter_3386" name="Vmtp" value="0.993008"/>
+          <Constant key="Parameter_3386" name="Vmtp" value="0.1"/>
           <Constant key="Parameter_3385" name="sfmtpC12" value="0.81"/>
         </ListOfConstants>
         <KineticLaw function="Function_93" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
@@ -19785,7 +19794,7 @@
           <Constant key="Parameter_3370" name="KmmtpCoAMAT" value="30"/>
           <Constant key="Parameter_3369" name="KmmtpNADHMAT" value="50"/>
           <Constant key="Parameter_3368" name="KmmtpNADMAT" value="60"/>
-          <Constant key="Parameter_3367" name="Vmtp" value="0.993008"/>
+          <Constant key="Parameter_3367" name="Vmtp" value="0.1"/>
           <Constant key="Parameter_3366" name="sfmtpC10" value="0.73"/>
         </ListOfConstants>
         <KineticLaw function="Function_95" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
@@ -19942,7 +19951,7 @@
           <Constant key="Parameter_3351" name="KmmtpCoAMAT" value="30"/>
           <Constant key="Parameter_3350" name="KmmtpNADHMAT" value="50"/>
           <Constant key="Parameter_3349" name="KmmtpNADMAT" value="60"/>
-          <Constant key="Parameter_3348" name="Vmtp" value="0.993008"/>
+          <Constant key="Parameter_3348" name="Vmtp" value="0.1"/>
           <Constant key="Parameter_3347" name="sfmtpC8" value="0.34"/>
         </ListOfConstants>
         <KineticLaw function="Function_79" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
@@ -20199,7 +20208,7 @@
           <Modifier metabolite="Metabolite_92" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_3340" name="parameter_1" value="0.019026"/>
+          <Constant key="Parameter_3340" name="parameter_1" value="0.2"/>
           <Constant key="Parameter_3339" name="parameter_10" value="1.08"/>
           <Constant key="Parameter_3338" name="parameter_11" value="1.08"/>
           <Constant key="Parameter_3337" name="parameter_12" value="1.08"/>
@@ -20351,7 +20360,7 @@
           <Modifier metabolite="Metabolite_92" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_3323" name="parameter_1" value="0.019026"/>
+          <Constant key="Parameter_3323" name="parameter_1" value="0.2"/>
           <Constant key="Parameter_3322" name="parameter_10" value="1.08"/>
           <Constant key="Parameter_3321" name="parameter_11" value="1.08"/>
           <Constant key="Parameter_3320" name="parameter_12" value="1.08"/>
@@ -20503,7 +20512,7 @@
           <Modifier metabolite="Metabolite_92" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_3306" name="parameter_1" value="0.019026"/>
+          <Constant key="Parameter_3306" name="parameter_1" value="0.2"/>
           <Constant key="Parameter_3305" name="parameter_10" value="1.08"/>
           <Constant key="Parameter_3304" name="parameter_11" value="1.08"/>
           <Constant key="Parameter_3303" name="parameter_12" value="1.08"/>
@@ -20655,7 +20664,7 @@
           <Modifier metabolite="Metabolite_92" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_3289" name="parameter_1" value="0.019026"/>
+          <Constant key="Parameter_3289" name="parameter_1" value="0.2"/>
           <Constant key="Parameter_3288" name="parameter_10" value="1.08"/>
           <Constant key="Parameter_3287" name="parameter_11" value="1.08"/>
           <Constant key="Parameter_3286" name="parameter_12" value="1.08"/>
@@ -20807,7 +20816,7 @@
           <Modifier metabolite="Metabolite_92" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_3272" name="parameter_1" value="0.019026"/>
+          <Constant key="Parameter_3272" name="parameter_1" value="0.2"/>
           <Constant key="Parameter_3271" name="parameter_10" value="1.08"/>
           <Constant key="Parameter_3270" name="parameter_11" value="1.08"/>
           <Constant key="Parameter_3269" name="parameter_12" value="1.08"/>
@@ -20959,7 +20968,7 @@
           <Modifier metabolite="Metabolite_87" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_3255" name="parameter_1" value="0.019026"/>
+          <Constant key="Parameter_3255" name="parameter_1" value="0.2"/>
           <Constant key="Parameter_3254" name="parameter_10" value="1.08"/>
           <Constant key="Parameter_3253" name="parameter_11" value="1.08"/>
           <Constant key="Parameter_3252" name="parameter_12" value="1.08"/>
@@ -21126,7 +21135,7 @@
           <Constant key="Parameter_3228" name="KmmcadC8EnoylCoAMAT" value="1.08"/>
           <Constant key="Parameter_3227" name="KmmcadFAD" value="0.100638"/>
           <Constant key="Parameter_3226" name="KmmcadFADH" value="24.2"/>
-          <Constant key="Parameter_3225" name="Vmcad" value="0.01346"/>
+          <Constant key="Parameter_3225" name="Vmcad" value="0.001"/>
           <Constant key="Parameter_3224" name="parameter_17" value="24.393"/>
           <Constant key="Parameter_3223" name="parameter_18" value="5"/>
           <Constant key="Parameter_3222" name="parameter_19" value="1.08"/>
@@ -21294,7 +21303,7 @@
           <Constant key="Parameter_3209" name="KmmcadC8EnoylCoAMAT" value="1.08"/>
           <Constant key="Parameter_3208" name="KmmcadFAD" value="0.100638"/>
           <Constant key="Parameter_3207" name="KmmcadFADH" value="24.2"/>
-          <Constant key="Parameter_3206" name="Vmcad" value="0.01346"/>
+          <Constant key="Parameter_3206" name="Vmcad" value="0.001"/>
           <Constant key="Parameter_3205" name="parameter_17" value="24.393"/>
           <Constant key="Parameter_3204" name="parameter_18" value="5"/>
           <Constant key="Parameter_3203" name="parameter_19" value="1.08"/>
@@ -21462,7 +21471,7 @@
           <Constant key="Parameter_3190" name="KmmcadC8EnoylCoAMAT" value="1.08"/>
           <Constant key="Parameter_3189" name="KmmcadFAD" value="0.100638"/>
           <Constant key="Parameter_3188" name="KmmcadFADH" value="24.2"/>
-          <Constant key="Parameter_3187" name="Vmcad" value="0.01346"/>
+          <Constant key="Parameter_3187" name="Vmcad" value="0.001"/>
           <Constant key="Parameter_3186" name="parameter_17" value="24.393"/>
           <Constant key="Parameter_3185" name="parameter_18" value="5"/>
           <Constant key="Parameter_3184" name="parameter_19" value="1.08"/>
@@ -21630,7 +21639,7 @@
           <Constant key="Parameter_3171" name="KmmcadC8EnoylCoAMAT" value="1.08"/>
           <Constant key="Parameter_3170" name="KmmcadFAD" value="0.100638"/>
           <Constant key="Parameter_3169" name="KmmcadFADH" value="24.2"/>
-          <Constant key="Parameter_3168" name="Vmcad" value="0.01346"/>
+          <Constant key="Parameter_3168" name="Vmcad" value="0.001"/>
           <Constant key="Parameter_3167" name="parameter_17" value="24.393"/>
           <Constant key="Parameter_3166" name="parameter_18" value="5"/>
           <Constant key="Parameter_3165" name="parameter_19" value="1.08"/>
@@ -21798,7 +21807,7 @@
           <Constant key="Parameter_3152" name="KmmcadC8EnoylCoAMAT" value="1.08"/>
           <Constant key="Parameter_3151" name="KmmcadFAD" value="0.100638"/>
           <Constant key="Parameter_3150" name="KmmcadFADH" value="24.2"/>
-          <Constant key="Parameter_3149" name="Vmcad" value="0.01346"/>
+          <Constant key="Parameter_3149" name="Vmcad" value="0.001"/>
           <Constant key="Parameter_3148" name="parameter_17" value="24.393"/>
           <Constant key="Parameter_3147" name="parameter_18" value="5"/>
           <Constant key="Parameter_3146" name="parameter_19" value="1.08"/>
@@ -21966,7 +21975,7 @@
           <Constant key="Parameter_3133" name="KmmcadC8EnoylCoAMAT" value="1.08"/>
           <Constant key="Parameter_3132" name="KmmcadFAD" value="0.100638"/>
           <Constant key="Parameter_3131" name="KmmcadFADH" value="24.2"/>
-          <Constant key="Parameter_3130" name="Vmcad" value="0.01346"/>
+          <Constant key="Parameter_3130" name="Vmcad" value="0.001"/>
           <Constant key="Parameter_3129" name="parameter_17" value="24.393"/>
           <Constant key="Parameter_3128" name="parameter_18" value="5"/>
           <Constant key="Parameter_3127" name="parameter_19" value="1.08"/>
@@ -22134,7 +22143,7 @@
           <Constant key="Parameter_3114" name="KmmcadC8EnoylCoAMAT" value="1.08"/>
           <Constant key="Parameter_3113" name="KmmcadFAD" value="0.100638"/>
           <Constant key="Parameter_3112" name="KmmcadFADH" value="24.2"/>
-          <Constant key="Parameter_3111" name="Vmcad" value="0.01346"/>
+          <Constant key="Parameter_3111" name="Vmcad" value="0.001"/>
           <Constant key="Parameter_3110" name="parameter_17" value="24.393"/>
           <Constant key="Parameter_3109" name="parameter_18" value="5"/>
           <Constant key="Parameter_3108" name="parameter_19" value="1.08"/>
@@ -22267,112 +22276,112 @@
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]" value="1.7999999999999999e-06" type="Compartment" simulationType="fixed"/>
         </ModelParameterGroup>
         <ModelParameterGroup cn="String=Initial Species Values" type="Group">
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VCYT],Vector=Metabolites[C16AcylCarCYT]" value="571755703680.57434" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VCYT],Vector=Metabolites[C14AcylCarCYT]" value="250813689185.88602" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VCYT],Vector=Metabolites[C12AcylCarCYT]" value="403902129745.50574" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VCYT],Vector=Metabolites[C10AcylCarCYT]" value="512036686090.46405" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VCYT],Vector=Metabolites[C8AcylCarCYT]" value="472594790347.28528" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VCYT],Vector=Metabolites[C6AcylCarCYT]" value="239834660655.89148" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VCYT],Vector=Metabolites[C4AcylCarCYT]" value="451405738120.89667" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VCYT],Vector=Metabolites[C16AcylCoACYT]" value="33121774713500" type="Species" simulationType="fixed"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VCYT],Vector=Metabolites[C16AcylCarCYT]" value="5299483954160" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VCYT],Vector=Metabolites[C14AcylCarCYT]" value="2649741977079.9995" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VCYT],Vector=Metabolites[C12AcylCarCYT]" value="3974612965620" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VCYT],Vector=Metabolites[C10AcylCarCYT]" value="5299483954160" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VCYT],Vector=Metabolites[C8AcylCarCYT]" value="4637048459890.002" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VCYT],Vector=Metabolites[C6AcylCarCYT]" value="2649741977079.9995" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VCYT],Vector=Metabolites[C4AcylCarCYT]" value="3974612965620" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VCYT],Vector=Metabolites[C16AcylCoACYT]" value="3408106405744.9937" type="Species" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VCYT],Vector=Metabolites[CarCYT]" value="264974197708000" type="Species" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VCYT],Vector=Metabolites[CoACYT]" value="185481938395600" type="Species" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VCYT],Vector=Metabolites[MalCoACYT]" value="0" type="Species" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C16AcylCarMAT]" value="2149616697089.533" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C16AcylCoAMAT]" value="22300938486237.953" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C16EnoylCoAMAT]" value="261056488308.17145" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C16HydroxyacylCoAMAT]" value="817106808404.57666" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C16KetoacylCoAMAT]" value="2710846978.2458925" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C14AcylCarMAT]" value="974753201154.2395" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C14AcylCoAMAT]" value="10609579022488.049" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C14EnoylCoAMAT]" value="286469638490.09393" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C14HydroxyacylCoAMAT]" value="640658555741.552" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C14KetoacylCoAMAT]" value="2117120152.2274504" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C12AcylCarMAT]" value="1569710549692.762" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C12AcylCoAMAT]" value="17085317698549.711" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C12EnoylCoAMAT]" value="310937962440.75867" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C12HydroxyacylCoAMAT]" value="854756724814.21106" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C12KetoacylCoAMAT]" value="2789629400.565515" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C10AcylCarMAT]" value="1989960757306.1235" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C10AcylCoAMAT]" value="21659478400572.84" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C10EnoylCoAMAT]" value="340313535751.47107" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C10HydroxyacylCoAMAT]" value="959122343430.39783" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C10KetoacylCoAMAT]" value="3094905519.1900506" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C8AcylCarMAT]" value="1836675207940.5879" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C8AcylCoAMAT]" value="19991061054445.23" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C8EnoylCoAMAT]" value="684655902388.39783" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C8HydroxyacylCoAMAT]" value="2036248876432.1523" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C8KetoacylCoAMAT]" value="6550322337.8803473" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C6AcylCarMAT]" value="932084703912.6698" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C6AcylCoAMAT]" value="10145159113203.117" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C6EnoylCoAMAT]" value="11350281196984.744" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C6HydroxyacylCoAMAT]" value="34769310223433.062" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C6KetoacylCoAMAT]" value="112098814161.14354" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C4AcylCarMAT]" value="1754326845878.9409" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C4AcylCoAMAT]" value="19094750630810.879" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C4EnoylCoAMAT]" value="42217100862597.961" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C4HydroxyacylCoAMAT]" value="131134136842016.03" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C4AcetoacylCoAMAT]" value="423188441376.85889" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[AcetylCoAMAT]" value="22916967969795.77" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[FADHMAT]" value="466328332519.92334" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VCYT],Vector=Metabolites[MalCoACYT]" value="3645056172939.7939" type="Species" simulationType="fixed"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C16AcylCarMAT]" value="21679707085200" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C16AcylCoAMAT]" value="216797070851999.88" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C16EnoylCoAMAT]" value="2167970708519.9998" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C16HydroxyacylCoAMAT]" value="8671882834080" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C16KetoacylCoAMAT]" value="27099633856.49976" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C14AcylCarMAT]" value="9755868188340" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C14AcylCoAMAT]" value="1083985354260.0002" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C14EnoylCoAMAT]" value="3251956062780" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C14HydroxyacylCoAMAT]" value="6503912125560" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C14KetoacylCoAMAT]" value="21679707085.19976" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C12AcylCarMAT]" value="16259780313900" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C12AcylCoAMAT]" value="162597803139000" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C12EnoylCoAMAT]" value="32519560627.80024" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C12HydroxyacylCoAMAT]" value="8671882834080" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C12KetoacylCoAMAT]" value="32519560627.799759" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C10AcylCarMAT]" value="21679707085200" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C10AcylCoAMAT]" value="2167970708520" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C10EnoylCoAMAT]" value="3251956062780" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C10HydroxyacylCoAMAT]" value="10839853542600" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C10KetoacylCoAMAT]" value="32519560627.799759" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C8AcylCarMAT]" value="18427751022420" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C8AcylCoAMAT]" value="216797070851999.88" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C8EnoylCoAMAT]" value="6503912125560" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C8HydroxyacylCoAMAT]" value="21679707085200" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C8KetoacylCoAMAT]" value="650391212.5562402" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C6AcylCarMAT]" value="10839853542600" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C6AcylCoAMAT]" value="108398535425999.94" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C6EnoylCoAMAT]" value="108398535425999.94" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C6HydroxyacylCoAMAT]" value="325195606278000" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C6KetoacylCoAMAT]" value="1083985354259.9998" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C4AcylCarMAT]" value="17343765668160" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C4AcylCoAMAT]" value="184277510224200" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C4EnoylCoAMAT]" value="433594141703999.75" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C4HydroxyacylCoAMAT]" value="1300782425112000" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C4AcetoacylCoAMAT]" value="4335941417040" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[AcetylCoAMAT]" value="216797070851999.88" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[FADHMAT]" value="466328332519.92285" type="Species" simulationType="reactions"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[NADHMAT]" value="16637224015341.311" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[CoAMAT]" value="5048908812882736" type="Species" simulationType="assignment"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[CarMAT]" value="1029786086547001" type="Species" simulationType="fixed"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[CoAMAT]" value="2065929096805522.8" type="Species" simulationType="assignment"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[CarMAT]" value="542072168141354.44" type="Species" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[FADtMAT]" value="834668722780.19922" type="Species" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[NADtMAT]" value="270996338565000" type="Species" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[CoAMATt]" value="5419926771300000" type="Species" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VCYT\[merge\]],Vector=Metabolites[C14AcylCarCYT]" value="250813689185.88599" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VCYT\[merge\]],Vector=Metabolites[C12AcylCarCYT]" value="403902129745.50592" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VCYT\[merge\]],Vector=Metabolites[C10AcylCarCYT]" value="512036686090.46436" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VCYT\[merge\]],Vector=Metabolites[C16AcylCarCYT]" value="571755703680.57471" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VCYT\[merge\]],Vector=Metabolites[C8AcylCarCYT]" value="472594790347.28546" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VCYT\[merge\]],Vector=Metabolites[C6AcylCarCYT]" value="239834660655.89157" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VCYT\[merge\]],Vector=Metabolites[C4AcylCarCYT]" value="451405738120.89722" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VCYT\[merge\]],Vector=Metabolites[C16AcylCoACYT]" value="33121774713500" type="Species" simulationType="fixed"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VCYT\[merge\]],Vector=Metabolites[C14AcylCarCYT]" value="2649741977079.9995" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VCYT\[merge\]],Vector=Metabolites[C12AcylCarCYT]" value="3974612965620" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VCYT\[merge\]],Vector=Metabolites[C10AcylCarCYT]" value="5299483954160" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VCYT\[merge\]],Vector=Metabolites[C16AcylCarCYT]" value="5299483954160" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VCYT\[merge\]],Vector=Metabolites[C8AcylCarCYT]" value="4637048459890.002" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VCYT\[merge\]],Vector=Metabolites[C6AcylCarCYT]" value="2649741977079.9995" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VCYT\[merge\]],Vector=Metabolites[C4AcylCarCYT]" value="4504561361036" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VCYT\[merge\]],Vector=Metabolites[C16AcylCoACYT]" value="3615753301332.0986" type="Species" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VCYT\[merge\]],Vector=Metabolites[CarCYT]" value="264974197708000" type="Species" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VCYT\[merge\]],Vector=Metabolites[CoACYT]" value="185481938395600" type="Species" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VCYT\[merge\]],Vector=Metabolites[MalCoACYT]" value="0" type="Species" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C16AcylCarMAT]" value="2149616697089.5339" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C16AcylCoAMAT]" value="22300938486237.965" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C16EnoylCoAMAT]" value="261056488308.17154" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C16HydroxyacylCoAMAT]" value="817106808404.57678" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C16KetoacylCoAMAT]" value="2710846978.2458935" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C14AcylCarMAT]" value="974753201154.23975" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C14AcylCoAMAT]" value="10609579022488.051" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C14EnoylCoAMAT]" value="286469638490.09412" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C14HydroxyacylCoAMAT]" value="640658555741.55249" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C14KetoacylCoAMAT]" value="2117120152.2274508" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C12AcylCarMAT]" value="1569710549692.7629" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C12AcylCoAMAT]" value="17085317698549.719" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C12EnoylCoAMAT]" value="310937962440.75879" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C12HydroxyacylCoAMAT]" value="854756724814.21118" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C12KetoacylCoAMAT]" value="2789629400.565516" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C10AcylCarMAT]" value="1989960757306.1245" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C10AcylCoAMAT]" value="21659478400572.848" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C10EnoylCoAMAT]" value="340313535751.47131" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C10HydroxyacylCoAMAT]" value="959122343430.39856" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C10KetoacylCoAMAT]" value="3094905519.1900539" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C8AcylCarMAT]" value="1836675207940.5881" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C8AcylCoAMAT]" value="19991061054445.234" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C8EnoylCoAMAT]" value="684655902388.39795" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C8HydroxyacylCoAMAT]" value="2036248876432.1526" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C8KetoacylCoAMAT]" value="6550322337.8803482" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C6AcylCarMAT]" value="932084703912.67041" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C6AcylCoAMAT]" value="10145159113203.125" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C6EnoylCoAMAT]" value="11350281196984.748" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C6HydroxyacylCoAMAT]" value="34769310223433.07" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C6KetoacylCoAMAT]" value="112098814161.1436" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C4AcylCarMAT]" value="1754326845878.9426" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C4AcylCoAMAT]" value="19094750630810.895" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C4EnoylCoAMAT]" value="42217100862597.984" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C4HydroxyacylCoAMAT]" value="131134136842016.12" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C4AcetoacylCoAMAT]" value="423188441376.85913" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[AcetylCoAMAT]" value="22916967969795.77" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[FADHMAT]" value="466328332519.92334" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VCYT\[merge\]],Vector=Metabolites[MalCoACYT]" value="4954444752351.8877" type="Species" simulationType="fixed"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C16AcylCarMAT]" value="21679707085200" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C16AcylCoAMAT]" value="2167970708520" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C16EnoylCoAMAT]" value="2601564850223.999" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C16HydroxyacylCoAMAT]" value="8129890156950" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C16KetoacylCoAMAT]" value="32519560627.799759" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C14AcylCarMAT]" value="9755868188340" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C14AcylCoAMAT]" value="108398535425999.94" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C14EnoylCoAMAT]" value="3251956062780" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C14HydroxyacylCoAMAT]" value="6503912125560" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C14KetoacylCoAMAT]" value="21679707085.19976" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C12AcylCarMAT]" value="15175794959640" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C12AcylCoAMAT]" value="162597803139000" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C12EnoylCoAMAT]" value="3251956062780" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C12HydroxyacylCoAMAT]" value="8671882834080" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C12KetoacylCoAMAT]" value="32519560627.799759" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C10AcylCarMAT]" value="21679707085200" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C10AcylCoAMAT]" value="216797070851999.88" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C10EnoylCoAMAT]" value="3251956062780" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C10HydroxyacylCoAMAT]" value="9755868188340" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C10KetoacylCoAMAT]" value="3251956062.7797575" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C8AcylCarMAT]" value="18427751022420" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C8AcylCoAMAT]" value="195117363766799.97" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C8EnoylCoAMAT]" value="6503912125560" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C8HydroxyacylCoAMAT]" value="21679707085200" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C8KetoacylCoAMAT]" value="65039121255.599754" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C6AcylCarMAT]" value="9755868188340" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C6AcylCoAMAT]" value="108398535425999.94" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C6EnoylCoAMAT]" value="108398535425999.94" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C6HydroxyacylCoAMAT]" value="325195606278000" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C6KetoacylCoAMAT]" value="1083985354259.9998" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C4AcylCarMAT]" value="17343765668160" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C4AcylCoAMAT]" value="184277510224200" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C4EnoylCoAMAT]" value="433594141703999.75" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C4HydroxyacylCoAMAT]" value="1300782425112000" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C4AcetoacylCoAMAT]" value="4335941417040" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[AcetylCoAMAT]" value="216797070851999.88" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[FADHMAT]" value="466328332519.92285" type="Species" simulationType="reactions"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[NADHMAT]" value="16637224015341.311" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[CoAMAT]" value="5048908812882736" type="Species" simulationType="assignment"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[CoAMAT]" value="2065929096805522.8" type="Species" simulationType="assignment"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[NADtMAT]" value="270996338565000" type="Species" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[CarMAT]" value="1029786086547001" type="Species" simulationType="fixed"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[CarMAT]" value="826779938307135.5" type="Species" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[FADtMAT]" value="834668722780.19922" type="Species" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[CoAMATt]" value="5419926771300000" type="Species" simulationType="fixed"/>
         </ModelParameterGroup>
@@ -22383,7 +22392,7 @@
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmcactCarCYT]" value="130" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KicactCarCYT]" value="200" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[Keqcact]" value="1" type="ModelValue" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[Vcpt2]" value="1.9550000000000001" type="ModelValue" simulationType="fixed"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[Vcpt2]" value="0.20705588600840633" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[Kmcpt2C16AcylCarMAT]" value="51" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[Kmcpt2C14AcylCarMAT]" value="51" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[Kmcpt2C12AcylCarMAT]" value="51" type="ModelValue" simulationType="fixed"/>
@@ -22401,7 +22410,7 @@
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[Kmcpt2C4AcylCoAMAT]" value="1000000" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[Kmcpt2CarMAT]" value="350" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[Keqcpt2]" value="2.2200000000000002" type="ModelValue" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[Vmcad]" value="0.01346" type="ModelValue" simulationType="fixed"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[Vmcad]" value="0.0010389604674948998" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmmcadC12AcylCoAMAT]" value="18.600000000000001" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmmcadC10AcylCoAMAT]" value="16.709200466412302" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmmcadC8AcylCoAMAT]" value="15.764386056472199" type="ModelValue" simulationType="fixed"/>
@@ -22415,7 +22424,7 @@
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmmcadC4EnoylCoAMAT]" value="1.0800000000000001" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmmcadFADH]" value="24.199999999999999" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[Keqmcad]" value="6" type="ModelValue" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[Vscad]" value="0.103914234378486" type="ModelValue" simulationType="fixed"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[Vscad]" value="0.0086759802026698772" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmscadC6AcylCoAMAT]" value="16.949999999999999" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmscadC4AcylCoAMAT]" value="18.146026595526401" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmscadFAD]" value="0.100637854138809" type="ModelValue" simulationType="assignment"/>
@@ -22423,7 +22432,7 @@
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmscadC4EnoylCoAMAT]" value="1.0800000000000001" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmscadFADH]" value="24.199999999999999" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[Keqscad]" value="6" type="ModelValue" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[Vcrot]" value="0.71999999999999997" type="ModelValue" simulationType="fixed"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[Vcrot]" value="1.2541192663271001" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmcrotC16EnoylCoAMAT]" value="150" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmcrotC14EnoylCoAMAT]" value="100" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmcrotC12EnoylCoAMAT]" value="25" type="ModelValue" simulationType="fixed"/>
@@ -22440,7 +22449,7 @@
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmcrotC4HydroxyacylCoAMAT]" value="45" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KicrotC4AcetoacylCoA]" value="1.6000000000000001" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[Keqcrot]" value="3.1299999999999999" type="ModelValue" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[Vmschad]" value="0.27487408626436199" type="ModelValue" simulationType="fixed"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[Vmschad]" value="2.7338291305880928" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmmschadC16HydroxyacylCoAMAT]" value="1.5" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmmschadC14HydroxyacylCoAMAT]" value="1.8" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmmschadC12HydroxyacylCoAMAT]" value="3.7000000000000002" type="ModelValue" simulationType="fixed"/>
@@ -22458,7 +22467,7 @@
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmmschadC4AcetoacylCoAMAT]" value="16.899999999999999" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmmschadNADHMAT]" value="5.4000000000000004" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[Keqmschad]" value="0.00021699999999999999" type="ModelValue" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[Vmckat]" value="0.39321499685699002" type="ModelValue" simulationType="fixed"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[Vmckat]" value="2.2387007732160331" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmmckatC16KetoacylCoAMAT]" value="1.1000000000000001" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmmckatC14KetoacylCoAMAT]" value="1.2" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmmckatC12KetoacylCoAMAT]" value="1.3" type="ModelValue" simulationType="fixed"/>
@@ -22476,7 +22485,7 @@
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmmckatC4AcylCoAMAT]" value="16.113640503993899" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmmckatAcetylCoAMAT]" value="68.110329096596402" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[Keqmckat]" value="1051" type="ModelValue" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[Vmtp]" value="0.99300769303528902" type="ModelValue" simulationType="fixed"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[Vmtp]" value="0.10001410207018814" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmmtpC16EnoylCoAMAT]" value="25" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmmtpC14EnoylCoAMAT]" value="25" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmmtpC12EnoylCoAMAT]" value="25" type="ModelValue" simulationType="fixed"/>
@@ -22493,7 +22502,7 @@
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmmtpNADHMAT]" value="50" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmmtpAcetylCoAMAT]" value="30" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[Keqmtp]" value="0.70999999999999996" type="ModelValue" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[Vvlcad]" value="0.019026013444632599" type="ModelValue" simulationType="fixed"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[Vvlcad]" value="0.16655216876026488" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmvlcadC16AcylCoAMAT]" value="8.7160272693415806" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmvlcadC14AcylCoAMAT]" value="5" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmvlcadC12AcylCoAMAT]" value="14" type="ModelValue" simulationType="fixed"/>
@@ -22536,7 +22545,7 @@
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[Kmcpt2C8AcylCoAMAT\[merge\]]" value="38" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[Kmcpt2CarMAT\[merge\]]" value="350" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[Kmcpt2CoAMAT\[merge\]]" value="30" type="ModelValue" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[Vcpt2\[merge\]]" value="1.9550000000000001" type="ModelValue" simulationType="fixed"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[Vcpt2\[merge\]]" value="0.20000000000000023" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[Keqscad\[merge\]]" value="6" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmscadC4AcylCoAMAT\[merge\]]" value="18.146026595526401" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmscadC4EnoylCoAMAT\[merge\]]" value="1.0800000000000001" type="ModelValue" simulationType="fixed"/>
@@ -22544,7 +22553,7 @@
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmscadC6EnoylCoAMAT\[merge\]]" value="1.0800000000000001" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmscadFAD\[merge\]]" value="0.100637854138809" type="ModelValue" simulationType="assignment"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmscadFADH\[merge\]]" value="24.199999999999999" type="ModelValue" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[Vscad\[merge\]]" value="0.103914234378486" type="ModelValue" simulationType="fixed"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[Vscad\[merge\]]" value="0.0042941021209047577" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[Keqcrot\[merge\]]" value="3.1299999999999999" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KicrotC4AcetoacylCoA\[merge\]]" value="1.6000000000000001" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmcrotC10EnoylCoAMAT\[merge\]]" value="25" type="ModelValue" simulationType="fixed"/>
@@ -22561,7 +22570,7 @@
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmcrotC6HydroxyacylCoAMAT\[merge\]]" value="45" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmcrotC8EnoylCoAMAT\[merge\]]" value="25" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmcrotC8HydroxyacylCoAMAT\[merge\]]" value="45" type="ModelValue" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[Vcrot\[merge\]]" value="0.71999999999999997" type="ModelValue" simulationType="fixed"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[Vcrot\[merge\]]" value="7" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[Keqmschad\[merge\]]" value="0.00021699999999999999" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmmschadC10HydroxyacylCoAMAT\[merge\]]" value="8.8000000000000007" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmmschadC10KetoacylCoAMAT\[merge\]]" value="2.2999999999999998" type="ModelValue" simulationType="fixed"/>
@@ -22579,7 +22588,7 @@
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmmschadC8KetoacylCoAMAT\[merge\]]" value="4.0999999999999996" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmmschadNADHMAT\[merge\]]" value="5.4000000000000004" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmmschadNADMAT\[merge\]]" value="58.5" type="ModelValue" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[Vmschad\[merge\]]" value="0.27487408626436199" type="ModelValue" simulationType="fixed"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[Vmschad\[merge\]]" value="0.064915193907033611" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[Keqmckat\[merge\]]" value="1051" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmmckatAcetylCoAMAT\[merge\]]" value="68.110329096596402" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmmckatC10AcylCoAMAT\[merge\]]" value="25.370239233996401" type="ModelValue" simulationType="fixed"/>
@@ -22597,7 +22606,7 @@
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmmckatC8AcylCoAMAT\[merge\]]" value="23.4696174554207" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmmckatC8KetoacylCoAMAT\[merge\]]" value="3.2000000000000002" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmmckatCoAMAT\[merge\]]" value="26.600000000000001" type="ModelValue" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[Vmckat\[merge\]]" value="0.39321499685699002" type="ModelValue" simulationType="fixed"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[Vmckat\[merge\]]" value="4" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[Keqmtp\[merge\]]" value="0.70999999999999996" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmmtpAcetylCoAMAT\[merge\]]" value="30" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmmtpC10AcylCoAMAT\[merge\]]" value="13.83" type="ModelValue" simulationType="fixed"/>
@@ -22614,8 +22623,8 @@
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmmtpCoAMAT\[merge\]]" value="30" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmmtpNADHMAT\[merge\]]" value="50" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmmtpNADMAT\[merge\]]" value="60" type="ModelValue" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[Vmtp\[merge\]]" value="0.99300769303528902" type="ModelValue" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[Vvlcad\[merge\]]" value="0.019026013444632599" type="ModelValue" simulationType="fixed"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[Vmtp\[merge\]]" value="0.10000000000000023" type="ModelValue" simulationType="fixed"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[Vvlcad\[merge\]]" value="0.19999999999999979" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmvlcadC14EnoylCoAMAT\[merge\]]" value="1.0800000000000001" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmvlcadC12EnoylCoAMAT\[merge\]]" value="1.0800000000000001" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmvlcadC10EnoylCoAMAT\[merge\]]" value="1.0800000000000001" type="ModelValue" simulationType="fixed"/>
@@ -22644,33 +22653,33 @@
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmmcadC8EnoylCoAMAT\[merge\]]" value="1.0800000000000001" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmmcadFAD\[merge\]]" value="0.100637854138809" type="ModelValue" simulationType="assignment"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmmcadFADH\[merge\]]" value="24.199999999999999" type="ModelValue" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[Vmcad\[merge\]]" value="0.01346" type="ModelValue" simulationType="fixed"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[Vmcad\[merge\]]" value="0.0010000000000002221" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmmcadC16AcylCoAMAT\[merge\]]" value="24.392998868414701" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmmcadC14AcylCoAMAT\[merge\]]" value="5" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmmcadC16EnoylCoAMAT\[merge\]]" value="1.0800000000000001" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmmcadC14EnoylCoAMAT\[merge\]]" value="1.0800000000000001" type="ModelValue" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[C10AcylCoA_ratio]" value="0.50000000000000011" type="ModelValue" simulationType="assignment"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[C10EnoylCoA_ratio]" value="0.015468943376213146" type="ModelValue" simulationType="assignment"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[C10HydroxyacylCoA_ratio]" value="0.50000000000000022" type="ModelValue" simulationType="assignment"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[C12AcylCoA_ratio]" value="0.50000000000000011" type="ModelValue" simulationType="assignment"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[C12EnoylCoA_ratio]" value="0.50000000000000011" type="ModelValue" simulationType="assignment"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[C12HydroxyacylCoA_ratio]" value="0.50000000000000011" type="ModelValue" simulationType="assignment"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[C14AcylCoA_ratio]" value="0.50000000000000011" type="ModelValue" simulationType="assignment"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[C14EnoylCoA_ratio]" value="0.50000000000000022" type="ModelValue" simulationType="assignment"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[C14HydroxyacylCoA_ratio]" value="0.50000000000000022" type="ModelValue" simulationType="assignment"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[C16AcylCoA_ratio]" value="0.50000000000000022" type="ModelValue" simulationType="assignment"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[C16EnoylCoA_ratio]" value="0.50000000000000011" type="ModelValue" simulationType="assignment"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[C16HydroxyacylCoA_ratio]" value="0.50000000000000011" type="ModelValue" simulationType="assignment"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[C4AcylCoA_ratio]" value="0.50000000000000022" type="ModelValue" simulationType="assignment"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[C4EnoylCoA_ratio]" value="0.50000000000000022" type="ModelValue" simulationType="assignment"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[C4HodryxyacylCoA_ratio]" value="0.50000000000000022" type="ModelValue" simulationType="assignment"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[C6AcylCoA_ratio]" value="0.50000000000000022" type="ModelValue" simulationType="assignment"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[C6EnoylCoA_ratio]" value="0.5280320399673426" type="ModelValue" simulationType="assignment"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[C6HydroxyacylCoA_ratio]" value="0.50000000000000011" type="ModelValue" simulationType="assignment"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[C8AcylCoA_ratio]" value="0.50000000000000011" type="ModelValue" simulationType="assignment"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[C10AcylCoA_ratio]" value="0.99009900990099009" type="ModelValue" simulationType="assignment"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[C10EnoylCoA_ratio]" value="0.59999999999999998" type="ModelValue" simulationType="assignment"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[C10HydroxyacylCoA_ratio]" value="0.47368421052631576" type="ModelValue" simulationType="assignment"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[C12AcylCoA_ratio]" value="0.5" type="ModelValue" simulationType="assignment"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[C12EnoylCoA_ratio]" value="0.99009900990098998" type="ModelValue" simulationType="assignment"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[C12HydroxyacylCoA_ratio]" value="0.5" type="ModelValue" simulationType="assignment"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[C14AcylCoA_ratio]" value="0.99009900990099009" type="ModelValue" simulationType="assignment"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[C14EnoylCoA_ratio]" value="0.5" type="ModelValue" simulationType="assignment"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[C14HydroxyacylCoA_ratio]" value="0.5" type="ModelValue" simulationType="assignment"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[C16AcylCoA_ratio]" value="0.0099009900990099046" type="ModelValue" simulationType="assignment"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[C16EnoylCoA_ratio]" value="0.54545454545454541" type="ModelValue" simulationType="assignment"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[C16HydroxyacylCoA_ratio]" value="0.4838709677419355" type="ModelValue" simulationType="assignment"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[C4AcylCoA_ratio]" value="0.5" type="ModelValue" simulationType="assignment"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[C4EnoylCoA_ratio]" value="0.5" type="ModelValue" simulationType="assignment"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[C4HodryxyacylCoA_ratio]" value="0.5" type="ModelValue" simulationType="assignment"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[C6AcylCoA_ratio]" value="0.5" type="ModelValue" simulationType="assignment"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[C6EnoylCoA_ratio]" value="0.5" type="ModelValue" simulationType="assignment"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[C6HydroxyacylCoA_ratio]" value="0.5" type="ModelValue" simulationType="assignment"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[C8AcylCoA_ratio]" value="0.47368421052631587" type="ModelValue" simulationType="assignment"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[C8EnoylCoA_ratio]" value="0.5" type="ModelValue" simulationType="assignment"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[C8HydroxyacylCoA_ratio]" value="0.50000000000000011" type="ModelValue" simulationType="assignment"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[Car_ratio]" value="0.5" type="ModelValue" simulationType="assignment"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[C8HydroxyacylCoA_ratio]" value="0.5" type="ModelValue" simulationType="assignment"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[Car_ratio]" value="0.60399508055857853" type="ModelValue" simulationType="assignment"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[AcetylCoA_ratio]" value="0.5" type="ModelValue" simulationType="assignment"/>
         </ModelParameterGroup>
         <ModelParameterGroup cn="String=Kinetic Parameters" type="Group">
@@ -23017,7 +23026,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Kmcpt2CoAMAT],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vcpt2C16],ParameterGroup=Parameters,Parameter=Vcpt2" value="1.9550000000000001" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vcpt2C16],ParameterGroup=Parameters,Parameter=Vcpt2" value="0.20705588600840633" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vcpt2],Reference=InitialValue>
               </InitialExpression>
@@ -23105,7 +23114,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Kmcpt2CoAMAT],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vcpt2C14],ParameterGroup=Parameters,Parameter=Vcpt2" value="1.9550000000000001" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vcpt2C14],ParameterGroup=Parameters,Parameter=Vcpt2" value="0.20705588600840633" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vcpt2],Reference=InitialValue>
               </InitialExpression>
@@ -23198,7 +23207,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Kmcpt2CoAMAT],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vcpt2C12],ParameterGroup=Parameters,Parameter=Vcpt2" value="1.9550000000000001" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vcpt2C12],ParameterGroup=Parameters,Parameter=Vcpt2" value="0.20705588600840633" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vcpt2],Reference=InitialValue>
               </InitialExpression>
@@ -23291,7 +23300,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Kmcpt2CoAMAT],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vcpt2C10],ParameterGroup=Parameters,Parameter=Vcpt2" value="1.9550000000000001" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vcpt2C10],ParameterGroup=Parameters,Parameter=Vcpt2" value="0.20705588600840633" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vcpt2],Reference=InitialValue>
               </InitialExpression>
@@ -23384,7 +23393,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Kmcpt2CoAMAT],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vcpt2C8],ParameterGroup=Parameters,Parameter=Vcpt2" value="1.9550000000000001" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vcpt2C8],ParameterGroup=Parameters,Parameter=Vcpt2" value="0.20705588600840633" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vcpt2],Reference=InitialValue>
               </InitialExpression>
@@ -23477,7 +23486,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Kmcpt2CoAMAT],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vcpt2C6],ParameterGroup=Parameters,Parameter=Vcpt2" value="1.9550000000000001" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vcpt2C6],ParameterGroup=Parameters,Parameter=Vcpt2" value="0.20705588600840633" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vcpt2],Reference=InitialValue>
               </InitialExpression>
@@ -23570,7 +23579,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Kmcpt2CoAMAT],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vcpt2C4],ParameterGroup=Parameters,Parameter=Vcpt2" value="1.9550000000000001" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vcpt2C4],ParameterGroup=Parameters,Parameter=Vcpt2" value="0.20705588600840633" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vcpt2],Reference=InitialValue>
               </InitialExpression>
@@ -23613,7 +23622,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmscadFADH],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vscadC6],ParameterGroup=Parameters,Parameter=Vscad" value="0.103914234378486" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vscadC6],ParameterGroup=Parameters,Parameter=Vscad" value="0.0086759802026698772" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vscad],Reference=InitialValue>
               </InitialExpression>
@@ -23656,7 +23665,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmscadFADH],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vscadC4],ParameterGroup=Parameters,Parameter=Vscad" value="0.103914234378486" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vscadC4],ParameterGroup=Parameters,Parameter=Vscad" value="0.0086759802026698772" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vscad],Reference=InitialValue>
               </InitialExpression>
@@ -23744,7 +23753,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmcrotC8HydroxyacylCoAMAT],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vcrotC16],ParameterGroup=Parameters,Parameter=Vcrot" value="0.71999999999999997" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vcrotC16],ParameterGroup=Parameters,Parameter=Vcrot" value="1.2541192663271001" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vcrot],Reference=InitialValue>
               </InitialExpression>
@@ -23832,7 +23841,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmcrotC8HydroxyacylCoAMAT],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vcrotC14],ParameterGroup=Parameters,Parameter=Vcrot" value="0.71999999999999997" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vcrotC14],ParameterGroup=Parameters,Parameter=Vcrot" value="1.2541192663271001" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vcrot],Reference=InitialValue>
               </InitialExpression>
@@ -23920,7 +23929,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmcrotC8HydroxyacylCoAMAT],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vcrotC12],ParameterGroup=Parameters,Parameter=Vcrot" value="0.71999999999999997" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vcrotC12],ParameterGroup=Parameters,Parameter=Vcrot" value="1.2541192663271001" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vcrot],Reference=InitialValue>
               </InitialExpression>
@@ -24008,7 +24017,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmcrotC8HydroxyacylCoAMAT],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vcrotC10],ParameterGroup=Parameters,Parameter=Vcrot" value="0.71999999999999997" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vcrotC10],ParameterGroup=Parameters,Parameter=Vcrot" value="1.2541192663271001" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vcrot],Reference=InitialValue>
               </InitialExpression>
@@ -24096,7 +24105,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmcrotC8HydroxyacylCoAMAT],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vcrotC8],ParameterGroup=Parameters,Parameter=Vcrot" value="0.71999999999999997" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vcrotC8],ParameterGroup=Parameters,Parameter=Vcrot" value="1.2541192663271001" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vcrot],Reference=InitialValue>
               </InitialExpression>
@@ -24184,7 +24193,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmcrotC8HydroxyacylCoAMAT],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vcrotC6],ParameterGroup=Parameters,Parameter=Vcrot" value="0.71999999999999997" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vcrotC6],ParameterGroup=Parameters,Parameter=Vcrot" value="1.2541192663271001" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vcrot],Reference=InitialValue>
               </InitialExpression>
@@ -24272,7 +24281,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmcrotC8HydroxyacylCoAMAT],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vcrotC4],ParameterGroup=Parameters,Parameter=Vcrot" value="0.71999999999999997" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vcrotC4],ParameterGroup=Parameters,Parameter=Vcrot" value="1.2541192663271001" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vcrot],Reference=InitialValue>
               </InitialExpression>
@@ -24365,7 +24374,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmmschadNADMAT],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmschadC16],ParameterGroup=Parameters,Parameter=Vmschad" value="0.27487408626436199" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmschadC16],ParameterGroup=Parameters,Parameter=Vmschad" value="2.7338291305880928" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vmschad],Reference=InitialValue>
               </InitialExpression>
@@ -24458,7 +24467,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmmschadNADMAT],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmschadC14],ParameterGroup=Parameters,Parameter=Vmschad" value="0.27487408626436199" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmschadC14],ParameterGroup=Parameters,Parameter=Vmschad" value="2.7338291305880928" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vmschad],Reference=InitialValue>
               </InitialExpression>
@@ -24551,7 +24560,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmmschadNADMAT],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmschadC12],ParameterGroup=Parameters,Parameter=Vmschad" value="0.27487408626436199" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmschadC12],ParameterGroup=Parameters,Parameter=Vmschad" value="2.7338291305880928" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vmschad],Reference=InitialValue>
               </InitialExpression>
@@ -24644,7 +24653,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmmschadNADMAT],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmschadC10],ParameterGroup=Parameters,Parameter=Vmschad" value="0.27487408626436199" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmschadC10],ParameterGroup=Parameters,Parameter=Vmschad" value="2.7338291305880928" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vmschad],Reference=InitialValue>
               </InitialExpression>
@@ -24737,7 +24746,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmmschadNADMAT],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmschadC8],ParameterGroup=Parameters,Parameter=Vmschad" value="0.27487408626436199" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmschadC8],ParameterGroup=Parameters,Parameter=Vmschad" value="2.7338291305880928" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vmschad],Reference=InitialValue>
               </InitialExpression>
@@ -24830,7 +24839,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmmschadNADMAT],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmschadC6],ParameterGroup=Parameters,Parameter=Vmschad" value="0.27487408626436199" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmschadC6],ParameterGroup=Parameters,Parameter=Vmschad" value="2.7338291305880928" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vmschad],Reference=InitialValue>
               </InitialExpression>
@@ -24923,7 +24932,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmmschadNADMAT],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmschadC4],ParameterGroup=Parameters,Parameter=Vmschad" value="0.27487408626436199" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmschadC4],ParameterGroup=Parameters,Parameter=Vmschad" value="2.7338291305880928" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vmschad],Reference=InitialValue>
               </InitialExpression>
@@ -25016,7 +25025,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmmckatCoAMAT],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmckatC16],ParameterGroup=Parameters,Parameter=Vmckat" value="0.39321499685699002" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmckatC16],ParameterGroup=Parameters,Parameter=Vmckat" value="2.2387007732160331" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vmckat],Reference=InitialValue>
               </InitialExpression>
@@ -25109,7 +25118,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmmckatCoAMAT],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmckatC14],ParameterGroup=Parameters,Parameter=Vmckat" value="0.39321499685699002" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmckatC14],ParameterGroup=Parameters,Parameter=Vmckat" value="2.2387007732160331" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vmckat],Reference=InitialValue>
               </InitialExpression>
@@ -25202,7 +25211,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmmckatCoAMAT],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmckatC12],ParameterGroup=Parameters,Parameter=Vmckat" value="0.39321499685699002" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmckatC12],ParameterGroup=Parameters,Parameter=Vmckat" value="2.2387007732160331" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vmckat],Reference=InitialValue>
               </InitialExpression>
@@ -25295,7 +25304,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmmckatCoAMAT],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmckatC10],ParameterGroup=Parameters,Parameter=Vmckat" value="0.39321499685699002" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmckatC10],ParameterGroup=Parameters,Parameter=Vmckat" value="2.2387007732160331" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vmckat],Reference=InitialValue>
               </InitialExpression>
@@ -25388,7 +25397,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmmckatCoAMAT],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmckatC8],ParameterGroup=Parameters,Parameter=Vmckat" value="0.39321499685699002" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmckatC8],ParameterGroup=Parameters,Parameter=Vmckat" value="2.2387007732160331" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vmckat],Reference=InitialValue>
               </InitialExpression>
@@ -25481,7 +25490,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmmckatCoAMAT],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmckatC6],ParameterGroup=Parameters,Parameter=Vmckat" value="0.39321499685699002" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmckatC6],ParameterGroup=Parameters,Parameter=Vmckat" value="2.2387007732160331" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vmckat],Reference=InitialValue>
               </InitialExpression>
@@ -25574,7 +25583,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmmckatCoAMAT],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmckatC4],ParameterGroup=Parameters,Parameter=Vmckat" value="0.39321499685699002" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmckatC4],ParameterGroup=Parameters,Parameter=Vmckat" value="2.2387007732160331" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vmckat],Reference=InitialValue>
               </InitialExpression>
@@ -25667,7 +25676,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmmtpNADMAT],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmtpC16],ParameterGroup=Parameters,Parameter=Vmtp" value="0.99300769303528902" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmtpC16],ParameterGroup=Parameters,Parameter=Vmtp" value="0.10001410207018814" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vmtp],Reference=InitialValue>
               </InitialExpression>
@@ -25760,7 +25769,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmmtpNADMAT],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmtpC14],ParameterGroup=Parameters,Parameter=Vmtp" value="0.99300769303528902" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmtpC14],ParameterGroup=Parameters,Parameter=Vmtp" value="0.10001410207018814" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vmtp],Reference=InitialValue>
               </InitialExpression>
@@ -25853,7 +25862,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmmtpNADMAT],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmtpC12],ParameterGroup=Parameters,Parameter=Vmtp" value="0.99300769303528902" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmtpC12],ParameterGroup=Parameters,Parameter=Vmtp" value="0.10001410207018814" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vmtp],Reference=InitialValue>
               </InitialExpression>
@@ -25946,7 +25955,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmmtpNADMAT],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmtpC10],ParameterGroup=Parameters,Parameter=Vmtp" value="0.99300769303528902" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmtpC10],ParameterGroup=Parameters,Parameter=Vmtp" value="0.10001410207018814" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vmtp],Reference=InitialValue>
               </InitialExpression>
@@ -26039,7 +26048,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmmtpNADMAT],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmtpC8],ParameterGroup=Parameters,Parameter=Vmtp" value="0.99300769303528902" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmtpC8],ParameterGroup=Parameters,Parameter=Vmtp" value="0.10001410207018814" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vmtp],Reference=InitialValue>
               </InitialExpression>
@@ -26059,7 +26068,7 @@
           </ModelParameterGroup>
           <ModelParameterGroup cn="CN=Root,Model=vaneunen,Vector=Reactions[vvlcadC16]" type="Reaction">
             <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vvlcadC16],ParameterGroup=Parameters,Parameter=sfvlcadC16" value="0.51000000000000001" type="ReactionParameter" simulationType="fixed"/>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vvlcadC16],ParameterGroup=Parameters,Parameter=parameter_1" value="0.019026013444632599" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vvlcadC16],ParameterGroup=Parameters,Parameter=parameter_1" value="0.16655216876026488" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vvlcad],Reference=InitialValue>
               </InitialExpression>
@@ -26142,7 +26151,7 @@
           </ModelParameterGroup>
           <ModelParameterGroup cn="CN=Root,Model=vaneunen,Vector=Reactions[vvlcadC14]" type="Reaction">
             <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vvlcadC14],ParameterGroup=Parameters,Parameter=sfvlcadC14" value="0.56999999999999995" type="ReactionParameter" simulationType="fixed"/>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vvlcadC14],ParameterGroup=Parameters,Parameter=parameter_1" value="0.019026013444632599" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vvlcadC14],ParameterGroup=Parameters,Parameter=parameter_1" value="0.16655216876026488" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vvlcad],Reference=InitialValue>
               </InitialExpression>
@@ -26225,7 +26234,7 @@
           </ModelParameterGroup>
           <ModelParameterGroup cn="CN=Root,Model=vaneunen,Vector=Reactions[vvlcadC12]" type="Reaction">
             <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vvlcadC12],ParameterGroup=Parameters,Parameter=sfvlcadC12" value="1" type="ReactionParameter" simulationType="fixed"/>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vvlcadC12],ParameterGroup=Parameters,Parameter=parameter_1" value="0.019026013444632599" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vvlcadC12],ParameterGroup=Parameters,Parameter=parameter_1" value="0.16655216876026488" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vvlcad],Reference=InitialValue>
               </InitialExpression>
@@ -26308,7 +26317,7 @@
           </ModelParameterGroup>
           <ModelParameterGroup cn="CN=Root,Model=vaneunen,Vector=Reactions[vvlcadC10]" type="Reaction">
             <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vvlcadC10],ParameterGroup=Parameters,Parameter=sfvlcadC10" value="1" type="ReactionParameter" simulationType="fixed"/>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vvlcadC10],ParameterGroup=Parameters,Parameter=parameter_1" value="0.019026013444632599" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vvlcadC10],ParameterGroup=Parameters,Parameter=parameter_1" value="0.16655216876026488" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vvlcad],Reference=InitialValue>
               </InitialExpression>
@@ -26391,7 +26400,7 @@
           </ModelParameterGroup>
           <ModelParameterGroup cn="CN=Root,Model=vaneunen,Vector=Reactions[vvlcadC8]" type="Reaction">
             <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vvlcadC8],ParameterGroup=Parameters,Parameter=sfvlcadC8" value="0.64000000000000001" type="ReactionParameter" simulationType="fixed"/>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vvlcadC8],ParameterGroup=Parameters,Parameter=parameter_1" value="0.019026013444632599" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vvlcadC8],ParameterGroup=Parameters,Parameter=parameter_1" value="0.16655216876026488" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vvlcad],Reference=InitialValue>
               </InitialExpression>
@@ -26474,7 +26483,7 @@
           </ModelParameterGroup>
           <ModelParameterGroup cn="CN=Root,Model=vaneunen,Vector=Reactions[vvlcadC6]" type="Reaction">
             <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vvlcadC6],ParameterGroup=Parameters,Parameter=sfvlcadC6" value="0.54000000000000004" type="ReactionParameter" simulationType="fixed"/>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vvlcadC6],ParameterGroup=Parameters,Parameter=parameter_1" value="0.019026013444632599" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vvlcadC6],ParameterGroup=Parameters,Parameter=parameter_1" value="0.16655216876026488" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vvlcad],Reference=InitialValue>
               </InitialExpression>
@@ -26622,7 +26631,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmmcadFADH],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmcadC16],ParameterGroup=Parameters,Parameter=Vmcad" value="0.01346" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmcadC16],ParameterGroup=Parameters,Parameter=Vmcad" value="0.0010389604674948998" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vmcad],Reference=InitialValue>
               </InitialExpression>
@@ -26715,7 +26724,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmmcadFADH],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmcadC14],ParameterGroup=Parameters,Parameter=Vmcad" value="0.01346" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmcadC14],ParameterGroup=Parameters,Parameter=Vmcad" value="0.0010389604674948998" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vmcad],Reference=InitialValue>
               </InitialExpression>
@@ -26808,7 +26817,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmmcadFADH],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmcadC12],ParameterGroup=Parameters,Parameter=Vmcad" value="0.01346" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmcadC12],ParameterGroup=Parameters,Parameter=Vmcad" value="0.0010389604674948998" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vmcad],Reference=InitialValue>
               </InitialExpression>
@@ -26901,7 +26910,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmmcadFADH],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmcadC10],ParameterGroup=Parameters,Parameter=Vmcad" value="0.01346" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmcadC10],ParameterGroup=Parameters,Parameter=Vmcad" value="0.0010389604674948998" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vmcad],Reference=InitialValue>
               </InitialExpression>
@@ -26994,7 +27003,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmmcadFADH],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmcadC8],ParameterGroup=Parameters,Parameter=Vmcad" value="0.01346" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmcadC8],ParameterGroup=Parameters,Parameter=Vmcad" value="0.0010389604674948998" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vmcad],Reference=InitialValue>
               </InitialExpression>
@@ -27087,7 +27096,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmmcadFADH],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmcadC6],ParameterGroup=Parameters,Parameter=Vmcad" value="0.01346" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmcadC6],ParameterGroup=Parameters,Parameter=Vmcad" value="0.0010389604674948998" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vmcad],Reference=InitialValue>
               </InitialExpression>
@@ -27180,7 +27189,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmmcadFADH],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmcadC4],ParameterGroup=Parameters,Parameter=Vmcad" value="0.01346" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmcadC4],ParameterGroup=Parameters,Parameter=Vmcad" value="0.0010389604674948998" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vmcad],Reference=InitialValue>
               </InitialExpression>
@@ -27548,7 +27557,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Kmcpt2CoAMAT\[merge\]],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vcpt2C16\[merge\]],ParameterGroup=Parameters,Parameter=Vcpt2" value="1.9550000000000001" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vcpt2C16\[merge\]],ParameterGroup=Parameters,Parameter=Vcpt2" value="0.20000000000000023" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vcpt2\[merge\]],Reference=InitialValue>
               </InitialExpression>
@@ -27636,7 +27645,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Kmcpt2CoAMAT\[merge\]],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vcpt2C14\[merge\]],ParameterGroup=Parameters,Parameter=Vcpt2" value="1.9550000000000001" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vcpt2C14\[merge\]],ParameterGroup=Parameters,Parameter=Vcpt2" value="0.20000000000000023" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vcpt2\[merge\]],Reference=InitialValue>
               </InitialExpression>
@@ -27729,7 +27738,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Kmcpt2CoAMAT\[merge\]],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vcpt2C12\[merge\]],ParameterGroup=Parameters,Parameter=Vcpt2" value="1.9550000000000001" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vcpt2C12\[merge\]],ParameterGroup=Parameters,Parameter=Vcpt2" value="0.20000000000000023" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vcpt2\[merge\]],Reference=InitialValue>
               </InitialExpression>
@@ -27822,7 +27831,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Kmcpt2CoAMAT\[merge\]],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vcpt2C10\[merge\]],ParameterGroup=Parameters,Parameter=Vcpt2" value="1.9550000000000001" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vcpt2C10\[merge\]],ParameterGroup=Parameters,Parameter=Vcpt2" value="0.20000000000000023" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vcpt2\[merge\]],Reference=InitialValue>
               </InitialExpression>
@@ -27915,7 +27924,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Kmcpt2CoAMAT\[merge\]],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vcpt2C8\[merge\]],ParameterGroup=Parameters,Parameter=Vcpt2" value="1.9550000000000001" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vcpt2C8\[merge\]],ParameterGroup=Parameters,Parameter=Vcpt2" value="0.20000000000000023" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vcpt2\[merge\]],Reference=InitialValue>
               </InitialExpression>
@@ -28008,7 +28017,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Kmcpt2CoAMAT\[merge\]],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vcpt2C6\[merge\]],ParameterGroup=Parameters,Parameter=Vcpt2" value="1.9550000000000001" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vcpt2C6\[merge\]],ParameterGroup=Parameters,Parameter=Vcpt2" value="0.20000000000000023" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vcpt2\[merge\]],Reference=InitialValue>
               </InitialExpression>
@@ -28101,7 +28110,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Kmcpt2CoAMAT\[merge\]],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vcpt2C4\[merge\]],ParameterGroup=Parameters,Parameter=Vcpt2" value="1.9550000000000001" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vcpt2C4\[merge\]],ParameterGroup=Parameters,Parameter=Vcpt2" value="0.20000000000000023" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vcpt2\[merge\]],Reference=InitialValue>
               </InitialExpression>
@@ -28144,7 +28153,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmscadFADH\[merge\]],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vscadC6\[merge\]],ParameterGroup=Parameters,Parameter=Vscad" value="0.103914234378486" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vscadC6\[merge\]],ParameterGroup=Parameters,Parameter=Vscad" value="0.0042941021209047577" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vscad\[merge\]],Reference=InitialValue>
               </InitialExpression>
@@ -28187,7 +28196,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmscadFADH\[merge\]],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vscadC4\[merge\]],ParameterGroup=Parameters,Parameter=Vscad" value="0.103914234378486" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vscadC4\[merge\]],ParameterGroup=Parameters,Parameter=Vscad" value="0.0042941021209047577" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vscad\[merge\]],Reference=InitialValue>
               </InitialExpression>
@@ -28275,7 +28284,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmcrotC8HydroxyacylCoAMAT\[merge\]],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vcrotC16\[merge\]],ParameterGroup=Parameters,Parameter=Vcrot" value="0.71999999999999997" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vcrotC16\[merge\]],ParameterGroup=Parameters,Parameter=Vcrot" value="7" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vcrot\[merge\]],Reference=InitialValue>
               </InitialExpression>
@@ -28363,7 +28372,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmcrotC8HydroxyacylCoAMAT\[merge\]],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vcrotC14\[merge\]],ParameterGroup=Parameters,Parameter=Vcrot" value="0.71999999999999997" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vcrotC14\[merge\]],ParameterGroup=Parameters,Parameter=Vcrot" value="7" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vcrot\[merge\]],Reference=InitialValue>
               </InitialExpression>
@@ -28451,7 +28460,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmcrotC8HydroxyacylCoAMAT\[merge\]],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vcrotC12\[merge\]],ParameterGroup=Parameters,Parameter=Vcrot" value="0.71999999999999997" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vcrotC12\[merge\]],ParameterGroup=Parameters,Parameter=Vcrot" value="7" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vcrot\[merge\]],Reference=InitialValue>
               </InitialExpression>
@@ -28539,7 +28548,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmcrotC8HydroxyacylCoAMAT\[merge\]],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vcrotC10\[merge\]],ParameterGroup=Parameters,Parameter=Vcrot" value="0.71999999999999997" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vcrotC10\[merge\]],ParameterGroup=Parameters,Parameter=Vcrot" value="7" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vcrot\[merge\]],Reference=InitialValue>
               </InitialExpression>
@@ -28627,7 +28636,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmcrotC8HydroxyacylCoAMAT\[merge\]],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vcrotC8\[merge\]],ParameterGroup=Parameters,Parameter=Vcrot" value="0.71999999999999997" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vcrotC8\[merge\]],ParameterGroup=Parameters,Parameter=Vcrot" value="7" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vcrot\[merge\]],Reference=InitialValue>
               </InitialExpression>
@@ -28715,7 +28724,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmcrotC8HydroxyacylCoAMAT\[merge\]],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vcrotC6\[merge\]],ParameterGroup=Parameters,Parameter=Vcrot" value="0.71999999999999997" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vcrotC6\[merge\]],ParameterGroup=Parameters,Parameter=Vcrot" value="7" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vcrot\[merge\]],Reference=InitialValue>
               </InitialExpression>
@@ -28803,7 +28812,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmcrotC8HydroxyacylCoAMAT\[merge\]],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vcrotC4\[merge\]],ParameterGroup=Parameters,Parameter=Vcrot" value="0.71999999999999997" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vcrotC4\[merge\]],ParameterGroup=Parameters,Parameter=Vcrot" value="7" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vcrot\[merge\]],Reference=InitialValue>
               </InitialExpression>
@@ -28896,7 +28905,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmmschadNADMAT\[merge\]],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmschadC16\[merge\]],ParameterGroup=Parameters,Parameter=Vmschad" value="0.27487408626436199" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmschadC16\[merge\]],ParameterGroup=Parameters,Parameter=Vmschad" value="0.064915193907033611" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vmschad\[merge\]],Reference=InitialValue>
               </InitialExpression>
@@ -28989,7 +28998,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmmschadNADMAT\[merge\]],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmschadC14\[merge\]],ParameterGroup=Parameters,Parameter=Vmschad" value="0.27487408626436199" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmschadC14\[merge\]],ParameterGroup=Parameters,Parameter=Vmschad" value="0.064915193907033611" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vmschad\[merge\]],Reference=InitialValue>
               </InitialExpression>
@@ -29082,7 +29091,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmmschadNADMAT\[merge\]],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmschadC12\[merge\]],ParameterGroup=Parameters,Parameter=Vmschad" value="0.27487408626436199" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmschadC12\[merge\]],ParameterGroup=Parameters,Parameter=Vmschad" value="0.064915193907033611" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vmschad\[merge\]],Reference=InitialValue>
               </InitialExpression>
@@ -29175,7 +29184,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmmschadNADMAT\[merge\]],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmschadC10\[merge\]],ParameterGroup=Parameters,Parameter=Vmschad" value="0.27487408626436199" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmschadC10\[merge\]],ParameterGroup=Parameters,Parameter=Vmschad" value="0.064915193907033611" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vmschad\[merge\]],Reference=InitialValue>
               </InitialExpression>
@@ -29268,7 +29277,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmmschadNADMAT\[merge\]],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmschadC8\[merge\]],ParameterGroup=Parameters,Parameter=Vmschad" value="0.27487408626436199" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmschadC8\[merge\]],ParameterGroup=Parameters,Parameter=Vmschad" value="0.064915193907033611" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vmschad\[merge\]],Reference=InitialValue>
               </InitialExpression>
@@ -29361,7 +29370,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmmschadNADMAT\[merge\]],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmschadC6\[merge\]],ParameterGroup=Parameters,Parameter=Vmschad" value="0.27487408626436199" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmschadC6\[merge\]],ParameterGroup=Parameters,Parameter=Vmschad" value="0.064915193907033611" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vmschad\[merge\]],Reference=InitialValue>
               </InitialExpression>
@@ -29454,7 +29463,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmmschadNADMAT\[merge\]],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmschadC4\[merge\]],ParameterGroup=Parameters,Parameter=Vmschad" value="0.27487408626436199" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmschadC4\[merge\]],ParameterGroup=Parameters,Parameter=Vmschad" value="0.064915193907033611" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vmschad\[merge\]],Reference=InitialValue>
               </InitialExpression>
@@ -29547,7 +29556,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmmckatCoAMAT\[merge\]],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmckatC16\[merge\]],ParameterGroup=Parameters,Parameter=Vmckat" value="0.39321499685699002" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmckatC16\[merge\]],ParameterGroup=Parameters,Parameter=Vmckat" value="4" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vmckat\[merge\]],Reference=InitialValue>
               </InitialExpression>
@@ -29640,7 +29649,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmmckatCoAMAT\[merge\]],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmckatC14\[merge\]],ParameterGroup=Parameters,Parameter=Vmckat" value="0.39321499685699002" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmckatC14\[merge\]],ParameterGroup=Parameters,Parameter=Vmckat" value="4" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vmckat\[merge\]],Reference=InitialValue>
               </InitialExpression>
@@ -29733,7 +29742,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmmckatCoAMAT\[merge\]],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmckatC12\[merge\]],ParameterGroup=Parameters,Parameter=Vmckat" value="0.39321499685699002" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmckatC12\[merge\]],ParameterGroup=Parameters,Parameter=Vmckat" value="4" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vmckat\[merge\]],Reference=InitialValue>
               </InitialExpression>
@@ -29826,7 +29835,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmmckatCoAMAT\[merge\]],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmckatC10\[merge\]],ParameterGroup=Parameters,Parameter=Vmckat" value="0.39321499685699002" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmckatC10\[merge\]],ParameterGroup=Parameters,Parameter=Vmckat" value="4" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vmckat\[merge\]],Reference=InitialValue>
               </InitialExpression>
@@ -29919,7 +29928,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmmckatCoAMAT\[merge\]],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmckatC8\[merge\]],ParameterGroup=Parameters,Parameter=Vmckat" value="0.39321499685699002" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmckatC8\[merge\]],ParameterGroup=Parameters,Parameter=Vmckat" value="4" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vmckat\[merge\]],Reference=InitialValue>
               </InitialExpression>
@@ -30012,7 +30021,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmmckatCoAMAT\[merge\]],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmckatC6\[merge\]],ParameterGroup=Parameters,Parameter=Vmckat" value="0.39321499685699002" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmckatC6\[merge\]],ParameterGroup=Parameters,Parameter=Vmckat" value="4" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vmckat\[merge\]],Reference=InitialValue>
               </InitialExpression>
@@ -30105,7 +30114,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmmckatCoAMAT\[merge\]],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmckatC4\[merge\]],ParameterGroup=Parameters,Parameter=Vmckat" value="0.39321499685699002" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmckatC4\[merge\]],ParameterGroup=Parameters,Parameter=Vmckat" value="4" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vmckat\[merge\]],Reference=InitialValue>
               </InitialExpression>
@@ -30198,7 +30207,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmmtpNADMAT\[merge\]],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmtpC16\[merge\]],ParameterGroup=Parameters,Parameter=Vmtp" value="0.99300769303528902" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmtpC16\[merge\]],ParameterGroup=Parameters,Parameter=Vmtp" value="0.10000000000000023" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vmtp\[merge\]],Reference=InitialValue>
               </InitialExpression>
@@ -30291,7 +30300,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmmtpNADMAT\[merge\]],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmtpC14\[merge\]],ParameterGroup=Parameters,Parameter=Vmtp" value="0.99300769303528902" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmtpC14\[merge\]],ParameterGroup=Parameters,Parameter=Vmtp" value="0.10000000000000023" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vmtp\[merge\]],Reference=InitialValue>
               </InitialExpression>
@@ -30384,7 +30393,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmmtpNADMAT\[merge\]],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmtpC12\[merge\]],ParameterGroup=Parameters,Parameter=Vmtp" value="0.99300769303528902" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmtpC12\[merge\]],ParameterGroup=Parameters,Parameter=Vmtp" value="0.10000000000000023" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vmtp\[merge\]],Reference=InitialValue>
               </InitialExpression>
@@ -30477,7 +30486,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmmtpNADMAT\[merge\]],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmtpC10\[merge\]],ParameterGroup=Parameters,Parameter=Vmtp" value="0.99300769303528902" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmtpC10\[merge\]],ParameterGroup=Parameters,Parameter=Vmtp" value="0.10000000000000023" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vmtp\[merge\]],Reference=InitialValue>
               </InitialExpression>
@@ -30570,7 +30579,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmmtpNADMAT\[merge\]],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmtpC8\[merge\]],ParameterGroup=Parameters,Parameter=Vmtp" value="0.99300769303528902" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmtpC8\[merge\]],ParameterGroup=Parameters,Parameter=Vmtp" value="0.10000000000000023" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vmtp\[merge\]],Reference=InitialValue>
               </InitialExpression>
@@ -30590,7 +30599,7 @@
             <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vnadhsink\[merge\]],ParameterGroup=Parameters,Parameter=Ksnadhsink" value="6000000" type="ReactionParameter" simulationType="fixed"/>
           </ModelParameterGroup>
           <ModelParameterGroup cn="CN=Root,Model=vaneunen,Vector=Reactions[vvlcadC16\[merge\]]" type="Reaction">
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vvlcadC16\[merge\]],ParameterGroup=Parameters,Parameter=parameter_1" value="0.019026013444632599" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vvlcadC16\[merge\]],ParameterGroup=Parameters,Parameter=parameter_1" value="0.19999999999999979" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vvlcad\[merge\]],Reference=InitialValue>
               </InitialExpression>
@@ -30673,7 +30682,7 @@
             <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vvlcadC16\[merge\]],ParameterGroup=Parameters,Parameter=sfvlcadC16" value="0.51000000000000001" type="ReactionParameter" simulationType="fixed"/>
           </ModelParameterGroup>
           <ModelParameterGroup cn="CN=Root,Model=vaneunen,Vector=Reactions[vvlcadC14\[merge\]]" type="Reaction">
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vvlcadC14\[merge\]],ParameterGroup=Parameters,Parameter=parameter_1" value="0.019026013444632599" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vvlcadC14\[merge\]],ParameterGroup=Parameters,Parameter=parameter_1" value="0.19999999999999979" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vvlcad\[merge\]],Reference=InitialValue>
               </InitialExpression>
@@ -30756,7 +30765,7 @@
             <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vvlcadC14\[merge\]],ParameterGroup=Parameters,Parameter=sfvlcadC14" value="0.56999999999999995" type="ReactionParameter" simulationType="fixed"/>
           </ModelParameterGroup>
           <ModelParameterGroup cn="CN=Root,Model=vaneunen,Vector=Reactions[vvlcadC12\[merge\]]" type="Reaction">
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vvlcadC12\[merge\]],ParameterGroup=Parameters,Parameter=parameter_1" value="0.019026013444632599" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vvlcadC12\[merge\]],ParameterGroup=Parameters,Parameter=parameter_1" value="0.19999999999999979" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vvlcad\[merge\]],Reference=InitialValue>
               </InitialExpression>
@@ -30839,7 +30848,7 @@
             <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vvlcadC12\[merge\]],ParameterGroup=Parameters,Parameter=sfvlcadC12" value="1" type="ReactionParameter" simulationType="fixed"/>
           </ModelParameterGroup>
           <ModelParameterGroup cn="CN=Root,Model=vaneunen,Vector=Reactions[vvlcadC10\[merge\]]" type="Reaction">
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vvlcadC10\[merge\]],ParameterGroup=Parameters,Parameter=parameter_1" value="0.019026013444632599" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vvlcadC10\[merge\]],ParameterGroup=Parameters,Parameter=parameter_1" value="0.19999999999999979" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vvlcad\[merge\]],Reference=InitialValue>
               </InitialExpression>
@@ -30922,7 +30931,7 @@
             <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vvlcadC10\[merge\]],ParameterGroup=Parameters,Parameter=sfvlcadC10" value="1" type="ReactionParameter" simulationType="fixed"/>
           </ModelParameterGroup>
           <ModelParameterGroup cn="CN=Root,Model=vaneunen,Vector=Reactions[vvlcadC8\[merge\]]" type="Reaction">
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vvlcadC8\[merge\]],ParameterGroup=Parameters,Parameter=parameter_1" value="0.019026013444632599" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vvlcadC8\[merge\]],ParameterGroup=Parameters,Parameter=parameter_1" value="0.19999999999999979" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vvlcad\[merge\]],Reference=InitialValue>
               </InitialExpression>
@@ -31005,7 +31014,7 @@
             <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vvlcadC8\[merge\]],ParameterGroup=Parameters,Parameter=sfvlcadC8" value="0.64000000000000001" type="ReactionParameter" simulationType="fixed"/>
           </ModelParameterGroup>
           <ModelParameterGroup cn="CN=Root,Model=vaneunen,Vector=Reactions[vvlcadC6\[merge\]]" type="Reaction">
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vvlcadC6\[merge\]],ParameterGroup=Parameters,Parameter=parameter_1" value="0.019026013444632599" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vvlcadC6\[merge\]],ParameterGroup=Parameters,Parameter=parameter_1" value="0.19999999999999979" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vvlcad\[merge\]],Reference=InitialValue>
               </InitialExpression>
@@ -31153,7 +31162,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmmcadFADH\[merge\]],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmcadC16\[merge\]],ParameterGroup=Parameters,Parameter=Vmcad" value="0.01346" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmcadC16\[merge\]],ParameterGroup=Parameters,Parameter=Vmcad" value="0.0010000000000002221" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vmcad\[merge\]],Reference=InitialValue>
               </InitialExpression>
@@ -31246,7 +31255,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmmcadFADH\[merge\]],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmcadC14\[merge\]],ParameterGroup=Parameters,Parameter=Vmcad" value="0.01346" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmcadC14\[merge\]],ParameterGroup=Parameters,Parameter=Vmcad" value="0.0010000000000002221" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vmcad\[merge\]],Reference=InitialValue>
               </InitialExpression>
@@ -31339,7 +31348,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmmcadFADH\[merge\]],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmcadC12\[merge\]],ParameterGroup=Parameters,Parameter=Vmcad" value="0.01346" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmcadC12\[merge\]],ParameterGroup=Parameters,Parameter=Vmcad" value="0.0010000000000002221" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vmcad\[merge\]],Reference=InitialValue>
               </InitialExpression>
@@ -31432,7 +31441,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmmcadFADH\[merge\]],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmcadC10\[merge\]],ParameterGroup=Parameters,Parameter=Vmcad" value="0.01346" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmcadC10\[merge\]],ParameterGroup=Parameters,Parameter=Vmcad" value="0.0010000000000002221" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vmcad\[merge\]],Reference=InitialValue>
               </InitialExpression>
@@ -31525,7 +31534,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmmcadFADH\[merge\]],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmcadC8\[merge\]],ParameterGroup=Parameters,Parameter=Vmcad" value="0.01346" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmcadC8\[merge\]],ParameterGroup=Parameters,Parameter=Vmcad" value="0.0010000000000002221" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vmcad\[merge\]],Reference=InitialValue>
               </InitialExpression>
@@ -31618,7 +31627,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmmcadFADH\[merge\]],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmcadC6\[merge\]],ParameterGroup=Parameters,Parameter=Vmcad" value="0.01346" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmcadC6\[merge\]],ParameterGroup=Parameters,Parameter=Vmcad" value="0.0010000000000002221" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vmcad\[merge\]],Reference=InitialValue>
               </InitialExpression>
@@ -31711,7 +31720,7 @@
                 &lt;CN=Root,Model=vaneunen,Vector=Values[KmmcadFADH\[merge\]],Reference=InitialValue>
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmcadC4\[merge\]],ParameterGroup=Parameters,Parameter=Vmcad" value="0.01346" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Reactions[vmcadC4\[merge\]],ParameterGroup=Parameters,Parameter=Vmcad" value="0.0010000000000002221" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
                 &lt;CN=Root,Model=vaneunen,Vector=Values[Vmcad\[merge\]],Reference=InitialValue>
               </InitialExpression>
@@ -32152,7 +32161,7 @@
       <StateTemplateVariable objectReference="ModelValue_271"/>
     </StateTemplate>
     <InitialState type="initialState">
-      0 22916967969795.77 466328332519.92334 22916967969795.77 466328332519.92334 16637224015341.311 16637224015341.311 10145159113203.117 10145159113203.125 10609579022488.049 10609579022488.051 17085317698549.711 17085317698549.719 21659478400572.84 21659478400572.848 19991061054445.23 19991061054445.234 261056488308.17154 261056488308.17145 19094750630810.895 19094750630810.879 684655902388.39783 684655902388.39795 310937962440.75867 310937962440.75879 340313535751.47107 340313535751.47131 286469638490.09393 286469638490.09412 11350281196984.744 11350281196984.748 571755703680.57434 571755703680.57471 131134136842016.03 131134136842016.12 22300938486237.953 22300938486237.965 1569710549692.7629 1569710549692.762 1836675207940.5879 1836675207940.5881 974753201154.23975 974753201154.2395 1754326845878.9409 1754326845878.9426 1989960757306.1235 1989960757306.1245 932084703912.6698 932084703912.67041 2789629400.565516 2789629400.565515 2710846978.2458935 2710846978.2458925 3094905519.1900506 3094905519.1900539 2036248876432.1523 2036248876432.1526 640658555741.55249 640658555741.552 112098814161.14354 112098814161.1436 42217100862597.961 42217100862597.984 2149616697089.5339 2149616697089.533 854756724814.21118 854756724814.21106 6550322337.8803473 6550322337.8803482 2117120152.2274508 2117120152.2274504 959122343430.39856 959122343430.39783 34769310223433.07 34769310223433.062 817106808404.57678 817106808404.57666 423188441376.85889 423188441376.85913 512036686090.46436 512036686090.46405 403902129745.50574 403902129745.50592 472594790347.28546 472594790347.28528 451405738120.89667 451405738120.89722 250813689185.88602 250813689185.88599 239834660655.89148 239834660655.89157 5048908812882736 5048908812882736 2.1000000000000001 0.100637854138809 0.100637854138809 2.1000000000000001 0.100637854138809 0.100637854138809 0.50000000000000011 0.015468943376213146 0.50000000000000022 0.50000000000000011 0.50000000000000011 0.50000000000000011 0.50000000000000011 0.50000000000000022 0.50000000000000022 0.50000000000000022 0.50000000000000011 0.50000000000000011 0.50000000000000022 0.50000000000000022 0.50000000000000022 0.50000000000000022 0.5280320399673426 0.50000000000000011 0.50000000000000011 0.5 0.50000000000000011 0.5 0.5 33121774713500 264974197708000 185481938395600 0 1029786086547001 834668722780.19922 270996338565000 5419926771300000 33121774713500 264974197708000 185481938395600 0 270996338565000 1029786086547001 834668722780.19922 5419926771300000 2.2000000000000001e-06 1.7999999999999999e-06 2.2000000000000001e-06 1.7999999999999999e-06 2.1000000000000001 130 130 200 1 1.9550000000000001 51 51 51 51 51 51 51 30 38 38 38 38 38 1000 1000000 350 2.2200000000000002 0.01346 18.600000000000001 16.709200466412302 15.764386056472199 10.800000000000001 142.80000000000001 1.0800000000000001 1.0800000000000001 1.0800000000000001 1.0800000000000001 1.0800000000000001 24.199999999999999 6 0.103914234378486 16.949999999999999 18.146026595526401 1.0800000000000001 1.0800000000000001 24.199999999999999 6 0.71999999999999997 150 100 25 25 25 25 40 45 45 45 45 45 45 45 1.6000000000000001 3.1299999999999999 0.27487408626436199 1.5 1.8 3.7000000000000002 8.8000000000000007 16.300000000000001 28.600000000000001 69.900000000000006 58.5 1.3999999999999999 1.3999999999999999 1.6000000000000001 2.2999999999999998 4.0999999999999996 5.7999999999999998 16.899999999999999 5.4000000000000004 0.00021699999999999999 0.39321499685699002 1.1000000000000001 1.2 1.3 2.1000000000000001 3.2000000000000002 6.7000000000000002 12.4 26.600000000000001 16.9184996128579 16.413657374084 29.878256363689498 25.370239233996401 23.4696174554207 15.476458927076999 16.113640503993899 68.110329096596402 1051 0.99300769303528902 25 25 25 25 25 60 30 13.83 13.83 13.83 13.83 13.83 13.83 50 30 0.70999999999999996 0.019026013444632599 8.7160272693415806 5 14 18.7503821636639 12.118878873384 14.5 0.100637854138809 1.0800000000000001 1.0800000000000001 1.0800000000000001 1.0800000000000001 1.0800000000000001 1.0800000000000001 24.199999999999999 6 24.392998868414701 5 1.0800000000000001 1.0800000000000001 1 200 130 130 2.1000000000000001 2.2200000000000002 51 38 51 38 51 38 51 38 51 1000000 51 1000 51 38 350 30 1.9550000000000001 6 18.146026595526401 1.0800000000000001 16.949999999999999 1.0800000000000001 24.199999999999999 0.103914234378486 3.1299999999999999 1.6000000000000001 25 45 25 45 100 45 150 45 40 45 25 45 25 45 0.71999999999999997 0.00021699999999999999 8.8000000000000007 2.2999999999999998 3.7000000000000002 1.6000000000000001 1.8 1.3999999999999999 1.5 1.3999999999999999 16.899999999999999 69.900000000000006 28.600000000000001 5.7999999999999998 16.300000000000001 4.0999999999999996 5.4000000000000004 58.5 0.27487408626436199 1051 68.110329096596402 25.370239233996401 2.1000000000000001 29.878256363689498 1.3 16.9184996128579 1.2 16.413657374084 1.1000000000000001 12.4 16.113640503993899 15.476458927076999 6.7000000000000002 23.4696174554207 3.2000000000000002 26.600000000000001 0.39321499685699002 0.70999999999999996 30 13.83 25 13.83 25 13.83 25 13.83 25 13.83 13.83 25 30 50 60 0.99300769303528902 0.019026013444632599 1.0800000000000001 1.0800000000000001 1.0800000000000001 1.0800000000000001 1.0800000000000001 24.199999999999999 6 8.7160272693415806 5 14 18.7503821636639 12.118878873384 14.5 0.100637854138809 1.0800000000000001 6 16.709200466412302 1.0800000000000001 18.600000000000001 1.0800000000000001 142.80000000000001 1.0800000000000001 10.800000000000001 1.0800000000000001 15.764386056472199 1.0800000000000001 24.199999999999999 0.01346 24.392998868414701 5 1.0800000000000001 1.0800000000000001 
+      0 216797070851999.88 466328332519.92285 216797070851999.88 466328332519.92285 16637224015341.311 16637224015341.311 108398535425999.94 108398535425999.94 1083985354260.0002 108398535425999.94 162597803139000 162597803139000 2167970708520 216797070851999.88 216797070851999.88 195117363766799.97 2601564850223.999 2167970708519.9998 184277510224200 184277510224200 6503912125560 6503912125560 32519560627.80024 3251956062780 3251956062780 3251956062780 3251956062780 3251956062780 108398535425999.94 108398535425999.94 5299483954160 5299483954160 1300782425112000 1300782425112000 216797070851999.88 2167970708520 15175794959640 16259780313900 18427751022420 18427751022420 9755868188340 9755868188340 17343765668160 17343765668160 21679707085200 21679707085200 10839853542600 9755868188340 32519560627.799759 32519560627.799759 32519560627.799759 27099633856.49976 32519560627.799759 3251956062.7797575 21679707085200 21679707085200 6503912125560 6503912125560 1083985354259.9998 1083985354259.9998 433594141703999.75 433594141703999.75 21679707085200 21679707085200 8671882834080 8671882834080 650391212.5562402 65039121255.599754 21679707085.19976 21679707085.19976 9755868188340 10839853542600 325195606278000 325195606278000 8129890156950 8671882834080 4335941417040 4335941417040 5299483954160 5299483954160 3974612965620 3974612965620 4637048459890.002 4637048459890.002 3974612965620 4504561361036 2649741977079.9995 2649741977079.9995 2649741977079.9995 2649741977079.9995 2065929096805522.8 2065929096805522.8 2.1000000000000001 0.100637854138809 0.100637854138809 2.1000000000000001 0.100637854138809 0.100637854138809 0.99009900990099009 0.59999999999999998 0.47368421052631576 0.5 0.99009900990098998 0.5 0.99009900990099009 0.5 0.5 0.0099009900990099046 0.54545454545454541 0.4838709677419355 0.5 0.5 0.5 0.5 0.5 0.5 0.47368421052631587 0.5 0.5 0.60399508055857853 0.5 3408106405744.9937 264974197708000 185481938395600 3645056172939.7939 542072168141354.44 834668722780.19922 270996338565000 5419926771300000 3615753301332.0986 264974197708000 185481938395600 4954444752351.8877 270996338565000 826779938307135.5 834668722780.19922 5419926771300000 2.2000000000000001e-06 1.7999999999999999e-06 2.2000000000000001e-06 1.7999999999999999e-06 2.1000000000000001 130 130 200 1 0.20705588600840633 51 51 51 51 51 51 51 30 38 38 38 38 38 1000 1000000 350 2.2200000000000002 0.0010389604674948998 18.600000000000001 16.709200466412302 15.764386056472199 10.800000000000001 142.80000000000001 1.0800000000000001 1.0800000000000001 1.0800000000000001 1.0800000000000001 1.0800000000000001 24.199999999999999 6 0.0086759802026698772 16.949999999999999 18.146026595526401 1.0800000000000001 1.0800000000000001 24.199999999999999 6 1.2541192663271001 150 100 25 25 25 25 40 45 45 45 45 45 45 45 1.6000000000000001 3.1299999999999999 2.7338291305880928 1.5 1.8 3.7000000000000002 8.8000000000000007 16.300000000000001 28.600000000000001 69.900000000000006 58.5 1.3999999999999999 1.3999999999999999 1.6000000000000001 2.2999999999999998 4.0999999999999996 5.7999999999999998 16.899999999999999 5.4000000000000004 0.00021699999999999999 2.2387007732160331 1.1000000000000001 1.2 1.3 2.1000000000000001 3.2000000000000002 6.7000000000000002 12.4 26.600000000000001 16.9184996128579 16.413657374084 29.878256363689498 25.370239233996401 23.4696174554207 15.476458927076999 16.113640503993899 68.110329096596402 1051 0.10001410207018814 25 25 25 25 25 60 30 13.83 13.83 13.83 13.83 13.83 13.83 50 30 0.70999999999999996 0.16655216876026488 8.7160272693415806 5 14 18.7503821636639 12.118878873384 14.5 0.100637854138809 1.0800000000000001 1.0800000000000001 1.0800000000000001 1.0800000000000001 1.0800000000000001 1.0800000000000001 24.199999999999999 6 24.392998868414701 5 1.0800000000000001 1.0800000000000001 1 200 130 130 2.1000000000000001 2.2200000000000002 51 38 51 38 51 38 51 38 51 1000000 51 1000 51 38 350 30 0.20000000000000023 6 18.146026595526401 1.0800000000000001 16.949999999999999 1.0800000000000001 24.199999999999999 0.0042941021209047577 3.1299999999999999 1.6000000000000001 25 45 25 45 100 45 150 45 40 45 25 45 25 45 7 0.00021699999999999999 8.8000000000000007 2.2999999999999998 3.7000000000000002 1.6000000000000001 1.8 1.3999999999999999 1.5 1.3999999999999999 16.899999999999999 69.900000000000006 28.600000000000001 5.7999999999999998 16.300000000000001 4.0999999999999996 5.4000000000000004 58.5 0.064915193907033611 1051 68.110329096596402 25.370239233996401 2.1000000000000001 29.878256363689498 1.3 16.9184996128579 1.2 16.413657374084 1.1000000000000001 12.4 16.113640503993899 15.476458927076999 6.7000000000000002 23.4696174554207 3.2000000000000002 26.600000000000001 4 0.70999999999999996 30 13.83 25 13.83 25 13.83 25 13.83 25 13.83 13.83 25 30 50 60 0.10000000000000023 0.19999999999999979 1.0800000000000001 1.0800000000000001 1.0800000000000001 1.0800000000000001 1.0800000000000001 24.199999999999999 6 8.7160272693415806 5 14 18.7503821636639 12.118878873384 14.5 0.100637854138809 1.0800000000000001 6 16.709200466412302 1.0800000000000001 18.600000000000001 1.0800000000000001 142.80000000000001 1.0800000000000001 10.800000000000001 1.0800000000000001 15.764386056472199 1.0800000000000001 24.199999999999999 0.0010000000000002221 24.392998868414701 5 1.0800000000000001 1.0800000000000001 
     </InitialState>
   </Model>
   <ListOfTasks>
@@ -32177,8 +32186,8 @@
     <Task key="Task_11" name="Time-Course" type="timeCourse" scheduled="false" updateModel="false">
       <Problem>
         <Parameter name="AutomaticStepSize" type="bool" value="0"/>
-        <Parameter name="StepNumber" type="unsignedInteger" value="1000"/>
-        <Parameter name="StepSize" type="float" value="0.01"/>
+        <Parameter name="StepNumber" type="unsignedInteger" value="500"/>
+        <Parameter name="StepSize" type="float" value="0.02"/>
         <Parameter name="Duration" type="float" value="10"/>
         <Parameter name="TimeSeriesRequested" type="bool" value="1"/>
         <Parameter name="OutputStartTime" type="float" value="0"/>
@@ -32244,7 +32253,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Values[Vcpt2],Reference=InitialValue"/>
             <Parameter name="LowerBound" type="cn" value="2e-1"/>
             <Parameter name="UpperBound" type="cn" value="20"/>
-            <Parameter name="StartValue" type="float" value="1.9550000000000001"/>
+            <Parameter name="StartValue" type="float" value="0.20705588600840633"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32254,7 +32263,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Values[Vcrot],Reference=InitialValue"/>
             <Parameter name="LowerBound" type="cn" value="7e-2"/>
             <Parameter name="UpperBound" type="cn" value="7"/>
-            <Parameter name="StartValue" type="float" value="0.71999999999999997"/>
+            <Parameter name="StartValue" type="float" value="1.2541192663271001"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32264,7 +32273,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Values[Vmcad],Reference=InitialValue"/>
             <Parameter name="LowerBound" type="cn" value="1e-3"/>
             <Parameter name="UpperBound" type="cn" value="0.1"/>
-            <Parameter name="StartValue" type="float" value="0.01346"/>
+            <Parameter name="StartValue" type="float" value="0.0010389604674948998"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32274,7 +32283,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Values[Vmckat],Reference=InitialValue"/>
             <Parameter name="LowerBound" type="cn" value="4e-2"/>
             <Parameter name="UpperBound" type="cn" value="4"/>
-            <Parameter name="StartValue" type="float" value="0.3932149969"/>
+            <Parameter name="StartValue" type="float" value="2.2387007732160331"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32284,7 +32293,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Values[Vmschad],Reference=InitialValue"/>
             <Parameter name="LowerBound" type="cn" value="3e-2"/>
             <Parameter name="UpperBound" type="cn" value="3"/>
-            <Parameter name="StartValue" type="float" value="0.27487408629999999"/>
+            <Parameter name="StartValue" type="float" value="2.7338291305880928"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32294,7 +32303,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Values[Vmtp],Reference=InitialValue"/>
             <Parameter name="LowerBound" type="cn" value="1e-1"/>
             <Parameter name="UpperBound" type="cn" value="10"/>
-            <Parameter name="StartValue" type="float" value="0.99300769300000002"/>
+            <Parameter name="StartValue" type="float" value="0.10001410207018814"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32302,9 +32311,9 @@
           </ParameterGroup>
           <ParameterGroup name="FitItem">
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Values[Vscad],Reference=InitialValue"/>
-            <Parameter name="LowerBound" type="cn" value="1e-2"/>
+            <Parameter name="LowerBound" type="cn" value="1e-3"/>
             <Parameter name="UpperBound" type="cn" value="1"/>
-            <Parameter name="StartValue" type="float" value="0.1039142344"/>
+            <Parameter name="StartValue" type="float" value="0.0086759802026698772"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32314,7 +32323,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Values[Vvlcad],Reference=InitialValue"/>
             <Parameter name="LowerBound" type="cn" value="2e-3"/>
             <Parameter name="UpperBound" type="cn" value="0.2"/>
-            <Parameter name="StartValue" type="float" value="0.01902601344"/>
+            <Parameter name="StartValue" type="float" value="0.16655216876026488"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32324,7 +32333,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Values[Vvlcad\[merge\]],Reference=InitialValue"/>
             <Parameter name="LowerBound" type="cn" value="0.002"/>
             <Parameter name="UpperBound" type="cn" value="0.2"/>
-            <Parameter name="StartValue" type="float" value="0.01902601344"/>
+            <Parameter name="StartValue" type="float" value="0.19999999999999979"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32332,9 +32341,9 @@
           </ParameterGroup>
           <ParameterGroup name="FitItem">
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Values[Vscad\[merge\]],Reference=InitialValue"/>
-            <Parameter name="LowerBound" type="cn" value="0.01"/>
+            <Parameter name="LowerBound" type="cn" value="1e-3"/>
             <Parameter name="UpperBound" type="cn" value="1"/>
-            <Parameter name="StartValue" type="float" value="0.1039142344"/>
+            <Parameter name="StartValue" type="float" value="0.0042941021209047577"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32344,7 +32353,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Values[Vmtp\[merge\]],Reference=InitialValue"/>
             <Parameter name="LowerBound" type="cn" value="0.1"/>
             <Parameter name="UpperBound" type="cn" value="10"/>
-            <Parameter name="StartValue" type="float" value="0.99300769300000002"/>
+            <Parameter name="StartValue" type="float" value="0.10000000000000023"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32354,7 +32363,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Values[Vmschad\[merge\]],Reference=InitialValue"/>
             <Parameter name="LowerBound" type="cn" value="0.03"/>
             <Parameter name="UpperBound" type="cn" value="3"/>
-            <Parameter name="StartValue" type="float" value="0.27487408629999999"/>
+            <Parameter name="StartValue" type="float" value="0.064915193907033611"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32364,7 +32373,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Values[Vmckat\[merge\]],Reference=InitialValue"/>
             <Parameter name="LowerBound" type="cn" value="0.04"/>
             <Parameter name="UpperBound" type="cn" value="4"/>
-            <Parameter name="StartValue" type="float" value="0.3932149969"/>
+            <Parameter name="StartValue" type="float" value="4"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32374,7 +32383,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Values[Vmcad\[merge\]],Reference=InitialValue"/>
             <Parameter name="LowerBound" type="cn" value="0.001"/>
             <Parameter name="UpperBound" type="cn" value="0.1"/>
-            <Parameter name="StartValue" type="float" value="0.01346"/>
+            <Parameter name="StartValue" type="float" value="0.0010000000000002221"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32384,7 +32393,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Values[Vcrot\[merge\]],Reference=InitialValue"/>
             <Parameter name="LowerBound" type="cn" value="0.07"/>
             <Parameter name="UpperBound" type="cn" value="7"/>
-            <Parameter name="StartValue" type="float" value="0.71999999999999997"/>
+            <Parameter name="StartValue" type="float" value="7"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32394,7 +32403,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Values[Vcpt2\[merge\]],Reference=InitialValue"/>
             <Parameter name="LowerBound" type="cn" value="0.2"/>
             <Parameter name="UpperBound" type="cn" value="20"/>
-            <Parameter name="StartValue" type="float" value="1.9550000000000001"/>
+            <Parameter name="StartValue" type="float" value="0.20000000000000023"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32404,7 +32413,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[AcetylCoAMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="2"/>
             <Parameter name="UpperBound" type="cn" value="200"/>
-            <Parameter name="StartValue" type="float" value="21.141400000000001"/>
+            <Parameter name="StartValue" type="float" value="200"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32414,7 +32423,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VCYT],Vector=Metabolites[C10AcylCarCYT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="0.04"/>
             <Parameter name="UpperBound" type="cn" value="4"/>
-            <Parameter name="StartValue" type="float" value="0.38648041239999997"/>
+            <Parameter name="StartValue" type="float" value="4"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32424,7 +32433,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C10AcylCarMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="0.2"/>
             <Parameter name="UpperBound" type="cn" value="20"/>
-            <Parameter name="StartValue" type="float" value="1.835781959"/>
+            <Parameter name="StartValue" type="float" value="20"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32434,7 +32443,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C10AcylCoAMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="2"/>
             <Parameter name="UpperBound" type="cn" value="200"/>
-            <Parameter name="StartValue" type="float" value="19.981338600000001"/>
+            <Parameter name="StartValue" type="float" value="2"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32444,7 +32453,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C10EnoylCoAMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="0.03"/>
             <Parameter name="UpperBound" type="cn" value="3"/>
-            <Parameter name="StartValue" type="float" value="0.31394661779999999"/>
+            <Parameter name="StartValue" type="float" value="3"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32454,7 +32463,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C10HydroxyacylCoAMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="0.01"/>
             <Parameter name="UpperBound" type="cn" value="10"/>
-            <Parameter name="StartValue" type="float" value="0.88481116429999995"/>
+            <Parameter name="StartValue" type="float" value="10"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32464,7 +32473,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C10KetoacylCoAMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="0.0003"/>
             <Parameter name="UpperBound" type="cn" value="0.03"/>
-            <Parameter name="StartValue" type="float" value="0.0028551174670000002"/>
+            <Parameter name="StartValue" type="float" value="0.029999999999999777"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32474,7 +32483,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VCYT],Vector=Metabolites[C12AcylCarCYT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="0.03"/>
             <Parameter name="UpperBound" type="cn" value="3"/>
-            <Parameter name="StartValue" type="float" value="0.30486147949999998"/>
+            <Parameter name="StartValue" type="float" value="3"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32484,7 +32493,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C12AcylCarMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="0.15"/>
             <Parameter name="UpperBound" type="cn" value="15"/>
-            <Parameter name="StartValue" type="float" value="1.448092028"/>
+            <Parameter name="StartValue" type="float" value="15"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32494,7 +32503,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C12AcylCoAMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="1.5"/>
             <Parameter name="UpperBound" type="cn" value="150"/>
-            <Parameter name="StartValue" type="float" value="15.761576140000001"/>
+            <Parameter name="StartValue" type="float" value="150"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32504,7 +32513,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C12EnoylCoAMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="0.03"/>
             <Parameter name="UpperBound" type="cn" value="3"/>
-            <Parameter name="StartValue" type="float" value="0.28684701429999998"/>
+            <Parameter name="StartValue" type="float" value="0.030000000000000221"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32514,7 +32523,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C12HydroxyacylCoAMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="0.08"/>
             <Parameter name="UpperBound" type="cn" value="8"/>
-            <Parameter name="StartValue" type="float" value="0.78853161760000001"/>
+            <Parameter name="StartValue" type="float" value="8"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32524,7 +32533,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C12KetoacylCoAMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="0.0003"/>
             <Parameter name="UpperBound" type="cn" value="0.03"/>
-            <Parameter name="StartValue" type="float" value="0.0025734936270000001"/>
+            <Parameter name="StartValue" type="float" value="0.029999999999999777"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32534,7 +32543,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VCYT],Vector=Metabolites[C14AcylCarCYT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="0.02"/>
             <Parameter name="UpperBound" type="cn" value="2"/>
-            <Parameter name="StartValue" type="float" value="0.18931178309999999"/>
+            <Parameter name="StartValue" type="float" value="1.9999999999999998"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32544,7 +32553,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C14AcylCarMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="0.09"/>
             <Parameter name="UpperBound" type="cn" value="9"/>
-            <Parameter name="StartValue" type="float" value="0.89923096960000004"/>
+            <Parameter name="StartValue" type="float" value="9"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32554,7 +32563,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C14AcylCoAMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="1"/>
             <Parameter name="UpperBound" type="cn" value="100"/>
-            <Parameter name="StartValue" type="float" value="9.7875667610000008"/>
+            <Parameter name="StartValue" type="float" value="1.0000000000000002"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32564,7 +32573,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C14EnoylCoAMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="0.03"/>
             <Parameter name="UpperBound" type="cn" value="3"/>
-            <Parameter name="StartValue" type="float" value="0.2642744548"/>
+            <Parameter name="StartValue" type="float" value="3"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32574,7 +32583,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C14HydroxyacylCoAMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="0.06"/>
             <Parameter name="UpperBound" type="cn" value="6"/>
-            <Parameter name="StartValue" type="float" value="0.591021413"/>
+            <Parameter name="StartValue" type="float" value="6"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32584,7 +32593,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C14KetoacylCoAMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="0.0002"/>
             <Parameter name="UpperBound" type="cn" value="0.02"/>
-            <Parameter name="StartValue" type="float" value="0.0019530892589999999"/>
+            <Parameter name="StartValue" type="float" value="0.019999999999999778"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32594,7 +32603,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VCYT],Vector=Metabolites[C16AcylCarCYT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="0.04"/>
             <Parameter name="UpperBound" type="cn" value="4"/>
-            <Parameter name="StartValue" type="float" value="0.43155575800000001"/>
+            <Parameter name="StartValue" type="float" value="4"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32604,7 +32613,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C16AcylCarMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="0.2"/>
             <Parameter name="UpperBound" type="cn" value="20"/>
-            <Parameter name="StartValue" type="float" value="1.983068026"/>
+            <Parameter name="StartValue" type="float" value="20"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32614,7 +32623,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VCYT],Vector=Metabolites[C16AcylCoACYT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="2.5"/>
             <Parameter name="UpperBound" type="cn" value="250"/>
-            <Parameter name="StartValue" type="float" value="25"/>
+            <Parameter name="StartValue" type="float" value="2.572406245758847"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32624,7 +32633,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C16AcylCoAMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="2"/>
             <Parameter name="UpperBound" type="cn" value="200"/>
-            <Parameter name="StartValue" type="float" value="20.57309944"/>
+            <Parameter name="StartValue" type="float" value="200"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32634,7 +32643,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C16EnoylCoAMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="0.02"/>
             <Parameter name="UpperBound" type="cn" value="2"/>
-            <Parameter name="StartValue" type="float" value="0.24083027260000001"/>
+            <Parameter name="StartValue" type="float" value="1.9999999999999998"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32644,7 +32653,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C16HydroxyacylCoAMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="0.08"/>
             <Parameter name="UpperBound" type="cn" value="8"/>
-            <Parameter name="StartValue" type="float" value="0.7537987531"/>
+            <Parameter name="StartValue" type="float" value="8"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32654,7 +32663,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C16KetoacylCoAMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="0.00025"/>
             <Parameter name="UpperBound" type="cn" value="0.025"/>
-            <Parameter name="StartValue" type="float" value="0.0025008151329999999"/>
+            <Parameter name="StartValue" type="float" value="0.024999999999999779"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32664,7 +32673,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C4AcetoacylCoAMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="0.04"/>
             <Parameter name="UpperBound" type="cn" value="4"/>
-            <Parameter name="StartValue" type="float" value="0.39040051580000001"/>
+            <Parameter name="StartValue" type="float" value="4"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32674,7 +32683,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VCYT],Vector=Metabolites[C4AcylCarCYT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="0.03"/>
             <Parameter name="UpperBound" type="cn" value="3"/>
-            <Parameter name="StartValue" type="float" value="0.34071675060000001"/>
+            <Parameter name="StartValue" type="float" value="3"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32684,7 +32693,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C4AcylCarMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="0.16"/>
             <Parameter name="UpperBound" type="cn" value="16"/>
-            <Parameter name="StartValue" type="float" value="1.6184045650000001"/>
+            <Parameter name="StartValue" type="float" value="16"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32694,7 +32703,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C4AcylCoAMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="1.7"/>
             <Parameter name="UpperBound" type="cn" value="170"/>
-            <Parameter name="StartValue" type="float" value="17.615321609999999"/>
+            <Parameter name="StartValue" type="float" value="170"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32704,7 +32713,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C4EnoylCoAMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="4"/>
             <Parameter name="UpperBound" type="cn" value="400"/>
-            <Parameter name="StartValue" type="float" value="38.946191200000001"/>
+            <Parameter name="StartValue" type="float" value="400"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32714,7 +32723,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C4HydroxyacylCoAMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="12"/>
             <Parameter name="UpperBound" type="cn" value="1200"/>
-            <Parameter name="StartValue" type="float" value="120.97408540000001"/>
+            <Parameter name="StartValue" type="float" value="1200"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32724,7 +32733,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VCYT],Vector=Metabolites[C6AcylCarCYT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="0.02"/>
             <Parameter name="UpperBound" type="cn" value="2"/>
-            <Parameter name="StartValue" type="float" value="0.1810249169"/>
+            <Parameter name="StartValue" type="float" value="1.9999999999999998"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32734,7 +32743,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C6AcylCarMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="0.01"/>
             <Parameter name="UpperBound" type="cn" value="10"/>
-            <Parameter name="StartValue" type="float" value="0.85986835549999996"/>
+            <Parameter name="StartValue" type="float" value="10"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32744,7 +32753,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C6AcylCoAMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="1"/>
             <Parameter name="UpperBound" type="cn" value="100"/>
-            <Parameter name="StartValue" type="float" value="9.3591293219999994"/>
+            <Parameter name="StartValue" type="float" value="100"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32754,7 +32763,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C6EnoylCoAMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="1"/>
             <Parameter name="UpperBound" type="cn" value="100"/>
-            <Parameter name="StartValue" type="float" value="10.470880579999999"/>
+            <Parameter name="StartValue" type="float" value="100"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32764,7 +32773,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C6HydroxyacylCoAMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="3"/>
             <Parameter name="UpperBound" type="cn" value="300"/>
-            <Parameter name="StartValue" type="float" value="32.075442799999998"/>
+            <Parameter name="StartValue" type="float" value="300"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32774,7 +32783,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C6KetoacylCoAMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="0.01"/>
             <Parameter name="UpperBound" type="cn" value="1"/>
-            <Parameter name="StartValue" type="float" value="0.10341358740000001"/>
+            <Parameter name="StartValue" type="float" value="0.99999999999999978"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32784,7 +32793,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VCYT],Vector=Metabolites[C8AcylCarCYT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="0.035"/>
             <Parameter name="UpperBound" type="cn" value="3.5"/>
-            <Parameter name="StartValue" type="float" value="0.3567100453"/>
+            <Parameter name="StartValue" type="float" value="3.5"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32794,7 +32803,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C8AcylCarMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="0.17"/>
             <Parameter name="UpperBound" type="cn" value="17"/>
-            <Parameter name="StartValue" type="float" value="1.6943727150000001"/>
+            <Parameter name="StartValue" type="float" value="17"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32804,7 +32813,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C8AcylCoAMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="2"/>
             <Parameter name="UpperBound" type="cn" value="200"/>
-            <Parameter name="StartValue" type="float" value="18.442187409999999"/>
+            <Parameter name="StartValue" type="float" value="200"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32814,7 +32823,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C8EnoylCoAMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="0.06"/>
             <Parameter name="UpperBound" type="cn" value="6"/>
-            <Parameter name="StartValue" type="float" value="0.63160991950000001"/>
+            <Parameter name="StartValue" type="float" value="6"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32824,7 +32833,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C8HydroxyacylCoAMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="0.2"/>
             <Parameter name="UpperBound" type="cn" value="20"/>
-            <Parameter name="StartValue" type="float" value="1.878483753"/>
+            <Parameter name="StartValue" type="float" value="20"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32834,7 +32843,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C8KetoacylCoAMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="0.0006"/>
             <Parameter name="UpperBound" type="cn" value="0.06"/>
-            <Parameter name="StartValue" type="float" value="0.0060428144270000001"/>
+            <Parameter name="StartValue" type="float" value="0.00060000000000022199"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32844,7 +32853,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[CarMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="95"/>
             <Parameter name="UpperBound" type="cn" value="9500"/>
-            <Parameter name="StartValue" type="float" value="950"/>
+            <Parameter name="StartValue" type="float" value="500.07333218206526"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32854,7 +32863,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VCYT],Vector=Metabolites[MalCoACYT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="1e-3"/>
             <Parameter name="UpperBound" type="cn" value="10"/>
-            <Parameter name="StartValue" type="float" value="0.10000000000000001"/>
+            <Parameter name="StartValue" type="float" value="2.7512536725984349"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32864,7 +32873,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[AcetylCoAMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="2"/>
             <Parameter name="UpperBound" type="cn" value="200"/>
-            <Parameter name="StartValue" type="float" value="21.141400000000001"/>
+            <Parameter name="StartValue" type="float" value="200"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32874,7 +32883,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VCYT\[merge\]],Vector=Metabolites[C10AcylCarCYT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="0.04"/>
             <Parameter name="UpperBound" type="cn" value="4"/>
-            <Parameter name="StartValue" type="float" value="0.38648041239999997"/>
+            <Parameter name="StartValue" type="float" value="4"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32884,7 +32893,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C10AcylCarMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="0.2"/>
             <Parameter name="UpperBound" type="cn" value="20"/>
-            <Parameter name="StartValue" type="float" value="1.835781959"/>
+            <Parameter name="StartValue" type="float" value="20"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32894,7 +32903,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C10AcylCoAMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="2"/>
             <Parameter name="UpperBound" type="cn" value="200"/>
-            <Parameter name="StartValue" type="float" value="19.981338600000001"/>
+            <Parameter name="StartValue" type="float" value="200"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32904,7 +32913,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C10EnoylCoAMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="0.03"/>
             <Parameter name="UpperBound" type="cn" value="3"/>
-            <Parameter name="StartValue" type="float" value="0.31394661779999999"/>
+            <Parameter name="StartValue" type="float" value="3"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32914,7 +32923,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C10HydroxyacylCoAMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="0.09"/>
             <Parameter name="UpperBound" type="cn" value="9"/>
-            <Parameter name="StartValue" type="float" value="0.88481116429999995"/>
+            <Parameter name="StartValue" type="float" value="9"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32924,7 +32933,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C10KetoacylCoAMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="0.0003"/>
             <Parameter name="UpperBound" type="cn" value="0.003"/>
-            <Parameter name="StartValue" type="float" value="0.0028551174670000002"/>
+            <Parameter name="StartValue" type="float" value="0.002999999999999778"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32934,7 +32943,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VCYT\[merge\]],Vector=Metabolites[C12AcylCarCYT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="0.03"/>
             <Parameter name="UpperBound" type="cn" value="3"/>
-            <Parameter name="StartValue" type="float" value="0.30486147949999998"/>
+            <Parameter name="StartValue" type="float" value="3"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32944,7 +32953,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C12AcylCarMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="0.1"/>
             <Parameter name="UpperBound" type="cn" value="14"/>
-            <Parameter name="StartValue" type="float" value="1.448092028"/>
+            <Parameter name="StartValue" type="float" value="14"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32954,7 +32963,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C12AcylCoAMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="1.5"/>
             <Parameter name="UpperBound" type="cn" value="150"/>
-            <Parameter name="StartValue" type="float" value="15.761576140000001"/>
+            <Parameter name="StartValue" type="float" value="150"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32964,7 +32973,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C12EnoylCoAMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="0.03"/>
             <Parameter name="UpperBound" type="cn" value="3"/>
-            <Parameter name="StartValue" type="float" value="0.28684701429999998"/>
+            <Parameter name="StartValue" type="float" value="3"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32974,7 +32983,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C12HydroxyacylCoAMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="0.08"/>
             <Parameter name="UpperBound" type="cn" value="8"/>
-            <Parameter name="StartValue" type="float" value="0.78853161760000001"/>
+            <Parameter name="StartValue" type="float" value="8"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32984,7 +32993,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C12KetoacylCoAMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="0.0003"/>
             <Parameter name="UpperBound" type="cn" value="0.03"/>
-            <Parameter name="StartValue" type="float" value="0.0025734936270000001"/>
+            <Parameter name="StartValue" type="float" value="0.029999999999999777"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -32994,7 +33003,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VCYT\[merge\]],Vector=Metabolites[C14AcylCarCYT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="0.02"/>
             <Parameter name="UpperBound" type="cn" value="2"/>
-            <Parameter name="StartValue" type="float" value="0.18931178309999999"/>
+            <Parameter name="StartValue" type="float" value="1.9999999999999998"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -33004,7 +33013,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C14AcylCarMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="0.09"/>
             <Parameter name="UpperBound" type="cn" value="9"/>
-            <Parameter name="StartValue" type="float" value="0.89923096960000004"/>
+            <Parameter name="StartValue" type="float" value="9"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -33014,7 +33023,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C14AcylCoAMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="1"/>
             <Parameter name="UpperBound" type="cn" value="100"/>
-            <Parameter name="StartValue" type="float" value="9.7875667610000008"/>
+            <Parameter name="StartValue" type="float" value="100"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -33024,7 +33033,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C14EnoylCoAMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="0.03"/>
             <Parameter name="UpperBound" type="cn" value="3"/>
-            <Parameter name="StartValue" type="float" value="0.2642744548"/>
+            <Parameter name="StartValue" type="float" value="3"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -33034,7 +33043,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C14HydroxyacylCoAMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="0.06"/>
             <Parameter name="UpperBound" type="cn" value="6"/>
-            <Parameter name="StartValue" type="float" value="0.591021413"/>
+            <Parameter name="StartValue" type="float" value="6"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -33044,7 +33053,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C14KetoacylCoAMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="0.0002"/>
             <Parameter name="UpperBound" type="cn" value="0.02"/>
-            <Parameter name="StartValue" type="float" value="0.0019530892589999999"/>
+            <Parameter name="StartValue" type="float" value="0.019999999999999778"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -33054,7 +33063,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VCYT\[merge\]],Vector=Metabolites[C16AcylCarCYT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="0.04"/>
             <Parameter name="UpperBound" type="cn" value="4"/>
-            <Parameter name="StartValue" type="float" value="0.43155575800000001"/>
+            <Parameter name="StartValue" type="float" value="4"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -33064,7 +33073,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C16AcylCarMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="0.2"/>
             <Parameter name="UpperBound" type="cn" value="20"/>
-            <Parameter name="StartValue" type="float" value="1.983068026"/>
+            <Parameter name="StartValue" type="float" value="20"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -33074,7 +33083,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VCYT\[merge\]],Vector=Metabolites[C16AcylCoACYT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="2.5"/>
             <Parameter name="UpperBound" type="cn" value="250"/>
-            <Parameter name="StartValue" type="float" value="25"/>
+            <Parameter name="StartValue" type="float" value="2.7291361442797064"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -33084,7 +33093,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C16AcylCoAMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="2"/>
             <Parameter name="UpperBound" type="cn" value="200"/>
-            <Parameter name="StartValue" type="float" value="20.57309944"/>
+            <Parameter name="StartValue" type="float" value="2"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -33094,7 +33103,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C16EnoylCoAMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="0.024"/>
             <Parameter name="UpperBound" type="cn" value="2.4"/>
-            <Parameter name="StartValue" type="float" value="0.24083027260000001"/>
+            <Parameter name="StartValue" type="float" value="2.3999999999999995"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -33104,7 +33113,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C16HydroxyacylCoAMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="0.075"/>
             <Parameter name="UpperBound" type="cn" value="7.5"/>
-            <Parameter name="StartValue" type="float" value="0.7537987531"/>
+            <Parameter name="StartValue" type="float" value="7.5"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -33114,7 +33123,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C16KetoacylCoAMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="0.0003"/>
             <Parameter name="UpperBound" type="cn" value="0.03"/>
-            <Parameter name="StartValue" type="float" value="0.0025008151329999999"/>
+            <Parameter name="StartValue" type="float" value="0.029999999999999777"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -33124,7 +33133,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C4AcetoacylCoAMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="0.04"/>
             <Parameter name="UpperBound" type="cn" value="4"/>
-            <Parameter name="StartValue" type="float" value="0.39040051580000001"/>
+            <Parameter name="StartValue" type="float" value="4"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -33134,7 +33143,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VCYT\[merge\]],Vector=Metabolites[C4AcylCarCYT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="0.034"/>
             <Parameter name="UpperBound" type="cn" value="3.4"/>
-            <Parameter name="StartValue" type="float" value="0.34071675060000001"/>
+            <Parameter name="StartValue" type="float" value="3.3999999999999995"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -33144,7 +33153,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C4AcylCarMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="0.16"/>
             <Parameter name="UpperBound" type="cn" value="16"/>
-            <Parameter name="StartValue" type="float" value="1.6184045650000001"/>
+            <Parameter name="StartValue" type="float" value="16"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -33154,7 +33163,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C4AcylCoAMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="1.7"/>
             <Parameter name="UpperBound" type="cn" value="170"/>
-            <Parameter name="StartValue" type="float" value="17.615321609999999"/>
+            <Parameter name="StartValue" type="float" value="170"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -33164,7 +33173,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C4EnoylCoAMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="4"/>
             <Parameter name="UpperBound" type="cn" value="400"/>
-            <Parameter name="StartValue" type="float" value="38.946191200000001"/>
+            <Parameter name="StartValue" type="float" value="400"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -33174,7 +33183,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C4HydroxyacylCoAMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="12"/>
             <Parameter name="UpperBound" type="cn" value="1200"/>
-            <Parameter name="StartValue" type="float" value="120.97408540000001"/>
+            <Parameter name="StartValue" type="float" value="1200"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -33184,7 +33193,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VCYT\[merge\]],Vector=Metabolites[C6AcylCarCYT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="0.02"/>
             <Parameter name="UpperBound" type="cn" value="2"/>
-            <Parameter name="StartValue" type="float" value="0.1810249169"/>
+            <Parameter name="StartValue" type="float" value="1.9999999999999998"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -33194,7 +33203,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C6AcylCarMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="0.09"/>
             <Parameter name="UpperBound" type="cn" value="9"/>
-            <Parameter name="StartValue" type="float" value="0.85986835549999996"/>
+            <Parameter name="StartValue" type="float" value="9"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -33204,7 +33213,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C6AcylCoAMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="1"/>
             <Parameter name="UpperBound" type="cn" value="100"/>
-            <Parameter name="StartValue" type="float" value="9.3591293219999994"/>
+            <Parameter name="StartValue" type="float" value="100"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -33214,7 +33223,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C6EnoylCoAMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="1"/>
             <Parameter name="UpperBound" type="cn" value="100"/>
-            <Parameter name="StartValue" type="float" value="10.470880579999999"/>
+            <Parameter name="StartValue" type="float" value="100"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -33224,7 +33233,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C6HydroxyacylCoAMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="3"/>
             <Parameter name="UpperBound" type="cn" value="300"/>
-            <Parameter name="StartValue" type="float" value="32.075442799999998"/>
+            <Parameter name="StartValue" type="float" value="300"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -33234,7 +33243,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C6KetoacylCoAMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="0.01"/>
             <Parameter name="UpperBound" type="cn" value="1"/>
-            <Parameter name="StartValue" type="float" value="0.10341358740000001"/>
+            <Parameter name="StartValue" type="float" value="0.99999999999999978"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -33244,7 +33253,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VCYT\[merge\]],Vector=Metabolites[C8AcylCarCYT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="0.035"/>
             <Parameter name="UpperBound" type="cn" value="3.5"/>
-            <Parameter name="StartValue" type="float" value="0.3567100453"/>
+            <Parameter name="StartValue" type="float" value="3.5"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -33254,7 +33263,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C8AcylCarMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="0.17"/>
             <Parameter name="UpperBound" type="cn" value="17"/>
-            <Parameter name="StartValue" type="float" value="1.6943727150000001"/>
+            <Parameter name="StartValue" type="float" value="17"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -33264,7 +33273,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C8AcylCoAMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="1.8"/>
             <Parameter name="UpperBound" type="cn" value="180"/>
-            <Parameter name="StartValue" type="float" value="18.442187409999999"/>
+            <Parameter name="StartValue" type="float" value="180"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -33274,7 +33283,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C8EnoylCoAMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="0.06"/>
             <Parameter name="UpperBound" type="cn" value="6"/>
-            <Parameter name="StartValue" type="float" value="0.63160991950000001"/>
+            <Parameter name="StartValue" type="float" value="6"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -33284,7 +33293,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C8HydroxyacylCoAMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="0.2"/>
             <Parameter name="UpperBound" type="cn" value="20"/>
-            <Parameter name="StartValue" type="float" value="1.878483753"/>
+            <Parameter name="StartValue" type="float" value="20"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -33294,7 +33303,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C8KetoacylCoAMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="0.0006"/>
             <Parameter name="UpperBound" type="cn" value="0.06"/>
-            <Parameter name="StartValue" type="float" value="0.0060428144270000001"/>
+            <Parameter name="StartValue" type="float" value="0.059999999999999776"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -33304,7 +33313,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[CarMAT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="95"/>
             <Parameter name="UpperBound" type="cn" value="9500"/>
-            <Parameter name="StartValue" type="float" value="950"/>
+            <Parameter name="StartValue" type="float" value="762.72242522275644"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -33314,7 +33323,7 @@
             <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=vaneunen,Vector=Compartments[VCYT\[merge\]],Vector=Metabolites[MalCoACYT],Reference=InitialConcentration"/>
             <Parameter name="LowerBound" type="cn" value="1e-3"/>
             <Parameter name="UpperBound" type="cn" value="10"/>
-            <Parameter name="StartValue" type="float" value="0.10000000000000001"/>
+            <Parameter name="StartValue" type="float" value="3.739567697690819"/>
             <ParameterGroup name="Affected Experiments">
             </ParameterGroup>
             <ParameterGroup name="Affected Cross Validation Experiments">
@@ -33327,20 +33336,173 @@
         <Parameter name="Time-Course" type="cn" value="CN=Root,Vector=TaskList[Time-Course]"/>
         <Parameter name="Create Parameter Sets" type="bool" value="0"/>
         <ParameterGroup name="Experiment Set">
+          <ParameterGroup name="Experiment">
+            <Parameter name="Key" type="key" value="Experiment_0"/>
+            <Parameter name="File Name" type="file" value="../measurements/human_van_Eunen_ac_ratios_time_in_minutes.csv"/>
+            <Parameter name="First Row" type="unsignedInteger" value="1"/>
+            <Parameter name="Last Row" type="unsignedInteger" value="5"/>
+            <Parameter name="Experiment Type" type="unsignedInteger" value="1"/>
+            <Parameter name="Normalize Weights per Experiment" type="bool" value="1"/>
+            <Parameter name="Separator" type="string" value=","/>
+            <Parameter name="Weight Method" type="unsignedInteger" value="1"/>
+            <Parameter name="Data is Row Oriented" type="bool" value="1"/>
+            <Parameter name="Row containing Names" type="unsignedInteger" value="1"/>
+            <Parameter name="Number of Columns" type="unsignedInteger" value="41"/>
+            <ParameterGroup name="Object Map">
+              <ParameterGroup name="0">
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=vaneunen,Vector=Values[Car_ratio],Reference=Value"/>
+              </ParameterGroup>
+              <ParameterGroup name="1">
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=vaneunen,Vector=Values[C10AcylCoA_ratio],Reference=Value"/>
+              </ParameterGroup>
+              <ParameterGroup name="2">
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=vaneunen,Vector=Values[C10EnoylCoA_ratio],Reference=Value"/>
+              </ParameterGroup>
+              <ParameterGroup name="3">
+                <Parameter name="Role" type="unsignedInteger" value="0"/>
+              </ParameterGroup>
+              <ParameterGroup name="4">
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=vaneunen,Vector=Values[C12AcylCoA_ratio],Reference=Value"/>
+              </ParameterGroup>
+              <ParameterGroup name="5">
+                <Parameter name="Role" type="unsignedInteger" value="0"/>
+              </ParameterGroup>
+              <ParameterGroup name="6">
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=vaneunen,Vector=Values[C12EnoylCoA_ratio],Reference=Value"/>
+              </ParameterGroup>
+              <ParameterGroup name="7">
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=vaneunen,Vector=Values[C14AcylCoA_ratio],Reference=Value"/>
+              </ParameterGroup>
+              <ParameterGroup name="8">
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=vaneunen,Vector=Values[C14EnoylCoA_ratio],Reference=Value"/>
+              </ParameterGroup>
+              <ParameterGroup name="9">
+                <Parameter name="Role" type="unsignedInteger" value="0"/>
+              </ParameterGroup>
+              <ParameterGroup name="10">
+                <Parameter name="Role" type="unsignedInteger" value="0"/>
+              </ParameterGroup>
+              <ParameterGroup name="11">
+                <Parameter name="Role" type="unsignedInteger" value="0"/>
+              </ParameterGroup>
+              <ParameterGroup name="12">
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=vaneunen,Vector=Values[C16AcylCoA_ratio],Reference=Value"/>
+              </ParameterGroup>
+              <ParameterGroup name="13">
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=vaneunen,Vector=Values[C16HydroxyacylCoA_ratio],Reference=Value"/>
+              </ParameterGroup>
+              <ParameterGroup name="14">
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=vaneunen,Vector=Values[C16EnoylCoA_ratio],Reference=Value"/>
+              </ParameterGroup>
+              <ParameterGroup name="15">
+                <Parameter name="Role" type="unsignedInteger" value="0"/>
+              </ParameterGroup>
+              <ParameterGroup name="16">
+                <Parameter name="Role" type="unsignedInteger" value="0"/>
+              </ParameterGroup>
+              <ParameterGroup name="17">
+                <Parameter name="Role" type="unsignedInteger" value="0"/>
+              </ParameterGroup>
+              <ParameterGroup name="18">
+                <Parameter name="Role" type="unsignedInteger" value="0"/>
+              </ParameterGroup>
+              <ParameterGroup name="19">
+                <Parameter name="Role" type="unsignedInteger" value="0"/>
+              </ParameterGroup>
+              <ParameterGroup name="20">
+                <Parameter name="Role" type="unsignedInteger" value="0"/>
+              </ParameterGroup>
+              <ParameterGroup name="21">
+                <Parameter name="Role" type="unsignedInteger" value="0"/>
+              </ParameterGroup>
+              <ParameterGroup name="22">
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=vaneunen,Vector=Values[AcetylCoA_ratio],Reference=Value"/>
+              </ParameterGroup>
+              <ParameterGroup name="23">
+                <Parameter name="Role" type="unsignedInteger" value="0"/>
+              </ParameterGroup>
+              <ParameterGroup name="24">
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=vaneunen,Vector=Values[C4HodryxyacylCoA_ratio],Reference=Value"/>
+              </ParameterGroup>
+              <ParameterGroup name="25">
+                <Parameter name="Role" type="unsignedInteger" value="0"/>
+              </ParameterGroup>
+              <ParameterGroup name="26">
+                <Parameter name="Role" type="unsignedInteger" value="0"/>
+              </ParameterGroup>
+              <ParameterGroup name="27">
+                <Parameter name="Role" type="unsignedInteger" value="0"/>
+              </ParameterGroup>
+              <ParameterGroup name="28">
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=vaneunen,Vector=Values[C4AcylCoA_ratio],Reference=Value"/>
+              </ParameterGroup>
+              <ParameterGroup name="29">
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=vaneunen,Vector=Values[C4EnoylCoA_ratio],Reference=Value"/>
+              </ParameterGroup>
+              <ParameterGroup name="30">
+                <Parameter name="Role" type="unsignedInteger" value="0"/>
+              </ParameterGroup>
+              <ParameterGroup name="31">
+                <Parameter name="Role" type="unsignedInteger" value="0"/>
+              </ParameterGroup>
+              <ParameterGroup name="32">
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=vaneunen,Vector=Values[C6HydroxyacylCoA_ratio],Reference=Value"/>
+              </ParameterGroup>
+              <ParameterGroup name="33">
+                <Parameter name="Role" type="unsignedInteger" value="0"/>
+              </ParameterGroup>
+              <ParameterGroup name="34">
+                <Parameter name="Role" type="unsignedInteger" value="0"/>
+              </ParameterGroup>
+              <ParameterGroup name="35">
+                <Parameter name="Role" type="unsignedInteger" value="0"/>
+              </ParameterGroup>
+              <ParameterGroup name="36">
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=vaneunen,Vector=Values[C6EnoylCoA_ratio],Reference=Value"/>
+              </ParameterGroup>
+              <ParameterGroup name="37">
+                <Parameter name="Role" type="unsignedInteger" value="0"/>
+              </ParameterGroup>
+              <ParameterGroup name="38">
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=vaneunen,Vector=Values[C8AcylCoA_ratio],Reference=Value"/>
+              </ParameterGroup>
+              <ParameterGroup name="39">
+                <Parameter name="Role" type="unsignedInteger" value="0"/>
+              </ParameterGroup>
+              <ParameterGroup name="40">
+                <Parameter name="Role" type="unsignedInteger" value="3"/>
+              </ParameterGroup>
+            </ParameterGroup>
+          </ParameterGroup>
         </ParameterGroup>
         <ParameterGroup name="Validation Set">
           <Parameter name="Weight" type="unsignedFloat" value="1"/>
           <Parameter name="Threshold" type="unsignedInteger" value="5"/>
         </ParameterGroup>
       </Problem>
-      <Method name="Evolution Strategy (SRES)" type="EvolutionaryStrategySR">
+      <Method name="Levenberg - Marquardt" type="LevenbergMarquardt">
         <Parameter name="Log Verbosity" type="unsignedInteger" value="0"/>
-        <Parameter name="Number of Generations" type="unsignedInteger" value="200"/>
-        <Parameter name="Population Size" type="unsignedInteger" value="20"/>
-        <Parameter name="Random Number Generator" type="unsignedInteger" value="1"/>
-        <Parameter name="Seed" type="unsignedInteger" value="0"/>
-        <Parameter name="Pf" type="float" value="0.47499999999999998"/>
-        <Parameter name="Stop after # Stalled Generations" type="unsignedInteger" value="0"/>
+        <Parameter name="Iteration Limit" type="unsignedInteger" value="2000"/>
+        <Parameter name="Tolerance" type="float" value="9.9999999999999995e-07"/>
+        <Parameter name="Modulation" type="float" value="9.9999999999999995e-07"/>
+        <Parameter name="Stop after # Stalled Iterations" type="unsignedInteger" value="0"/>
       </Method>
     </Task>
     <Task key="Task_6" name="Metabolic Control Analysis" type="metabolicControlAnalysis" scheduled="false" updateModel="false">
@@ -33582,11 +33744,23 @@
     </Report>
   </ListOfReports>
   <ListOfPlots>
-    <PlotSpecification name="plot" type="Plot2D" active="0" taskTypes="">
+    <PlotSpecification name="plot" type="Plot2D" active="1" taskTypes="">
       <Parameter name="log X" type="bool" value="0"/>
       <Parameter name="log Y" type="bool" value="0"/>
       <ListOfPlotItems>
-        <PlotItem name="(vcactC4).Flux|Time" type="Curve2D">
+        <PlotItem name="Values[AcetylCoA_ratio]|Time" type="Curve2D">
+          <Parameter name="Line type" type="unsignedInteger" value="0"/>
+          <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
+          <Parameter name="Line width" type="unsignedFloat" value="1"/>
+          <Parameter name="Symbol subtype" type="unsignedInteger" value="2"/>
+          <Parameter name="Color" type="string" value="auto"/>
+          <Parameter name="Recording Activity" type="string" value="during"/>
+          <ListOfChannels>
+            <ChannelSpec cn="CN=Root,Model=vaneunen,Reference=Time"/>
+            <ChannelSpec cn="CN=Root,Model=vaneunen,Vector=Values[AcetylCoA_ratio],Reference=Value"/>
+          </ListOfChannels>
+        </PlotItem>
+        <PlotItem name="Values[C10AcylCoA_ratio]|Time" type="Curve2D">
           <Parameter name="Line type" type="unsignedInteger" value="0"/>
           <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
           <Parameter name="Line width" type="unsignedFloat" value="1"/>
@@ -33595,7 +33769,577 @@
           <Parameter name="Recording Activity" type="string" value="during"/>
           <ListOfChannels>
             <ChannelSpec cn="CN=Root,Model=vaneunen,Reference=Time"/>
-            <ChannelSpec cn="CN=Root,Model=vaneunen,Vector=Reactions[vcactC4],Reference=Flux"/>
+            <ChannelSpec cn="CN=Root,Model=vaneunen,Vector=Values[C10AcylCoA_ratio],Reference=Value"/>
+          </ListOfChannels>
+        </PlotItem>
+        <PlotItem name="Values[C12AcylCoA_ratio]|Time" type="Curve2D">
+          <Parameter name="Line type" type="unsignedInteger" value="0"/>
+          <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
+          <Parameter name="Line width" type="unsignedFloat" value="1"/>
+          <Parameter name="Symbol subtype" type="unsignedInteger" value="0"/>
+          <Parameter name="Color" type="string" value="auto"/>
+          <Parameter name="Recording Activity" type="string" value="during"/>
+          <ListOfChannels>
+            <ChannelSpec cn="CN=Root,Model=vaneunen,Reference=Time"/>
+            <ChannelSpec cn="CN=Root,Model=vaneunen,Vector=Values[C12AcylCoA_ratio],Reference=Value"/>
+          </ListOfChannels>
+        </PlotItem>
+        <PlotItem name="Values[C14AcylCoA_ratio]|Time" type="Curve2D">
+          <Parameter name="Line type" type="unsignedInteger" value="0"/>
+          <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
+          <Parameter name="Line width" type="unsignedFloat" value="1"/>
+          <Parameter name="Symbol subtype" type="unsignedInteger" value="0"/>
+          <Parameter name="Color" type="string" value="auto"/>
+          <Parameter name="Recording Activity" type="string" value="during"/>
+          <ListOfChannels>
+            <ChannelSpec cn="CN=Root,Model=vaneunen,Reference=Time"/>
+            <ChannelSpec cn="CN=Root,Model=vaneunen,Vector=Values[C14AcylCoA_ratio],Reference=Value"/>
+          </ListOfChannels>
+        </PlotItem>
+        <PlotItem name="Values[C16AcylCoA_ratio]|Time" type="Curve2D">
+          <Parameter name="Line type" type="unsignedInteger" value="0"/>
+          <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
+          <Parameter name="Line width" type="unsignedFloat" value="1"/>
+          <Parameter name="Symbol subtype" type="unsignedInteger" value="0"/>
+          <Parameter name="Color" type="string" value="auto"/>
+          <Parameter name="Recording Activity" type="string" value="during"/>
+          <ListOfChannels>
+            <ChannelSpec cn="CN=Root,Model=vaneunen,Reference=Time"/>
+            <ChannelSpec cn="CN=Root,Model=vaneunen,Vector=Values[C16AcylCoA_ratio],Reference=Value"/>
+          </ListOfChannels>
+        </PlotItem>
+        <PlotItem name="Values[C4AcylCoA_ratio]|Time" type="Curve2D">
+          <Parameter name="Line type" type="unsignedInteger" value="0"/>
+          <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
+          <Parameter name="Line width" type="unsignedFloat" value="1"/>
+          <Parameter name="Symbol subtype" type="unsignedInteger" value="0"/>
+          <Parameter name="Color" type="string" value="auto"/>
+          <Parameter name="Recording Activity" type="string" value="during"/>
+          <ListOfChannels>
+            <ChannelSpec cn="CN=Root,Model=vaneunen,Reference=Time"/>
+            <ChannelSpec cn="CN=Root,Model=vaneunen,Vector=Values[C4AcylCoA_ratio],Reference=Value"/>
+          </ListOfChannels>
+        </PlotItem>
+        <PlotItem name="Values[C6AcylCoA_ratio]|Time" type="Curve2D">
+          <Parameter name="Line type" type="unsignedInteger" value="0"/>
+          <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
+          <Parameter name="Line width" type="unsignedFloat" value="1"/>
+          <Parameter name="Symbol subtype" type="unsignedInteger" value="0"/>
+          <Parameter name="Color" type="string" value="auto"/>
+          <Parameter name="Recording Activity" type="string" value="during"/>
+          <ListOfChannels>
+            <ChannelSpec cn="CN=Root,Model=vaneunen,Reference=Time"/>
+            <ChannelSpec cn="CN=Root,Model=vaneunen,Vector=Values[C6AcylCoA_ratio],Reference=Value"/>
+          </ListOfChannels>
+        </PlotItem>
+        <PlotItem name="Values[C8AcylCoA_ratio]|Time" type="Curve2D">
+          <Parameter name="Line type" type="unsignedInteger" value="0"/>
+          <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
+          <Parameter name="Line width" type="unsignedFloat" value="1"/>
+          <Parameter name="Symbol subtype" type="unsignedInteger" value="0"/>
+          <Parameter name="Color" type="string" value="auto"/>
+          <Parameter name="Recording Activity" type="string" value="during"/>
+          <ListOfChannels>
+            <ChannelSpec cn="CN=Root,Model=vaneunen,Reference=Time"/>
+            <ChannelSpec cn="CN=Root,Model=vaneunen,Vector=Values[C8AcylCoA_ratio],Reference=Value"/>
+          </ListOfChannels>
+        </PlotItem>
+        <PlotItem name="Values[Car_ratio]|Time" type="Curve2D">
+          <Parameter name="Line type" type="unsignedInteger" value="0"/>
+          <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
+          <Parameter name="Line width" type="unsignedFloat" value="1"/>
+          <Parameter name="Symbol subtype" type="unsignedInteger" value="0"/>
+          <Parameter name="Color" type="string" value="auto"/>
+          <Parameter name="Recording Activity" type="string" value="during"/>
+          <ListOfChannels>
+            <ChannelSpec cn="CN=Root,Model=vaneunen,Reference=Time"/>
+            <ChannelSpec cn="CN=Root,Model=vaneunen,Vector=Values[Car_ratio],Reference=Value"/>
+          </ListOfChannels>
+        </PlotItem>
+      </ListOfPlotItems>
+    </PlotSpecification>
+    <PlotSpecification name="Parameter Estimation Result" type="Plot2D" active="1" taskTypes="Parameter Estimation">
+      <Parameter name="log X" type="bool" value="0"/>
+      <Parameter name="log Y" type="bool" value="0"/>
+      <ListOfPlotItems>
+        <PlotItem name="Experiment,Values[AcetylCoA_ratio](Fitted Value)" type="Curve2D">
+          <Parameter name="Line type" type="unsignedInteger" value="0"/>
+          <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
+          <Parameter name="Line width" type="unsignedFloat" value="1"/>
+          <Parameter name="Symbol subtype" type="unsignedInteger" value="1"/>
+          <Parameter name="Color" type="string" value="#F000FF"/>
+          <Parameter name="Recording Activity" type="string" value="after"/>
+          <ListOfChannels>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[10],Reference=Fitted Value"/>
+          </ListOfChannels>
+        </PlotItem>
+        <PlotItem name="Experiment,Values[AcetylCoA_ratio](Measured Value)" type="Curve2D">
+          <Parameter name="Line type" type="unsignedInteger" value="3"/>
+          <Parameter name="Line subtype" type="unsignedInteger" value="1"/>
+          <Parameter name="Line width" type="unsignedFloat" value="1"/>
+          <Parameter name="Symbol subtype" type="unsignedInteger" value="1"/>
+          <Parameter name="Color" type="string" value="#F000FF"/>
+          <Parameter name="Recording Activity" type="string" value="after"/>
+          <ListOfChannels>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[10],Reference=Measured Value"/>
+          </ListOfChannels>
+        </PlotItem>
+        <PlotItem name="Experiment,Values[C10AcylCoA_ratio](Fitted Value)" type="Curve2D">
+          <Parameter name="Line type" type="unsignedInteger" value="0"/>
+          <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
+          <Parameter name="Line width" type="unsignedFloat" value="1"/>
+          <Parameter name="Symbol subtype" type="unsignedInteger" value="0"/>
+          <Parameter name="Color" type="string" value="#0000FF"/>
+          <Parameter name="Recording Activity" type="string" value="after"/>
+          <ListOfChannels>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[1],Reference=Fitted Value"/>
+          </ListOfChannels>
+        </PlotItem>
+        <PlotItem name="Experiment,Values[C10AcylCoA_ratio](Measured Value)" type="Curve2D">
+          <Parameter name="Line type" type="unsignedInteger" value="3"/>
+          <Parameter name="Line subtype" type="unsignedInteger" value="1"/>
+          <Parameter name="Line width" type="unsignedFloat" value="1"/>
+          <Parameter name="Symbol subtype" type="unsignedInteger" value="1"/>
+          <Parameter name="Color" type="string" value="#0000FF"/>
+          <Parameter name="Recording Activity" type="string" value="after"/>
+          <ListOfChannels>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[1],Reference=Measured Value"/>
+          </ListOfChannels>
+        </PlotItem>
+        <PlotItem name="Experiment,Values[C10EnoylCoA_ratio](Fitted Value)" type="Curve2D">
+          <Parameter name="Line type" type="unsignedInteger" value="0"/>
+          <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
+          <Parameter name="Line width" type="unsignedFloat" value="1"/>
+          <Parameter name="Symbol subtype" type="unsignedInteger" value="0"/>
+          <Parameter name="Color" type="string" value="#00E600"/>
+          <Parameter name="Recording Activity" type="string" value="after"/>
+          <ListOfChannels>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[2],Reference=Fitted Value"/>
+          </ListOfChannels>
+        </PlotItem>
+        <PlotItem name="Experiment,Values[C10EnoylCoA_ratio](Measured Value)" type="Curve2D">
+          <Parameter name="Line type" type="unsignedInteger" value="3"/>
+          <Parameter name="Line subtype" type="unsignedInteger" value="1"/>
+          <Parameter name="Line width" type="unsignedFloat" value="1"/>
+          <Parameter name="Symbol subtype" type="unsignedInteger" value="1"/>
+          <Parameter name="Color" type="string" value="#00E600"/>
+          <Parameter name="Recording Activity" type="string" value="after"/>
+          <ListOfChannels>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[2],Reference=Measured Value"/>
+          </ListOfChannels>
+        </PlotItem>
+        <PlotItem name="Experiment,Values[C12AcylCoA_ratio](Fitted Value)" type="Curve2D">
+          <Parameter name="Line type" type="unsignedInteger" value="0"/>
+          <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
+          <Parameter name="Line width" type="unsignedFloat" value="1"/>
+          <Parameter name="Symbol subtype" type="unsignedInteger" value="0"/>
+          <Parameter name="Color" type="string" value="#00BEF0"/>
+          <Parameter name="Recording Activity" type="string" value="after"/>
+          <ListOfChannels>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[3],Reference=Fitted Value"/>
+          </ListOfChannels>
+        </PlotItem>
+        <PlotItem name="Experiment,Values[C12AcylCoA_ratio](Measured Value)" type="Curve2D">
+          <Parameter name="Line type" type="unsignedInteger" value="3"/>
+          <Parameter name="Line subtype" type="unsignedInteger" value="1"/>
+          <Parameter name="Line width" type="unsignedFloat" value="1"/>
+          <Parameter name="Symbol subtype" type="unsignedInteger" value="1"/>
+          <Parameter name="Color" type="string" value="#00BEF0"/>
+          <Parameter name="Recording Activity" type="string" value="after"/>
+          <ListOfChannels>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[3],Reference=Measured Value"/>
+          </ListOfChannels>
+        </PlotItem>
+        <PlotItem name="Experiment,Values[C12EnoylCoA_ratio](Fitted Value)" type="Curve2D">
+          <Parameter name="Line type" type="unsignedInteger" value="0"/>
+          <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
+          <Parameter name="Line width" type="unsignedFloat" value="1"/>
+          <Parameter name="Symbol subtype" type="unsignedInteger" value="0"/>
+          <Parameter name="Color" type="string" value="#F000FF"/>
+          <Parameter name="Recording Activity" type="string" value="after"/>
+          <ListOfChannels>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[4],Reference=Fitted Value"/>
+          </ListOfChannels>
+        </PlotItem>
+        <PlotItem name="Experiment,Values[C12EnoylCoA_ratio](Measured Value)" type="Curve2D">
+          <Parameter name="Line type" type="unsignedInteger" value="3"/>
+          <Parameter name="Line subtype" type="unsignedInteger" value="1"/>
+          <Parameter name="Line width" type="unsignedFloat" value="1"/>
+          <Parameter name="Symbol subtype" type="unsignedInteger" value="1"/>
+          <Parameter name="Color" type="string" value="#F000FF"/>
+          <Parameter name="Recording Activity" type="string" value="after"/>
+          <ListOfChannels>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[4],Reference=Measured Value"/>
+          </ListOfChannels>
+        </PlotItem>
+        <PlotItem name="Experiment,Values[C14AcylCoA_ratio](Fitted Value)" type="Curve2D">
+          <Parameter name="Line type" type="unsignedInteger" value="0"/>
+          <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
+          <Parameter name="Line width" type="unsignedFloat" value="1"/>
+          <Parameter name="Symbol subtype" type="unsignedInteger" value="0"/>
+          <Parameter name="Color" type="string" value="#F0C800"/>
+          <Parameter name="Recording Activity" type="string" value="after"/>
+          <ListOfChannels>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[5],Reference=Fitted Value"/>
+          </ListOfChannels>
+        </PlotItem>
+        <PlotItem name="Experiment,Values[C14AcylCoA_ratio](Measured Value)" type="Curve2D">
+          <Parameter name="Line type" type="unsignedInteger" value="3"/>
+          <Parameter name="Line subtype" type="unsignedInteger" value="1"/>
+          <Parameter name="Line width" type="unsignedFloat" value="1"/>
+          <Parameter name="Symbol subtype" type="unsignedInteger" value="1"/>
+          <Parameter name="Color" type="string" value="#F0C800"/>
+          <Parameter name="Recording Activity" type="string" value="after"/>
+          <ListOfChannels>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[5],Reference=Measured Value"/>
+          </ListOfChannels>
+        </PlotItem>
+        <PlotItem name="Experiment,Values[C14EnoylCoA_ratio](Fitted Value)" type="Curve2D">
+          <Parameter name="Line type" type="unsignedInteger" value="0"/>
+          <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
+          <Parameter name="Line width" type="unsignedFloat" value="1"/>
+          <Parameter name="Symbol subtype" type="unsignedInteger" value="0"/>
+          <Parameter name="Color" type="string" value="#FF0000"/>
+          <Parameter name="Recording Activity" type="string" value="after"/>
+          <ListOfChannels>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[6],Reference=Fitted Value"/>
+          </ListOfChannels>
+        </PlotItem>
+        <PlotItem name="Experiment,Values[C14EnoylCoA_ratio](Measured Value)" type="Curve2D">
+          <Parameter name="Line type" type="unsignedInteger" value="3"/>
+          <Parameter name="Line subtype" type="unsignedInteger" value="1"/>
+          <Parameter name="Line width" type="unsignedFloat" value="1"/>
+          <Parameter name="Symbol subtype" type="unsignedInteger" value="1"/>
+          <Parameter name="Color" type="string" value="#FF0000"/>
+          <Parameter name="Recording Activity" type="string" value="after"/>
+          <ListOfChannels>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[6],Reference=Measured Value"/>
+          </ListOfChannels>
+        </PlotItem>
+        <PlotItem name="Experiment,Values[C16AcylCoA_ratio](Fitted Value)" type="Curve2D">
+          <Parameter name="Line type" type="unsignedInteger" value="0"/>
+          <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
+          <Parameter name="Line width" type="unsignedFloat" value="1"/>
+          <Parameter name="Symbol subtype" type="unsignedInteger" value="0"/>
+          <Parameter name="Color" type="string" value="#0000FF"/>
+          <Parameter name="Recording Activity" type="string" value="after"/>
+          <ListOfChannels>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[7],Reference=Fitted Value"/>
+          </ListOfChannels>
+        </PlotItem>
+        <PlotItem name="Experiment,Values[C16AcylCoA_ratio](Measured Value)" type="Curve2D">
+          <Parameter name="Line type" type="unsignedInteger" value="3"/>
+          <Parameter name="Line subtype" type="unsignedInteger" value="1"/>
+          <Parameter name="Line width" type="unsignedFloat" value="1"/>
+          <Parameter name="Symbol subtype" type="unsignedInteger" value="1"/>
+          <Parameter name="Color" type="string" value="#0000FF"/>
+          <Parameter name="Recording Activity" type="string" value="after"/>
+          <ListOfChannels>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[7],Reference=Measured Value"/>
+          </ListOfChannels>
+        </PlotItem>
+        <PlotItem name="Experiment,Values[C16EnoylCoA_ratio](Fitted Value)" type="Curve2D">
+          <Parameter name="Line type" type="unsignedInteger" value="0"/>
+          <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
+          <Parameter name="Line width" type="unsignedFloat" value="1"/>
+          <Parameter name="Symbol subtype" type="unsignedInteger" value="0"/>
+          <Parameter name="Color" type="string" value="#00BEF0"/>
+          <Parameter name="Recording Activity" type="string" value="after"/>
+          <ListOfChannels>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[9],Reference=Fitted Value"/>
+          </ListOfChannels>
+        </PlotItem>
+        <PlotItem name="Experiment,Values[C16EnoylCoA_ratio](Measured Value)" type="Curve2D">
+          <Parameter name="Line type" type="unsignedInteger" value="3"/>
+          <Parameter name="Line subtype" type="unsignedInteger" value="1"/>
+          <Parameter name="Line width" type="unsignedFloat" value="1"/>
+          <Parameter name="Symbol subtype" type="unsignedInteger" value="1"/>
+          <Parameter name="Color" type="string" value="#00BEF0"/>
+          <Parameter name="Recording Activity" type="string" value="after"/>
+          <ListOfChannels>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[9],Reference=Measured Value"/>
+          </ListOfChannels>
+        </PlotItem>
+        <PlotItem name="Experiment,Values[C16HydroxyacylCoA_ratio](Fitted Value)" type="Curve2D">
+          <Parameter name="Line type" type="unsignedInteger" value="0"/>
+          <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
+          <Parameter name="Line width" type="unsignedFloat" value="1"/>
+          <Parameter name="Symbol subtype" type="unsignedInteger" value="0"/>
+          <Parameter name="Color" type="string" value="#00E600"/>
+          <Parameter name="Recording Activity" type="string" value="after"/>
+          <ListOfChannels>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[8],Reference=Fitted Value"/>
+          </ListOfChannels>
+        </PlotItem>
+        <PlotItem name="Experiment,Values[C16HydroxyacylCoA_ratio](Measured Value)" type="Curve2D">
+          <Parameter name="Line type" type="unsignedInteger" value="3"/>
+          <Parameter name="Line subtype" type="unsignedInteger" value="1"/>
+          <Parameter name="Line width" type="unsignedFloat" value="1"/>
+          <Parameter name="Symbol subtype" type="unsignedInteger" value="1"/>
+          <Parameter name="Color" type="string" value="#00E600"/>
+          <Parameter name="Recording Activity" type="string" value="after"/>
+          <ListOfChannels>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[8],Reference=Measured Value"/>
+          </ListOfChannels>
+        </PlotItem>
+        <PlotItem name="Experiment,Values[C4AcylCoA_ratio](Fitted Value)" type="Curve2D">
+          <Parameter name="Line type" type="unsignedInteger" value="0"/>
+          <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
+          <Parameter name="Line width" type="unsignedFloat" value="1"/>
+          <Parameter name="Symbol subtype" type="unsignedInteger" value="0"/>
+          <Parameter name="Color" type="string" value="#FF0000"/>
+          <Parameter name="Recording Activity" type="string" value="after"/>
+          <ListOfChannels>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[12],Reference=Fitted Value"/>
+          </ListOfChannels>
+        </PlotItem>
+        <PlotItem name="Experiment,Values[C4AcylCoA_ratio](Measured Value)" type="Curve2D">
+          <Parameter name="Line type" type="unsignedInteger" value="3"/>
+          <Parameter name="Line subtype" type="unsignedInteger" value="1"/>
+          <Parameter name="Line width" type="unsignedFloat" value="1"/>
+          <Parameter name="Symbol subtype" type="unsignedInteger" value="1"/>
+          <Parameter name="Color" type="string" value="#FF0000"/>
+          <Parameter name="Recording Activity" type="string" value="after"/>
+          <ListOfChannels>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[12],Reference=Measured Value"/>
+          </ListOfChannels>
+        </PlotItem>
+        <PlotItem name="Experiment,Values[C4EnoylCoA_ratio](Fitted Value)" type="Curve2D">
+          <Parameter name="Line type" type="unsignedInteger" value="0"/>
+          <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
+          <Parameter name="Line width" type="unsignedFloat" value="1"/>
+          <Parameter name="Symbol subtype" type="unsignedInteger" value="0"/>
+          <Parameter name="Color" type="string" value="#0000FF"/>
+          <Parameter name="Recording Activity" type="string" value="after"/>
+          <ListOfChannels>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[13],Reference=Fitted Value"/>
+          </ListOfChannels>
+        </PlotItem>
+        <PlotItem name="Experiment,Values[C4EnoylCoA_ratio](Measured Value)" type="Curve2D">
+          <Parameter name="Line type" type="unsignedInteger" value="3"/>
+          <Parameter name="Line subtype" type="unsignedInteger" value="1"/>
+          <Parameter name="Line width" type="unsignedFloat" value="1"/>
+          <Parameter name="Symbol subtype" type="unsignedInteger" value="1"/>
+          <Parameter name="Color" type="string" value="#0000FF"/>
+          <Parameter name="Recording Activity" type="string" value="after"/>
+          <ListOfChannels>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[13],Reference=Measured Value"/>
+          </ListOfChannels>
+        </PlotItem>
+        <PlotItem name="Experiment,Values[C4HodryxyacylCoA_ratio](Fitted Value)" type="Curve2D">
+          <Parameter name="Line type" type="unsignedInteger" value="0"/>
+          <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
+          <Parameter name="Line width" type="unsignedFloat" value="1"/>
+          <Parameter name="Symbol subtype" type="unsignedInteger" value="0"/>
+          <Parameter name="Color" type="string" value="#F0C800"/>
+          <Parameter name="Recording Activity" type="string" value="after"/>
+          <ListOfChannels>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[11],Reference=Fitted Value"/>
+          </ListOfChannels>
+        </PlotItem>
+        <PlotItem name="Experiment,Values[C4HodryxyacylCoA_ratio](Measured Value)" type="Curve2D">
+          <Parameter name="Line type" type="unsignedInteger" value="3"/>
+          <Parameter name="Line subtype" type="unsignedInteger" value="1"/>
+          <Parameter name="Line width" type="unsignedFloat" value="1"/>
+          <Parameter name="Symbol subtype" type="unsignedInteger" value="1"/>
+          <Parameter name="Color" type="string" value="#F0C800"/>
+          <Parameter name="Recording Activity" type="string" value="after"/>
+          <ListOfChannels>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[11],Reference=Measured Value"/>
+          </ListOfChannels>
+        </PlotItem>
+        <PlotItem name="Experiment,Values[C6EnoylCoA_ratio](Fitted Value)" type="Curve2D">
+          <Parameter name="Line type" type="unsignedInteger" value="0"/>
+          <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
+          <Parameter name="Line width" type="unsignedFloat" value="1"/>
+          <Parameter name="Symbol subtype" type="unsignedInteger" value="0"/>
+          <Parameter name="Color" type="string" value="#00BEF0"/>
+          <Parameter name="Recording Activity" type="string" value="after"/>
+          <ListOfChannels>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[15],Reference=Fitted Value"/>
+          </ListOfChannels>
+        </PlotItem>
+        <PlotItem name="Experiment,Values[C6EnoylCoA_ratio](Measured Value)" type="Curve2D">
+          <Parameter name="Line type" type="unsignedInteger" value="3"/>
+          <Parameter name="Line subtype" type="unsignedInteger" value="1"/>
+          <Parameter name="Line width" type="unsignedFloat" value="1"/>
+          <Parameter name="Symbol subtype" type="unsignedInteger" value="1"/>
+          <Parameter name="Color" type="string" value="#00BEF0"/>
+          <Parameter name="Recording Activity" type="string" value="after"/>
+          <ListOfChannels>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[15],Reference=Measured Value"/>
+          </ListOfChannels>
+        </PlotItem>
+        <PlotItem name="Experiment,Values[C6HydroxyacylCoA_ratio](Fitted Value)" type="Curve2D">
+          <Parameter name="Line type" type="unsignedInteger" value="0"/>
+          <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
+          <Parameter name="Line width" type="unsignedFloat" value="1"/>
+          <Parameter name="Symbol subtype" type="unsignedInteger" value="0"/>
+          <Parameter name="Color" type="string" value="#00E600"/>
+          <Parameter name="Recording Activity" type="string" value="after"/>
+          <ListOfChannels>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[14],Reference=Fitted Value"/>
+          </ListOfChannels>
+        </PlotItem>
+        <PlotItem name="Experiment,Values[C6HydroxyacylCoA_ratio](Measured Value)" type="Curve2D">
+          <Parameter name="Line type" type="unsignedInteger" value="3"/>
+          <Parameter name="Line subtype" type="unsignedInteger" value="1"/>
+          <Parameter name="Line width" type="unsignedFloat" value="1"/>
+          <Parameter name="Symbol subtype" type="unsignedInteger" value="1"/>
+          <Parameter name="Color" type="string" value="#00E600"/>
+          <Parameter name="Recording Activity" type="string" value="after"/>
+          <ListOfChannels>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[14],Reference=Measured Value"/>
+          </ListOfChannels>
+        </PlotItem>
+        <PlotItem name="Experiment,Values[C8AcylCoA_ratio](Fitted Value)" type="Curve2D">
+          <Parameter name="Line type" type="unsignedInteger" value="0"/>
+          <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
+          <Parameter name="Line width" type="unsignedFloat" value="1"/>
+          <Parameter name="Symbol subtype" type="unsignedInteger" value="0"/>
+          <Parameter name="Color" type="string" value="#F000FF"/>
+          <Parameter name="Recording Activity" type="string" value="after"/>
+          <ListOfChannels>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[16],Reference=Fitted Value"/>
+          </ListOfChannels>
+        </PlotItem>
+        <PlotItem name="Experiment,Values[C8AcylCoA_ratio](Measured Value)" type="Curve2D">
+          <Parameter name="Line type" type="unsignedInteger" value="3"/>
+          <Parameter name="Line subtype" type="unsignedInteger" value="1"/>
+          <Parameter name="Line width" type="unsignedFloat" value="1"/>
+          <Parameter name="Symbol subtype" type="unsignedInteger" value="1"/>
+          <Parameter name="Color" type="string" value="#F000FF"/>
+          <Parameter name="Recording Activity" type="string" value="after"/>
+          <ListOfChannels>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[16],Reference=Measured Value"/>
+          </ListOfChannels>
+        </PlotItem>
+        <PlotItem name="Experiment,Values[Car_ratio](Fitted Value)" type="Curve2D">
+          <Parameter name="Line type" type="unsignedInteger" value="0"/>
+          <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
+          <Parameter name="Line width" type="unsignedFloat" value="1"/>
+          <Parameter name="Symbol subtype" type="unsignedInteger" value="0"/>
+          <Parameter name="Color" type="string" value="#FF0000"/>
+          <Parameter name="Recording Activity" type="string" value="after"/>
+          <ListOfChannels>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Fitted Value"/>
+          </ListOfChannels>
+        </PlotItem>
+        <PlotItem name="Experiment,Values[Car_ratio](Measured Value)" type="Curve2D">
+          <Parameter name="Line type" type="unsignedInteger" value="3"/>
+          <Parameter name="Line subtype" type="unsignedInteger" value="1"/>
+          <Parameter name="Line width" type="unsignedFloat" value="1"/>
+          <Parameter name="Symbol subtype" type="unsignedInteger" value="1"/>
+          <Parameter name="Color" type="string" value="#FF0000"/>
+          <Parameter name="Recording Activity" type="string" value="after"/>
+          <ListOfChannels>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Measured Value"/>
+          </ListOfChannels>
+        </PlotItem>
+      </ListOfPlotItems>
+    </PlotSpecification>
+    <PlotSpecification name="Progress of Fit" type="Plot2D" active="1" taskTypes="Parameter Estimation">
+      <Parameter name="log X" type="bool" value="0"/>
+      <Parameter name="log Y" type="bool" value="1"/>
+      <ListOfPlotItems>
+        <PlotItem name="sum of squares" type="Curve2D">
+          <Parameter name="Line type" type="unsignedInteger" value="0"/>
+          <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
+          <Parameter name="Line width" type="unsignedFloat" value="1"/>
+          <Parameter name="Symbol subtype" type="unsignedInteger" value="0"/>
+          <Parameter name="Color" type="string" value="auto"/>
+          <Parameter name="Recording Activity" type="string" value="during"/>
+          <ListOfChannels>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Function Evaluations"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Value"/>
+          </ListOfChannels>
+        </PlotItem>
+      </ListOfPlotItems>
+    </PlotSpecification>
+    <PlotSpecification name="plot_1" type="Plot2D" active="1" taskTypes="">
+      <Parameter name="log X" type="bool" value="0"/>
+      <Parameter name="log Y" type="bool" value="0"/>
+      <ListOfPlotItems>
+        <PlotItem name="[C10AcylCoAMAT{VMAT[merge]}]|Time" type="Curve2D">
+          <Parameter name="Line type" type="unsignedInteger" value="0"/>
+          <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
+          <Parameter name="Line width" type="unsignedFloat" value="1"/>
+          <Parameter name="Symbol subtype" type="unsignedInteger" value="2"/>
+          <Parameter name="Color" type="string" value="auto"/>
+          <Parameter name="Recording Activity" type="string" value="during"/>
+          <ListOfChannels>
+            <ChannelSpec cn="CN=Root,Model=vaneunen,Reference=Time"/>
+            <ChannelSpec cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C10AcylCoAMAT],Reference=Concentration"/>
+          </ListOfChannels>
+        </PlotItem>
+        <PlotItem name="[C10AcylCoAMAT{VMAT}]|Time" type="Curve2D">
+          <Parameter name="Line type" type="unsignedInteger" value="0"/>
+          <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
+          <Parameter name="Line width" type="unsignedFloat" value="1"/>
+          <Parameter name="Symbol subtype" type="unsignedInteger" value="2"/>
+          <Parameter name="Color" type="string" value="auto"/>
+          <Parameter name="Recording Activity" type="string" value="during"/>
+          <ListOfChannels>
+            <ChannelSpec cn="CN=Root,Model=vaneunen,Reference=Time"/>
+            <ChannelSpec cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C10AcylCoAMAT],Reference=Concentration"/>
+          </ListOfChannels>
+        </PlotItem>
+        <PlotItem name="[C4AcylCoAMAT{VMAT[merge]}]|Time" type="Curve2D">
+          <Parameter name="Line type" type="unsignedInteger" value="0"/>
+          <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
+          <Parameter name="Line width" type="unsignedFloat" value="1"/>
+          <Parameter name="Symbol subtype" type="unsignedInteger" value="2"/>
+          <Parameter name="Color" type="string" value="auto"/>
+          <Parameter name="Recording Activity" type="string" value="during"/>
+          <ListOfChannels>
+            <ChannelSpec cn="CN=Root,Model=vaneunen,Reference=Time"/>
+            <ChannelSpec cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C4AcylCoAMAT],Reference=Concentration"/>
+          </ListOfChannels>
+        </PlotItem>
+        <PlotItem name="[C4AcylCoAMAT{VMAT}]|Time" type="Curve2D">
+          <Parameter name="Line type" type="unsignedInteger" value="0"/>
+          <Parameter name="Line subtype" type="unsignedInteger" value="0"/>
+          <Parameter name="Line width" type="unsignedFloat" value="1"/>
+          <Parameter name="Symbol subtype" type="unsignedInteger" value="2"/>
+          <Parameter name="Color" type="string" value="auto"/>
+          <Parameter name="Recording Activity" type="string" value="during"/>
+          <ListOfChannels>
+            <ChannelSpec cn="CN=Root,Model=vaneunen,Reference=Time"/>
+            <ChannelSpec cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C4AcylCoAMAT],Reference=Concentration"/>
           </ListOfChannels>
         </PlotItem>
       </ListOfPlotItems>
