@@ -119,6 +119,9 @@ human_sepsis_data_normal_grouped[, -1:-6] <- scale(human_sepsis_data_normal_grou
 human_data_normal_grouped <- human_data_grouped
 human_data_normal_grouped[, -1:-6] <- scale(human_data_normal_grouped[, -1:-6])
 
+#Build measurement characteristics table
+met_group_table <- as.data.frame(table(human_sepsis_legend$group[metab_sel - 6]))
+
 #Get data overview
 ##Get overview of sample distribution along days
 human_sig_diff_res <- human_sig_diffs_along_days(human_sepsis_data, corr_fdr = TRUE)

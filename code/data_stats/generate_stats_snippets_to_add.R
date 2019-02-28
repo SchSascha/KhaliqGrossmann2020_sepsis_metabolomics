@@ -433,9 +433,9 @@ p <- prcomp(human_sepsis_data_pheno_dist[, -1:-6])
 hsdpd <- human_sepsis_data_pheno_dist
 hsdpd$label <- paste0("P", hsdpd$Patient, "-D", hsdpd$Day)
 lam <- p$sdev[1:2] * sqrt(nrow(p$x))
-ap <- autoplot(object = p, data = hsdpd, colour = "Group", frame = FALSE, frame.type = "norm", size = 0.6)
+ap <- autoplot(object = p, data = hsdpd, colour = "Group", frame = FALSE, frame.type = "norm", size = 0.8)
 ap <- ap + 
-  geom_text_repel(label = hsdpd$label, x = p$x[, 1] / lam[1], y = p$x[, 2] / lam[2], size = 1, mapping = aes(color = Group), segment.size = 0.3) +
+  geom_text_repel(label = hsdpd$label, x = p$x[, 1] / lam[1], y = p$x[, 2] / lam[2], size = 1.3, mapping = aes(color = Group), segment.size = 0.3, force = 0.5, box.padding = 0.1) +
   human_col_scale() +
   ggtitle("PCA biplot, Canberra distance, clinical params,\nseptic patients") +
   guides(shape = "none") +
