@@ -15,7 +15,7 @@ human_sepsis_data_s <- subset(human_data, grepl(pattern = "Septic", x = Group) &
 ms <- aggregate(human_sepsis_data_s[, -1:-6], by = list(group = interaction(human_sepsis_data_s$Group, human_sepsis_data_s$Day)), mean)
 ms$group <- substring(ms$group, 8)
 ms[c("group", "Day")] <- Reduce("rbind", strsplit(x = ms$group, split = ".", fixed = TRUE))
-l <- lapply(unique(ms$Day), function(d){ s <- subset(ms, Day == d, -which(colnames(ms) %in% c("group", "Day"))); return(s[1, ] / (s[2, ] + s[1, ])) })
+l <- lapply(unique(ms$Day), function(d){ s <- subset(ms, Day == d, -which(colnames(ms) %in% c("group", "Day"))); return(s[1, ] / (s[2, ] + s[1, ])) }) #s[1, ] is Nonsurvivor, s[2, ] is Survivor
 l <- Reduce("rbind", l)
 l$Day <- (0:3 + 1) * 24 * 60
 fwrite(x = l, file = paste0(out_dir, "human_van_Eunen_ac_ratios_time_in_minutes.csv"))

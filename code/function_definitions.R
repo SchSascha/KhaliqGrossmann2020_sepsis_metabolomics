@@ -135,6 +135,39 @@ get_french_normal_data <- function(){
   return(data)
 }
 
+#' Read and return Copasi kinetic model parameter estimation results
+#'
+#' @return list of data.frames with parameter esimation results per day
+#' @export
+#'
+#' @examples
+get_human_kinetic_model_fit_results <- function(){
+  #Read manually exported result files
+  kin_fit_res_files <- list.files(path = "../../results/kinetic_model/", pattern = "stepwise_day._ES_..\\.txt", full.names = TRUE)
+  kin_fit_res_file_con <- lapply(kin_fit_res_files, file, open = "r", blocking = TRUE) 
+  raw_res_data <- lapply(kin_fit_res_file_con, readLines)
+  dummy <- lapply(kin_fit_res_file_con, close)
+  res_empty_lines <- lapply(lapply(raw_res_data, sapply, stri_cmp_eq, e2 = ""), which)
+  res_data <- lapply(1:length(raw_res_data), function(rn) raw_res_data[[rn]][res_empty_lines[[rn]][1]:res_empty_lines[[rn]][2]])
+  res_tables <- lapply(lapply(res_data, paste, collapse = "\n"), fread, data.table = FALSE)
+  names(res_tables) <- stri_extract_last_regex(kin_fit_res_files, "day[0-9]")
+  #Read Copasi's automatic result report files
+  kin_fit_report_files <- list.files(path = "../../results/kinetic_model/", pattern = "stepwise_day._ES_.._report\\.txt", full.names = TRUE)
+  kin_fit_report_file_con <- lapply(kin_fit_report_files, file, open = "r", blocking = TRUE) 
+  raw_report_data <- lapply(kin_fit_report_file_con, readLines)
+  dummy <- lapply(kin_fit_report_file_con, close)
+  report_empty_lines <- lapply(lapply(raw_report_data, sapply, stri_cmp_eq, e2 = ""), which)
+  report_data <- lapply(1:length(raw_report_data), function(rn) raw_report_data[[rn]][report_empty_lines[[rn]][11]:report_empty_lines[[rn]][12]])
+  report_tables <- lapply(lapply(report_data, paste, collapse = "\n"), fread, data.table = FALSE)
+  names(report_tables) <- stri_extract_last_regex(kin_fit_report_files, "day[0-9]")
+  #Combine and return
+  comb_results <- res_tables
+  comb_results <- c(comb_results, report_tables[setdiff(names(report_tables), names(res_tables))])
+  comb_results <- comb_results[order(names(comb_results))]
+  comb_results <- lapply(comb_results, `[`, -1)
+  return(comb_results)
+}
+
 #' Remove all bile acids from the metabolite legend table
 #'
 #' @param df the metabolite legend
