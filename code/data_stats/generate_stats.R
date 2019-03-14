@@ -277,6 +277,19 @@ anova.car.nssepnon.ps <- (apply(anova.car.nssepnon.pre.ps, 2, function(row){ p.a
 sig.anova.car.nssepnon.class <- colnames(anova.car.nssepnon.ps)[colAnys(anova.car.nssepnon.ps[c("Survival", "Day:Survival"), ] <= 0.05)]
 sig.anova.car.nssepnon.class <- intersect(sig.anova.car.nssepnon.class, sig.anova.car.nssepnon.pre.class)
 
+#ANOVA to find where non-septic Nonsurvivors differ from non-septic Survivors
+fml <- concentration ~ Day*Group
+met_set <- colnames(full_tanova_data)[metab_sel]
+names(met_set) <- met_set
+ftd_s <- subset(full_tanova_data, Group %in% c("Nonsep-S", "Nonsep-NS"))
+ftd_s <- ftd_s[, -pheno_sel]
+anova.car.cnscs <- t3ANOVA(data = ftd_s, random = ~1|Patient, formula = fml, use.corAR = TRUE, col.set = met_set, id.vars = c("Group", "Day", "Patient"), control = lmeControl(msMaxIter = 100))
+anova.car.cnscs.pre.ps <- anova.car.cnscs$ps
+sig.anova.car.cnscs.pre.class <- colnames(anova.car.cnscs.pre.ps)[colAnys(anova.car.cnscs.pre.ps[c("Group", "Day:Group"), ] <= 0.05)]
+anova.car.cnscs.ps <- (apply(anova.car.cnscs.pre.ps, 2, function(row){ p.adjust(p = row, method = "fdr") }))
+sig.anova.car.cnscs.class <- colnames(anova.car.cnscs.ps)[colAnys(anova.car.cnscs.ps[c("Group", "Day:Group"), ] <= 0.05)]
+sig.anova.car.cnscs.class <- intersect(sig.anova.car.cnscs.class, sig.anova.car.cnscs.pre.class)
+
 ##Human, metab concentration time course, only metabolites significant in control vs sepsis and with control overlapping S, statistical approach
 #keep_set <- intersect(sig.anova.car.s.class, sig.anova.car.cvns.class)
 keep_set <- intersect(colnames(anova.car.cvns.ps)[anova.car.cvns.ps["Survival", ] < 0.05], colnames(anova.car.s.ps)[anova.car.s.ps["Survival", ] < 0.05])
@@ -550,6 +563,14 @@ c_tab <- as.data.frame(c_tab_list)
 c_tab <- c_tab[, match(make.names(unique(groups)), colnames(c_tab))]
 colnames(c_tab) <- unique(groups)
 write.table(x = c_tab, file = paste0(out_dir, "table_control_anova_sig_features.csv"), sep = "\t", quote = FALSE, row.names = FALSE)
+
+#human fold changes at day 0
+SS <- subset(human_data, Day == 0 & Group == "Septic-S", sig.anova.car.s.class)
+NS <- subset(human_data, Day == 0 & Group == "Septic-NS", sig.anova.car.s.class)
+fold_change <- log2(colMeans(SS) / colMeans(NS))
+sink(file = paste0(out_dir, "fold_change_leq_1_day0.txt"))
+print(fold_change[which(abs(fold_change) > 1)])
+sink()
 
 ####################
 #Plot data
@@ -1638,6 +1659,40 @@ h_time_course_sig_diff_plot <- ggplot(h_time_course_sig_diff_dat, aes(x = factor
   ggtitle(paste0("Metabolites significantly differing between Septic-NS and Nonsep-NS by repeated measures ANOVA")) + 
   theme_bw()
 ggsave(plot = h_time_course_sig_diff_plot, filename = paste0("human_metab_time_course_car_rm_anova_septicns_nonsepns_sig_diff.png"), path = out_dir, width = 12, height = 0.3 + 1.5 * ceiling(n_mets/5), units = "in")
+
+##Human, metabolite concentrations signif. diff. between Nonsep-S and Nonsep-NS in type 3 ANOVA
+h_time_course_sig_diff_dat <- melt(full_tanova_data, id.vars = c("Patient", "Survival", "Day", "Sample ID", "CAP / FP", "Group"))
+h_time_course_sig_diff_dat <- subset(h_time_course_sig_diff_dat, variable %in% sig.anova.car.cnscs.class & Group %in% c("Nonsep-NS", "Nonsep-S"))
+h_time_course_sig_diff_dat$Group <- factor(h_time_course_sig_diff_dat$Group)
+cms <- colMaxs(as.matrix(subset(full_tanova_data, grepl(pattern = "-NS", x = Group), -1:-6)))
+h_time_course_group <- data.frame(variable = sort(unique(h_time_course_sig_diff_dat$variable)), value = 1, Day = 3, text = coarse_group_list[match(sort(unique(h_time_course_sig_diff_dat$variable)), colnames(human_sepsis_data)[-1:-6])])
+h_time_course_group$value <- cms[match(h_time_course_group$variable, colnames(full_tanova_data[, -1:-6]))]
+hhr <- human_healthy_ranges
+orig_nrow_hhr <- nrow(hhr)
+hhr <- hhr[rep(1:orig_nrow_hhr, each = length(0:3)), ]
+hhr$Day <- rep(0:3, times = orig_nrow_hhr)
+hhr$variable <- hhr$ID
+hhr$Group <- "Healthy_Fr"
+hhr$value <- hhr$Median
+hhr <- hhr[hhr$variable %in% h_time_course_sig_diff_dat$variable, ]
+hhr <- hhr[order(match(hhr$ID, h_time_course_sig_diff_dat$variable)), ]
+hhr$variable <- factor(hhr$variable)
+h_time_course_group$value <- pmax(h_time_course_group$value * 1.3, hhr[match(h_time_course_group$variable, hhr$Metabolite), ]$UQ * 1.3, na.rm = TRUE)
+n_cols <- 5
+n_mets <- length(unique(h_time_course_sig_diff_dat$variable))
+h_time_course_sig_diff_plot <- ggplot(h_time_course_sig_diff_dat, aes(x = factor(Day), y = value, group = Group, color = Group)) +
+  facet_wrap(facets = ~ variable, ncol = n_cols, nrow = ceiling(n_mets/n_cols), scales = "free_y") +
+  stat_summary(fun.ymin = "min", fun.ymax = "max", fun.y = "mean", geom = "line") +
+  geom_text(data = h_time_course_group, mapping = aes(x = Day, y = value, label = text), inherit.aes = FALSE, size = 2.8) +
+  geom_rect(data = hhr, mapping = aes(xmin = -Inf, xmax = Inf, ymin = LQ, ymax = UQ, colour = Group), fill = "grey70", linetype = 0, alpha = 0.2, inherit.aes = FALSE) +
+  geom_hline(data = hhr, mapping = aes(yintercept = Median), colour = "grey40") +
+  geom_point(position = position_dodge(width = 0.2)) +
+  human_col_scale(black_color = "grey40", levels = c("", "Nonsep-S", "", "Nonsep-NS", "Healthy_Fr")) +
+  ylab("Concentration, µM") + 
+  xlab("Day") + 
+  ggtitle(paste0("Metabolites significantly differing between Nonsep-S and Nonsep-NS by repeated measures ANOVA")) + 
+  theme_bw()
+ggsave(plot = h_time_course_sig_diff_plot, filename = paste0("human_metab_time_course_car_rm_anova_cns_cs_sig_diff.png"), path = out_dir, width = 12, height = 0.3 + 1.5 * ceiling(n_mets/5), units = "in")
 
 ##Human, metab concentration time course, only metabolites significant in control vs sepsis and with control between S and NS
 keep_set <- c(paste0("lysoPC a C2", c("6:0", "6:1", "8:0", "8:1")),
