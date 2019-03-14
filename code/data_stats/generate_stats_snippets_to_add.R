@@ -330,15 +330,15 @@ betadiv_S_C <- t.test(x = pat_S_pw_dist, y = pat_C_pw_dist, var.equal = FALSE)
 betadiv_NS_C <- t.test(x = pat_NS_pw_dist, y = pat_C_pw_dist, var.equal = FALSE)
 env <- environment()
 env_names <- names(env)
-betadiv_names <- env_names[grep(pattern = "betadiv", x = env_names)]
-bdiv_elements <- lapply(betadiv_names, function(e) eval(as.symbol(e)))
-betadiv_names <- betadiv_names[sapply(bdiv_elements, class) == "htest"]
+bdiv_names <- env_names[grep(pattern = "betadiv", x = env_names)]
+bdiv_elements <- lapply(bdiv_names, function(e) eval(as.symbol(e)))
+bdiv_names <- bdiv_names[sapply(bdiv_elements, class) == "htest"]
 bdiv_elements <- bdiv_elements[sapply(bdiv_elements, class) == "htest"]
 bdiv_p <- sapply(bdiv_elements, function(e) e$p.value)
 bdiv_fdr <- p.adjust(bdiv_p, method = "fdr")
-names(bdiv_p) <- betadiv_names
-names(bdiv_fdr) <- betadiv_names
-g1 <- sub("betadiv", "", betadiv_names)
+names(bdiv_p) <- bdiv_names
+names(bdiv_fdr) <- bdiv_names
+g1 <- sub("betadiv", "", bdiv_names)
 g1 <- sub("_CS", "_Nonsep-S", g1)
 g1 <- sub("_CNS", "_Nonsep-NS", g1)
 g1 <- sub("_C", "_Nonsep", g1)
@@ -346,8 +346,9 @@ g1 <- sub("_S", "_Septic-S", g1)
 g1 <- sub("_NS", "_Septic-NS", g1)
 g1 <- substring(g1, 2)
 g1 <- strsplit(g1, "_", fixed = TRUE)
-betadiv_df <- data.frame(Group1 = sapply(g1, `[`, 1), Group2 = sapply(g1, `[`, 2), p = bdiv_p, FDR = bdiv_fdr)
-write.csv(x = betadiv_df, file = paste0(out_dir, "betadiversity_comparison_pvals.csv"), row.names = FALSE)
+bdiv_df <- data.frame(Group1 = sapply(g1, `[`, 1), Group2 = sapply(g1, `[`, 2), p = bdiv_p, FDR = bdiv_fdr)
+bdiv_df <- bdiv_df[order(rownames(bdiv_df)), ]
+write.csv(x = bdiv_df, file = paste0(out_dir, "betadiversity_comparison_pvals.csv"), row.names = FALSE)
 ####Plot
 pat_pw_group_dat <- data.frame(distance = c(pat_CS_pw_dist, pat_CNS_pw_dist, pat_C_pw_dist, pat_S_pw_dist, pat_NS_pw_dist), 
                                Group = c(rep("Nonsep-S", length(pat_CS_pw_dist)), 
@@ -362,18 +363,20 @@ p <- ggplot(data = pat_pw_group_dat, mapping = aes(x = Group, y = distance, colo
   geom_path(data = data.frame(x = 2 + c(2.05, 2.05, 3, 3), y = c(380, 390, 390, 380)), mapping = aes(x = x, y = y), size = 0.25, inherit.aes = FALSE) +
   geom_path(data = data.frame(x = 2 + c(1, 1, 3, 3), y = c(440, 450, 450, 440)), mapping = aes(x = x, y = y), size = 0.25, inherit.aes = FALSE) +
   geom_path(data = data.frame(x = c(1, 1, 4, 4), y = c(500, 510, 510, 500)), mapping = aes(x = x, y = y), size = 0.25, inherit.aes = FALSE) +
-  geom_path(data = data.frame(x = c(1, 1, 5, 5), y = c(560, 570, 570, 560)), mapping = aes(x = x, y = y), size = 0.25, inherit.aes = FALSE) +
-  geom_text(x = 1.5, y = 410, label = "q > 0.05", size = 1.5, inherit.aes = FALSE) +
-  geom_text(x = 2 + 1.5, y = 410, label = "q > 0.05", size = 1.5, inherit.aes = FALSE) +
-  geom_text(x = 2 + 2.5, y = 410, label = paste0("q < ", format(betadiv_df$FDR[1], digits = 2)), size = 1.5, inherit.aes = FALSE) +
-  geom_text(x = 2 + 2, y = 470, label = paste0("q < ", format(betadiv_df$FDR[7], digits = 2)), size = 1.5, inherit.aes = FALSE) +
-  geom_text(x = 2.5, y = 530, label = paste0("q < ", format(bdiv_fdr[8], digits = 2)), size = 1.5, inherit.aes = FALSE) +
-  geom_text(x = 3, y = 590, label = paste0("q < ", format(bdiv_fdr[4], digits = 2)), size = 1.5, inherit.aes = FALSE) +
+  geom_path(data = data.frame(x = c(2, 2, 5, 5), y = c(560, 570, 570, 560)), mapping = aes(x = x, y = y), size = 0.25, inherit.aes = FALSE) +
+  geom_path(data = data.frame(x = c(1, 1, 5, 5), y = 60 + c(560, 570, 570, 560)), mapping = aes(x = x, y = y), size = 0.25, inherit.aes = FALSE) +
+  geom_text(x = 1.5, y = 410, label = "q > 0.05", size = 1.5, inherit.aes = FALSE) + #CNS vs CS
+  geom_text(x = 2 + 1.5, y = 410, label = "q > 0.05", size = 1.5, inherit.aes = FALSE) + #C vs S
+  geom_text(x = 2 + 2.5, y = 410, label = paste0("q < ", format(bdiv_df$FDR[8], digits = 2)), size = 1.5, inherit.aes = FALSE) + #S vs NS
+  geom_text(x = 2 + 2, y = 470, label = paste0("q < ", format(bdiv_df$FDR[2], digits = 2)), size = 1.5, inherit.aes = FALSE) + #C vs NS
+  geom_text(x = 2.5, y = 530, label = paste0("q < ", format(bdiv_df$FDR[7], digits = 2)), size = 1.5, inherit.aes = FALSE) + #CS vs S
+  geom_text(x = 3.5, y = 590, label = "q > 0.05", size = 1.5, inherit.aes = FALSE) + #CNS vs NS
+  geom_text(x = 3, y = 60 + 590, label = paste0("q < ", format(bdiv_df$FDR[4], digits = 2)), size = 1.5, inherit.aes = FALSE) + #CS vs NS
   human_col_scale(levels = as.character(unique(pat_pw_group_dat$Group))[c(5, 1, 4, 2, 3)], black_color = "green", black_pos = 5) +
   scale_x_discrete(limits = as.character(unique(pat_pw_group_dat$Group))) +
   #geom_segment(x = 2.5, y = 0, xend = 2.5, yend = max(pat_pw_group_dat$distance), size = 0.25, inherit.aes = FALSE) +
   guides(color = "none") +
-  ylim(0, 600) +
+  ylim(0, 670) +
   theme_bw() + 
   theme(panel.grid = element_blank(), axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
 ggsave(filename = "PCA_metab_betadiv_comparison.png", path = out_dir, width = 2.5, height = 4, units = "in")
@@ -481,7 +484,7 @@ human_data_dist <- cbind(human_data[,1:6], as.matrix(dist(x = human_data[, metab
 p <- prcomp(human_data_dist[, -1:-6])
 ad_rv <- ad_mg_r_df[["all"]]
 ad_rv[ad_rv > 0.05] <- 0.05
-text_v <- paste0(c("Nonsep", "Nonsep", "Septic-S", "Nonsep-S"), " vs ", c("Septic-S", "Septic-NS", "Septic-NS", "Septic-NS"), ", q ", c("> ", "< ")[1 + (ad_rv < 0.05)], sapply(ad_rv, format, digits = 2))
+text_v <- paste0(c("Nonsep", "Nonsep", "Septic-S", "Nonsep-NS"), " vs ", c("Septic-S", "Septic-NS", "Septic-NS", "Septic-NS"), ", q ", c("> ", "< ")[1 + (ad_rv < 0.05)], sapply(ad_rv, format, digits = 2))
 hdd <- human_data_dist
 ap <- autoplot(object = p, data = hdd, colour = "Group", frame = TRUE, frame.type = "norm", size = 0.5)
 ap <- ap + 
