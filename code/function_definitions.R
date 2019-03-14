@@ -85,6 +85,17 @@ get_human_pheno_var_groups <- function(){
   return(data)
 }
 
+#' Read patient meta data table
+#'
+#' @return data.frame with patient meta data
+#' @export
+#'
+#' @examples
+get_human_meta_data <- function(){
+  data <- read.csv(file = "../../data/measurements/Raw data Germany Human samples.csv", header = TRUE, sep = "\t", stringsAsFactors = FALSE, dec = ",", check.names = FALSE)
+  return(data)
+}
+
 #' Read the data set on provoked sepsis and controls in rat
 #'
 #' @return the data.frame with data, column names are identical to file content (non-standard for R)
