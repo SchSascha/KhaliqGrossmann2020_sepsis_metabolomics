@@ -92,7 +92,10 @@ get_human_pheno_var_groups <- function(){
 #'
 #' @examples
 get_human_meta_data <- function(){
+  library(stringi)
   data <- read.csv(file = "../../data/measurements/Raw data Germany Human samples.csv", header = TRUE, sep = "\t", stringsAsFactors = FALSE, dec = ",", check.names = FALSE)
+  data$`Patient ID` <- stri_trim_both(data$`Patient ID`)
+  data$Diagnosis <- stri_trim_both(data$Diagnosis)
   return(data)
 }
 
