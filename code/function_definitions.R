@@ -99,6 +99,23 @@ get_human_meta_data <- function(){
   return(data)
 }
 
+#' Read patient illenss data - why they where in the ICU
+#'
+#' @return
+#' @export
+#'
+#' @examples
+get_human_illness_data <- function(){
+  library(stringi)
+  data <- read.csv(file = "../../data/measurements/Vic_patients_downselected.csv", skip = 1, header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+  data$Diagnoses <- stri_trim_both(data$Diagnoses)
+  data$Diagnoses[data$Diagnoses == "fracture femur"] <- "Fracture femur"
+  data$Diagnoses[data$Diagnoses == "fp"] <- "Intra-abdominal sepsis"
+  data$Diagnoses[data$Diagnoses == "pn"] <- "Community-acquired sepsis"
+  data$Number <- stri_trim_both(data$Number)
+  return(data)
+}
+
 #' Read the data set on provoked sepsis and controls in rat
 #'
 #' @return the data.frame with data, column names are identical to file content (non-standard for R)
