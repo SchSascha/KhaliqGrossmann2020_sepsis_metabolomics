@@ -1840,11 +1840,6 @@ pat_path <- subset(pat_path, variable %in% var_keep_union)
 cns <- unique(cntrl_and_s$variable)
 pat_path$x <- match(pat_path$variable, cns)
 pat_path$x <- pat_path$x + (scale(seq_along(unique(pat_path$Day)))/4)[unlist(lapply(rle(pat_path$Patient)[["lengths"]], function(to) 1:to))]
-corridor <- as.data.frame(t(sapply(unique(cntrl_and_s$variable), 
-                                function(metab) mean_sdl(subset(cntrl_and_s, variable == metab & Survival == "S", "value")[[1]], mult = 1))))
-corridor$variable <- as.numeric(factor(unique(cntrl_and_s$variable)))
-for (n in seq_along(corridor))
-  corridor[[n]] <- unlist(corridor[[n]])
 p <- ggplot(data = subset(cntrl_and_s, Survival != "NS"), mapping = aes(y = value, x = variable, color = Group)) +
   #geom_ribbon(data = corridor, mapping = aes(ymax = ymax, ymin = ymin, x = variable), inherit.aes = FALSE) +
   stat_summary(fun.data = "mean_sdl", fun.args = list(mult = 1), position = position_dodge(width = 0.7), geom = "errorbar") +
@@ -1865,6 +1860,35 @@ p <- ggplot(data = subset(cntrl_and_s, Survival != "NS"), mapping = aes(y = valu
   theme_bw() + 
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 6), panel.grid = element_line(colour = 0))
 ggsave(filename = paste0("human_metab_nonsig_single_plot_SD_all_pats.png"), path = out_dir, plot = p, width = 16, height = 9.5, units = "in")
+###Generalize the corridor principle to a classification scheme, use corridor 
+corridor <- as.data.frame(t(sapply(unique(cntrl_and_s$variable), 
+                                   function(metab) Hmisc::smean.sd(subset(cntrl_and_s, variable == metab & Survival == "S", "value")[[1]]))))
+corridor$variable <- unique(cntrl_and_s$variable)
+for (n in seq_along(corridor))
+  corridor[[n]] <- unlist(corridor[[n]])
+pat_dev_score <- subset(human_data, Day %in% 0:3, select = c(1:6, which(colnames(human_data) %in% var_keep_union)))
+pat_dev_mean <- corridor$Mean[match(colnames(pat_dev_score)[-1:-6], corridor$variable)]
+pat_dev_sd <- corridor$SD[match(colnames(pat_dev_score)[-1:-6], corridor$variable)]
+sdmul <- 5.5
+udev <- pat_dev_score[, -1:-6] > matrix(pat_dev_mean + sdmul * pat_dev_sd, ncol = ncol(pat_dev_score) - 6, nrow = nrow(pat_dev_score), byrow = TRUE)
+ldev <- pat_dev_score[, -1:-6] < matrix(pat_dev_mean - sdmul * pat_dev_sd, ncol = ncol(pat_dev_score) - 6, nrow = nrow(pat_dev_score), byrow = TRUE)
+sdev <- aggregate(udev | ldev, by = list(Patient = pat_dev_score$Patient), FUN = max)
+dev_score <- data.frame(Patient = sdev$Patient, score = rowSums(sdev[, -1]))
+dev_score$Survival <- pat_dev_score$Survival[match(dev_score$Patient, pat_dev_score$Patient)]
+dev_score$Group <- pat_dev_score$Group[match(dev_score$Patient, pat_dev_score$Patient)]
+p <- ggplot(data = dev_score, mapping = aes(fill = Group, x = score)) +
+  geom_histogram(position = position_stack(), bins = max(dev_score$score) + 1) +
+  human_col_scale(aesthetics = "fill") +
+  ylab("Number of Patients") +
+  xlab("Number of metabolites outside of the safe corridor at Days 0-3") +
+  theme_bw() +
+  theme(panel.grid = element_blank())
+ggsave(plot = p, filename = "generalized_safe_corridor.png", path = out_dir, width = 6, height = 3, units = "in")
+print(paste0("Contribution of high deviation and low deviation to score is ", sum(udev), " and ", sum(ldev), " respectively."))
+w <- which.xy(udev) # tell me which variables make a difference
+mtab <- sort(table(w[, 2]), decreasing = TRUE)
+names(mtab) <- colnames(pat_dev_score)[-1:-6][as.numeric(names(mtab))]
+
 ###plot metab variance, only nonsig, nondeviation metabs
 ##Human, variance of ungrouped metab vars, all days
 met_nor_day_var_df <- na.omit(human_sepsis_data_conc_var)
