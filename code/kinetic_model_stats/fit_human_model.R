@@ -4,6 +4,9 @@ library(data.table)
 library(matrixStats)
 library(CoRC)
 library(tictoc)
+library(parallel)
+
+source("../function_definitions.R")
 
 #Paths
 
@@ -50,7 +53,7 @@ model_fit_function <- function(number = 1){
   gcrefs <- getGlobalQuantityReferences(model = new_model)
   gcvals <- getGlobalQuantities(model = new_model)
   gcvals$initial_value[match(merge_gcvals$name, gcvals$name)] <- merge_gcvals$initial_value
-  react_Vms <- c("Vcpt2", "Vcrot", "Vmcad", "Vmckat", "Vmschad", "Vmtp", "Vscad", "Vvlcad", "Ksacesink", "Ksfadhsink")
+  react_Vms <- c("Vcpt2", "Vcrot", "Vmcad", "Vmckat", "Vmschad", "Vmtp", "Vscad", "Vvlcad") #, "Ksacesink", "Ksfadhsink") # do not vary sink parameters!
   react_Vms <- c(react_Vms, paste0(react_Vms, "[merge]"))
   gcrefs <- gcrefs[gcrefs$name %in% react_Vms, ]
   gcvals <- gcvals[gcvals$key %in% gcrefs$key, ]
@@ -61,12 +64,13 @@ model_fit_function <- function(number = 1){
   ub <- gcvals$initial_value * 10
   react_params <- lapply(1:nrow(gcrefs), function(n) defineParameterEstimationParameter(ref = react_Vms[n], lower_bound = lb[n], upper_bound = ub[n], start_value = gcvals$initial_value[n]))
   dummy <- lapply(react_params, addParameterEstimationParameter, model = new_model)
-  ##Load and add experiments, Day 0
-  exp_tc_data <- fread("../../data/measurements/human_van_Eunen_ac_ratios_daystep_day_0_time_in_minutes.csv")
+  ##Set optimization endpoints and mappings - stays the same for all optimization steps
   col_keep <- c("C0", "C10", "C10:1", "C12", "C12:1", "C14", "C14:1", "C4:1", "C6 (C4:1-DC)", "C5-DC (C6-OH)", "C8", "Day")
-  exp_tc_data <- subset(exp_tc_data, select = col_keep)
   ratio_quant_map <- c("Car_ratio", "C10AcylCoA_ratio", "C10EnoylCoA_ratio", "C12AcylCoA_ratio", "C12EnoylCoA_ratio", "C14AcylCoA_ratio", "C14EnoylCoA_ratio", "C4EnoylCoA_ratio", "C6AcylCoA_ratio", "C6HydroxyacylCoA_ratio", "C8AcylCoA_ratio", "Time")
   ratio_quant_map <- paste0("{Values[", ratio_quant_map, "]}")
+  ##Load and add experiments, Day 0
+  exp_tc_data <- fread("../../data/measurements/human_van_Eunen_ac_ratios_daystep_day_0_time_in_minutes.csv")
+  exp_tc_data <- subset(exp_tc_data, select = col_keep)
   types <- c(rep("dependent", ncol(exp_tc_data) - 1), "time")
   ratio_exp <- defineExperiments(experiment_type = "time_course", data = exp_tc_data, types = types, mappings = ratio_quant_map, weight_method = "mean_square")
   addExperiments(ratio_exp, model = new_model)
@@ -76,15 +80,12 @@ model_fit_function <- function(number = 1){
   setParameterEstimationSettings(model = new_model, method = "HookeJeeves", update_model = TRUE, randomize_start_values = TRUE)
   pe_res_hj_day0 <- runParameterEstimation(model = new_model)
   
-  saveModel(model = new_model, filename = paste0(out_dir, "fitted_model_pilot__number_", number, "_day0.cps"), overwrite = TRUE)
+  saveModel(model = new_model, filename = paste0(out_dir, "fitted_model_pilot_number_", number, "_day0.cps"), overwrite = TRUE)
   
   ##Load and add Experiments, Day 1
   clearExperiments(model = new_model)
   exp_tc_data <- fread("../../data/measurements/human_van_Eunen_ac_ratios_daystep_day_1_time_in_minutes.csv")
-  col_keep <- c("C0", "C10", "C10:1", "C12", "C12:1", "C14", "C14:1", "C4:1", "C6 (C4:1-DC)", "C5-DC (C6-OH)", "C8", "Day")
   exp_tc_data <- subset(exp_tc_data, select = col_keep)
-  ratio_quant_map <- c("Car_ratio", "C10AcylCoA_ratio", "C10EnoylCoA_ratio", "C12AcylCoA_ratio", "C12EnoylCoA_ratio", "C14AcylCoA_ratio", "C14EnoylCoA_ratio", "C4EnoylCoA_ratio", "C6AcylCoA_ratio", "C6HydroxyacylCoA_ratio", "C8AcylCoA_ratio", "Time")
-  ratio_quant_map <- paste0("{Values[", ratio_quant_map, "]}")
   types <- c(rep("dependent", ncol(exp_tc_data) - 1), "time")
   ratio_exp <- defineExperiments(experiment_type = "time_course", data = exp_tc_data, types = types, mappings = ratio_quant_map, weight_method = "mean_square")
   addExperiments(ratio_exp, model = new_model)
@@ -99,11 +100,8 @@ model_fit_function <- function(number = 1){
   ##Load and add Experiments, Day 2
   clearExperiments(model = new_model)
   exp_tc_data <- fread("../../data/measurements/human_van_Eunen_ac_ratios_daystep_day_2_time_in_minutes.csv")
-  col_keep <- c("C0", "C10", "C10:1", "C12", "C12:1", "C14", "C14:1", "C4:1", "C6 (C4:1-DC)", "C5-DC (C6-OH)", "C8", "Day")
   exp_tc_data <- subset(exp_tc_data, select = col_keep)
-  ratio_quant_map <- c("Car_ratio", "C10AcylCoA_ratio", "C10EnoylCoA_ratio", "C12AcylCoA_ratio", "C12EnoylCoA_ratio", "C14AcylCoA_ratio", "C14EnoylCoA_ratio", "C4EnoylCoA_ratio", "C6AcylCoA_ratio", "C6HydroxyacylCoA_ratio", "C8AcylCoA_ratio", "Time")
-  ratio_quant_map <- paste0("{Values[", ratio_quant_map, "]}")
-  types <- c(rep("dependent", ncol(exp_tc_data) - 1), "time")
+  types <- c(rep("dependent", ncol(exp_tc_data) - 1), "time" )       
   ratio_exp <- defineExperiments(experiment_type = "time_course", data = exp_tc_data, types = types, mappings = ratio_quant_map, weight_method = "mean_square")
   addExperiments(ratio_exp, model = new_model)
   ##Estimate parameters
@@ -113,8 +111,43 @@ model_fit_function <- function(number = 1){
   pe_res_hj_day2 <- runParameterEstimation(model = new_model)
   #Save fitted model
   saveModel(model = new_model, filename = paste0(out_dir, "fitted_model_pilot_number_", number, "_day2.cps"), overwrite = TRUE)
+  #unload model
+  unloadModel(model = new_model)
   #Return results
   return(list(sres_res_d0 = pe_res_sres_day0, hj_res_d0 = pe_res_hj_day0, sres_res_d1 = pe_res_sres_day1, hj_res_d1 = pe_res_hj_day1, sres_res_d2 = pe_res_sres_day2, hj_res_d2 = pe_res_hj_day2))
 }
-par_est_res <- mclapply(1:1000, model_fit_function)
+tic()
+par_est_res <- lapply(1:100, model_fit_function)
+toc()
+
+save.image()
+
+par_d0 <- lapply(lapply(lapply(par_est_res, `[[`, "hj_res_d0"), `[[`, "parameters"), subset, subset = stri_startswith_fixed(str = parameter, pattern = "Values["), select = c("parameter", "value", "lower_bound", "upper_bound"))
+pd0 <- Reduce("rbind", par_d0)
+pd0$Day <- 0
+par_d1 <- lapply(lapply(lapply(par_est_res, `[[`, "hj_res_d1"), `[[`, "parameters"), subset, subset = stri_startswith_fixed(str = parameter, pattern = "Values["), select = c("parameter", "value", "lower_bound", "upper_bound"))
+pd1 <- Reduce("rbind", par_d1)
+pd1$Day <- 1
+par_d2 <- lapply(lapply(lapply(par_est_res, `[[`, "hj_res_d2"), `[[`, "parameters"), subset, subset = stri_startswith_fixed(str = parameter, pattern = "Values["), select = c("parameter", "value", "lower_bound", "upper_bound"))
+pd2 <- Reduce("rbind", par_d2)
+pd2$Day <- 2
+
+pd <- rbind(pd0, pd1, pd2)
+pd$Group <- c("Survivor", "Nonsurvivor")[1 + (grepl(pattern = "merge", x = pd$parameter))] #Values with [merge] belong to Nonsurvivors
+pd$parameter <- stri_replace(str = pd$parameter, replacement = "", fixed = "[merge]")
+pd$parameter <- stri_extract(str = pd$parameter, regex = "\\[.+\\]")
+n_par <- length(unique(pd$parameter))
+pd_mn <- lapply(unique(pd$parameter), function(par){ ss <- subset(x = pd, parameter == par); ss$value <- ss$value / mean(ss$value); return(ss) })
+pd_mn <- Reduce("rbind", pd_mn)
+p <- ggplot(data = pd, mapping = aes(x = Day, y = value, color = Group)) + 
+  facet_wrap(facets = ~ parameter, ncol = 4, nrow = 2) +
+  stat_summary(geom = "line", fun.data = mean_se) +
+  stat_summary(geom = "errorbar", fun.data = mean_se, position = position_dodge(width = 0.2)) +
+  scale_y_log10() +
+  scale_x_continuous(breaks = 0:2) +
+  ylab("value +/- SEM") +
+  theme_bw() + 
+  theme(panel.grid = element_blank())
+ggsave(filename = "kin_mitomod_Vmax_S_vs_NS_repeated.png", plot = p, path = out_dir, width = 8, height = 4, units = "in")
+
 save.image()
