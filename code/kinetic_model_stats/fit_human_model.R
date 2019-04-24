@@ -1,5 +1,7 @@
+library(purrr)
 library(ggplot2)
 library(stringi)
+library(reshape2)
 library(data.table)
 library(matrixStats)
 library(CoRC)
@@ -9,7 +11,6 @@ library(parallel)
 source("../function_definitions.R")
 
 #Paths
-
 out_dir <- "../../results/kinetic_modeling/"
 base_model_dir <- "../../data/template_models/"
 
@@ -22,16 +23,25 @@ base_ss <- runSteadyState(model = base_model)
 merge_ss <- base_ss
 merge_ss$species$key <- sub(pattern = "{VMAT}", replacement = "{VMAT[merge]}", x = merge_ss$species$key, fixed = TRUE)
 merge_ss$species$key <- sub(pattern = "{VCYT}", replacement = "{VCYT[merge]}", x = merge_ss$species$key, fixed = TRUE)
-ss_conc <- rbind(base_ss$species, merge_ss$species)
+ss_conc <- rbind(base_ss$species, merge_ss$species) 
 ss_conc <- subset(ss_conc, type == "reactions")
 base_gcvals <- getGlobalQuantities(model = base_model)
 merge_gcvals <- base_gcvals
 merge_gcvals$name <- paste0(merge_gcvals$name, "[merge]")
 merge_gcvals <- rbind(base_gcvals, merge_gcvals)
 
-#To later turn into a function that runs in parallel from random start points
+#Set optimization endpoints and mappings - stays the same for all optimization steps
+#col_keep <- c("C0", "C10", "C10:1", "C12", "C12:1", "C14", "C14:1", "C16", "C16:1", "C16-OH", "C2", "C4", "C4:1", "C3-DC (C4-OH)", "C6 (C4:1-DC)", "C6:1", "C5-DC (C6-OH)", "C8", "Day")
+#ratio_quant_map <- c("Car_ratio", "C10AcylCoA_ratio", "C10EnoylCoA_ratio", "C12AcylCoA_ratio", "C12EnoylCoA_ratio", "C14AcylCoA_ratio", "C14EnoylCoA_ratio", "C16AcylCoA_ratio", "C16EnoylCoA_ratio", "C16HydroxyacylCoA_ratio", "AcetylCoA_ratio", "C4AcylCoA_ratio", "C4EnoylCoA_ratio", "C4HydroxyacylCoA_ratio", "C6AcylCoA_ratio", "C6EnoylCoA_ratio", "C6HydroxyacylCoA_ratio", "C8AcylCoA_ratio", "Time")
+col_keep <- c("C0", "C10", "C10:1", "C12", "C12:1", "C4:1", "C3-DC (C4-OH)", "C6 (C4:1-DC)", "C6:1", "C5-DC (C6-OH)", "C8", "Day")
+ratio_quant_map <- c("Car_ratio", "C10AcylCoA_ratio", "C10EnoylCoA_ratio", "C12AcylCoA_ratio", "C12EnoylCoA_ratio", "C4EnoylCoA_ratio", "C4HydroxyacylCoA_ratio", "C6AcylCoA_ratio", "C6EnoylCoA_ratio", "C6HydroxyacylCoA_ratio", "C8AcylCoA_ratio", "Time")
+ratio_quant_map <- paste0("{Values[", ratio_quant_map, "]}")
+#Set kinetic parameter names to estimate - also the same for all optimization steps
+react_pars <- c("Vcpt2", "Vcrot", "Vmcad", "Vmckat", "Vmschad", "Vmtp", "Vscad", "Vvlcad") #, "Ksacesink", "Ksfadhsink") # do not vary sink parameters!
+react_pars <- c(react_pars, paste0(react_pars, "[merge]"))
 
-model_fit_function <- function(number = 1){
+#Fitting function
+model_fit_function <- function(number = 1, base_model_dir, out_dir, ss_conc, merge_gcvals = merge_gcvals, react_pars = react_pars, col_keep = col_keep, ratio_quant_map = ratio_quant_map){
   ##Load and clean model
   new_model <- loadModel(path = paste0(base_model_dir, "human_beta_oxidation_twin_model.cps"))
   clearExperiments(model = new_model)
@@ -41,33 +51,27 @@ model_fit_function <- function(number = 1){
   setSpecies(key = ss_conc$key, initial_concentration = ss_conc$concentration, model = new_model)
   ##Set species initial concentrations
   sprefs <- getSpeciesReferences(model = new_model)
-  sprefs <- subset(sprefs, !(substring(name, first = 1, last = 3) %in% c("NAD", "FAD", "CoA")))
+  sprefs <- subset(sprefs, !(substring(name, first = 1, last = 3) %in% c("NAD", "FAD", "CoA"))) # , "Mal"))) # to exclude MalCoA influence, bc. init = 0
   spvals <- getSpecies(model = new_model)
   spvals <- spvals[spvals$key %in% sprefs$key, ]
   spvals <- spvals[match(sprefs$key, spvals$key), ]
   lb <- spvals$initial_concentration / 10
   ub <- spvals$initial_concentration * 10
   species_params <- lapply(1:nrow(sprefs), function(n) defineParameterEstimationParameter(ref = sprefs$initial_concentration[n], lower_bound = lb[n], upper_bound = ub[n], start_value = spvals$initial_concentration[n]))
-  dummy <- lapply(species_params, addParameterEstimationParameter, model = new_model)
+  dummy <- lapply(species_params, addParameterEstimationParameter, model = new_model) #TODO: test effect of parameter availability for tuning
   ##Set kinetic parameter names to estimate
   gcrefs <- getGlobalQuantityReferences(model = new_model)
   gcvals <- getGlobalQuantities(model = new_model)
   gcvals$initial_value[match(merge_gcvals$name, gcvals$name)] <- merge_gcvals$initial_value
-  react_Vms <- c("Vcpt2", "Vcrot", "Vmcad", "Vmckat", "Vmschad", "Vmtp", "Vscad", "Vvlcad") #, "Ksacesink", "Ksfadhsink") # do not vary sink parameters!
-  react_Vms <- c(react_Vms, paste0(react_Vms, "[merge]"))
-  gcrefs <- gcrefs[gcrefs$name %in% react_Vms, ]
+  gcrefs <- gcrefs[gcrefs$name %in% react_pars, ]
   gcvals <- gcvals[gcvals$key %in% gcrefs$key, ]
-  gcrefs <- gcrefs[match(react_Vms, gcrefs$name), ]
+  gcrefs <- gcrefs[match(react_pars, gcrefs$name), ]
   gcvals <- gcvals[match(gcrefs$key, gcvals$key), ]
-  react_Vms <- paste0("{Values[", react_Vms, "].InitialValue}")
+  react_Vms <- paste0("{Values[", react_pars, "].InitialValue}")
   lb <- gcvals$initial_value / 10
   ub <- gcvals$initial_value * 10
   react_params <- lapply(1:nrow(gcrefs), function(n) defineParameterEstimationParameter(ref = react_Vms[n], lower_bound = lb[n], upper_bound = ub[n], start_value = gcvals$initial_value[n]))
-  dummy <- lapply(react_params, addParameterEstimationParameter, model = new_model)
-  ##Set optimization endpoints and mappings - stays the same for all optimization steps
-  col_keep <- c("C0", "C10", "C10:1", "C12", "C12:1", "C14", "C14:1", "C4:1", "C6 (C4:1-DC)", "C5-DC (C6-OH)", "C8", "Day")
-  ratio_quant_map <- c("Car_ratio", "C10AcylCoA_ratio", "C10EnoylCoA_ratio", "C12AcylCoA_ratio", "C12EnoylCoA_ratio", "C14AcylCoA_ratio", "C14EnoylCoA_ratio", "C4EnoylCoA_ratio", "C6AcylCoA_ratio", "C6HydroxyacylCoA_ratio", "C8AcylCoA_ratio", "Time")
-  ratio_quant_map <- paste0("{Values[", ratio_quant_map, "]}")
+  #dummy <- lapply(react_params, addParameterEstimationParameter, model = new_model)
   ##Load and add experiments, Day 0
   exp_tc_data <- fread("../../data/measurements/human_van_Eunen_ac_ratios_daystep_day_0_time_in_minutes.csv")
   exp_tc_data <- subset(exp_tc_data, select = col_keep)
@@ -77,7 +81,7 @@ model_fit_function <- function(number = 1){
   ##Estimate parameters
   setParameterEstimationSettings(model = new_model, method = "SRES", update_model = TRUE, randomize_start_values = TRUE) #parameters are already stored in model
   pe_res_sres_day0 <- runParameterEstimation(model = new_model)
-  setParameterEstimationSettings(model = new_model, method = "HookeJeeves", update_model = TRUE, randomize_start_values = TRUE)
+  setParameterEstimationSettings(model = new_model, method = "HookeJeeves", update_model = TRUE, randomize_start_values = FALSE)
   pe_res_hj_day0 <- runParameterEstimation(model = new_model)
   
   saveModel(model = new_model, filename = paste0(out_dir, "fitted_model_pilot_number_", number, "_day0.cps"), overwrite = TRUE)
@@ -113,15 +117,22 @@ model_fit_function <- function(number = 1){
   saveModel(model = new_model, filename = paste0(out_dir, "fitted_model_pilot_number_", number, "_day2.cps"), overwrite = TRUE)
   #unload model
   unloadModel(model = new_model)
+  
   #Return results
   return(list(sres_res_d0 = pe_res_sres_day0, hj_res_d0 = pe_res_hj_day0, sres_res_d1 = pe_res_sres_day1, hj_res_d1 = pe_res_hj_day1, sres_res_d2 = pe_res_sres_day2, hj_res_d2 = pe_res_hj_day2))
 }
+
+#Actual fitting
 tic()
-par_est_res <- lapply(1:100, model_fit_function)
+cl <- makeCluster(detectCores() - 1)
+prep_res <- clusterCall(cl = cl, fun = eval, quote({library(CoRC); library(data.table)}), env = .GlobalEnv)
+par_est_res <- parLapplyLB(cl = cl, X = 1:100, fun = model_fit_function, base_model_dir = base_model_dir, out_dir = out_dir, ss_conc = ss_conc, merge_gcvals = merge_gcvals, react_pars = react_pars, col_keep = col_keep, ratio_quant_map = ratio_quant_map)
+stopCluster(cl)
 toc()
 
-save.image()
+#save.image()
 
+#Extract optimization results
 par_d0 <- lapply(lapply(lapply(par_est_res, `[[`, "hj_res_d0"), `[[`, "parameters"), subset, subset = stri_startswith_fixed(str = parameter, pattern = "Values["), select = c("parameter", "value", "lower_bound", "upper_bound"))
 pd0 <- Reduce("rbind", par_d0)
 pd0$Day <- 0
@@ -132,7 +143,14 @@ par_d2 <- lapply(lapply(lapply(par_est_res, `[[`, "hj_res_d2"), `[[`, "parameter
 pd2 <- Reduce("rbind", par_d2)
 pd2$Day <- 2
 
+obj_d0 <- sapply(lapply(par_est_res, `[[`, "hj_res_d0"), function(e) e$main$objective_value)
+obj_d1 <- sapply(lapply(par_est_res, `[[`, "hj_res_d1"), function(e) e$main$objective_value)
+obj_d2 <- sapply(lapply(par_est_res, `[[`, "hj_res_d2"), function(e) e$main$objective_value)
+obj <- data.frame(Value = c(obj_d0, obj_d1, obj_d2), Day = rep(0:2, each = length(obj_d0)))
+
+#Plot enzyme
 pd <- rbind(pd0, pd1, pd2)
+pd$Run <- rep(rep(1:length(par_est_res), each = length(unique(pd0$parameter))), times = 3)
 pd$Group <- c("Survivor", "Nonsurvivor")[1 + (grepl(pattern = "merge", x = pd$parameter))] #Values with [merge] belong to Nonsurvivors
 pd$parameter <- stri_replace(str = pd$parameter, replacement = "", fixed = "[merge]")
 pd$parameter <- stri_extract(str = pd$parameter, regex = "\\[.+\\]")
@@ -142,12 +160,40 @@ pd_mn <- Reduce("rbind", pd_mn)
 p <- ggplot(data = pd, mapping = aes(x = Day, y = value, color = Group)) + 
   facet_wrap(facets = ~ parameter, ncol = 4, nrow = 2) +
   stat_summary(geom = "line", fun.data = mean_se) +
-  stat_summary(geom = "errorbar", fun.data = mean_se, position = position_dodge(width = 0.2)) +
+  #stat_summary(geom = "errorbar", fun.data = mean_se, position = position_dodge(width = 0.2)) +
+  geom_hline(mapping = aes(yintercept = lower_bound)) +
+  geom_hline(mapping = aes(yintercept = upper_bound)) +
   scale_y_log10() +
   scale_x_continuous(breaks = 0:2) +
-  ylab("value +/- SEM") +
+  ylab("value +/- 1 SEM") +
   theme_bw() + 
   theme(panel.grid = element_blank())
 ggsave(filename = "kin_mitomod_Vmax_S_vs_NS_repeated.png", plot = p, path = out_dir, width = 8, height = 4, units = "in")
 
-save.image()
+mpd <- dcast(pd, Day + Run + parameter ~ Group)
+l <- ggplot(data = mpd, mapping = aes(x = Nonsurvivor, y = Survivor)) + 
+  facet_grid(Day ~ parameter) + 
+  #geom_point(size = 0.7, alpha = 0.1) +
+  stat_bin_hex(bins = 20) + 
+  geom_smooth(formula = y ~ x, method = "lm", se = FALSE) +
+  scale_x_log10() +
+  scale_y_log10() +
+  theme_bw() + 
+  theme(panel.grid = element_blank(), axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+plot(l)
+ggsave(plot = l, file = "kin_mitomod_rel_Vm.png", path = out_dir, width = 10, height = 4, units = "in")
+
+c1pd <- dcast(pd, Day + Run + Group ~ parameter)
+c2pd <- dcast(pd, Day + Run ~ parameter + Group)
+pc1 <- prcomp(as.matrix(c1pd[c1pd$Day == 0, -1:-3]), scale. = TRUE)
+pc2 <- prcomp(as.matrix(c2pd[c2pd$Day == 0, -1:-2]), scale. = TRUE)
+
+h <- ggplot(data = obj, mapping = aes(x = Value)) +
+  facet_wrap(Day ~ .) +
+  scale_x_log10() +
+  geom_histogram(bins = 10) +
+  theme_bw() + 
+  theme(panel.grid = element_blank())
+ggsave(plot = h, filename = "kin_mitomod_obj_val.png", path = out_dir, width = 8, height = 4, units = "in")
+
+unloadAllModels()
