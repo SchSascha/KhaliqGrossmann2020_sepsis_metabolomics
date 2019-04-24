@@ -59,6 +59,10 @@ rat_sepsis_legend <- get_rat_sepsis_legend()
 ##Import normal plasma ranges
 human_healthy_ranges <- get_french_normal_data()
 
+##Import validation data
+human_sepsis_val_data <- get_Ferrario_validation_data()
+human_sepsis_val_data <- human_sepsis_val_data[, -ncol(human_sepsis_val_data)]
+
 ###########################
 #Process data
 ###########################
@@ -76,6 +80,11 @@ colnames(human_data) <- make.names(colnames(human_data))
 imputables <- 7:which(colnames(human_data) == "H1")
 human_data[, imputables] <- missRanger(data = human_data[, imputables])
 colnames(human_data) <- colns
+
+colns <- colnames(human_sepsis_val_data)
+colnames(human_sepsis_val_data) <- make.names(colnames(human_sepsis_val_data))
+human_sepsis_val_data[, -1:-4] <- missRanger(data = human_sepsis_val_data[, -1:-4])
+colnames(human_sepsis_val_data) <- colns
 
 #Seperate septic and nonseptic patients
 human_nonsepsis_data <- human_data[human_data$`CAP / FP` == "-", ]
@@ -1888,6 +1897,28 @@ print(paste0("Contribution of high deviation and low deviation to score is ", su
 w <- which.xy(udev) # tell me which variables make a difference
 mtab <- sort(table(w[, 2]), decreasing = TRUE)
 names(mtab) <- colnames(pat_dev_score)[-1:-6][as.numeric(names(mtab))]
+
+#TODO: validate safe corridor on Ferrario data
+val_anova <- t3ANOVA(data = human_sepsis_val_data, random = ~1|Patient, formula = concentration ~ Day * Survival28, use.corAR = TRUE, col.set = colnames(human_sepsis_val_data[, c(-1:-4)]), id.vars = c("Survival28", "Day", "Patient"), control = lmeControl(msMaxIter = 100))
+vd <- human_sepsis_val_data[, c(-3:-4, -4 + union(-which(val_anova$ps[3, ] < 0.05), -which(val_anova$ps[4, ] < 0.05)))]
+vd[, -1:-2] <- scale(vd[, -1:-2])
+sd_lim <- 5 # max(colMaxs(as.matrix(vd[vd$Survival28 == "S", -1:-2]), na.rm = TRUE))
+udev <- vd[, -1:-2] > matrix(sd_lim, ncol = ncol(vd) - 2, nrow = nrow(vd), byrow = TRUE)
+ldev <- vd[, -1:-2] < matrix(- sd_lim, ncol = ncol(vd) - 2, nrow = nrow(vd), byrow = TRUE)
+sdev <- aggregate(udev | ldev, by = list(Patient = vd$Patient), FUN = max)
+dev_score <- data.frame(Patient = sdev$Patient, score = rowSums(sdev[, -1]))
+dev_score$Survival <- vd$Survival28[match(dev_score$Patient, vd$Patient)]
+p <- ggplot(data = dev_score, mapping = aes(fill = Survival, x = score)) +
+  geom_histogram(position = position_stack(), bins = max(dev_score$score) + 1) +
+  ylab("Number of Patients") +
+  xlab("Number of metabolites outside of the safe corridor at Days 0 & 1") +
+  theme_bw() +
+  theme(panel.grid = element_blank())
+ggsave(plot = p, filename = "generalized_safe_corridor_Ferrario_SD5.png", path = out_dir, width = 6, height = 3, units = "in")
+print(paste0("Contribution of high deviation and low deviation to score is ", sum(udev), " and ", sum(ldev), " respectively."))
+w <- which.xy(udev) # tell me which variables make a difference
+mtab <- sort(table(w[, 2]), decreasing = TRUE)
+names(mtab) <- colnames(vd)[-1:-2][as.numeric(names(mtab))]
 
 ###plot metab variance, only nonsig, nondeviation metabs
 ##Human, variance of ungrouped metab vars, all days
