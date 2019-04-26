@@ -40,6 +40,9 @@ ratio_quant_map <- paste0("{Values[", ratio_quant_map, "]}")
 react_pars <- c("Vcpt2", "Vcrot", "Vmcad", "Vmckat", "Vmschad", "Vmtp", "Vscad", "Vvlcad") #, "Ksacesink", "Ksfadhsink") # do not vary sink parameters!
 react_pars <- c(react_pars, paste0(react_pars, "[merge]"))
 
+#TODO: find out how to add constraints to parameter estimation taks
+#TODO: add constraints on t=1440 concentrations to be similar to t=0 concentrations
+
 #Fitting function
 model_fit_function <- function(number = 1, base_model_dir, out_dir, ss_conc, merge_gcvals = merge_gcvals, react_pars = react_pars, col_keep = col_keep, ratio_quant_map = ratio_quant_map){
   ##Load and clean model
@@ -51,14 +54,14 @@ model_fit_function <- function(number = 1, base_model_dir, out_dir, ss_conc, mer
   setSpecies(key = ss_conc$key, initial_concentration = ss_conc$concentration, model = new_model)
   ##Set species initial concentrations
   sprefs <- getSpeciesReferences(model = new_model)
-  sprefs <- subset(sprefs, !(substring(name, first = 1, last = 3) %in% c("NAD", "FAD", "CoA"))) # , "Mal"))) # to exclude MalCoA influence, bc. init = 0
+  sprefs <- subset(sprefs, !(substring(name, first = 1, last = 3) %in% c("NAD", "FAD", "CoA", "Mal"))) # to exclude MalCoA influence, bc. init = 0
   spvals <- getSpecies(model = new_model)
   spvals <- spvals[spvals$key %in% sprefs$key, ]
   spvals <- spvals[match(sprefs$key, spvals$key), ]
-  lb <- spvals$initial_concentration / 10
-  ub <- spvals$initial_concentration * 10
+  lb <- spvals$initial_concentration / 2
+  ub <- spvals$initial_concentration * 2
   species_params <- lapply(1:nrow(sprefs), function(n) defineParameterEstimationParameter(ref = sprefs$initial_concentration[n], lower_bound = lb[n], upper_bound = ub[n], start_value = spvals$initial_concentration[n]))
-  dummy <- lapply(species_params, addParameterEstimationParameter, model = new_model) #TODO: test effect of parameter availability for tuning
+  dummy <- lapply(species_params, addParameterEstimationParameter, model = new_model)
   ##Set kinetic parameter names to estimate
   gcrefs <- getGlobalQuantityReferences(model = new_model)
   gcvals <- getGlobalQuantities(model = new_model)
@@ -68,10 +71,10 @@ model_fit_function <- function(number = 1, base_model_dir, out_dir, ss_conc, mer
   gcrefs <- gcrefs[match(react_pars, gcrefs$name), ]
   gcvals <- gcvals[match(gcrefs$key, gcvals$key), ]
   react_Vms <- paste0("{Values[", react_pars, "].InitialValue}")
-  lb <- gcvals$initial_value / 10
-  ub <- gcvals$initial_value * 10
+  lb <- gcvals$initial_value / 5
+  ub <- gcvals$initial_value * 5
   react_params <- lapply(1:nrow(gcrefs), function(n) defineParameterEstimationParameter(ref = react_Vms[n], lower_bound = lb[n], upper_bound = ub[n], start_value = gcvals$initial_value[n]))
-  #dummy <- lapply(react_params, addParameterEstimationParameter, model = new_model)
+  dummy <- lapply(react_params, addParameterEstimationParameter, model = new_model)
   ##Load and add experiments, Day 0
   exp_tc_data <- fread("../../data/measurements/human_van_Eunen_ac_ratios_daystep_day_0_time_in_minutes.csv")
   exp_tc_data <- subset(exp_tc_data, select = col_keep)
@@ -126,7 +129,7 @@ model_fit_function <- function(number = 1, base_model_dir, out_dir, ss_conc, mer
 tic()
 cl <- makeCluster(detectCores() - 1)
 prep_res <- clusterCall(cl = cl, fun = eval, quote({library(CoRC); library(data.table)}), env = .GlobalEnv)
-par_est_res <- parLapplyLB(cl = cl, X = 1:100, fun = model_fit_function, base_model_dir = base_model_dir, out_dir = out_dir, ss_conc = ss_conc, merge_gcvals = merge_gcvals, react_pars = react_pars, col_keep = col_keep, ratio_quant_map = ratio_quant_map)
+par_est_res <- parLapplyLB(cl = cl, X = 1:1000, fun = model_fit_function, base_model_dir = base_model_dir, out_dir = out_dir, ss_conc = ss_conc, merge_gcvals = merge_gcvals, react_pars = react_pars, col_keep = col_keep, ratio_quant_map = ratio_quant_map)
 stopCluster(cl)
 toc()
 
@@ -196,4 +199,8 @@ h <- ggplot(data = obj, mapping = aes(x = Value)) +
   theme(panel.grid = element_blank())
 ggsave(plot = h, filename = "kin_mitomod_obj_val.png", path = out_dir, width = 8, height = 4, units = "in")
 
+#Remove COPASI models from memory
 unloadAllModels()
+
+#Remove temporary experiment files created by CoRC
+file.remove(list.files(pattern = "CoRC_exp_.{9,13}\\.txt$"))
