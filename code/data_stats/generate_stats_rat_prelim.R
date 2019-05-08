@@ -955,7 +955,7 @@ p <- ggplot(data = subset(rat_ratio_ci, metabolite %in% c("C0", "C2", "C4", "C4:
   coord_cartesian(xlim = c(0.75, 2), ylim = c(0.4, 1.5)) +
   theme_bw() +
   theme(panel.grid = element_blank())
-ggsave(plot = p, filename = "rat_ac_ratios_liver_vs_plasma_6h.png", path = out_dir)
+ggsave(plot = p, filename = "rat_S_vs_NS_ac_ratios_liver_vs_plasma_6h.png", path = out_dir)
 
 p <- ggplot(data = subset(rat_ratio_ci, metabolite %in% c("C0", "C2", "C4", "C4:1", "C3-DC (C4-OH)", "C6 (C4:1-DC)", "C5-DC (C6-OH)", "C6:1", "C8", "C10", "C10:1", "C12", "C12:1", "C12-OH", "C14", "C14:1", "C14-OH", "C16", "C16:1", "C16-OH")), 
             mapping = aes(x = liver_24h_estimate, 
@@ -975,7 +975,7 @@ p <- ggplot(data = subset(rat_ratio_ci, metabolite %in% c("C0", "C2", "C4", "C4:
   coord_cartesian(xlim = c(0.75, 2), ylim = c(0.4, 1.5)) +
   theme_bw() +
   theme(panel.grid = element_blank())
-ggsave(plot = p, filename = "rat_ac_ratios_liver_vs_plasma_24h.png", path = out_dir)
+ggsave(plot = p, filename = "rat_S_vs_NS_ac_ratios_liver_vs_plasma_24h.png", path = out_dir)
 
 p <- ggplot(data = subset(rat_ratio_ci, metabolite %in% c("C0", "C2", "C4", "C4:1", "C3-DC (C4-OH)", "C6 (C4:1-DC)", "C5-DC (C6-OH)", "C6:1", "C8", "C10", "C10:1", "C12", "C12:1", "C12-OH", "C14", "C14:1", "C14-OH", "C16", "C16:1", "C16-OH")), 
             mapping = aes(x = heart_6h_estimate, 
@@ -995,7 +995,7 @@ p <- ggplot(data = subset(rat_ratio_ci, metabolite %in% c("C0", "C2", "C4", "C4:
   coord_cartesian(xlim = c(0, 3), ylim = c(0.4, 1.5)) +
   theme_bw() +
   theme(panel.grid = element_blank())
-ggsave(plot = p, filename = "rat_ac_ratios_heart_vs_plasma_6h.png", path = out_dir)
+ggsave(plot = p, filename = "rat_S_vs_NS_ac_ratios_heart_vs_plasma_6h.png", path = out_dir)
 
 p <- ggplot(data = subset(rat_ratio_ci, metabolite %in% c("C0", "C2", "C4", "C4:1", "C3-DC (C4-OH)", "C6 (C4:1-DC)", "C5-DC (C6-OH)", "C6:1", "C8", "C10", "C10:1", "C12", "C12:1", "C12-OH", "C14", "C14:1", "C14-OH", "C16", "C16:1", "C16-OH")), 
             mapping = aes(x = heart_24h_estimate, 
@@ -1015,7 +1015,7 @@ p <- ggplot(data = subset(rat_ratio_ci, metabolite %in% c("C0", "C2", "C4", "C4:
   coord_cartesian(xlim = c(0, 3), ylim = c(0.4, 1.5)) +
   theme_bw() +
   theme(panel.grid = element_blank())
-ggsave(plot = p, filename = "rat_ac_ratios_heart_vs_plasma_24h.png", path = out_dir)
+ggsave(plot = p, filename = "rat_S_vs_NS_ac_ratios_heart_vs_plasma_24h.png", path = out_dir)
 
 p <- ggplot(data = subset(rat_ratio_ci, metabolite %in% c("C0", "C2", "C4", "C4:1", "C3-DC (C4-OH)", "C6 (C4:1-DC)", "C5-DC (C6-OH)", "C6:1", "C8", "C10", "C10:1", "C12", "C12:1", "C12-OH", "C14", "C14:1", "C14-OH", "C16", "C16:1", "C16-OH")), 
             mapping = aes(x = heart_6h_estimate, 
@@ -1035,7 +1035,7 @@ p <- ggplot(data = subset(rat_ratio_ci, metabolite %in% c("C0", "C2", "C4", "C4:
   coord_cartesian(xlim = c(0, 3), ylim = c(0.4, 2)) +
   theme_bw() +
   theme(panel.grid = element_blank())
-ggsave(plot = p, filename = "rat_ac_ratios_heart_vs_liver_6h.png", path = out_dir)
+ggsave(plot = p, filename = "rat_S_vs_NS_ac_ratios_heart_vs_liver_6h.png", path = out_dir)
 
 p <- ggplot(data = subset(rat_ratio_ci, metabolite %in% c("C0", "C2", "C4", "C4:1", "C3-DC (C4-OH)", "C6 (C4:1-DC)", "C5-DC (C6-OH)", "C6:1", "C8", "C10", "C10:1", "C12", "C12:1", "C12-OH", "C14", "C14:1", "C14-OH", "C16", "C16:1", "C16-OH")), 
             mapping = aes(x = heart_24h_estimate, 
@@ -1055,7 +1055,10 @@ p <- ggplot(data = subset(rat_ratio_ci, metabolite %in% c("C0", "C2", "C4", "C4:
   coord_cartesian(xlim = c(0, 3), ylim = c(0.4, 2)) +
   theme_bw() +
   theme(panel.grid = element_blank())
-ggsave(plot = p, filename = "rat_ac_ratios_heart_vs_liver_24h.png", path = out_dir)
+ggsave(plot = p, filename = "rat_S_vs_NS_ac_ratios_heart_vs_liver_24h.png", path = out_dir)
+
+#TODO: add comparisons of sham rat vs septic S rat ratios, maybe also sham vs septic NS
+
 
 ##Rat, metabolites vs survival, first measurement only
 # rp1 <- ggplot(data = subset(x = rat_sepsis_data_long_form, subset = `time point` == "6h"), mapping = aes(x = group, y = value)) +
