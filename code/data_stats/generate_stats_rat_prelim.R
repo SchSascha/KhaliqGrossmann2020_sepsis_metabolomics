@@ -1059,6 +1059,18 @@ ggsave(plot = p, filename = "rat_S_vs_NS_ac_ratios_heart_vs_liver_24h.png", path
 
 #TODO: add comparisons of sham rat vs septic S rat ratios, maybe also sham vs septic NS
 
+ml_human_best_feat_set <- c("C4", "lysoPC a C28:0", "lysoPC a C28:1")
+data_feat_set <- subset(rat_sepsis_data, material %in% c("liver", "plasma") & `time point` %in% c("6h", "24h"))
+data_feat_set <- cbind(data_feat_set[, 1:4], data_feat_set[ml_human_best_feat_set])
+data_feat_set <- melt(data_feat_set, id.vars = 1:4)
+human_best_feat_plot <- ggplot(data = data_feat_set, mapping = aes(y = value, x = material, color = group)) +
+  facet_grid(facets = `time point` ~ variable) + 
+  stat_summary(fun.data = "mean_se", geom = "errorbar", position = "dodge") +
+  scale_discrete_manual(values = scales::hue_pal()(3), limits = unique(data_feat_set$group)[c(3, 1, 2)], aesthetics = c("fill", "color")) +
+  scale_y_log10() +
+  theme_bw() + 
+  theme(panel.grid = element_blank(), legend.direction = "horizontal", legend.position = "bottom", axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+ggsave(filename = "human_survival_best_feats_plasma_liver.png", plot = human_best_feat_plot, path = out_dir, width = 6, height = 6, units = "in")
 
 ##Rat, metabolites vs survival, first measurement only
 # rp1 <- ggplot(data = subset(x = rat_sepsis_data_long_form, subset = `time point` == "6h"), mapping = aes(x = group, y = value)) +
