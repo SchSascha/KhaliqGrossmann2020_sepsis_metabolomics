@@ -33,26 +33,17 @@ if (!dir.exists(out_dir_pred))
 
 #Import data
 ##Import clinical data
-human_sepsis_data <- get_human_sepsis_data()
+human_data <- get_human_sepsis_data()
 
 ##Import clinicla legend
 human_sepsis_legend <- get_human_sepsis_legend()
 
 ##Filter out patients without sepsis
-human_nonsepsis_data <- human_sepsis_data[human_sepsis_data$`CAP / FP` == "-", ]
-human_sepsis_data <- human_sepsis_data[human_sepsis_data$`CAP / FP` != "-", ]
+human_nonsepsis_data <- human_data[human_data$`CAP / FP` == "-", ]
+human_sepsis_data <- human_data[human_data$`CAP / FP` != "-", ]
 
 ##only keep non-lipid metabolites
 #human_sepsis_data <- subset(human_sepsis_data, select = c(1:5, which(human_sepsis_legend %in% c("acylcarnitine", "amino acid", "biogenic amine", "sugar"))))
-
-#Get significantly different classes
-human_sig_diff_res <- human_sig_diffs_along_days(human_sepsis_data, corr_fdr = FALSE)
-day_sig_u_diff <- human_sig_diff_res$day_sig_u_diff
-day_sig_t_diff <- human_sig_diff_res$day_sig_t_diff
-
-#Get sig vars
-sig_u_class <- na.omit(colnames(day_sig_u_diff[,-1])[colAnys(day_sig_u_diff[, -1] <= 0.05)])
-sig_t_class <- na.omit(colnames(day_sig_t_diff[,-1])[colAnys(day_sig_t_diff[, -1] <= 0.05)])
 
 #Try prediction
 ##On human
@@ -61,12 +52,24 @@ human_sepsis_data_ml <- human_sepsis_data[, 1:which(colnames(human_sepsis_data) 
 human_sepsis_data_ml <- subset(human_sepsis_data_ml, Day == 0)
 human_sepsis_data_ml <- subset(human_sepsis_data_ml, select = !(colnames(human_sepsis_data_ml) %in% c("Histamin", "PC aa C36:0", "DOPA"))) #remove metabs with questionable range
 human_sepsis_data_ml$Survival <- as.numeric(factor(human_sepsis_data_ml$Survival, levels = sort(unique(human_sepsis_data_ml$Survival)))) - 1 #Dependent variable transformation
-human_sepsis_data_ml <- human_sepsis_data_ml[, c(1:6, 6 + which(!colAnys(human_sepsis_data_ml == 0)[-1:-6]))]
+col_all_nonzeros <- 6 + which(!colAnys(human_sepsis_data_ml == 0)[-1:-6])
+human_sepsis_data_ml <- human_sepsis_data_ml[, c(1:6, col_all_nonzeros)]
+human_nonsepsis_data_ml <- human_nonsepsis_data[, 1:which(colnames(human_sepsis_data) == "H1")]
+human_nonsepsis_data_ml <- subset(human_nonsepsis_data_ml, Day == 0)
+human_nonsepsis_data_ml <- subset(human_nonsepsis_data_ml, select = !(colnames(human_nonsepsis_data_ml) %in% c("Histamin", "PC aa C36:0", "DOPA"))) #remove metabs with questionable range
+human_nonsepsis_data_ml$Survival <- as.numeric(factor(human_nonsepsis_data_ml$Survival, levels = sort(unique(human_nonsepsis_data_ml$Survival)))) - 1 #Dependent variable transformation
+human_nonsepsis_data_ml <- human_nonsepsis_data_ml[, c(1:6, col_all_nonzeros)]
 ###Strip phenomenological variables
 #human_sepsis_data_ml <- subset(human_sepsis_data_ml, select = c(colnames(human_sepsis_data_ml)[1:5], intersect(sig_t_class, colnames(human_sepsis_data_ml))))
 colnames(human_sepsis_data_ml) <- make.names(colnames(human_sepsis_data_ml))
+colnames(human_nonsepsis_data_ml) <- make.names(colnames(human_nonsepsis_data_ml))
 ###Impute missing values
-human_sepsis_data_ml[, -1:-6] <- scale(missRanger(human_sepsis_data_ml[, -1:-6], pmm.k = 3, num.trees = 100))
+scaled <- scale(missRanger(human_sepsis_data_ml[, -1:-6], pmm.k = 3, num.trees = 100))
+sepsis_data_scales <- lapply(c("scaled:center", "scaled:scale"), function(w) attr(scaled, which = w))
+human_sepsis_data_ml[, -1:-6] <- scaled
+human_nonsepsis_data_ml[, -1:-6] <- scale(missRanger(human_nonsepsis_data_ml[, -1:-6], pmm.k = 3, num.trees = 100), 
+                                          center = sepsis_data_scales[[1]], 
+                                          scale = sepsis_data_scales[[2]])
 
 ##Set number of features to try in RFE
 set_sizes <- c(1:20, 25, 30, 40, 50, 60, 80, 100, 120, 150, 180)
@@ -128,6 +131,42 @@ sv_tlpocv_res <- tlpocv_rfe_parallel(data_x = human_sepsis_data_ml[-1:-6],
                                      varimp_fun = sv_varimp_fun)
 toc()
 save.image()
+
+#Test performance on nonseptic patients
+num_ns_reps <- 60
+num_best_feats <- 6
+##Random Forest
+l <- length(rg_tlpocv_res$best_features)
+rg_ns_feats <- rg_tlpocv_res$best_features[(l-1):(l - num_best_feats + 1)]
+rg_cf_pred <- list()
+for (n in seq_along(rg_ns_feats)){
+  rg_cf_pred[[n]] <- list()
+  for (num in 1:num_ns_reps){
+    rg_cf <- ranger(data = human_sepsis_data_ml[, c("Survival", rg_ns_feats[[n]])], write.forest = TRUE, probability = TRUE, save.memory = FALSE, dependent.variable.name = "Survival", num.trees = 500)
+    rg_cf_pred[[n]][[num]] <- predict(object = rg_cf, data = human_nonsepsis_data_ml, type = "response")
+  }
+}
+rg_cf_pred <- lapply(rg_cf_pred, lapply, `[[`, "predictions")
+rg_cf_pred <- lapply(rg_cf_pred, lapply, function(e) e[, 1])
+rg_cf_auc <- lapply(rg_cf_pred, sapply, function(p) ml.auc(ref = 1 - human_nonsepsis_data_ml$Survival, conf = p))
+rg_cf_auc <- sapply(rg_cf_auc, mean)
+rg_cf_auc
+rg_cf_roc <- lapply(rg_cf_pred, lapply, function(p) ml.roc(ref = 1 - human_nonsepsis_data_ml$Survival, conf = p))
+##SVM
+l <- length(sv_tlpocv_res$best_features)
+sv_ns_feats <- sv_tlpocv_res$best_features[(l-1):(l - num_best_feats + 1)]
+sv_cf_pred <- list()
+for (n in seq_along(sv_ns_feats)){
+  sv_cf_pred[[n]] <- list()
+  for (num in 1:num_ns_reps){
+    sv_cf <- sv_tr_fun(tr_x = human_sepsis_data_ml[, sv_ns_feats[[n]]], tr_y = human_sepsis_data_ml["Survival"])
+    sv_cf_pred[[n]][[num]] <- sv_prob_fun(classifier = sv_cf, te_x = human_nonsepsis_data_ml[sv_ns_feats[[n]]])
+  }
+}
+sv_cf_auc <- lapply(sv_cf_pred, sapply, function(p) ml.auc(ref = 1 - human_nonsepsis_data_ml$Survival, conf = p))
+sv_cf_auc <- sapply(sv_cf_auc, mean)
+sv_cf_auc
+sv_cf_roc <- lapply(sv_cf_pred, lapply, function(p) ml.roc(ref = 1 - human_nonsepsis_data_ml$Survival, conf = p))
 
 #Plot AUCs and ROCs
 
@@ -254,3 +293,46 @@ p <- ggplot(data = subset(human_sepsis_data_ml, Day == 0, c("Survival", f2)), ma
   geom_point() + 
   theme_bw()
 ggsave(plot = p, filename = "SVM_class_separation_2feat.png", width = 5, height = 4, units = "in", path = out_dir_pred)
+
+rg_nsep_roc_dfs <- lapply(rg_cf_roc, lapply, as.data.frame)
+rg_nsep_roc_dfs <- lapply(rg_nsep_roc_dfs, lapply, function(e) stepfun(e[, 1], c(0, e[, 2])))
+rg_nsep_roc_dfs <- lapply(rg_nsep_roc_dfs, lapply, function(f) data.frame(FPR = seq(0, 1, by = 0.01), TPR = f(seq(0, 1, by = 0.01))))
+rg_nsep_roc_dfs <- lapply(rg_nsep_roc_dfs, lapply, function(df) return(rbind(data.frame(FPR = 0, TPR = 0), df)))
+rg_nsep_roc_dfs <- lapply(lapply(rg_cf_roc, lapply, as.data.frame), lapply, function(df) return(rbind(data.frame(TPR = 0, FPR = 0), df)))
+rg_nonsep_melt_roc <- melt(rg_nsep_roc_dfs, id.vars = 1:2)
+rg_nonsep_melt_roc$Num_features <- factor(sapply(rg_ns_feats, length)[rg_nonsep_melt_roc$L1])
+rg_nonsep_melt_roc$Group <- interaction(rg_nonsep_melt_roc$L2, rg_nonsep_melt_roc$Num_features)
+rg_nonsep_roc <- ggplot(data = rg_nonsep_melt_roc, mapping = aes(x = FPR, y = TPR, color = Num_features, fill = Num_features)) +
+  stat_summary(data = rg_nonsep_melt_roc,
+               fun.y = mean, fun.ymax = function(x) quantile(x, p = 0.75), fun.ymin = function(x) quantile(x, p = 0.25),
+               geom = "ribbon", alpha = 0.1, colour = NA) +
+  stat_summary(data = rg_nonsep_melt_roc,
+               fun.y = median, geom = "line") +
+  geom_segment(x = 0, y = 0, xend = 1, yend = 1, size = 0.25, inherit.aes = FALSE) +
+  scale_x_continuous(limits = c(-0.01, 1.01), expand = c(0, 0)) +
+  scale_y_continuous(limits = c(-0.01, 1.01), expand = c(0, 0)) +
+  ggtitle("RF: performance on nonseptic patients\ntrained on septic patients") +
+  theme_bw() +
+  theme(panel.grid = element_blank())
+ggsave(plot = rg_nonsep_roc, filename = "RF_train_sep_test_nonsep_roc.png", width = 5, height = 4, units = "in", path = out_dir_pred)
+
+sv_nsep_roc_dfs <- lapply(sv_cf_roc, lapply, as.data.frame)
+sv_nsep_roc_dfs <- lapply(sv_nsep_roc_dfs, lapply, function(e) stepfun(e[, 1], c(0, e[, 2])))
+sv_nsep_roc_dfs <- lapply(sv_nsep_roc_dfs, lapply, function(f) data.frame(FPR = seq(0, 1, by = 0.01), TPR = f(seq(0, 1, by = 0.01))))
+sv_nsep_roc_dfs <- lapply(sv_nsep_roc_dfs, lapply, function(df) return(rbind(data.frame(FPR = 0, TPR = 0), df)))
+sv_nonsep_melt_roc <- melt(sv_nsep_roc_dfs, id.vars = 1:2)
+sv_nonsep_melt_roc$Num_features <- factor(sapply(sv_ns_feats, length)[sv_nonsep_melt_roc$L1])
+sv_nonsep_melt_roc$Group <- interaction(sv_nonsep_melt_roc$L2, sv_nonsep_melt_roc$Num_features)
+sv_nonsep_roc <- ggplot(data = sv_nonsep_melt_roc, mapping = aes(x = FPR, y = TPR, color = Num_features, fill = Num_features)) +
+  stat_summary(data = sv_nonsep_melt_roc,
+               fun.y = mean, fun.ymax = function(x) quantile(x, p = 0.75), fun.ymin = function(x) quantile(x, p = 0.25),
+               geom = "ribbon", alpha = 0.1, colour = NA) +
+  stat_summary(data = sv_nonsep_melt_roc,
+               fun.y = median, geom = "line") +
+  geom_segment(x = 0, y = 0, xend = 1, yend = 1, size = 0.25, inherit.aes = FALSE) +
+  scale_x_continuous(limits = c(-0.01, 1.01), expand = c(0, 0)) +
+  scale_y_continuous(limits = c(-0.01, 1.01), expand = c(0, 0)) +
+  ggtitle("SVM: performance on nonseptic patients\ntrained on septic patients") +
+  theme_bw() +
+  theme(panel.grid = element_blank())
+ggsave(plot = sv_nonsep_roc, filename = "SVM_train_sep_test_nonsep_roc.png", width = 5, height = 4, units = "in", path = out_dir_pred)
