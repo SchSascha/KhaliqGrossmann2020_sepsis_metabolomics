@@ -55,7 +55,7 @@ get_Ferrario_validation_data <- function(){
   data <- cbind(data, matrix(NA, ncol = length(mets), nrow = nrow(data)))
   colnames(data)[-1:-4] <- mets
   data[1:nrow(data_day1), m1 + 4] <- data_day1
-  data[(nrow(data_day1) + 1):nrow(data_day7), m2 + 4] <- data_day7
+  data[(nrow(data_day1) + 1):nrow(data), m2 + 4] <- data_day7
   data <- data[order(data$Patient),]
   return(data)
 }

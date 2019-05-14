@@ -61,7 +61,7 @@ human_healthy_ranges <- get_french_normal_data()
 
 ##Import validation data
 human_sepsis_val_data <- get_Ferrario_validation_data()
-human_sepsis_val_data <- human_sepsis_val_data[, -ncol(human_sepsis_val_data)]
+human_sepsis_val_data <- human_sepsis_val_data[, -5] #column 5 has a lysoPC where all values at Day 6 are missing
 
 ###########################
 #Process data
@@ -1869,15 +1869,58 @@ p <- ggplot(data = subset(cntrl_and_s, Survival != "NS"), mapping = aes(y = valu
   theme_bw() + 
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 6), panel.grid = element_line(colour = 0))
 ggsave(filename = paste0("human_metab_nonsig_single_plot_SD_all_pats.png"), path = out_dir, plot = p, width = 16, height = 9.5, units = "in")
+##Same as above, but with Survivor min-max as corridor
+pat_dev_score <- subset(human_data, Day %in% tanova_day_set, select = setdiff(which(!(colnames(human_data) %in% sig.anova.car.s.class)), pheno_sel)) # select already includes cols 1:6
+pat_dev_max <- colMaxs(as.matrix(pat_dev_score[pat_dev_score$Survival == "S", -1:-6]))
+pat_dev_min <- colMins(as.matrix(pat_dev_score[pat_dev_score$Survival == "S", -1:-6]))
+udev <- pat_dev_score[, -1:-6] > matrix(pat_dev_max, ncol = ncol(pat_dev_score) - 6, nrow = nrow(pat_dev_score), byrow = TRUE)
+ldev <- pat_dev_score[, -1:-6] < matrix(pat_dev_min, ncol = ncol(pat_dev_score) - 6, nrow = nrow(pat_dev_score), byrow = TRUE)
+sdev <- aggregate(udev | ldev, by = list(Patient = pat_dev_score$Patient), FUN = max) #count same metabolite at different time points as one deviation
+met_pat_score <- data.frame(Metabolite = colnames(sdev)[-1], score = colSums(sdev[, -1]), stringsAsFactors = FALSE)
+sdev_melted <- subset(melt(sdev, id.vars = 1), value == 1)
+score_thresh <- 3
+minmax_corridor_met_sel <- subset(met_pat_score, score > score_thresh)
+minmax_corridor_met_sel$color <- grey_pal()(max(minmax_corridor_met_sel$score) - score_thresh)[minmax_corridor_met_sel$score - score_thresh]
+hsd <- subset(human_data, Day %in% tanova_day_set, select = c(colnames(human_data)[1:6], minmax_corridor_met_sel$Metabolite))
+hsd <- cbind(hsd[1:6], hsd[-1:-6][order(colMeans(as.matrix(subset(hsd, Survival == "S", -1:-6))), decreasing = TRUE)])
+hsd <- melt(hsd, id.vars = 1:6)
+pat_path <- melt(subset(human_data, Survival == "NS" & Day %in% tanova_day_set), id.vars = 1:6)
+pat_path <- subset(pat_path, variable %in% minmax_corridor_met_sel$Metabolite)
+pat_path <- subset(pat_path, interaction(variable, Patient) %in% interaction(sdev_melted$variable, sdev_melted$Patient))
+pat_path$x <- match(pat_path$variable, unique(hsd$variable))
+pat_path$x <- pat_path$x + (scale(seq_along(unique(pat_path$Day)))/4)[unlist(lapply(rle(pat_path$Patient)[["lengths"]], function(to) 1:to))]
+pat_path$metabolite_group <- human_sepsis_legend$group[match(pat_path$variable, human_sepsis_legend[, 1])]
+p <- ggplot(data = subset(hsd, Survival == "S"), mapping = aes(y = value, x = variable, color = Group)) +
+  stat_summary(fun.y = "mean", fun.ymin = "min", fun.ymax = "max", position = position_dodge(width = 0.7), geom = "errorbar") +
+  stat_summary(fun.y = "mean", fun.ymin = "mean", fun.ymax = "mean", position = position_dodge(width = 0.7), geom = "errorbar") +
+  geom_line(data = pat_path, mapping = aes(y = value, x = x, color = Group, group = interaction(variable, Patient), linetype = factor(Patient)), inherit.aes = FALSE) +
+  geom_tile(mapping = aes(x = variable, y = 1e-4, fill = metabolite_group), width = 1, height = 0.5, data = pat_path, inherit.aes = FALSE) +
+  geom_point(mapping = aes(x = Metabolite, y = 3.5e-5, shape = factor(score)), data = minmax_corridor_met_sel, inherit.aes = FALSE) +
+  geom_tile(mapping = aes(x = Metabolite, y = 3.5e-5), width = 1, height = 0.5, fill = minmax_corridor_met_sel$color, data = minmax_corridor_met_sel, inherit.aes = FALSE) +
+  guides(color = guide_legend(order = 1),
+        fill = guide_legend(title = "Metabolite Group", order = 2),
+        shape = guide_legend(title = "#NS pats with deviation", override.aes = list(shape = 15, size = 6, colour = sort(unique(minmax_corridor_met_sel$color))), order = 3),
+        linetype = guide_legend(title = "NS Patient", override.aes = list(color = hue_pal()(4)[c(4, 1)[1 + (subset(hsd, !duplicated(Patient) & Survival == "NS", "Group")[[1]] == "Septic-NS")]]), order = 4)) +
+  scale_color_discrete(drop = FALSE) +
+  scale_y_log10(expand = c(0,0)) +
+  #scale_y_continuous(trans = pseudo_log_trans(sigma = 0.25, base = 2), expand = c(0, 0), limits = c(-10, 1000)) +
+  ylab("Concentration, µM") +
+  xlab("Metabolite") +
+  human_col_scale() +
+  theme_bw() + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 6), panel.grid = element_line(colour = 0))
+ggsave(filename = paste0("human_metab_nonsig_single_plot_minmax_all_pats.png"), path = out_dir, plot = p, width = 16, height = 9.5, units = "in")
+
 ###Generalize the corridor principle to a classification scheme, use corridor 
 corridor <- as.data.frame(t(sapply(unique(cntrl_and_s$variable), 
                                    function(metab) Hmisc::smean.sd(subset(cntrl_and_s, variable == metab & Survival == "S", "value")[[1]]))))
 corridor$variable <- unique(cntrl_and_s$variable)
 for (n in seq_along(corridor))
   corridor[[n]] <- unlist(corridor[[n]])
-pat_dev_score <- subset(human_data, Day %in% 0:3, select = c(1:6, which(colnames(human_data) %in% var_keep_union)))
-pat_dev_mean <- corridor$Mean[match(colnames(pat_dev_score)[-1:-6], corridor$variable)]
-pat_dev_sd <- corridor$SD[match(colnames(pat_dev_score)[-1:-6], corridor$variable)]
+pat_dev_score <- subset(human_data, Day %in% 0:3, select = c(1:6, which(colnames(human_data) %in% corridor$variable)))
+#pat_dev_score <- subset(human_data, Day %in% 0:3, select = setdiff(which(!(colnames(human_data) %in% sig.anova.car.s.class)), pheno_sel))
+pat_dev_mean <- colMeans(pat_dev_score[pat_dev_score$Survival == "S", -1:-6])
+pat_dev_sd <- colSds(as.matrix(pat_dev_score[pat_dev_score$Survival == "S", -1:-6]))
 sdmul <- 5.5
 udev <- pat_dev_score[, -1:-6] > matrix(pat_dev_mean + sdmul * pat_dev_sd, ncol = ncol(pat_dev_score) - 6, nrow = nrow(pat_dev_score), byrow = TRUE)
 ldev <- pat_dev_score[, -1:-6] < matrix(pat_dev_mean - sdmul * pat_dev_sd, ncol = ncol(pat_dev_score) - 6, nrow = nrow(pat_dev_score), byrow = TRUE)
@@ -1892,33 +1935,103 @@ p <- ggplot(data = dev_score, mapping = aes(fill = Group, x = score)) +
   xlab("Number of metabolites outside of the safe corridor at Days 0-3") +
   theme_bw() +
   theme(panel.grid = element_blank())
-ggsave(plot = p, filename = "generalized_safe_corridor.png", path = out_dir, width = 6, height = 3, units = "in")
+ggsave(plot = p, filename = "generalized_safe_corridor_SD5.5.png", path = out_dir, width = 6, height = 3, units = "in")
 print(paste0("Contribution of high deviation and low deviation to score is ", sum(udev), " and ", sum(ldev), " respectively."))
 w <- which.xy(udev) # tell me which variables make a difference
 mtab <- sort(table(w[, 2]), decreasing = TRUE)
 names(mtab) <- colnames(pat_dev_score)[-1:-6][as.numeric(names(mtab))]
+mtab
+##Generalized corridor defined by min and max of survivor (septic and nonseptic)
+pat_dev_score <- subset(human_data, Day %in% 0:3, select = setdiff(which(!(colnames(human_data) %in% sig.anova.car.s.class)), pheno_sel)) # select already includes cols 1:6
+pat_dev_max <- colMaxs(as.matrix(pat_dev_score[pat_dev_score$Survival == "S", -1:-6]))
+pat_dev_min <- colMins(as.matrix(pat_dev_score[pat_dev_score$Survival == "S", -1:-6]))
+udev <- pat_dev_score[, -1:-6] > matrix(pat_dev_max, ncol = ncol(pat_dev_score) - 6, nrow = nrow(pat_dev_score), byrow = TRUE)
+ldev <- pat_dev_score[, -1:-6] < matrix(pat_dev_min, ncol = ncol(pat_dev_score) - 6, nrow = nrow(pat_dev_score), byrow = TRUE)
+sdev <- aggregate(udev | ldev, by = list(Patient = pat_dev_score$Patient), FUN = max) #count same metabolite at different time points as one deviation
+dev_score <- data.frame(Patient = sdev$Patient, score = rowSums(sdev[, -1]))
+dev_score$Survival <- pat_dev_score$Survival[match(dev_score$Patient, pat_dev_score$Patient)]
+dev_score$Group <- pat_dev_score$Group[match(dev_score$Patient, pat_dev_score$Patient)]
+p <- ggplot(data = dev_score, mapping = aes(fill = Group, x = score)) +
+  geom_histogram(position = position_stack(), bins = max(dev_score$score) + 1) +
+  human_col_scale(aesthetics = "fill") +
+  ylab("Number of Patients") +
+  xlab("Number of metabolites outside of the safe corridor at Days 0-3") +
+  theme_bw() +
+  theme(panel.grid = element_blank())
+ggsave(plot = p, filename = "generalized_safe_corridor_minmax.png", path = out_dir, width = 6, height = 3, units = "in")
+print(paste0("Contribution of high deviation and low deviation to score is ", sum(udev), " and ", sum(ldev), " respectively."))
+w <- which.xy(udev | ldev) # tell me which variables make a difference
+mtab <- sort(table(w[, 2]), decreasing = TRUE)
+names(mtab) <- colnames(pat_dev_score)[-1:-6][as.numeric(names(mtab))]
+mtab
+uk_minmax_mtab <- mtab
 
-#TODO: validate safe corridor on Ferrario data
-val_anova <- t3ANOVA(data = human_sepsis_val_data, random = ~1|Patient, formula = concentration ~ Day * Survival28, use.corAR = TRUE, col.set = colnames(human_sepsis_val_data[, c(-1:-4)]), id.vars = c("Survival28", "Day", "Patient"), control = lmeControl(msMaxIter = 100))
-vd <- human_sepsis_val_data[, c(-3:-4, -4 + union(-which(val_anova$ps[3, ] < 0.05), -which(val_anova$ps[4, ] < 0.05)))]
-vd[, -1:-2] <- scale(vd[, -1:-2])
-sd_lim <- 5 # max(colMaxs(as.matrix(vd[vd$Survival28 == "S", -1:-2]), na.rm = TRUE))
-udev <- vd[, -1:-2] > matrix(sd_lim, ncol = ncol(vd) - 2, nrow = nrow(vd), byrow = TRUE)
-ldev <- vd[, -1:-2] < matrix(- sd_lim, ncol = ncol(vd) - 2, nrow = nrow(vd), byrow = TRUE)
-sdev <- aggregate(udev | ldev, by = list(Patient = vd$Patient), FUN = max)
+##Generalized corridor validation on Ferrario data
+val_anova <- t3ANOVA(data = human_sepsis_val_data, random = ~1|Patient, formula = concentration ~ Day + Day*Survival28 + Survival28, use.corAR = TRUE, col.set = colnames(human_sepsis_val_data[, c(-1:-4)]), id.vars = c("Survival28", "Day", "Patient"), control = lmeControl(msMaxIter = 100))
+colnames(val_anova$ps) <- colnames(human_sepsis_val_data[, c(-1:-4)])
+val_anova_ps <- val_anova$ps
+val_anova_fdr <- apply(val_anova_ps, 2, p.adjust, method = "fdr")
+sig.anova.car.val.s.pre.class <- colnames(val_anova$ps)[colAnys(val_anova_ps[3:4, ] < 0.05)]
+sig.anova.car.val.s.class <- colnames(val_anova$ps)[colAnys(val_anova_fdr[3:4, ] < 0.05)]
+vd <- human_sepsis_val_data[, c(-3:-4, -4 + union(-which(val_anova_fdr[3, ] < 0.05), -which(val_anova_fdr[4, ] < 0.05)))]
+###Survivor mean +- SD corridor
+vd_mean <- colMeans(vd[vd$Survival28 == "S", -1:-2])
+vd_sd <- colSds(as.matrix(vd[vd$Survival28 == "S", -1:-2]))
+sd_mul <- 4.5
+udev <- vd[, -1:-2] > matrix(vd_mean + sd_mul * vd_sd, ncol = ncol(vd) - 2, nrow = nrow(vd), byrow = TRUE)
+ldev <- vd[, -1:-2] < matrix(vd_mean - sd_mul * vd_sd, ncol = ncol(vd) - 2, nrow = nrow(vd), byrow = TRUE)
+sdev <- aggregate(udev | ldev, by = list(Patient = vd$Patient), FUN = max) #count same metabolite at two time points as one deviation
 dev_score <- data.frame(Patient = sdev$Patient, score = rowSums(sdev[, -1]))
 dev_score$Survival <- vd$Survival28[match(dev_score$Patient, vd$Patient)]
 p <- ggplot(data = dev_score, mapping = aes(fill = Survival, x = score)) +
   geom_histogram(position = position_stack(), bins = max(dev_score$score) + 1) +
   ylab("Number of Patients") +
-  xlab("Number of metabolites outside of the safe corridor at Days 0 & 1") +
+  xlab("Number of metabolites outside of the safe corridor at Days 0 & 7") +
   theme_bw() +
   theme(panel.grid = element_blank())
-ggsave(plot = p, filename = "generalized_safe_corridor_Ferrario_SD5.png", path = out_dir, width = 6, height = 3, units = "in")
+ggsave(plot = p, filename = "generalized_safe_corridor_Ferrario_SD4.5.png", path = out_dir, width = 6, height = 3, units = "in")
 print(paste0("Contribution of high deviation and low deviation to score is ", sum(udev), " and ", sum(ldev), " respectively."))
-w <- which.xy(udev) # tell me which variables make a difference
+w <- which.xy(udev | ldev) # tell me which variables make a difference
 mtab <- sort(table(w[, 2]), decreasing = TRUE)
 names(mtab) <- colnames(vd)[-1:-2][as.numeric(names(mtab))]
+mtab
+###Survivor min-max corridor
+vd_max <- colMaxs(as.matrix(vd[vd$Survival28 == "S", -1:-2]))
+vd_min <- colMins(as.matrix(vd[vd$Survival28 == "S", -1:-2]))
+udev <- vd[, -1:-2] > matrix(vd_max, ncol = ncol(vd) - 2, nrow = nrow(vd), byrow = TRUE)
+ldev <- vd[, -1:-2] < matrix(vd_min, ncol = ncol(vd) - 2, nrow = nrow(vd), byrow = TRUE)
+sdev <- aggregate(udev | ldev, by = list(Patient = vd$Patient), FUN = max) #count same metabolite at two time points as one deviation
+dev_score <- data.frame(Patient = sdev$Patient, score = rowSums(sdev[, -1]))
+dev_score$Survival <- vd$Survival28[match(dev_score$Patient, vd$Patient)]
+p <- ggplot(data = dev_score, mapping = aes(fill = Survival, x = score)) +
+  geom_histogram(position = position_stack(), bins = max(dev_score$score) + 1) +
+  ylab("Number of Patients") +
+  xlab("Number of metabolites outside of the safe corridor at Days 0 & 7") +
+  theme_bw() +
+  theme(panel.grid = element_blank())
+ggsave(plot = p, filename = "generalized_safe_corridor_Ferrario_minmax.png", path = out_dir, width = 6, height = 3, units = "in")
+print(paste0("Contribution of high deviation and low deviation to score is ", sum(udev), " and ", sum(ldev), " respectively."))
+w <- which.xy(udev | ldev) # tell me which variables make a difference
+mtab <- sort(table(w[, 2]), decreasing = TRUE)
+names(mtab) <- colnames(vd)[-1:-2][as.numeric(names(mtab))]
+mtab
+length(intersect(names(uk_minmax_mtab), names(mtab)))
+
+##Compare C4, lysoPC a C28:0 and :1 S-vs-NS in Ferrario et al. visually
+hsvd <- subset(human_sepsis_val_data, C4 < 300, select = c("Survival28", "Day", "C4", "lysoPC a C28:1"))
+hsvd$Day <- paste0("Day ", hsvd$Day)
+hsvd <- na.omit(hsvd)
+hsvd_C4_tsig <- t.test(x = hsvd$C4[hsvd$Survival28 == "S" & hsvd$Day == "Day 0"], y = hsvd$C4[hsvd$Survival28 == "NS" & hsvd$Day == "Day 0"])
+hsvd_lpc281_tsig <- t.test(x = hsvd$`lysoPC a C28:1`[hsvd$Survival28 == "S" & hsvd$Day == "Day 6"], y = hsvd$`lysoPC a C28:1`[hsvd$Survival28 == "NS" & hsvd$Day == "Day 6"])
+hsvdp <- ggplot(data = melt(hsvd, id.vars = 1:2), mapping = aes(y = value, x = variable, colour = Survival28)) +
+  facet_wrap( ~ Day) +
+  geom_boxplot() + 
+  ylab("Concentration, µM") +
+  xlab("Metabolite") +
+  scale_y_log10() +
+  theme_bw() + 
+  theme(panel.grid = element_blank())
+ggsave(plot = hsvdp, filename = "best_3_UK_feats_in_Ferrario.png", path = out_dir, width = 6, height = 6, units = "in")
 
 ###plot metab variance, only nonsig, nondeviation metabs
 ##Human, variance of ungrouped metab vars, all days
