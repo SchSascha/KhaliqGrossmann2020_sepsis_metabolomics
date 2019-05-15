@@ -1059,7 +1059,7 @@ ggsave(plot = p, filename = "rat_S_vs_NS_ac_ratios_heart_vs_liver_24h.png", path
 
 #TODO: add comparisons of sham rat vs septic S rat ratios, maybe also sham vs septic NS
 
-ml_human_best_feat_set <- c("C4", "lysoPC a C28:0", "lysoPC a C28:1")
+ml_human_best_feat_set <- c("C4", "lysoPC a C28:0", "lysoPC a C28:1", "SM C22:3")
 data_feat_set <- subset(rat_sepsis_data, material %in% c("liver", "plasma") & `time point` %in% c("6h", "24h") & group != "control" )
 data_feat_set <- cbind(data_feat_set[, 1:4], data_feat_set[ml_human_best_feat_set])
 data_feat_set <- melt(data_feat_set, id.vars = 1:4)

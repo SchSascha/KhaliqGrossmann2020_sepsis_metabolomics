@@ -573,12 +573,20 @@ c_tab <- c_tab[, match(make.names(unique(groups)), colnames(c_tab))]
 colnames(c_tab) <- unique(groups)
 write.table(x = c_tab, file = paste0(out_dir, "table_control_anova_sig_features.csv"), sep = "\t", quote = FALSE, row.names = FALSE)
 
-#human fold changes at day 0
+#human fold changes at day 0, septic-NS vs septic-S
 SS <- subset(human_data, Day == 0 & Group == "Septic-S", sig.anova.car.s.class)
 NS <- subset(human_data, Day == 0 & Group == "Septic-NS", sig.anova.car.s.class)
 fold_change <- log2(colMeans(SS) / colMeans(NS))
-sink(file = paste0(out_dir, "fold_change_leq_1_day0.txt"))
+sink(file = paste0(out_dir, "fold_change_geq_1_day0_sS_vs_sNS.txt"))
 print(fold_change[which(abs(fold_change) > 1)])
+sink()
+
+#human fold changes at day 0, septic-NS vs nonseptic-NS
+sNS <- subset(human_data, Day == 0 & Group == "Septic-NS", sig.anova.car.nssepnon.class)
+nNS <- subset(human_data, Day == 0 & Group == "Nonsep-NS", sig.anova.car.nssepnon.class)
+fold_change <- log2(colMeans(sNS) / colMeans(nNS))
+sink(file = paste0(out_dir, "fold_change_day0_sNS_vs_nNS.txt"))
+print(fold_change)#[which(abs(fold_change) > 1)])
 sink()
 
 ####################
@@ -2003,7 +2011,7 @@ ldev <- vd[, -1:-2] < matrix(vd_min, ncol = ncol(vd) - 2, nrow = nrow(vd), byrow
 sdev <- aggregate(udev | ldev, by = list(Patient = vd$Patient), FUN = max) #count same metabolite at two time points as one deviation
 dev_score <- data.frame(Patient = sdev$Patient, score = rowSums(sdev[, -1]))
 dev_score$Survival <- vd$Survival28[match(dev_score$Patient, vd$Patient)]
-p <- ggplot(data = dev_score, mapping = aes(fill = Survival, x = score)) +
+p <- ggplot(data = dev_score, mapping = aes(fill = Survival28, x = score)) +
   geom_histogram(position = position_stack(), bins = max(dev_score$score) + 1) +
   ylab("Number of Patients") +
   xlab("Number of metabolites outside of the safe corridor at Days 0 & 7") +
@@ -2016,9 +2024,12 @@ mtab <- sort(table(w[, 2]), decreasing = TRUE)
 names(mtab) <- colnames(vd)[-1:-2][as.numeric(names(mtab))]
 mtab
 length(intersect(names(uk_minmax_mtab), names(mtab)))
+sort(intersect(names(uk_minmax_mtab), names(mtab))) # metabolites that deviate in UK and Ferrario data
+intersect(setdiff(colnames(human_sepsis_val_data)[-1:-4], sig.anova.car.val.s.class), # metabolites that could deviate in both data sets
+          setdiff(colnames(human_sepsis_data)[-1:-6], sig.anova.car.val.s.class))
 
-##Compare C4, lysoPC a C28:0 and :1 S-vs-NS in Ferrario et al. visually
-hsvd <- subset(human_sepsis_val_data, C4 < 300, select = c("Survival28", "Day", "C4", "lysoPC a C28:1"))
+##Compare C4, lysoPC a C28:0, -:1 and SM C22:3 S-vs-NS in Ferrario et al. visually
+hsvd <- subset(human_sepsis_val_data, C4 < 300, select = c("Survival28", "Day", "C4", "lysoPC a C28:1", "SM C22:3"))
 hsvd$Day <- paste0("Day ", hsvd$Day)
 hsvd <- na.omit(hsvd)
 hsvd_C4_tsig <- t.test(x = hsvd$C4[hsvd$Survival28 == "S" & hsvd$Day == "Day 0"], y = hsvd$C4[hsvd$Survival28 == "NS" & hsvd$Day == "Day 0"])
@@ -2030,8 +2041,8 @@ hsvdp <- ggplot(data = melt(hsvd, id.vars = 1:2), mapping = aes(y = value, x = v
   xlab("Metabolite") +
   scale_y_log10() +
   theme_bw() + 
-  theme(panel.grid = element_blank())
-ggsave(plot = hsvdp, filename = "best_3_UK_feats_in_Ferrario.png", path = out_dir, width = 6, height = 6, units = "in")
+  theme(panel.grid = element_blank(), axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+ggsave(plot = hsvdp, filename = "best_4_UK_feats_in_Ferrario.png", path = out_dir, width = 6, height = 6, units = "in")
 
 ###plot metab variance, only nonsig, nondeviation metabs
 ##Human, variance of ungrouped metab vars, all days
@@ -2242,7 +2253,6 @@ p <- ggplot(data = subset(melt(ac_transferase_grouped, id.vars = 1:6), Day %in% 
   geom_point(position = position_dodge(width = 0.2)) +
   stat_summary(fun.ymin = "min", fun.ymax = "max", fun.y = "mean", geom = "line") +
   human_col_scale() +
-  ylab("Concentration relative to C0") +
   xlab("Day") +
   theme_bw()
 ggsave(plot = p, filename = paste0("human_metab_AC_group_time_course.png"), path = out_dir, width = 12, height = 0.3 + 1.5 * ceiling(n_mets/n_cols), units = "in")
