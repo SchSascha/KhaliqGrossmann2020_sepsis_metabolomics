@@ -1885,6 +1885,9 @@ udev <- pat_dev_score[, -1:-6] > matrix(pat_dev_max, ncol = ncol(pat_dev_score) 
 ldev <- pat_dev_score[, -1:-6] < matrix(pat_dev_min, ncol = ncol(pat_dev_score) - 6, nrow = nrow(pat_dev_score), byrow = TRUE)
 sdev <- aggregate(udev | ldev, by = list(Patient = pat_dev_score$Patient), FUN = max) #count same metabolite at different time points as one deviation
 met_pat_score <- data.frame(Metabolite = colnames(sdev)[-1], score = colSums(sdev[, -1]), stringsAsFactors = FALSE)
+met_pat_score_sep <- data.frame(Metabolite = colnames(sdev[sdev$Patient %in% human_sepsis_data$Patient, ])[-1], score = colSums(sdev[sdev$Patient %in% human_sepsis_data$Patient, -1]), stringsAsFactors = FALSE)
+met_pat_score_nonsep <- data.frame(Metabolite = colnames(sdev[sdev$Patient %in% human_nonsepsis_data$Patient, ])[-1], score = colSums(sdev[sdev$Patient %in% human_nonsepsis_data$Patient, -1]), stringsAsFactors = FALSE)
+subset(met_pat_score_sep, score >= 4 & !(Metabolite %in% met_pat_score_nonsep[met_pat_score_nonsep$score > 0, 1])) # Metabolite devs specific for septic-NS
 sdev_melted <- subset(melt(sdev, id.vars = 1), value == 1)
 score_thresh <- 3
 minmax_corridor_met_sel <- subset(met_pat_score, score > score_thresh)
