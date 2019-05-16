@@ -1976,6 +1976,16 @@ mtab <- sort(table(w[, 2]), decreasing = TRUE)
 names(mtab) <- colnames(pat_dev_score)[-1:-6][as.numeric(names(mtab))]
 mtab
 uk_minmax_mtab <- mtab
+min_met_set_for_dev <- sdev
+min_met_set_for_dev <- subset(min_met_set_for_dev, Patient %in% human_sepsis_data$Patient[human_sepsis_data$Group == "Septic-NS"])
+min_met_set_for_dev <- min_met_set_for_dev[, c(1, 1 + which(colAnys(as.matrix(min_met_set_for_dev[, -1]))))]
+min_met_set_for_dev$`lysoPC a C24:0` + min_met_set_for_dev$`PC aa C36:0` + min_met_set_for_dev$`lysoPC a C18:2`
+colSums(min_met_set_for_dev[, 1 + grep(pattern = "lysoPC", x = colnames(min_met_set_for_dev)[-1])])
+rowSums(min_met_set_for_dev[, 1 + grep(pattern = "lysoPC", x = colnames(min_met_set_for_dev)[-1])])
+colSums(min_met_set_for_dev[, 1 + grep(pattern = "^C", x = colnames(min_met_set_for_dev)[-1])])
+rowSums(min_met_set_for_dev[, 1 + grep(pattern = "^C", x = colnames(min_met_set_for_dev)[-1])])
+colSums(min_met_set_for_dev[, 1 + grep(pattern = "SM", x = colnames(min_met_set_for_dev)[-1])])
+rowSums(min_met_set_for_dev[, 1 + grep(pattern = "SM", x = colnames(min_met_set_for_dev)[-1])])
 
 ##Generalized corridor validation on Ferrario data
 val_anova <- t3ANOVA(data = human_sepsis_val_data, random = ~1|Patient, formula = concentration ~ Day + Day*Survival28 + Survival28, use.corAR = TRUE, col.set = colnames(human_sepsis_val_data[, c(-1:-4)]), id.vars = c("Survival28", "Day", "Patient"), control = lmeControl(msMaxIter = 100))
