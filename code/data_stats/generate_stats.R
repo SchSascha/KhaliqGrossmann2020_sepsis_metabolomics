@@ -1976,16 +1976,32 @@ mtab <- sort(table(w[, 2]), decreasing = TRUE)
 names(mtab) <- colnames(pat_dev_score)[-1:-6][as.numeric(names(mtab))]
 mtab
 uk_minmax_mtab <- mtab
-min_met_set_for_dev <- sdev
-min_met_set_for_dev <- subset(min_met_set_for_dev, Patient %in% human_sepsis_data$Patient[human_sepsis_data$Group == "Septic-NS"])
+min_met_set_for_dev <- subset(sdev, Patient %in% human_sepsis_data$Patient[human_sepsis_data$Group == "Septic-NS"])
 min_met_set_for_dev <- min_met_set_for_dev[, c(1, 1 + which(colAnys(as.matrix(min_met_set_for_dev[, -1]))))]
+###Find minimal combination of features to seperate sNS from sS
+pat_dev_idx_per_met <- lapply(lapply(min_met_set_for_dev[, -1], as.logical), which)
+pat_dev_idx_met_crossover <- lapply(pat_dev_idx_per_met, function(e) lapply(pat_dev_idx_per_met, union, e))
+full_idx <- Reduce("rbind", lapply(lapply(pat_dev_idx_met_crossover, lapply, length), sapply, `==`, nrow(min_met_set_for_dev)))
+xy <- which.xy(full_idx)
+colnames(min_met_set_for_dev[, -1])[c(xy$x[1], xy$y[1])]
+colnames(min_met_set_for_dev[, -1])[c(xy$x[2], xy$y[2])]
+sink(file = paste0(out_dir, "devs_UK_sNS_met_counts.csv"))
+print("Test if lysoPC a C24:0, PC aa C36:0 and lysoPC a C18:2 provide enough deviations to cover all sNS patients")
 min_met_set_for_dev$`lysoPC a C24:0` + min_met_set_for_dev$`PC aa C36:0` + min_met_set_for_dev$`lysoPC a C18:2`
+print("ColSums and RowSums of deviations per metabolite group")
+print("lysoPC")
 colSums(min_met_set_for_dev[, 1 + grep(pattern = "lysoPC", x = colnames(min_met_set_for_dev)[-1])])
 rowSums(min_met_set_for_dev[, 1 + grep(pattern = "lysoPC", x = colnames(min_met_set_for_dev)[-1])])
+print("Acylcarnitines")
 colSums(min_met_set_for_dev[, 1 + grep(pattern = "^C", x = colnames(min_met_set_for_dev)[-1])])
 rowSums(min_met_set_for_dev[, 1 + grep(pattern = "^C", x = colnames(min_met_set_for_dev)[-1])])
+print("Sphingolipids")
 colSums(min_met_set_for_dev[, 1 + grep(pattern = "SM", x = colnames(min_met_set_for_dev)[-1])])
 rowSums(min_met_set_for_dev[, 1 + grep(pattern = "SM", x = colnames(min_met_set_for_dev)[-1])])
+sink()
+
+nNS_min_met_set <- subset(sdev, Patient %in% human_data$Patient[human_data$Group == "Nonsep-NS"])
+rowSums(nNS_min_met_set[c("lysoPC a C24:0", "PC aa C36:0", "lysoPC a C18:2")])
 
 ##Generalized corridor validation on Ferrario data
 val_anova <- t3ANOVA(data = human_sepsis_val_data, random = ~1|Patient, formula = concentration ~ Day + Day*Survival28 + Survival28, use.corAR = TRUE, col.set = colnames(human_sepsis_val_data[, c(-1:-4)]), id.vars = c("Survival28", "Day", "Patient"), control = lmeControl(msMaxIter = 100))
