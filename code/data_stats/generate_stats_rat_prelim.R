@@ -415,6 +415,41 @@ rat_sepsis_data_normal_grouped_conc_metab_cov <- cov(rat_sepsis_data_normal_grou
 rat_sepsis_data_normal_NS_grouped_conc_metab_cov <- cov(subset(rat_sepsis_data_normal_grouped, group == "septic non-survivor", group_metab_sel), use = "pairwise.complete.obs")
 rat_sepsis_data_normal_S_grouped_conc_metab_cov <- cov(subset(rat_sepsis_data_normal_grouped, group == "septic survivor", group_metab_sel), use = "pairwise.complete.obs")
 
+##Generalized corridor defined by min and max of survivor rats (septic and nonseptic)
+dev_score <- list()
+for (mat in unique(rat_sepsis_data$material)){
+  rat_dev_score <- subset(rat_sepsis_data, 
+                              material == mat & `time point` %in% c("6h", "24h"), 
+                              setdiff(which(!(colnames(rat_sepsis_data) %in% rat.sig.anova.car.s.class[[mat]])), pheno_sel)) # select already includes cols 1:4
+  rat_dev_max <- colMaxs(as.matrix(rat_dev_score[grep("non-survivor", rat_dev_score$group, invert = T), -1:-4]), na.rm = TRUE)
+  rat_dev_min <- colMins(as.matrix(rat_dev_score[grep("non-survivor", rat_dev_score$group, invert = T), -1:-4]), na.rm = TRUE)
+  udev <- rat_dev_score[, -1:-4] > matrix(rat_dev_max, ncol = ncol(rat_dev_score) - 4, nrow = nrow(rat_dev_score), byrow = TRUE)
+  ldev <- rat_dev_score[, -1:-4] < matrix(rat_dev_min, ncol = ncol(rat_dev_score) - 4, nrow = nrow(rat_dev_score), byrow = TRUE)
+  udev[is.na(udev)] <- 0
+  ldev[is.na(ldev)] <- 0
+  sdev <- aggregate(udev | ldev, by = list(`Sample Identification` = rat_dev_score$`Sample Identification`), FUN = identity) #count each deviation since each rat is sampled once
+  dev_score[[mat]] <- data.frame(`Sample Identification` = sdev$`Sample Identification`, score = rowSums(sdev[, -1]))
+  dev_score[[mat]][c("group", "time point")] <- rat_dev_score[match(dev_score[[mat]]$Sample.Identification, rat_dev_score$`Sample Identification`), c("group", "time point")]
+  #print(dev_score)
+  print(paste0("Contribution of high deviation and low deviation to score is ", sum(udev), " and ", sum(ldev), " respectively."))
+  w <- which.xy(udev | ldev) # tell me which variables make a difference
+  mtab <- sort(table(w[, 2]), decreasing = TRUE)
+  names(mtab) <- colnames(rat_dev_score)[-1:-6][as.numeric(names(mtab))]
+  mtab
+  min_met_set_for_dev <- subset(sdev, `Sample Identification` %in% rat_dev_score$`Sample Identification`)
+  min_met_set_for_dev <- min_met_set_for_dev[, c(1, 1 + which(colAnys(as.matrix(min_met_set_for_dev[, -1]))))]
+}
+dev_score_m <- melt(dev_score)
+p <- ggplot(data = dev_score_m, mapping = aes(fill = group, x = value)) +
+  facet_wrap( ~ L1, ncol = 1, nrow = length(dev_score)) +
+  geom_histogram(position = position_stack(), bins = max(dev_score_m$value) + 1) +
+  scale_color_manual(name = "group", values = hue_pal()(3)[], aesthetics = "fill") +
+  ylab("Number of Rats") +
+  xlab("Number of metabolites outside of the safe corridor") +
+  theme_bw() +
+  theme(panel.grid = element_blank())
+ggsave(plot = p, filename = paste0("generalized_safe_corridor_minmax.png"), path = out_dir, width = 6, height = 6, units = "in")
+
 ####################
 #Plot data
 ####################
