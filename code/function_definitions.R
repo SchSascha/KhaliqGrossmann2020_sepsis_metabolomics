@@ -51,6 +51,8 @@ get_Ferrario_validation_data <- function(){
   mets[mets == "Met:SO"] <- "Met-SO"
   mets[mets == "Ac Orn"] <- "Ac-Orn"
   mets[mets == "Alpha AAA"] <- "alpha-AAA"
+  mets[mets == "T4 OH Pro"] <- "t4-OH-Pro"
+  mets[mets == "Total DMA"] <- "total DMA"
   #Copy concentrations into data.frame
   data <- cbind(data, matrix(NA, ncol = length(mets), nrow = nrow(data)))
   colnames(data)[-1:-4] <- mets

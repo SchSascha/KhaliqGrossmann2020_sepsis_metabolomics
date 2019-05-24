@@ -318,6 +318,14 @@ p <- ggplot(data = subset(melt(hd, id.vars = 1:6), Day %in% 0:3), mapping = aes(
   theme_bw()
 ggsave(plot = p, filename = "human_metab_survival_nonsig_C_overlap_S_sig.png", path = out_dir, width = 12/4*ncols, height = 0.3 + 1.5 * ceiling(n_mets/ncols), units = "in")
 
+#ANOVA for Ferrario data, sS vs sNS
+val_anova <- t3ANOVA(data = human_sepsis_val_data, random = ~1|Patient, formula = concentration ~ Day + Day*Survival28 + Survival28, use.corAR = TRUE, col.set = colnames(human_sepsis_val_data[, c(-1:-4)]), id.vars = c("Survival28", "Day", "Patient"), control = lmeControl(msMaxIter = 100))
+colnames(val_anova$ps) <- colnames(human_sepsis_val_data[, c(-1:-4)])
+val_anova_ps <- val_anova$ps
+val_anova_fdr <- apply(val_anova_ps, 2, p.adjust, method = "fdr")
+sig.anova.car.val.s.pre.class <- colnames(val_anova$ps)[colAnys(val_anova_ps[3:4, ] < 0.05)]
+sig.anova.car.val.s.class <- colnames(val_anova$ps)[colAnys(val_anova_fdr[3:4, ] < 0.05)]
+
 #Save everything ANOVA to file
 anova_complete_res <- grep(pattern = "anova.car", x = names(environment()), value = TRUE)
 anova_complete_res <- grep(pattern = "models|res|terms|normality", x = anova_complete_res, invert = TRUE, value = TRUE)
@@ -1975,6 +1983,9 @@ w <- which.xy(udev | ldev) # tell me which variables make a difference
 mtab <- sort(table(w[, 2]), decreasing = TRUE)
 names(mtab) <- colnames(pat_dev_score)[-1:-6][as.numeric(names(mtab))]
 mtab
+dev_mets_out_UK <- data.frame(Name = names(mtab), stringsAsFactors = FALSE)
+dev_mets_out_UK$Group <- human_sepsis_legend$group[match(names(mtab), human_sepsis_legend[, 1])]
+dev_mets_out_UK$PatCount <- colSums(sdev[, names(mtab)])
 uk_minmax_mtab <- mtab
 min_met_set_for_dev <- subset(sdev, Patient %in% human_sepsis_data$Patient[human_sepsis_data$Group == "Septic-NS"])
 min_met_set_for_dev <- min_met_set_for_dev[, c(1, 1 + which(colAnys(as.matrix(min_met_set_for_dev[, -1]))))]
@@ -2004,12 +2015,6 @@ nNS_min_met_set <- subset(sdev, Patient %in% human_data$Patient[human_data$Group
 rowSums(nNS_min_met_set[c("lysoPC a C24:0", "PC aa C36:0", "lysoPC a C18:2")])
 
 ##Generalized corridor validation on Ferrario data
-val_anova <- t3ANOVA(data = human_sepsis_val_data, random = ~1|Patient, formula = concentration ~ Day + Day*Survival28 + Survival28, use.corAR = TRUE, col.set = colnames(human_sepsis_val_data[, c(-1:-4)]), id.vars = c("Survival28", "Day", "Patient"), control = lmeControl(msMaxIter = 100))
-colnames(val_anova$ps) <- colnames(human_sepsis_val_data[, c(-1:-4)])
-val_anova_ps <- val_anova$ps
-val_anova_fdr <- apply(val_anova_ps, 2, p.adjust, method = "fdr")
-sig.anova.car.val.s.pre.class <- colnames(val_anova$ps)[colAnys(val_anova_ps[3:4, ] < 0.05)]
-sig.anova.car.val.s.class <- colnames(val_anova$ps)[colAnys(val_anova_fdr[3:4, ] < 0.05)]
 vd <- human_sepsis_val_data[, c(-3:-4, -4 + union(-which(val_anova_fdr[3, ] < 0.05), -which(val_anova_fdr[4, ] < 0.05)))]
 ###Survivor mean +- SD corridor
 vd_mean <- colMeans(vd[vd$Survival28 == "S", -1:-2])
@@ -2040,7 +2045,7 @@ ldev <- vd[, -1:-2] < matrix(vd_min, ncol = ncol(vd) - 2, nrow = nrow(vd), byrow
 sdev <- aggregate(udev | ldev, by = list(Patient = vd$Patient), FUN = max) #count same metabolite at two time points as one deviation
 dev_score <- data.frame(Patient = sdev$Patient, score = rowSums(sdev[, -1]))
 dev_score$Survival <- vd$Survival28[match(dev_score$Patient, vd$Patient)]
-p <- ggplot(data = dev_score, mapping = aes(fill = Survival28, x = score)) +
+p <- ggplot(data = dev_score, mapping = aes(fill = Survival, x = score)) +
   geom_histogram(position = position_stack(), bins = max(dev_score$score) + 1) +
   ylab("Number of Patients") +
   xlab("Number of metabolites outside of the safe corridor at Days 0 & 7") +
@@ -2056,6 +2061,16 @@ length(intersect(names(uk_minmax_mtab), names(mtab)))
 sort(intersect(names(uk_minmax_mtab), names(mtab))) # metabolites that deviate in UK and Ferrario data
 intersect(setdiff(colnames(human_sepsis_val_data)[-1:-4], sig.anova.car.val.s.class), # metabolites that could deviate in both data sets
           setdiff(colnames(human_sepsis_data)[-1:-6], sig.anova.car.val.s.class))
+dev_mets_out_Ferrario <- data.frame(Name = names(mtab), stringsAsFactors = FALSE)
+dev_mets_out_Ferrario$Group <- human_sepsis_legend$group[match(names(mtab), human_sepsis_legend[, 1])]
+dev_mets_out_Ferrario$PatCount <- colSums(sdev[, names(mtab)])
+dev_mets_out_all <- merge(x = dev_mets_out_UK, y = dev_mets_out_Ferrario, by = c("Name", "Group"), all = TRUE, suffixes = c("_UK", "_Ferrario"))
+dev_mets_out_all <- dev_mets_out_all[order(dev_mets_out_all$Group, dev_mets_out_all$Name), ]
+dev_mets_out_all$PatCount_UK[is.na(dev_mets_out_all$PatCount_UK)] <- "-" #not 0 because it was significant in sS vs sNS
+dev_mets_out_all$PatCount_Ferrario[is.na(dev_mets_out_all$PatCount_Ferrario) & !(dev_mets_out_all$Name %in% sig.anova.car.val.s.class)] <- 0
+dev_mets_out_all$PatCount_Ferrario[dev_mets_out_all$Name %in% sig.anova.car.val.s.class] <- "-" #not 0 because significant in sS vs sNS
+dev_mets_out_all$PatCount_Ferrario[!(dev_mets_out_all$Name %in% colnames(human_sepsis_val_data))] <- "-" #not 0 because metabolite not in data set
+fwrite(x = dev_mets_out_all, file = paste0(out_dir, "generalized_safe_corridor_minmax_dev_mets.csv"))
 
 ##Compare C4, lysoPC a C28:0, -:1 and SM C22:3 S-vs-NS in Ferrario et al. visually
 hsvd <- subset(human_sepsis_val_data, C4 < 300, select = c("Survival28", "Day", "C4", "lysoPC a C28:1", "SM C22:3"))
