@@ -1922,6 +1922,29 @@ p <- ggplot(data = subset(hsd, Survival == "S"), mapping = aes(y = value, x = va
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 6), panel.grid = element_line(colour = 0))
 ggsave(filename = paste0("human_metab_nonsig_single_plot_minmax_all_pats.png"), path = out_dir, plot = p, width = 16, height = 9.5, units = "in")
 
+hsd_lpc24 <- subset(human_data, Day %in% tanova_day_set)
+hsd_lpc24 <- melt(hsd_lpc24, id.vars = 1:6)
+hsd_lpc24 <- subset(hsd_lpc24, as.character(variable) == "lysoPC a C24:0" & Survival == "S")
+hsd_lpc24_max <- aggregate(x = hsd_lpc24$value, by = list(Group = hsd_lpc24$Group), FUN = max)
+hsd_lpc24_min <- aggregate(x = hsd_lpc24$value, by = list(Group = hsd_lpc24$Group), FUN = min)
+pp_lpc24 <- subset(melt(subset(human_data, Survival == "NS" & Day %in% tanova_day_set), id.vars = 1:6), as.character(variable) == "lysoPC a C24:0")
+p <- ggplot(data = pp_lpc24, mapping = aes(y = value, x = Day, color = Group, group = Patient, linetype = factor(Patient))) +
+  facet_wrap(~ variable, ncol = 1, nrow = 1) +
+  geom_line() +
+  scale_y_continuous(limits = c(0, 1), expand = c(0, 0)) +
+  geom_hline(data = hsd_lpc24_min, mapping = aes(color = Group, yintercept = x)) +
+  geom_hline(data = hsd_lpc24_max, mapping = aes(color = Group, yintercept = x)) +
+  guides(color = guide_legend(order = 1),
+         linetype = guide_legend(title = "NS Patient", override.aes = list(color = hue_pal()(4)[c(4, 1)[1 + (subset(hsd, !duplicated(Patient) & Survival == "NS", "Group")[[1]] == "Septic-NS")]]), order = 4)) +
+  scale_color_discrete(drop = FALSE) +
+  #scale_y_continuous(trans = pseudo_log_trans(sigma = 0.25, base = 2), expand = c(0, 0), limits = c(-10, 1000)) +
+  ylab("Concentration, µM") +
+  xlab("Day") +
+  human_col_scale() +
+  theme_bw() + 
+  theme(axis.text.x = element_text(angle = 0, vjust = 0.5, size = 10), panel.grid = element_line(colour = 0))
+ggsave(filename = paste0("human_metab_nonsig_single_plot_minmax_all_pats_lysoPCaC24.png"), path = out_dir, plot = p, width = 5, height = 5, units = "in")
+
 ###Generalize the corridor principle to a classification scheme, use corridor 
 corridor <- as.data.frame(t(sapply(unique(cntrl_and_s$variable), 
                                    function(metab) Hmisc::smean.sd(subset(cntrl_and_s, variable == metab & Survival == "S", "value")[[1]]))))
