@@ -254,6 +254,7 @@ get_rat_sepsis_legend <- function(){
   data[[1]][data[[1]] == "Tot Cholesterol"] <- "Total Cholesterol"
   data[[1]][data[[1]] == "LDL/VLDL"] <- "LDL"
   data <- remove_bile_acids_from_legend(data)
+  data <- data[!(data[, 1] %in% c("c4-OH-Pro", "Dopamine", "Nitro-Tyr", "PEA")), ] #excluded bc. of all NA or all 0
   return(data)
 }
 
@@ -1090,4 +1091,42 @@ human_col_scale <- function(name = "Group", levels = c("Septic-NS", "Nonsep-S", 
   color_set <- c(color_set, black_color) #last is black (or grey)
   names(color_set) <- c(levels[seq_along(levels)[-black_pos]], levels[black_pos]) #assign correct level to black (last)
   return(scale_colour_manual(name = name, values = color_set, ...))
+}
+
+#' Build arrows (feature influence on biplot points). 
+#' Arrows will be sorted by length. 
+#' Arrow and label positions will be rescaled to fit into the plot limits and further rescaled by scale_by to deal with labels that overlap a plot border. 
+#' Arrows are shortened by shorten_arr_by; the labels indicate the exact magnitude of the influence.
+#'
+#' @param x tranformed features
+#' @param w original features, all >= 0
+#' @param num number of arrows to show, beginning from the longest
+#' @param xmax max x coordinate of plot
+#' @param xmin min x coordinate of plot
+#' @param ymax max y coordinate of plot
+#' @param ymin min y coordinate of plot
+#' @param scale_by (inverse) scaling factor, increase if labels overlap plot border
+#' @param shorten_arw_by the absolute length to shorten an arrow by before scaling to plot limits
+#'
+#' @return a list of labels and arrow coordinates to feed into ggplot2::geom_path
+#' @export
+#'
+#' @examples
+make_ordination_arrows <- function(x, w, num = 5, xmax, xmin, ymax, ymin, scale_by = 1.0, shorten_arw_by = 1){
+  library(vegan)
+  ph_ars <- wascores(x = x, w = w, expand = TRUE)
+  ph_ars_len <- apply(ph_ars, 1, function(row) sqrt(sum(row^2)))
+  ph_ars_len_full <- ph_ars_len
+  ph_ars <- as.data.frame(ph_ars[order(ph_ars_len, decreasing = TRUE)[1:num], ])
+  ph_ars_len <- ph_ars_len[order(ph_ars_len, decreasing = TRUE)[1:num]]
+  ph_ars_names <- ph_ars
+  ph_ars$Group <- 1:nrow(ph_ars)
+  ph_ars <- rbind(data.frame(PC1 = rep(0, nrow(ph_ars)), PC2 = rep(0, nrow(ph_ars)), Group = ph_ars$Group), ph_ars)
+  ph_ars_s <- ph_ars
+  ph_ars_names_s <- ph_ars_names
+  xyscale <- max(ph_ars$PC1/xmax, ph_ars$PC1/xmin, ph_ars$PC2/ymax, ph_ars$PC2/ymin) * scale_by
+  ph_ars_names_s[, 1:2] <- ph_ars_names[, 1:2] / xyscale
+  ph_ars_s[, 1:2] <- ph_ars[, 1:2] * ((ph_ars_len - shorten_arw_by) / ph_ars_len) / xyscale
+  ph_ars_names_s$label <- rownames(ph_ars_names_s)
+  return(list(ph_ars_names_s = ph_ars_names_s, ph_ars_s = ph_ars_s, ph_ars_len_full = ph_ars_len_full))
 }

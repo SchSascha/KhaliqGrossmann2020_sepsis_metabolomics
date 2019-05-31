@@ -1,4 +1,3 @@
-library(CCA)
 library(hexbin)
 library(matrixStats)
 library(data.table)
@@ -6,7 +5,6 @@ library(missRanger)
 library(nscancor)
 library(TDAmapper)
 library(elasticnet)
-library(analogue)
 library(corpcor)
 library(vegan)
 library(ggplot2)
@@ -20,6 +18,8 @@ source("../function_definitions.R")
 out_dir <- "../../results/data_stats_NS_high_var/"
 if (!dir.exists(out_dir))
   dir.create(out_dir)
+
+num_cores <- 2
 
 #Read data
 human_data <- get_human_sepsis_data()
@@ -94,10 +94,26 @@ ad_res_mc <- mclapply(1:100,
                         list(ad_res = ad_res)
                       }, 
                       s_idx = s_idx, ns_idx = ns_idx, PCs = PCs, ad_data = ad_data,
-                      mc.cores = 7
-)
+                      mc.cores = num_cores)
 toc()
 ad_r_p <- sapply(lapply(lapply(lapply(ad_res_mc, `[[`, "ad_res"), `[[`, "aov.tab"), `[[`, "Pr(>F)"), `[`, 1)
+
+##MDS plot with arrows - trial to see how it looks like
+hsd_pheno_mds <- metaMDS(comm = subset(human_sepsis_data, Day < 4, pheno_sel), distance = "canberra", k = 2, wascores = TRUE, autotransform = FALSE, try = 20, trymax = 40)
+pts <- as.data.frame(hsd_pheno_mds$points)
+pts$Group <- subset(human_sepsis_data, Day < 4)$Group
+ars <- hsd_pheno_mds$species
+ars <- ars[apply(ars, 1, function(row) sqrt(sum(row^2))) > 0.4, ]
+ars_text <- rownames(ars)
+ars <- as.data.frame(ars)
+ars$Group <- 1:nrow(ars)
+ars <- rbind(data.frame(MDS1 = rep(0, nrow(ars)), MDS2 = rep(0, nrow(ars)), Group = ars$Group), ars)
+ggplot(data = pts, mapping = aes(x = MDS1, y = MDS2, color = Group)) + 
+  geom_point() + 
+  geom_path(data = ars, mapping = aes(x = MDS1, y = MDS2, group = Group), inherit.aes = FALSE, arrow = arrow()) +
+  #geom_text(data = ars[(length(ars_names) + 1):nrow(ars), ], label = ars_names, x = ars[ars_names, 1], y = ars[ars_names, 2], inherit.aes = FALSE) +
+  human_col_scale() +
+  theme_bw()
 
 ##Metabolites in metabolite groups, all patients
 met_group_res <- list()
@@ -145,8 +161,7 @@ for (met_group in unique(human_data_legend$group[metab_sel])){
                           list(ad_C_vs_S = ad_C_vs_S, ad_C_vs_NS = ad_C_vs_NS, ad_S_vs_NS = ad_S_vs_NS, ad_NS_vs_CNS = ad_NS_vs_CNS)
                         }, 
                         c_idx = c_idx, s_idx = s_idx, ns_idx = ns_idx, cns_idx = cns_idx, PCs = PCs, ad_data = ad_data,
-                        mc.cores = 7
-  )
+                        mc.cores = num_cores)
 
   ###Compare step lengths of between patient groups, compare PCA-transformed points
   pat_step_len <- list()
@@ -184,7 +199,7 @@ for (met_group in unique(human_data_legend$group[metab_sel])){
                             list(ad_step1 = ad_step1, ad_step2 = ad_step2, ad_step3 = ad_step3, t_r1 = t_r1, t_r2 = t_r2, t_r3 = t_r3)
                           },
                           pat_step_len_df = pat_step_len_df, num_S_vals = num_S_vals, num_NS_vals = num_NS_vals,
-                          mc.cores = 7)
+                          mc.cores = num_cores)
   met_group_res[[met_group]] <- list(ad = ad_res_mc, 
                                      bt = bt_step_res)
 }
@@ -236,8 +251,7 @@ ad_res_mc <- mclapply(1:100,
                         list(ad_res1 = ad_res1, ad_res2 = ad_res2, ad_res3 = ad_res3, ad_res4 = ad_res4)
                       }, 
                       c_idx = c_idx, s_idx = s_idx, ns_idx = ns_idx, cns_idx = cns_idx, PCs = PCs, ad_data = ad_data,
-                      mc.cores = 7
-)
+                      mc.cores = num_cores)
 toc()
 ad_r1_p <- sapply(lapply(lapply(lapply(ad_res_mc, `[[`, "ad_res1"), `[[`, "aov.tab"), `[[`, "Pr(>F)"), `[`, 1)
 ad_r2_p <- sapply(lapply(lapply(lapply(ad_res_mc, `[[`, "ad_res2"), `[[`, "aov.tab"), `[[`, "Pr(>F)"), `[`, 1)
@@ -287,7 +301,7 @@ bt_step_res <- mclapply(1:100,
                           list(ad_step1 = ad_step1, ad_step2 = ad_step2, ad_step3 = ad_step3, t_r1 = t_r1, t_r2 = t_r2, t_r3 = t_r3)
                         },
                         pat_step_len_df = pat_step_len_df, num_S_vals = num_S_vals, num_NS_vals = num_NS_vals,
-                        mc.cores = 7)
+                        mc.cores = num_cores)
 toc()
 ad_s1_p <- sapply(lapply(lapply(lapply(bt_step_res, `[[`, "ad_step1"), `[[`, "aov.tab"), `[[`, "Pr(>F)"), `[`, 1)
 ad_s2_p <- sapply(lapply(lapply(lapply(bt_step_res, `[[`, "ad_step2"), `[[`, "aov.tab"), `[[`, "Pr(>F)"), `[`, 1)
@@ -430,7 +444,7 @@ fwrite(x = ad_st_r_df, file = paste0(out_dir, "human_met_group_PCA_step_diff_FDR
 
 ##Actual plots for each metabolite group
 tic()
-for (met_group in unique(human_data_legend$group[metab_sel])){
+for (met_group in setdiff(unique(human_data_legend$group[metab_sel]), "sugar")){
   met_group_idx <- which(human_data_legend$group == met_group)
   human_data_dist <- cbind(human_data[,1:6], as.matrix(dist(x = human_data[, met_group_idx], method = "canberra"))) # distance() works on a per row basis
   p <- prcomp(human_data_dist[, -1:-6])
@@ -438,7 +452,8 @@ for (met_group in unique(human_data_legend$group[metab_sel])){
   ad_rv <- ad_mg_r_df[[met_group]]
   ad_rv[ad_rv > 0.05] <- 0.05
   text_v <- paste0(c("Nonsep", "Nonsep", "Septic-S", "Nonsep-NS"), " vs ", c("Septic-S", "Septic-NS", "Septic-NS", "Septic-NS"), ", q ", c("> ", "< ")[1 + (ad_rv < 0.05)], sapply(ad_rv, format, digits = 2))
-  
+
+  lam <- p$sdev[1:2] * sqrt(nrow(p$x))
   hdd <- human_data_dist
   ap <- autoplot(object = p, data = hdd, colour = "Group", frame = TRUE, frame.type = "norm", size = 0.5)
   ap <- ap +
@@ -448,14 +463,20 @@ for (met_group in unique(human_data_legend$group[metab_sel])){
     theme_bw() + 
     theme(panel.grid = element_blank())
   gobj <- ggplot_build(ap)
+  xmax <- gobj$layout$panel_params[[1]]$x.range[2]
   xmin <- gobj$layout$panel_params[[1]]$x.range[1]
+  ymax <- gobj$layout$panel_params[[1]]$y.range[2]
   ymin <- gobj$layout$panel_params[[1]]$y.range[1]
+  arws <- make_ordination_arrows(x = p$x[, 1:2], w = subset(human_data, select = met_group_idx), xmax = xmax, xmin = xmin, ymin = ymin, ymax = ymax, shorten_arw_by = 4, scale_by = 1.1)
   ap <- ap +
+    geom_path(data = arws$ph_ars_s, mapping = aes(x = PC1, y = PC2, group = Group), inherit.aes = FALSE, arrow = arrow(length = unit(0.06, "inches")), size = 0.2, color = "grey50") + 
+    geom_text(data = arws$ph_ars_names_s, mapping = aes(label = label, x = PC1, y = PC2), inherit.aes = FALSE, size = 1.5, color = "grey50") +
     geom_text(x = 0.9 * xmin, y = 0.83 * ymin, label = paste0(text_v, collapse = "\n"), size = 2, hjust = "left")
   ggsave(filename = paste0("PCA_biplot_", met_group, "_all_samples.png"), path = out_dir, plot = ap, width = 6, height = 5, units = "in")
 }
 toc()
 
+#JUMP
 ###Actual plot of sepsis samples, clinical params
 human_sepsis_data_pheno_dist <- cbind(subset(human_sepsis_data, Day < 4, 1:6), as.matrix(dist(x = subset(human_sepsis_data, Day < 4, pheno_sel), method = "canberra"))) # distance() works on a per row basis
 human_sepsis_data_pheno_dist$Patient <- factor(human_sepsis_data_pheno_dist$Patient, levels = unique(human_sepsis_data_pheno_dist$Patient))
@@ -466,16 +487,23 @@ lam <- p$sdev[1:2] * sqrt(nrow(p$x))
 ap <- autoplot(object = p, data = hsdpd, colour = "Group", frame = FALSE, frame.type = "norm", size = 0.8)
 ap <- ap + 
   geom_point(size = 3, color = "white") +
-  geom_text_repel(label = hsdpd$label, x = p$x[, 1] / lam[1], y = p$x[, 2] / lam[2], size = 1.3, mapping = aes(color = Group), segment.size = 0.3, force = 0.005, box.padding = 0.0) +
+  geom_text_repel(parse = TRUE, label = sapply(hsdpd$label, function(lab) sprintf("bold(\"%s\")", lab)), x = p$x[, 1] / lam[1], y = p$x[, 2] / lam[2], size = 1.3, mapping = aes(color = Group), segment.size = 0.3, force = 0.005, box.padding = 0.0) +
   human_col_scale() +
   ggtitle("PCA biplot, Canberra distance, clinical params,\nseptic patients") +
   guides(shape = "none") +
   theme_bw() + 
   theme(panel.grid = element_blank())
 gobj <- ggplot_build(ap)
+xmax <- gobj$layout$panel_params[[1]]$x.range[2]
 xmin <- gobj$layout$panel_params[[1]]$x.range[1]
+ymax <- gobj$layout$panel_params[[1]]$y.range[2]
 ymin <- gobj$layout$panel_params[[1]]$y.range[1]
+arws <- make_ordination_arrows(x = p$x[, 1:2], w = subset(human_sepsis_data, Day < 4, pheno_sel), xmax = xmax, xmin = xmin, ymin = ymin, ymax = ymax, shorten_arw_by = 1.5)
+arws$ph_ars_names_s$label[arws$ph_ars_names_s$label == "Troponin T"] <- "TnT"
 ap <- ap +
+  geom_path(data = arws$ph_ars_s, mapping = aes(x = PC1, y = PC2, group = Group), inherit.aes = FALSE, arrow = arrow(length = unit(0.06, "inches")), size = 0.2, color = "grey50") + 
+  geom_text(data = arws$ph_ars_names_s, mapping = aes(label = label, x = PC1, y = PC2), inherit.aes = FALSE, size = 1.5, color = "grey50") +
+  scale_x_continuous(limits = c(xmin, xmax) * 1) +
   geom_text(x = 0.9 * xmin, y = 0.95 * ymin, label = paste0("S vs NS, q < ", format(ad_mg_r_df$pheno[3], digits = 3)), size = 2, hjust = "left")
 ggsave(filename = paste0("PCA_biplot_sepsis_pheno_gg.png"), path = out_dir, plot = ap, width = 5, height = 4, units = "in")
 
@@ -485,6 +513,7 @@ p <- prcomp(human_data_dist[, -1:-6])
 ad_rv <- ad_mg_r_df[["all"]]
 ad_rv[ad_rv > 0.05] <- 0.05
 text_v <- paste0(c("Nonsep", "Nonsep", "Septic-S", "Nonsep-NS"), " vs ", c("Septic-S", "Septic-NS", "Septic-NS", "Septic-NS"), ", q ", c("> ", "< ")[1 + (ad_rv < 0.05)], sapply(ad_rv, format, digits = 2))
+lam <- p$sdev[1:2] * sqrt(nrow(p$x))
 hdd <- human_data_dist
 ap <- autoplot(object = p, data = hdd, colour = "Group", frame = TRUE, frame.type = "norm", size = 0.5)
 ap <- ap + 
@@ -494,9 +523,14 @@ ap <- ap +
   theme_bw() + 
   theme(panel.grid = element_blank())
 gobj <- ggplot_build(ap)
+xmax <- gobj$layout$panel_params[[1]]$x.range[2]
 xmin <- gobj$layout$panel_params[[1]]$x.range[1]
+ymax <- gobj$layout$panel_params[[1]]$y.range[2]
 ymin <- gobj$layout$panel_params[[1]]$y.range[1]
+arws <- make_ordination_arrows(x = p$x[, 1:2], w = subset(human_data, select = metab_sel), xmax = xmax, xmin = xmin, ymin = ymin, ymax = ymax, shorten_arw_by = 200, scale_by = 1.1)
 ap <- ap +
+  geom_path(data = arws$ph_ars_s, mapping = aes(x = PC1, y = PC2, group = Group), inherit.aes = FALSE, arrow = arrow(length = unit(0.06, "inches")), size = 0.2, color = "grey50") + 
+  geom_text(data = arws$ph_ars_names_s, mapping = aes(label = label, x = PC1, y = PC2), inherit.aes = FALSE, size = 1.5, color = "grey50") +
   geom_text(x = 0.9 * xmin, y = 0.85 * ymin, label = paste0(text_v, collapse = "\n"), size = 2, hjust = "left")
 ggsave(filename = paste0("PCA_biplot_metab_all_samples_gg.png"), path = out_dir, plot = ap, width = 5, height = 4, units = "in")
 
