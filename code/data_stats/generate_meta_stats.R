@@ -65,6 +65,66 @@ diag_to_add <- unique(human_illness_data$Diagnoses)
 human_meta_data[diag_to_add] <- lapply(diag_to_add, function(diag) human_meta_data$`Patient ID` %in% human_illness_data$Number[human_illness_data$Diagnoses == diag])
 human_meta_data[diag_to_add] <- lapply(human_meta_data[diag_to_add], as.numeric)
 
+#Calculate statistics for differences in meta data between groups
+hmd <- human_meta_data
+hmd$Group <- human_data$Group[match(substring(hmd$`Patient ID`, 2), human_data$Patient)]
+##Set comparisons
+cmp_pairs <- list(list("Septic-S", "Septic-NS"), 
+                  list("n.Septic-S", "Septic-S"), 
+                  list("n.Septic-S", "n.Septic-NS"),
+                  list(c("Septic-S", "Septic-NS"), c("n.Septic-S", "n.Septic-NS")))
+##Set discrete variables to compare
+cmp_vars_disc <- colnames(human_meta_data)[which(colnames(human_meta_data) == "Diabetes"):which(colnames(human_meta_data) == "Other hospital")]
+cmp_vars_disc <- setdiff(cmp_vars_disc, "Homelessness")
+cmp_vars_disc <- c("Gender", cmp_vars_disc)
+##Calculate statistics for discrete variables
+cmp_disc_res <- lapply(cmp_pairs, 
+                       function(cmp) 
+                         lapply(cmp_vars_disc, 
+                                function(varb){
+                                  vtab <- table(hmd[c("Group", varb)])
+                                  if (length(cmp[[1]]) > 1){
+                                    xvec <- colSums(vtab[cmp[[1]], ])
+                                  }else{
+                                    xvec <- as.numeric(vtab[cmp[[1]], ])
+                                  }
+                                  if (length(cmp[[2]]) > 1){
+                                    yvec <- colSums(vtab[cmp[[2]], ])
+                                  }else{
+                                    yvec <- as.numeric(vtab[cmp[[2]], ])
+                                  }
+                                  mat <- matrix(c(xvec, yvec), ncol = 2, byrow = FALSE)
+                                  return(chisq.test(x = mat, rescale.p = TRUE))
+                                }))
+cmp_disc_ps <- lapply(cmp_disc_res, sapply, `[[`, "p.value")
+for (n in seq_along(cmp_disc_ps))
+  names(cmp_disc_ps[[n]]) <- cmp_vars_disc
+cmp_disc_sig <- lapply(cmp_disc_ps, sapply, `<`, 0.05)
+cmp_disc_sig <- lapply(cmp_disc_sig, which)
+cmp_disc_sig <- lapply(cmp_disc_sig, names)
+##Set continuous variables
+cmp_vars_cont <- colnames(human_meta_data)[c(4, 6, 7, 8)]
+##Calculate statistics for continuous variables
+cmp_cont_res <- lapply(cmp_pairs, 
+                       function(cmp) 
+                         lapply(cmp_vars_cont, 
+                                function(varb){
+                                  xvec <- subset(hmd, Group %in% cmp[[1]], varb)
+                                  yvec <- subset(hmd, Group %in% cmp[[2]], varb)
+                                  return(t.test(x = xvec, y = yvec))
+                                }))
+cmp_cont_ps <- lapply(cmp_cont_res, sapply, `[[`, "p.value")
+for (n in seq_along(cmp_cont_ps))
+  names(cmp_cont_ps[[n]]) <- cmp_vars_cont
+cmp_cont_sig <- lapply(cmp_cont_ps, sapply, `<`, 0.05)
+cmp_cont_sig <- lapply(cmp_cont_sig, which)
+cmp_cont_sig <- lapply(cmp_cont_sig, names)
+##Combine discrete and continuous results
+cmp_sig <- list()
+for (n in seq_along(cmp_pairs)){
+  cmp_sig[[n]] <- c(cmp_cont_sig[[n]], cmp_disc_sig[[n]])
+}
+
 #Calculate means, SDs, counts and percentages
 patient_numbers <- lapply(unique(human_data$Group), function(gr) unique(subset(human_data, Group == gr)$Patient))
 names(patient_numbers) <- unique(human_data$Group)
@@ -113,6 +173,11 @@ if (unique(pub_meta_table["Homelessness", ]) == "0 (0.0)"){
   pub_meta_table <- pub_meta_table[setdiff(rownames(pub_meta_table), "Homelessness"), ]
 }
 pub_meta_table_u <- cbind(rownames(pub_meta_table), pub_meta_table)
+#Mark significant differences between groups in the rownames of the meta data table output
+mark_idx <- lapply(lapply(cmp_sig, paste0, collapse = "|"), grep, x = pub_meta_table[, 1])
+mark_idx_inv <- melt(mark_idx)
+#TODO: finish significance marks in meta data table
+
 new_rownames <- rep("", nrow(pub_meta_table_u))
 new_rownames[match(c("Diabetes", "Beta blockers", "Tobacco use", "Employed", "Elective", "ED", "Fracture femur"), pub_meta_table_u[, 1])] <- 
   c("Co-morbidities - n (%)", "Medication use prior to submission - n (%)", "Social history - n (%)", "Occupational status - n (%)", "Type of admission - n (%)", "Admission source - n (%)", "Other critical illness - n (%)")
