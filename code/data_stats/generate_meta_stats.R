@@ -104,9 +104,9 @@ pub_meta_table <- t(pub_meta_table)
 rownames(pub_meta_table) <- c("n =", "FP/CAP", gsub(x = rownames(pub_meta_table)[-1:-2], pattern = "\\.", replacement = " "))
 rownames(pub_meta_table)[7] <- "Male sex - n (%)"
 rownames(pub_meta_table)[c(3, 4, 6)] <- paste0(rownames(pub_meta_table)[c(3, 4, 6)], c(" - yr", " - kg", " score"))
-pub_meta_table["FP/CAP", c("Nonsep-S", "Nonsep-NS")] <- "-"
+pub_meta_table["FP/CAP", c("n.Septic-S", "n.Septic-NS")] <- "-"
 pub_meta_table[(nrow(pub_meta_table) - length(diag_to_add) + 3):nrow(pub_meta_table), c("Septic-NS", "Septic-S")] <- "-"
-pub_meta_table[nrow(pub_meta_table) - length(diag_to_add) + 1:2, c("Nonsep-NS", "Nonsep-S")] <- "-"
+pub_meta_table[nrow(pub_meta_table) - length(diag_to_add) + 1:2, c("n.Septic-NS", "n.Septic-S")] <- "-"
 pub_meta_table <- pub_meta_table[, c(2, 1, 3, 4)]
 pub_meta_table <- pub_meta_table[setdiff(rownames(pub_meta_table), "FP/CAP"), ]
 if (unique(pub_meta_table["Homelessness", ]) == "0 (0.0)"){
