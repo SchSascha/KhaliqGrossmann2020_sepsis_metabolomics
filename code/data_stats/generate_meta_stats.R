@@ -173,13 +173,15 @@ if (unique(pub_meta_table["Homelessness", ]) == "0 (0.0)"){
   pub_meta_table <- pub_meta_table[setdiff(rownames(pub_meta_table), "Homelessness"), ]
 }
 pub_meta_table_u <- cbind(rownames(pub_meta_table), pub_meta_table)
-#Mark significant differences between groups in the rownames of the meta data table output
-mark_idx <- lapply(lapply(cmp_sig, paste0, collapse = "|"), grep, x = pub_meta_table[, 1])
-mark_idx_inv <- melt(mark_idx)
-#TODO: finish significance marks in meta data table
-
 new_rownames <- rep("", nrow(pub_meta_table_u))
 new_rownames[match(c("Diabetes", "Beta blockers", "Tobacco use", "Employed", "Elective", "ED", "Fracture femur"), pub_meta_table_u[, 1])] <- 
   c("Co-morbidities - n (%)", "Medication use prior to submission - n (%)", "Social history - n (%)", "Occupational status - n (%)", "Type of admission - n (%)", "Admission source - n (%)", "Other critical illness - n (%)")
 pub_meta_table_u <- cbind(new_rownames, pub_meta_table_u)
+#Mark significant differences between groups in the rownames of the meta data table output
+mark_idx <- lapply(lapply(cmp_sig, paste0, collapse = "|"), grep, x = pub_meta_table_u[, 2])
+mark_idx_inv <- melt(mark_idx)
+marks <- lapply(unique(mark_idx_inv$value), function(s) mark_idx_inv$L1[mark_idx_inv$value == s])
+marks <- lapply(marks, function(m) paste0(letters[m], collapse = ", "))
+marks_add <- paste0(pub_meta_table_u[unique(mark_idx_inv$value), 2], unlist(marks))
+pub_meta_table_u[unique(mark_idx_inv$value), 2] <- marks_add
 fwrite(x = as.data.frame(pub_meta_table_u), file = paste0(out_dir, "patient_meta_table.csv"), sep = "\t", row.names = FALSE, col.names = TRUE)
