@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- generated with COPASI 4.25 (Build 207) (http://www.copasi.org) at 2019-04-16T07:14:47Z -->
+<!-- generated with COPASI 4.25 (Build 207) (http://www.copasi.org) at 2019-06-06T13:01:01Z -->
 <?oxygen RNGSchema="http://www.copasi.org/static/schema/CopasiML.rng" type="xml"?>
 <COPASI xmlns="http://www.copasi.org/static/schema" versionMajor="4" versionMinor="25" versionDevel="207" copasiSourcesModified="0">
   <ListOfFunctions>
@@ -8832,15 +8832,15 @@
           <Modifier metabolite="Metabolite_10" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_5059" name="Keqcpt1" value="0.45"/>
-          <Constant key="Parameter_5061" name="Kicpt1MalCoACYT" value="9.1"/>
-          <Constant key="Parameter_5062" name="Kmcpt1C16AcylCarCYT" value="136"/>
-          <Constant key="Parameter_5056" name="Kmcpt1C16AcylCoACYT" value="17.6693"/>
-          <Constant key="Parameter_5058" name="Kmcpt1CarCYT" value="279.902"/>
-          <Constant key="Parameter_5057" name="Kmcpt1CoACYT" value="40.7"/>
-          <Constant key="Parameter_5060" name="Vcpt1" value="0.0108985"/>
-          <Constant key="Parameter_5063" name="ncpt1" value="2.4799"/>
-          <Constant key="Parameter_5054" name="sfcpt1C16" value="1"/>
+          <Constant key="Parameter_5067" name="Keqcpt1" value="0.45"/>
+          <Constant key="Parameter_5069" name="Kicpt1MalCoACYT" value="9.1"/>
+          <Constant key="Parameter_5070" name="Kmcpt1C16AcylCarCYT" value="136"/>
+          <Constant key="Parameter_5064" name="Kmcpt1C16AcylCoACYT" value="17.6693"/>
+          <Constant key="Parameter_5066" name="Kmcpt1CarCYT" value="279.902"/>
+          <Constant key="Parameter_5065" name="Kmcpt1CoACYT" value="40.7"/>
+          <Constant key="Parameter_5068" name="Vcpt1" value="0.0108985"/>
+          <Constant key="Parameter_5071" name="ncpt1" value="2.4799"/>
+          <Constant key="Parameter_5062" name="sfcpt1C16" value="1"/>
         </ListOfConstants>
         <KineticLaw function="Function_86" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VCYT]">
           <ListOfCallParameters>
@@ -8857,22 +8857,22 @@
               <SourceParameter reference="Metabolite_9"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1576">
-              <SourceParameter reference="Parameter_5059"/>
+              <SourceParameter reference="Parameter_5067"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1575">
-              <SourceParameter reference="Parameter_5061"/>
+              <SourceParameter reference="Parameter_5069"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1574">
-              <SourceParameter reference="Parameter_5062"/>
+              <SourceParameter reference="Parameter_5070"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1573">
-              <SourceParameter reference="Parameter_5056"/>
+              <SourceParameter reference="Parameter_5064"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1572">
-              <SourceParameter reference="Parameter_5058"/>
+              <SourceParameter reference="Parameter_5066"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1571">
-              <SourceParameter reference="Parameter_5057"/>
+              <SourceParameter reference="Parameter_5065"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1570">
               <SourceParameter reference="Metabolite_10"/>
@@ -8881,13 +8881,13 @@
               <SourceParameter reference="Compartment_0"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1568">
-              <SourceParameter reference="Parameter_5060"/>
+              <SourceParameter reference="Parameter_5068"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1567">
-              <SourceParameter reference="Parameter_5063"/>
+              <SourceParameter reference="Parameter_5071"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1566">
-              <SourceParameter reference="Parameter_5054"/>
+              <SourceParameter reference="Parameter_5062"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -8913,15 +8913,15 @@
           <Product metabolite="Metabolite_8" stoichiometry="1"/>
         </ListOfProducts>
         <ListOfConstants>
-          <Constant key="Parameter_5052" name="KicactC16AcylCarCYT" value="56"/>
-          <Constant key="Parameter_5051" name="KmcactC16AcylCarCYT" value="15"/>
-          <Constant key="Parameter_5055" name="KmcactC16AcylCarMAT" value="15"/>
-          <Constant key="Parameter_5053" name="Keqcact" value="1"/>
-          <Constant key="Parameter_5028" name="KicactCarCYT" value="200"/>
-          <Constant key="Parameter_5026" name="KmcactCarCYT" value="130"/>
-          <Constant key="Parameter_5025" name="KmcactCarMAT" value="130"/>
-          <Constant key="Parameter_5029" name="Vfcact" value="2.1"/>
-          <Constant key="Parameter_5027" name="Vrcact" value="2.1"/>
+          <Constant key="Parameter_5060" name="KicactC16AcylCarCYT" value="56"/>
+          <Constant key="Parameter_5059" name="KmcactC16AcylCarCYT" value="15"/>
+          <Constant key="Parameter_5063" name="KmcactC16AcylCarMAT" value="15"/>
+          <Constant key="Parameter_5061" name="Keqcact" value="1"/>
+          <Constant key="Parameter_5036" name="KicactCarCYT" value="200"/>
+          <Constant key="Parameter_5034" name="KmcactCarCYT" value="130"/>
+          <Constant key="Parameter_5033" name="KmcactCarMAT" value="130"/>
+          <Constant key="Parameter_5037" name="Vfcact" value="2.1"/>
+          <Constant key="Parameter_5035" name="Vrcact" value="2.1"/>
         </ListOfConstants>
         <KineticLaw function="Function_41" unitType="Default">
           <ListOfCallParameters>
@@ -8941,16 +8941,16 @@
               <SourceParameter reference="ModelValue_5"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_280">
-              <SourceParameter reference="Parameter_5052"/>
+              <SourceParameter reference="Parameter_5060"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_279">
               <SourceParameter reference="ModelValue_4"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_278">
-              <SourceParameter reference="Parameter_5051"/>
+              <SourceParameter reference="Parameter_5059"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_277">
-              <SourceParameter reference="Parameter_5055"/>
+              <SourceParameter reference="Parameter_5063"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_276">
               <SourceParameter reference="ModelValue_3"/>
@@ -8988,15 +8988,15 @@
           <Product metabolite="Metabolite_8" stoichiometry="1"/>
         </ListOfProducts>
         <ListOfConstants>
-          <Constant key="Parameter_5031" name="KmcactC14AcylCarCYT" value="15"/>
-          <Constant key="Parameter_5046" name="KicactC14AcylCarCYT" value="56"/>
-          <Constant key="Parameter_5034" name="KmcactC14AcylCarMAT" value="15"/>
-          <Constant key="Parameter_5048" name="Keqcact" value="1"/>
-          <Constant key="Parameter_5049" name="KicactCarCYT" value="200"/>
-          <Constant key="Parameter_5043" name="KmcactCarCYT" value="130"/>
-          <Constant key="Parameter_5030" name="KmcactCarMAT" value="130"/>
-          <Constant key="Parameter_5038" name="Vfcact" value="2.1"/>
-          <Constant key="Parameter_5045" name="Vrcact" value="2.1"/>
+          <Constant key="Parameter_5039" name="KmcactC14AcylCarCYT" value="15"/>
+          <Constant key="Parameter_5054" name="KicactC14AcylCarCYT" value="56"/>
+          <Constant key="Parameter_5042" name="KmcactC14AcylCarMAT" value="15"/>
+          <Constant key="Parameter_5056" name="Keqcact" value="1"/>
+          <Constant key="Parameter_5057" name="KicactCarCYT" value="200"/>
+          <Constant key="Parameter_5051" name="KmcactCarCYT" value="130"/>
+          <Constant key="Parameter_5038" name="KmcactCarMAT" value="130"/>
+          <Constant key="Parameter_5046" name="Vfcact" value="2.1"/>
+          <Constant key="Parameter_5053" name="Vrcact" value="2.1"/>
         </ListOfConstants>
         <KineticLaw function="Function_96" unitType="Default">
           <ListOfCallParameters>
@@ -9016,16 +9016,16 @@
               <SourceParameter reference="ModelValue_5"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1906">
-              <SourceParameter reference="Parameter_5046"/>
+              <SourceParameter reference="Parameter_5054"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1905">
               <SourceParameter reference="ModelValue_4"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1904">
-              <SourceParameter reference="Parameter_5031"/>
+              <SourceParameter reference="Parameter_5039"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1903">
-              <SourceParameter reference="Parameter_5034"/>
+              <SourceParameter reference="Parameter_5042"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1902">
               <SourceParameter reference="ModelValue_3"/>
@@ -9063,15 +9063,15 @@
           <Product metabolite="Metabolite_8" stoichiometry="1"/>
         </ListOfProducts>
         <ListOfConstants>
-          <Constant key="Parameter_5032" name="KicactC12AcylCarCYT" value="56"/>
-          <Constant key="Parameter_5044" name="KmcactC12AcylCarCYT" value="15"/>
-          <Constant key="Parameter_5037" name="KmcactC12AcylCarMAT" value="15"/>
-          <Constant key="Parameter_5041" name="Keqcact" value="1"/>
-          <Constant key="Parameter_5036" name="KicactCarCYT" value="200"/>
-          <Constant key="Parameter_5040" name="KmcactCarCYT" value="130"/>
-          <Constant key="Parameter_5039" name="KmcactCarMAT" value="130"/>
-          <Constant key="Parameter_5042" name="Vfcact" value="2.1"/>
-          <Constant key="Parameter_5047" name="Vrcact" value="2.1"/>
+          <Constant key="Parameter_5040" name="KicactC12AcylCarCYT" value="56"/>
+          <Constant key="Parameter_5052" name="KmcactC12AcylCarCYT" value="15"/>
+          <Constant key="Parameter_5045" name="KmcactC12AcylCarMAT" value="15"/>
+          <Constant key="Parameter_5049" name="Keqcact" value="1"/>
+          <Constant key="Parameter_5044" name="KicactCarCYT" value="200"/>
+          <Constant key="Parameter_5048" name="KmcactCarCYT" value="130"/>
+          <Constant key="Parameter_5047" name="KmcactCarMAT" value="130"/>
+          <Constant key="Parameter_5050" name="Vfcact" value="2.1"/>
+          <Constant key="Parameter_5055" name="Vrcact" value="2.1"/>
         </ListOfConstants>
         <KineticLaw function="Function_40" unitType="Default">
           <ListOfCallParameters>
@@ -9091,16 +9091,16 @@
               <SourceParameter reference="ModelValue_5"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_265">
-              <SourceParameter reference="Parameter_5032"/>
+              <SourceParameter reference="Parameter_5040"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_266">
               <SourceParameter reference="ModelValue_4"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_267">
-              <SourceParameter reference="Parameter_5044"/>
+              <SourceParameter reference="Parameter_5052"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_268">
-              <SourceParameter reference="Parameter_5037"/>
+              <SourceParameter reference="Parameter_5045"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_269">
               <SourceParameter reference="ModelValue_3"/>
@@ -9138,15 +9138,15 @@
           <Product metabolite="Metabolite_8" stoichiometry="1"/>
         </ListOfProducts>
         <ListOfConstants>
-          <Constant key="Parameter_5033" name="KicactC10AcylCarCYT" value="56"/>
-          <Constant key="Parameter_5035" name="KmcactC10AcylCarCYT" value="15"/>
-          <Constant key="Parameter_5050" name="KmcactC10AcylCarMAT" value="15"/>
-          <Constant key="Parameter_5064" name="Keqcact" value="1"/>
-          <Constant key="Parameter_5065" name="KicactCarCYT" value="200"/>
-          <Constant key="Parameter_5071" name="KmcactCarCYT" value="130"/>
-          <Constant key="Parameter_5070" name="KmcactCarMAT" value="130"/>
-          <Constant key="Parameter_5072" name="Vfcact" value="2.1"/>
-          <Constant key="Parameter_5069" name="Vrcact" value="2.1"/>
+          <Constant key="Parameter_5041" name="KicactC10AcylCarCYT" value="56"/>
+          <Constant key="Parameter_5043" name="KmcactC10AcylCarCYT" value="15"/>
+          <Constant key="Parameter_5058" name="KmcactC10AcylCarMAT" value="15"/>
+          <Constant key="Parameter_5072" name="Keqcact" value="1"/>
+          <Constant key="Parameter_5073" name="KicactCarCYT" value="200"/>
+          <Constant key="Parameter_5079" name="KmcactCarCYT" value="130"/>
+          <Constant key="Parameter_5078" name="KmcactCarMAT" value="130"/>
+          <Constant key="Parameter_5080" name="Vfcact" value="2.1"/>
+          <Constant key="Parameter_5075" name="Vrcact" value="2.1"/>
         </ListOfConstants>
         <KineticLaw function="Function_43" unitType="Default">
           <ListOfCallParameters>
@@ -9166,16 +9166,16 @@
               <SourceParameter reference="ModelValue_5"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_306">
-              <SourceParameter reference="Parameter_5033"/>
+              <SourceParameter reference="Parameter_5041"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_305">
               <SourceParameter reference="ModelValue_4"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_304">
-              <SourceParameter reference="Parameter_5035"/>
+              <SourceParameter reference="Parameter_5043"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_303">
-              <SourceParameter reference="Parameter_5050"/>
+              <SourceParameter reference="Parameter_5058"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_302">
               <SourceParameter reference="ModelValue_3"/>
@@ -9213,15 +9213,15 @@
           <Product metabolite="Metabolite_8" stoichiometry="1"/>
         </ListOfProducts>
         <ListOfConstants>
-          <Constant key="Parameter_5068" name="KicactC8AcylCarCYT" value="56"/>
-          <Constant key="Parameter_5067" name="KmcactC8AcylCarCYT" value="15"/>
-          <Constant key="Parameter_5066" name="KmcactC8AcylCarMAT" value="15"/>
-          <Constant key="Parameter_5073" name="Keqcact" value="1"/>
-          <Constant key="Parameter_5077" name="KicactCarCYT" value="200"/>
-          <Constant key="Parameter_5075" name="KmcactCarCYT" value="130"/>
-          <Constant key="Parameter_5074" name="KmcactCarMAT" value="130"/>
-          <Constant key="Parameter_5078" name="Vfcact" value="2.1"/>
-          <Constant key="Parameter_5076" name="Vrcact" value="2.1"/>
+          <Constant key="Parameter_5074" name="KicactC8AcylCarCYT" value="56"/>
+          <Constant key="Parameter_5077" name="KmcactC8AcylCarCYT" value="15"/>
+          <Constant key="Parameter_5076" name="KmcactC8AcylCarMAT" value="15"/>
+          <Constant key="Parameter_5081" name="Keqcact" value="1"/>
+          <Constant key="Parameter_5085" name="KicactCarCYT" value="200"/>
+          <Constant key="Parameter_5083" name="KmcactCarCYT" value="130"/>
+          <Constant key="Parameter_5082" name="KmcactCarMAT" value="130"/>
+          <Constant key="Parameter_5086" name="Vfcact" value="2.1"/>
+          <Constant key="Parameter_5084" name="Vrcact" value="2.1"/>
         </ListOfConstants>
         <KineticLaw function="Function_42" unitType="Default">
           <ListOfCallParameters>
@@ -9241,16 +9241,16 @@
               <SourceParameter reference="ModelValue_5"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_293">
-              <SourceParameter reference="Parameter_5068"/>
+              <SourceParameter reference="Parameter_5074"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_292">
               <SourceParameter reference="ModelValue_4"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_291">
-              <SourceParameter reference="Parameter_5067"/>
+              <SourceParameter reference="Parameter_5077"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_290">
-              <SourceParameter reference="Parameter_5066"/>
+              <SourceParameter reference="Parameter_5076"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_289">
               <SourceParameter reference="ModelValue_3"/>
@@ -9288,15 +9288,15 @@
           <Product metabolite="Metabolite_8" stoichiometry="1"/>
         </ListOfProducts>
         <ListOfConstants>
-          <Constant key="Parameter_5080" name="KicactC6AcylCarCYT" value="56"/>
-          <Constant key="Parameter_5082" name="KmcactC6AcylCarCYT" value="15"/>
-          <Constant key="Parameter_5083" name="KmcactC6AcylCarMAT" value="15"/>
-          <Constant key="Parameter_5079" name="Keqcact" value="1"/>
-          <Constant key="Parameter_5081" name="KicactCarCYT" value="200"/>
-          <Constant key="Parameter_5086" name="KmcactCarCYT" value="130"/>
-          <Constant key="Parameter_5087" name="KmcactCarMAT" value="130"/>
-          <Constant key="Parameter_5088" name="Vfcact" value="2.1"/>
-          <Constant key="Parameter_5084" name="Vrcact" value="2.1"/>
+          <Constant key="Parameter_5088" name="KicactC6AcylCarCYT" value="56"/>
+          <Constant key="Parameter_5090" name="KmcactC6AcylCarCYT" value="15"/>
+          <Constant key="Parameter_5091" name="KmcactC6AcylCarMAT" value="15"/>
+          <Constant key="Parameter_5087" name="Keqcact" value="1"/>
+          <Constant key="Parameter_5089" name="KicactCarCYT" value="200"/>
+          <Constant key="Parameter_5094" name="KmcactCarCYT" value="130"/>
+          <Constant key="Parameter_5095" name="KmcactCarMAT" value="130"/>
+          <Constant key="Parameter_5096" name="Vfcact" value="2.1"/>
+          <Constant key="Parameter_5092" name="Vrcact" value="2.1"/>
         </ListOfConstants>
         <KineticLaw function="Function_45" unitType="Default">
           <ListOfCallParameters>
@@ -9316,16 +9316,16 @@
               <SourceParameter reference="ModelValue_5"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_332">
-              <SourceParameter reference="Parameter_5080"/>
+              <SourceParameter reference="Parameter_5088"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_331">
               <SourceParameter reference="ModelValue_4"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_330">
-              <SourceParameter reference="Parameter_5082"/>
+              <SourceParameter reference="Parameter_5090"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_329">
-              <SourceParameter reference="Parameter_5083"/>
+              <SourceParameter reference="Parameter_5091"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_328">
               <SourceParameter reference="ModelValue_3"/>
@@ -9363,15 +9363,15 @@
           <Product metabolite="Metabolite_8" stoichiometry="1"/>
         </ListOfProducts>
         <ListOfConstants>
-          <Constant key="Parameter_5085" name="KicactC4AcylCarCYT" value="56"/>
-          <Constant key="Parameter_5089" name="KmcactC4AcylCarCYT" value="15"/>
-          <Constant key="Parameter_5091" name="KmcactC4AcylCarMAT" value="15"/>
-          <Constant key="Parameter_5090" name="Keqcact" value="1"/>
-          <Constant key="Parameter_5092" name="KicactCarCYT" value="200"/>
-          <Constant key="Parameter_5093" name="KmcactCarCYT" value="130"/>
-          <Constant key="Parameter_5094" name="KmcactCarMAT" value="130"/>
-          <Constant key="Parameter_5095" name="Vfcact" value="2.1"/>
-          <Constant key="Parameter_5096" name="Vrcact" value="2.1"/>
+          <Constant key="Parameter_5093" name="KicactC4AcylCarCYT" value="56"/>
+          <Constant key="Parameter_5097" name="KmcactC4AcylCarCYT" value="15"/>
+          <Constant key="Parameter_5099" name="KmcactC4AcylCarMAT" value="15"/>
+          <Constant key="Parameter_5098" name="Keqcact" value="1"/>
+          <Constant key="Parameter_5100" name="KicactCarCYT" value="200"/>
+          <Constant key="Parameter_5101" name="KmcactCarCYT" value="130"/>
+          <Constant key="Parameter_5102" name="KmcactCarMAT" value="130"/>
+          <Constant key="Parameter_5103" name="Vfcact" value="2.1"/>
+          <Constant key="Parameter_5104" name="Vrcact" value="2.1"/>
         </ListOfConstants>
         <KineticLaw function="Function_44" unitType="Default">
           <ListOfCallParameters>
@@ -9391,16 +9391,16 @@
               <SourceParameter reference="ModelValue_5"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_319">
-              <SourceParameter reference="Parameter_5085"/>
+              <SourceParameter reference="Parameter_5093"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_318">
               <SourceParameter reference="ModelValue_4"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_317">
-              <SourceParameter reference="Parameter_5089"/>
+              <SourceParameter reference="Parameter_5097"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_316">
-              <SourceParameter reference="Parameter_5091"/>
+              <SourceParameter reference="Parameter_5099"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_315">
               <SourceParameter reference="ModelValue_3"/>
@@ -9452,25 +9452,25 @@
           <Modifier metabolite="Metabolite_50" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_5097" name="sfcpt2C16" value="0.85"/>
-          <Constant key="Parameter_5104" name="Keqcpt2" value="2.22"/>
-          <Constant key="Parameter_5103" name="Kmcpt2C10AcylCarMAT" value="51"/>
-          <Constant key="Parameter_5102" name="Kmcpt2C10AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_5101" name="Kmcpt2C12AcylCarMAT" value="51"/>
-          <Constant key="Parameter_5099" name="Kmcpt2C12AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_5098" name="Kmcpt2C14AcylCarMAT" value="51"/>
-          <Constant key="Parameter_5109" name="Kmcpt2C14AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_5106" name="Kmcpt2C16AcylCarMAT" value="51"/>
-          <Constant key="Parameter_5107" name="Kmcpt2C16AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_5108" name="Kmcpt2C4AcylCarMAT" value="51"/>
-          <Constant key="Parameter_5100" name="Kmcpt2C4AcylCoAMAT" value="1e+06"/>
-          <Constant key="Parameter_5105" name="Kmcpt2C6AcylCarMAT" value="51"/>
-          <Constant key="Parameter_5110" name="Kmcpt2C6AcylCoAMAT" value="1000"/>
-          <Constant key="Parameter_5111" name="Kmcpt2C8AcylCarMAT" value="51"/>
-          <Constant key="Parameter_5112" name="Kmcpt2C8AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_5113" name="Kmcpt2CarMAT" value="350"/>
-          <Constant key="Parameter_5118" name="Kmcpt2CoAMAT" value="30"/>
-          <Constant key="Parameter_5115" name="Vcpt2" value="0.480873"/>
+          <Constant key="Parameter_5105" name="sfcpt2C16" value="0.85"/>
+          <Constant key="Parameter_5112" name="Keqcpt2" value="2.22"/>
+          <Constant key="Parameter_5111" name="Kmcpt2C10AcylCarMAT" value="51"/>
+          <Constant key="Parameter_5110" name="Kmcpt2C10AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_5109" name="Kmcpt2C12AcylCarMAT" value="51"/>
+          <Constant key="Parameter_5107" name="Kmcpt2C12AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_5106" name="Kmcpt2C14AcylCarMAT" value="51"/>
+          <Constant key="Parameter_5117" name="Kmcpt2C14AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_5114" name="Kmcpt2C16AcylCarMAT" value="51"/>
+          <Constant key="Parameter_5115" name="Kmcpt2C16AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_5116" name="Kmcpt2C4AcylCarMAT" value="51"/>
+          <Constant key="Parameter_5108" name="Kmcpt2C4AcylCoAMAT" value="1e+06"/>
+          <Constant key="Parameter_5113" name="Kmcpt2C6AcylCarMAT" value="51"/>
+          <Constant key="Parameter_5118" name="Kmcpt2C6AcylCoAMAT" value="1000"/>
+          <Constant key="Parameter_5119" name="Kmcpt2C8AcylCarMAT" value="51"/>
+          <Constant key="Parameter_5120" name="Kmcpt2C8AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_5121" name="Kmcpt2CarMAT" value="350"/>
+          <Constant key="Parameter_5126" name="Kmcpt2CoAMAT" value="30"/>
+          <Constant key="Parameter_5123" name="Vcpt2" value="0.480873"/>
         </ListOfConstants>
         <KineticLaw function="Function_84" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -9580,7 +9580,7 @@
               <SourceParameter reference="ModelValue_6"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1508">
-              <SourceParameter reference="Parameter_5097"/>
+              <SourceParameter reference="Parameter_5105"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -9620,24 +9620,24 @@
           <Modifier metabolite="Metabolite_50" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_5117" name="sfcpt2C14" value="1"/>
-          <Constant key="Parameter_5116" name="Keqcpt2" value="2.22"/>
-          <Constant key="Parameter_5114" name="Kmcpt2C10AcylCarMAT" value="51"/>
-          <Constant key="Parameter_5121" name="Kmcpt2C10AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_5120" name="Kmcpt2C12AcylCarMAT" value="51"/>
-          <Constant key="Parameter_5119" name="Kmcpt2C12AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_5181" name="Kmcpt2C14AcylCarMAT" value="51"/>
-          <Constant key="Parameter_5123" name="Kmcpt2C14AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_5122" name="Kmcpt2C16AcylCarMAT" value="51"/>
-          <Constant key="Parameter_5178" name="Kmcpt2C16AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_5138" name="Kmcpt2C4AcylCoAMAT" value="1e+06"/>
-          <Constant key="Parameter_5124" name="Kmcpt2C6AcylCarMAT" value="51"/>
-          <Constant key="Parameter_5126" name="Kmcpt2C6AcylCoAMAT" value="1000"/>
-          <Constant key="Parameter_5127" name="Kmcpt2C8AcylCarMAT" value="51"/>
-          <Constant key="Parameter_5176" name="Kmcpt2C8AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_5177" name="Kmcpt2CarMAT" value="350"/>
-          <Constant key="Parameter_5175" name="Kmcpt2CoAMAT" value="30"/>
-          <Constant key="Parameter_5125" name="Vcpt2" value="0.480873"/>
+          <Constant key="Parameter_5125" name="sfcpt2C14" value="1"/>
+          <Constant key="Parameter_5124" name="Keqcpt2" value="2.22"/>
+          <Constant key="Parameter_5122" name="Kmcpt2C10AcylCarMAT" value="51"/>
+          <Constant key="Parameter_5189" name="Kmcpt2C10AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_5146" name="Kmcpt2C12AcylCarMAT" value="51"/>
+          <Constant key="Parameter_5127" name="Kmcpt2C12AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_5185" name="Kmcpt2C14AcylCarMAT" value="51"/>
+          <Constant key="Parameter_5184" name="Kmcpt2C14AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_5186" name="Kmcpt2C16AcylCarMAT" value="51"/>
+          <Constant key="Parameter_5128" name="Kmcpt2C16AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_5183" name="Kmcpt2C4AcylCoAMAT" value="1e+06"/>
+          <Constant key="Parameter_5132" name="Kmcpt2C6AcylCarMAT" value="51"/>
+          <Constant key="Parameter_5134" name="Kmcpt2C6AcylCoAMAT" value="1000"/>
+          <Constant key="Parameter_5135" name="Kmcpt2C8AcylCarMAT" value="51"/>
+          <Constant key="Parameter_5129" name="Kmcpt2C8AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_5131" name="Kmcpt2CarMAT" value="350"/>
+          <Constant key="Parameter_5130" name="Kmcpt2CoAMAT" value="30"/>
+          <Constant key="Parameter_5133" name="Vcpt2" value="0.480873"/>
         </ListOfConstants>
         <KineticLaw function="Function_83" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -9744,7 +9744,7 @@
               <SourceParameter reference="ModelValue_6"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1472">
-              <SourceParameter reference="Parameter_5117"/>
+              <SourceParameter reference="Parameter_5125"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -9784,25 +9784,25 @@
           <Modifier metabolite="Metabolite_50" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_5128" name="sfcpt2C12" value="0.95"/>
-          <Constant key="Parameter_5137" name="Keqcpt2" value="2.22"/>
-          <Constant key="Parameter_5134" name="Kmcpt2C10AcylCarMAT" value="51"/>
-          <Constant key="Parameter_5133" name="Kmcpt2C10AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_5135" name="Kmcpt2C12AcylCarMAT" value="51"/>
-          <Constant key="Parameter_5130" name="Kmcpt2C12AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_5129" name="Kmcpt2C14AcylCarMAT" value="51"/>
-          <Constant key="Parameter_5131" name="Kmcpt2C14AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_5136" name="Kmcpt2C16AcylCarMAT" value="51"/>
-          <Constant key="Parameter_5132" name="Kmcpt2C16AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_5017" name="Kmcpt2C4AcylCarMAT" value="51"/>
-          <Constant key="Parameter_5022" name="Kmcpt2C4AcylCoAMAT" value="1e+06"/>
-          <Constant key="Parameter_5019" name="Kmcpt2C6AcylCarMAT" value="51"/>
-          <Constant key="Parameter_5020" name="Kmcpt2C6AcylCoAMAT" value="1000"/>
-          <Constant key="Parameter_5023" name="Kmcpt2C8AcylCarMAT" value="51"/>
-          <Constant key="Parameter_5011" name="Kmcpt2C8AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_5018" name="Kmcpt2CarMAT" value="350"/>
-          <Constant key="Parameter_5016" name="Kmcpt2CoAMAT" value="30"/>
-          <Constant key="Parameter_5015" name="Vcpt2" value="0.480873"/>
+          <Constant key="Parameter_5136" name="sfcpt2C12" value="0.95"/>
+          <Constant key="Parameter_5145" name="Keqcpt2" value="2.22"/>
+          <Constant key="Parameter_5142" name="Kmcpt2C10AcylCarMAT" value="51"/>
+          <Constant key="Parameter_5141" name="Kmcpt2C10AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_5143" name="Kmcpt2C12AcylCarMAT" value="51"/>
+          <Constant key="Parameter_5138" name="Kmcpt2C12AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_5137" name="Kmcpt2C14AcylCarMAT" value="51"/>
+          <Constant key="Parameter_5139" name="Kmcpt2C14AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_5144" name="Kmcpt2C16AcylCarMAT" value="51"/>
+          <Constant key="Parameter_5140" name="Kmcpt2C16AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_5025" name="Kmcpt2C4AcylCarMAT" value="51"/>
+          <Constant key="Parameter_5030" name="Kmcpt2C4AcylCoAMAT" value="1e+06"/>
+          <Constant key="Parameter_5027" name="Kmcpt2C6AcylCarMAT" value="51"/>
+          <Constant key="Parameter_5028" name="Kmcpt2C6AcylCoAMAT" value="1000"/>
+          <Constant key="Parameter_5031" name="Kmcpt2C8AcylCarMAT" value="51"/>
+          <Constant key="Parameter_5019" name="Kmcpt2C8AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_5026" name="Kmcpt2CarMAT" value="350"/>
+          <Constant key="Parameter_5024" name="Kmcpt2CoAMAT" value="30"/>
+          <Constant key="Parameter_5023" name="Vcpt2" value="0.480873"/>
         </ListOfConstants>
         <KineticLaw function="Function_85" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -9912,7 +9912,7 @@
               <SourceParameter reference="ModelValue_6"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1509">
-              <SourceParameter reference="Parameter_5128"/>
+              <SourceParameter reference="Parameter_5136"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -9952,25 +9952,25 @@
           <Modifier metabolite="Metabolite_50" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_5021" name="sfcpt2C10" value="0.95"/>
-          <Constant key="Parameter_5014" name="Keqcpt2" value="2.22"/>
-          <Constant key="Parameter_5012" name="Kmcpt2C10AcylCarMAT" value="51"/>
-          <Constant key="Parameter_5013" name="Kmcpt2C10AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_5173" name="Kmcpt2C12AcylCarMAT" value="51"/>
-          <Constant key="Parameter_5174" name="Kmcpt2C12AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_4875" name="Kmcpt2C14AcylCarMAT" value="51"/>
-          <Constant key="Parameter_4874" name="Kmcpt2C14AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_4873" name="Kmcpt2C16AcylCarMAT" value="51"/>
-          <Constant key="Parameter_4872" name="Kmcpt2C16AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_4871" name="Kmcpt2C4AcylCarMAT" value="51"/>
-          <Constant key="Parameter_4870" name="Kmcpt2C4AcylCoAMAT" value="1e+06"/>
-          <Constant key="Parameter_4869" name="Kmcpt2C6AcylCarMAT" value="51"/>
-          <Constant key="Parameter_4868" name="Kmcpt2C6AcylCoAMAT" value="1000"/>
-          <Constant key="Parameter_4867" name="Kmcpt2C8AcylCarMAT" value="51"/>
-          <Constant key="Parameter_4866" name="Kmcpt2C8AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_4865" name="Kmcpt2CarMAT" value="350"/>
-          <Constant key="Parameter_4864" name="Kmcpt2CoAMAT" value="30"/>
-          <Constant key="Parameter_4863" name="Vcpt2" value="0.480873"/>
+          <Constant key="Parameter_5029" name="sfcpt2C10" value="0.95"/>
+          <Constant key="Parameter_5022" name="Keqcpt2" value="2.22"/>
+          <Constant key="Parameter_5020" name="Kmcpt2C10AcylCarMAT" value="51"/>
+          <Constant key="Parameter_5021" name="Kmcpt2C10AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_5181" name="Kmcpt2C12AcylCarMAT" value="51"/>
+          <Constant key="Parameter_5182" name="Kmcpt2C12AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_4883" name="Kmcpt2C14AcylCarMAT" value="51"/>
+          <Constant key="Parameter_4882" name="Kmcpt2C14AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_4881" name="Kmcpt2C16AcylCarMAT" value="51"/>
+          <Constant key="Parameter_4880" name="Kmcpt2C16AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_4879" name="Kmcpt2C4AcylCarMAT" value="51"/>
+          <Constant key="Parameter_4878" name="Kmcpt2C4AcylCoAMAT" value="1e+06"/>
+          <Constant key="Parameter_4877" name="Kmcpt2C6AcylCarMAT" value="51"/>
+          <Constant key="Parameter_4876" name="Kmcpt2C6AcylCoAMAT" value="1000"/>
+          <Constant key="Parameter_4875" name="Kmcpt2C8AcylCarMAT" value="51"/>
+          <Constant key="Parameter_4874" name="Kmcpt2C8AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_4873" name="Kmcpt2CarMAT" value="350"/>
+          <Constant key="Parameter_4872" name="Kmcpt2CoAMAT" value="30"/>
+          <Constant key="Parameter_4871" name="Vcpt2" value="0.480873"/>
         </ListOfConstants>
         <KineticLaw function="Function_56" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -10080,7 +10080,7 @@
               <SourceParameter reference="ModelValue_6"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_646">
-              <SourceParameter reference="Parameter_5021"/>
+              <SourceParameter reference="Parameter_5029"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -10120,25 +10120,25 @@
           <Modifier metabolite="Metabolite_50" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_4862" name="sfcpt2C8" value="0.35"/>
-          <Constant key="Parameter_4861" name="Keqcpt2" value="2.22"/>
-          <Constant key="Parameter_4860" name="Kmcpt2C10AcylCarMAT" value="51"/>
-          <Constant key="Parameter_4859" name="Kmcpt2C10AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_4858" name="Kmcpt2C12AcylCarMAT" value="51"/>
-          <Constant key="Parameter_4857" name="Kmcpt2C12AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_4856" name="Kmcpt2C14AcylCarMAT" value="51"/>
-          <Constant key="Parameter_4855" name="Kmcpt2C14AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_4854" name="Kmcpt2C16AcylCarMAT" value="51"/>
-          <Constant key="Parameter_4853" name="Kmcpt2C16AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_4852" name="Kmcpt2C4AcylCarMAT" value="51"/>
-          <Constant key="Parameter_4851" name="Kmcpt2C4AcylCoAMAT" value="1e+06"/>
-          <Constant key="Parameter_4850" name="Kmcpt2C6AcylCarMAT" value="51"/>
-          <Constant key="Parameter_4849" name="Kmcpt2C6AcylCoAMAT" value="1000"/>
-          <Constant key="Parameter_4848" name="Kmcpt2C8AcylCarMAT" value="51"/>
-          <Constant key="Parameter_4847" name="Kmcpt2C8AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_4846" name="Kmcpt2CarMAT" value="350"/>
-          <Constant key="Parameter_4845" name="Kmcpt2CoAMAT" value="30"/>
-          <Constant key="Parameter_4844" name="Vcpt2" value="0.480873"/>
+          <Constant key="Parameter_4870" name="sfcpt2C8" value="0.35"/>
+          <Constant key="Parameter_4869" name="Keqcpt2" value="2.22"/>
+          <Constant key="Parameter_4868" name="Kmcpt2C10AcylCarMAT" value="51"/>
+          <Constant key="Parameter_4867" name="Kmcpt2C10AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_4866" name="Kmcpt2C12AcylCarMAT" value="51"/>
+          <Constant key="Parameter_4865" name="Kmcpt2C12AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_4864" name="Kmcpt2C14AcylCarMAT" value="51"/>
+          <Constant key="Parameter_4863" name="Kmcpt2C14AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_4862" name="Kmcpt2C16AcylCarMAT" value="51"/>
+          <Constant key="Parameter_4861" name="Kmcpt2C16AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_4860" name="Kmcpt2C4AcylCarMAT" value="51"/>
+          <Constant key="Parameter_4859" name="Kmcpt2C4AcylCoAMAT" value="1e+06"/>
+          <Constant key="Parameter_4858" name="Kmcpt2C6AcylCarMAT" value="51"/>
+          <Constant key="Parameter_4857" name="Kmcpt2C6AcylCoAMAT" value="1000"/>
+          <Constant key="Parameter_4856" name="Kmcpt2C8AcylCarMAT" value="51"/>
+          <Constant key="Parameter_4855" name="Kmcpt2C8AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_4854" name="Kmcpt2CarMAT" value="350"/>
+          <Constant key="Parameter_4853" name="Kmcpt2CoAMAT" value="30"/>
+          <Constant key="Parameter_4852" name="Vcpt2" value="0.480873"/>
         </ListOfConstants>
         <KineticLaw function="Function_60" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -10248,7 +10248,7 @@
               <SourceParameter reference="ModelValue_6"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_785">
-              <SourceParameter reference="Parameter_4862"/>
+              <SourceParameter reference="Parameter_4870"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -10288,25 +10288,25 @@
           <Modifier metabolite="Metabolite_50" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_4843" name="sfcpt2C6" value="0.15"/>
-          <Constant key="Parameter_4842" name="Keqcpt2" value="2.22"/>
-          <Constant key="Parameter_4841" name="Kmcpt2C10AcylCarMAT" value="51"/>
-          <Constant key="Parameter_4840" name="Kmcpt2C10AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_4839" name="Kmcpt2C12AcylCarMAT" value="51"/>
-          <Constant key="Parameter_4838" name="Kmcpt2C12AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_4837" name="Kmcpt2C14AcylCarMAT" value="51"/>
-          <Constant key="Parameter_4836" name="Kmcpt2C14AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_4835" name="Kmcpt2C16AcylCarMAT" value="51"/>
-          <Constant key="Parameter_4834" name="Kmcpt2C16AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_4833" name="Kmcpt2C4AcylCarMAT" value="51"/>
-          <Constant key="Parameter_4832" name="Kmcpt2C4AcylCoAMAT" value="1e+06"/>
-          <Constant key="Parameter_4831" name="Kmcpt2C6AcylCarMAT" value="51"/>
-          <Constant key="Parameter_4830" name="Kmcpt2C6AcylCoAMAT" value="1000"/>
-          <Constant key="Parameter_4829" name="Kmcpt2C8AcylCarMAT" value="51"/>
-          <Constant key="Parameter_4828" name="Kmcpt2C8AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_4827" name="Kmcpt2CarMAT" value="350"/>
-          <Constant key="Parameter_4826" name="Kmcpt2CoAMAT" value="30"/>
-          <Constant key="Parameter_4825" name="Vcpt2" value="0.480873"/>
+          <Constant key="Parameter_4851" name="sfcpt2C6" value="0.15"/>
+          <Constant key="Parameter_4850" name="Keqcpt2" value="2.22"/>
+          <Constant key="Parameter_4849" name="Kmcpt2C10AcylCarMAT" value="51"/>
+          <Constant key="Parameter_4848" name="Kmcpt2C10AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_4847" name="Kmcpt2C12AcylCarMAT" value="51"/>
+          <Constant key="Parameter_4846" name="Kmcpt2C12AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_4845" name="Kmcpt2C14AcylCarMAT" value="51"/>
+          <Constant key="Parameter_4844" name="Kmcpt2C14AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_4843" name="Kmcpt2C16AcylCarMAT" value="51"/>
+          <Constant key="Parameter_4842" name="Kmcpt2C16AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_4841" name="Kmcpt2C4AcylCarMAT" value="51"/>
+          <Constant key="Parameter_4840" name="Kmcpt2C4AcylCoAMAT" value="1e+06"/>
+          <Constant key="Parameter_4839" name="Kmcpt2C6AcylCarMAT" value="51"/>
+          <Constant key="Parameter_4838" name="Kmcpt2C6AcylCoAMAT" value="1000"/>
+          <Constant key="Parameter_4837" name="Kmcpt2C8AcylCarMAT" value="51"/>
+          <Constant key="Parameter_4836" name="Kmcpt2C8AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_4835" name="Kmcpt2CarMAT" value="350"/>
+          <Constant key="Parameter_4834" name="Kmcpt2CoAMAT" value="30"/>
+          <Constant key="Parameter_4833" name="Vcpt2" value="0.480873"/>
         </ListOfConstants>
         <KineticLaw function="Function_58" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -10416,7 +10416,7 @@
               <SourceParameter reference="ModelValue_6"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_715">
-              <SourceParameter reference="Parameter_4843"/>
+              <SourceParameter reference="Parameter_4851"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -10456,25 +10456,25 @@
           <Modifier metabolite="Metabolite_50" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_4824" name="sfcpt2C4" value="0.01"/>
-          <Constant key="Parameter_4823" name="Keqcpt2" value="2.22"/>
-          <Constant key="Parameter_4822" name="Kmcpt2C10AcylCarMAT" value="51"/>
-          <Constant key="Parameter_4821" name="Kmcpt2C10AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_4820" name="Kmcpt2C12AcylCarMAT" value="51"/>
-          <Constant key="Parameter_4819" name="Kmcpt2C12AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_4818" name="Kmcpt2C14AcylCarMAT" value="51"/>
-          <Constant key="Parameter_4817" name="Kmcpt2C14AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_4816" name="Kmcpt2C16AcylCarMAT" value="51"/>
-          <Constant key="Parameter_4815" name="Kmcpt2C16AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_4814" name="Kmcpt2C4AcylCarMAT" value="51"/>
-          <Constant key="Parameter_4813" name="Kmcpt2C4AcylCoAMAT" value="1e+06"/>
-          <Constant key="Parameter_4812" name="Kmcpt2C6AcylCarMAT" value="51"/>
-          <Constant key="Parameter_4811" name="Kmcpt2C6AcylCoAMAT" value="1000"/>
-          <Constant key="Parameter_4810" name="Kmcpt2C8AcylCarMAT" value="51"/>
-          <Constant key="Parameter_4809" name="Kmcpt2C8AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_4808" name="Kmcpt2CarMAT" value="350"/>
-          <Constant key="Parameter_4807" name="Kmcpt2CoAMAT" value="30"/>
-          <Constant key="Parameter_4806" name="Vcpt2" value="0.480873"/>
+          <Constant key="Parameter_4832" name="sfcpt2C4" value="0.01"/>
+          <Constant key="Parameter_4831" name="Keqcpt2" value="2.22"/>
+          <Constant key="Parameter_4830" name="Kmcpt2C10AcylCarMAT" value="51"/>
+          <Constant key="Parameter_4829" name="Kmcpt2C10AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_4828" name="Kmcpt2C12AcylCarMAT" value="51"/>
+          <Constant key="Parameter_4827" name="Kmcpt2C12AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_4826" name="Kmcpt2C14AcylCarMAT" value="51"/>
+          <Constant key="Parameter_4825" name="Kmcpt2C14AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_4824" name="Kmcpt2C16AcylCarMAT" value="51"/>
+          <Constant key="Parameter_4823" name="Kmcpt2C16AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_4822" name="Kmcpt2C4AcylCarMAT" value="51"/>
+          <Constant key="Parameter_4821" name="Kmcpt2C4AcylCoAMAT" value="1e+06"/>
+          <Constant key="Parameter_4820" name="Kmcpt2C6AcylCarMAT" value="51"/>
+          <Constant key="Parameter_4819" name="Kmcpt2C6AcylCoAMAT" value="1000"/>
+          <Constant key="Parameter_4818" name="Kmcpt2C8AcylCarMAT" value="51"/>
+          <Constant key="Parameter_4817" name="Kmcpt2C8AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_4816" name="Kmcpt2CarMAT" value="350"/>
+          <Constant key="Parameter_4815" name="Kmcpt2CoAMAT" value="30"/>
+          <Constant key="Parameter_4814" name="Vcpt2" value="0.480873"/>
         </ListOfConstants>
         <KineticLaw function="Function_63" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -10584,7 +10584,7 @@
               <SourceParameter reference="ModelValue_6"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_871">
-              <SourceParameter reference="Parameter_4824"/>
+              <SourceParameter reference="Parameter_4832"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -10614,15 +10614,15 @@
           <Modifier metabolite="Metabolite_43" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_4805" name="sfscadC6" value="0.79"/>
-          <Constant key="Parameter_4804" name="Keqscad" value="6"/>
-          <Constant key="Parameter_4803" name="KmscadC4AcylCoAMAT" value="18.146"/>
-          <Constant key="Parameter_4802" name="KmscadC4EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_4801" name="KmscadC6AcylCoAMAT" value="16.95"/>
-          <Constant key="Parameter_4800" name="KmscadC6EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_4799" name="KmscadFAD" value="0.100638"/>
-          <Constant key="Parameter_4798" name="KmscadFADH" value="24.2"/>
-          <Constant key="Parameter_4797" name="Vscad" value="0.00468975"/>
+          <Constant key="Parameter_4813" name="sfscadC6" value="0.79"/>
+          <Constant key="Parameter_4812" name="Keqscad" value="6"/>
+          <Constant key="Parameter_4811" name="KmscadC4AcylCoAMAT" value="18.146"/>
+          <Constant key="Parameter_4810" name="KmscadC4EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_4809" name="KmscadC6AcylCoAMAT" value="16.95"/>
+          <Constant key="Parameter_4808" name="KmscadC6EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_4807" name="KmscadFAD" value="0.100638"/>
+          <Constant key="Parameter_4806" name="KmscadFADH" value="24.2"/>
+          <Constant key="Parameter_4805" name="Vscad" value="0.00468975"/>
         </ListOfConstants>
         <KineticLaw function="Function_61" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -10672,7 +10672,7 @@
               <SourceParameter reference="ModelValue_38"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_806">
-              <SourceParameter reference="Parameter_4805"/>
+              <SourceParameter reference="Parameter_4813"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -10702,15 +10702,15 @@
           <Modifier metabolite="Metabolite_38" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_4796" name="sfscadC4" value="1"/>
-          <Constant key="Parameter_4795" name="Keqscad" value="6"/>
-          <Constant key="Parameter_4794" name="KmscadC4AcylCoAMAT" value="18.146"/>
-          <Constant key="Parameter_4793" name="KmscadC4EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_4792" name="KmscadC6AcylCoAMAT" value="16.95"/>
-          <Constant key="Parameter_4791" name="KmscadC6EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_4790" name="KmscadFAD" value="0.100638"/>
-          <Constant key="Parameter_4789" name="KmscadFADH" value="24.2"/>
-          <Constant key="Parameter_4788" name="Vscad" value="0.00468975"/>
+          <Constant key="Parameter_4804" name="sfscadC4" value="1"/>
+          <Constant key="Parameter_4803" name="Keqscad" value="6"/>
+          <Constant key="Parameter_4802" name="KmscadC4AcylCoAMAT" value="18.146"/>
+          <Constant key="Parameter_4801" name="KmscadC4EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_4800" name="KmscadC6AcylCoAMAT" value="16.95"/>
+          <Constant key="Parameter_4799" name="KmscadC6EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_4798" name="KmscadFAD" value="0.100638"/>
+          <Constant key="Parameter_4797" name="KmscadFADH" value="24.2"/>
+          <Constant key="Parameter_4796" name="Vscad" value="0.00468975"/>
         </ListOfConstants>
         <KineticLaw function="Function_64" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -10760,7 +10760,7 @@
               <SourceParameter reference="ModelValue_38"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_892">
-              <SourceParameter reference="Parameter_4796"/>
+              <SourceParameter reference="Parameter_4804"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -10799,24 +10799,24 @@
           <Modifier metabolite="Metabolite_45" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_4787" name="sfcrotC16" value="0.13"/>
-          <Constant key="Parameter_4786" name="Keqcrot" value="3.13"/>
-          <Constant key="Parameter_4785" name="KicrotC4AcetoacylCoA" value="1.6"/>
-          <Constant key="Parameter_4784" name="KmcrotC10EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_4783" name="KmcrotC10HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_4782" name="KmcrotC12EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_4781" name="KmcrotC12HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_4780" name="KmcrotC14EnoylCoAMAT" value="100"/>
-          <Constant key="Parameter_4779" name="KmcrotC14HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_4778" name="KmcrotC16EnoylCoAMAT" value="150"/>
-          <Constant key="Parameter_4777" name="KmcrotC16HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_4776" name="KmcrotC4EnoylCoAMAT" value="40"/>
-          <Constant key="Parameter_4775" name="KmcrotC4HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_4774" name="KmcrotC6EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_4773" name="KmcrotC6HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_4772" name="KmcrotC8EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_4771" name="KmcrotC8HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_4770" name="Vcrot" value="0.171057"/>
+          <Constant key="Parameter_4795" name="sfcrotC16" value="0.13"/>
+          <Constant key="Parameter_4794" name="Keqcrot" value="3.13"/>
+          <Constant key="Parameter_4793" name="KicrotC4AcetoacylCoA" value="1.6"/>
+          <Constant key="Parameter_4792" name="KmcrotC10EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_4791" name="KmcrotC10HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_4790" name="KmcrotC12EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_4789" name="KmcrotC12HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_4788" name="KmcrotC14EnoylCoAMAT" value="100"/>
+          <Constant key="Parameter_4787" name="KmcrotC14HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_4786" name="KmcrotC16EnoylCoAMAT" value="150"/>
+          <Constant key="Parameter_4785" name="KmcrotC16HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_4784" name="KmcrotC4EnoylCoAMAT" value="40"/>
+          <Constant key="Parameter_4783" name="KmcrotC4HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_4782" name="KmcrotC6EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_4781" name="KmcrotC6HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_4780" name="KmcrotC8EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_4779" name="KmcrotC8HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_4778" name="Vcrot" value="0.171057"/>
         </ListOfConstants>
         <KineticLaw function="Function_59" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -10920,7 +10920,7 @@
               <SourceParameter reference="ModelValue_46"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_718">
-              <SourceParameter reference="Parameter_4787"/>
+              <SourceParameter reference="Parameter_4795"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -10959,24 +10959,24 @@
           <Modifier metabolite="Metabolite_45" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_4769" name="sfcrotC14" value="0.2"/>
-          <Constant key="Parameter_4768" name="Keqcrot" value="3.13"/>
-          <Constant key="Parameter_4767" name="KicrotC4AcetoacylCoA" value="1.6"/>
-          <Constant key="Parameter_4766" name="KmcrotC10EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_4765" name="KmcrotC10HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_4764" name="KmcrotC12EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_4763" name="KmcrotC12HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_4762" name="KmcrotC14EnoylCoAMAT" value="100"/>
-          <Constant key="Parameter_4761" name="KmcrotC14HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_4760" name="KmcrotC16EnoylCoAMAT" value="150"/>
-          <Constant key="Parameter_4759" name="KmcrotC16HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_4758" name="KmcrotC4EnoylCoAMAT" value="40"/>
-          <Constant key="Parameter_4757" name="KmcrotC4HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_4756" name="KmcrotC6EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_4755" name="KmcrotC6HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_4754" name="KmcrotC8EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_4753" name="KmcrotC8HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_4752" name="Vcrot" value="0.171057"/>
+          <Constant key="Parameter_4777" name="sfcrotC14" value="0.2"/>
+          <Constant key="Parameter_4776" name="Keqcrot" value="3.13"/>
+          <Constant key="Parameter_4775" name="KicrotC4AcetoacylCoA" value="1.6"/>
+          <Constant key="Parameter_4774" name="KmcrotC10EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_4773" name="KmcrotC10HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_4772" name="KmcrotC12EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_4771" name="KmcrotC12HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_4770" name="KmcrotC14EnoylCoAMAT" value="100"/>
+          <Constant key="Parameter_4769" name="KmcrotC14HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_4768" name="KmcrotC16EnoylCoAMAT" value="150"/>
+          <Constant key="Parameter_4767" name="KmcrotC16HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_4766" name="KmcrotC4EnoylCoAMAT" value="40"/>
+          <Constant key="Parameter_4765" name="KmcrotC4HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_4764" name="KmcrotC6EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_4763" name="KmcrotC6HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_4762" name="KmcrotC8EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_4761" name="KmcrotC8HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_4760" name="Vcrot" value="0.171057"/>
         </ListOfConstants>
         <KineticLaw function="Function_62" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -11080,7 +11080,7 @@
               <SourceParameter reference="ModelValue_46"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_835">
-              <SourceParameter reference="Parameter_4769"/>
+              <SourceParameter reference="Parameter_4777"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -11119,24 +11119,24 @@
           <Modifier metabolite="Metabolite_45" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_4751" name="sfcrotC12" value="0.25"/>
-          <Constant key="Parameter_4750" name="Keqcrot" value="3.13"/>
-          <Constant key="Parameter_4749" name="KicrotC4AcetoacylCoA" value="1.6"/>
-          <Constant key="Parameter_4748" name="KmcrotC10EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_4747" name="KmcrotC10HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_4746" name="KmcrotC12EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_4745" name="KmcrotC12HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_4744" name="KmcrotC14EnoylCoAMAT" value="100"/>
-          <Constant key="Parameter_4743" name="KmcrotC14HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_4742" name="KmcrotC16EnoylCoAMAT" value="150"/>
-          <Constant key="Parameter_4741" name="KmcrotC16HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_4740" name="KmcrotC4EnoylCoAMAT" value="40"/>
-          <Constant key="Parameter_4739" name="KmcrotC4HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_4738" name="KmcrotC6EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_4737" name="KmcrotC6HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_4736" name="KmcrotC8EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_4735" name="KmcrotC8HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_4734" name="Vcrot" value="0.171057"/>
+          <Constant key="Parameter_4759" name="sfcrotC12" value="0.25"/>
+          <Constant key="Parameter_4758" name="Keqcrot" value="3.13"/>
+          <Constant key="Parameter_4757" name="KicrotC4AcetoacylCoA" value="1.6"/>
+          <Constant key="Parameter_4756" name="KmcrotC10EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_4755" name="KmcrotC10HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_4754" name="KmcrotC12EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_4753" name="KmcrotC12HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_4752" name="KmcrotC14EnoylCoAMAT" value="100"/>
+          <Constant key="Parameter_4751" name="KmcrotC14HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_4750" name="KmcrotC16EnoylCoAMAT" value="150"/>
+          <Constant key="Parameter_4749" name="KmcrotC16HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_4748" name="KmcrotC4EnoylCoAMAT" value="40"/>
+          <Constant key="Parameter_4747" name="KmcrotC4HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_4746" name="KmcrotC6EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_4745" name="KmcrotC6HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_4744" name="KmcrotC8EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_4743" name="KmcrotC8HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_4742" name="Vcrot" value="0.171057"/>
         </ListOfConstants>
         <KineticLaw function="Function_66" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -11240,7 +11240,7 @@
               <SourceParameter reference="ModelValue_46"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_926">
-              <SourceParameter reference="Parameter_4751"/>
+              <SourceParameter reference="Parameter_4759"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -11279,24 +11279,24 @@
           <Modifier metabolite="Metabolite_45" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_4733" name="sfcrotC10" value="0.33"/>
-          <Constant key="Parameter_4732" name="Keqcrot" value="3.13"/>
-          <Constant key="Parameter_4731" name="KicrotC4AcetoacylCoA" value="1.6"/>
-          <Constant key="Parameter_4730" name="KmcrotC10EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_4729" name="KmcrotC10HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_4728" name="KmcrotC12EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_4727" name="KmcrotC12HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_4726" name="KmcrotC14EnoylCoAMAT" value="100"/>
-          <Constant key="Parameter_4725" name="KmcrotC14HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_4724" name="KmcrotC16EnoylCoAMAT" value="150"/>
-          <Constant key="Parameter_4723" name="KmcrotC16HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_4722" name="KmcrotC4EnoylCoAMAT" value="40"/>
-          <Constant key="Parameter_4721" name="KmcrotC4HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_4720" name="KmcrotC6EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_4719" name="KmcrotC6HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_4718" name="KmcrotC8EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_4717" name="KmcrotC8HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_4716" name="Vcrot" value="0.171057"/>
+          <Constant key="Parameter_4741" name="sfcrotC10" value="0.33"/>
+          <Constant key="Parameter_4740" name="Keqcrot" value="3.13"/>
+          <Constant key="Parameter_4739" name="KicrotC4AcetoacylCoA" value="1.6"/>
+          <Constant key="Parameter_4738" name="KmcrotC10EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_4737" name="KmcrotC10HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_4736" name="KmcrotC12EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_4735" name="KmcrotC12HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_4734" name="KmcrotC14EnoylCoAMAT" value="100"/>
+          <Constant key="Parameter_4733" name="KmcrotC14HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_4732" name="KmcrotC16EnoylCoAMAT" value="150"/>
+          <Constant key="Parameter_4731" name="KmcrotC16HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_4730" name="KmcrotC4EnoylCoAMAT" value="40"/>
+          <Constant key="Parameter_4729" name="KmcrotC4HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_4728" name="KmcrotC6EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_4727" name="KmcrotC6HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_4726" name="KmcrotC8EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_4725" name="KmcrotC8HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_4724" name="Vcrot" value="0.171057"/>
         </ListOfConstants>
         <KineticLaw function="Function_87" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -11400,7 +11400,7 @@
               <SourceParameter reference="ModelValue_46"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1593">
-              <SourceParameter reference="Parameter_4733"/>
+              <SourceParameter reference="Parameter_4741"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -11439,24 +11439,24 @@
           <Modifier metabolite="Metabolite_45" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_4715" name="sfcrotC8" value="0.58"/>
-          <Constant key="Parameter_4714" name="Keqcrot" value="3.13"/>
-          <Constant key="Parameter_4713" name="KicrotC4AcetoacylCoA" value="1.6"/>
-          <Constant key="Parameter_4712" name="KmcrotC10EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_4711" name="KmcrotC10HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_4710" name="KmcrotC12EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_4709" name="KmcrotC12HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_4708" name="KmcrotC14EnoylCoAMAT" value="100"/>
-          <Constant key="Parameter_4707" name="KmcrotC14HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_4706" name="KmcrotC16EnoylCoAMAT" value="150"/>
-          <Constant key="Parameter_4705" name="KmcrotC16HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_4704" name="KmcrotC4EnoylCoAMAT" value="40"/>
-          <Constant key="Parameter_4703" name="KmcrotC4HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_4702" name="KmcrotC6EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_4701" name="KmcrotC6HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_4700" name="KmcrotC8EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_4699" name="KmcrotC8HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_4698" name="Vcrot" value="0.171057"/>
+          <Constant key="Parameter_4723" name="sfcrotC8" value="0.58"/>
+          <Constant key="Parameter_4722" name="Keqcrot" value="3.13"/>
+          <Constant key="Parameter_4721" name="KicrotC4AcetoacylCoA" value="1.6"/>
+          <Constant key="Parameter_4720" name="KmcrotC10EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_4719" name="KmcrotC10HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_4718" name="KmcrotC12EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_4717" name="KmcrotC12HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_4716" name="KmcrotC14EnoylCoAMAT" value="100"/>
+          <Constant key="Parameter_4715" name="KmcrotC14HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_4714" name="KmcrotC16EnoylCoAMAT" value="150"/>
+          <Constant key="Parameter_4713" name="KmcrotC16HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_4712" name="KmcrotC4EnoylCoAMAT" value="40"/>
+          <Constant key="Parameter_4711" name="KmcrotC4HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_4710" name="KmcrotC6EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_4709" name="KmcrotC6HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_4708" name="KmcrotC8EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_4707" name="KmcrotC8HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_4706" name="Vcrot" value="0.171057"/>
         </ListOfConstants>
         <KineticLaw function="Function_88" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -11560,7 +11560,7 @@
               <SourceParameter reference="ModelValue_46"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1594">
-              <SourceParameter reference="Parameter_4715"/>
+              <SourceParameter reference="Parameter_4723"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -11599,24 +11599,24 @@
           <Modifier metabolite="Metabolite_45" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_4697" name="sfcrotC6" value="0.83"/>
-          <Constant key="Parameter_4696" name="Keqcrot" value="3.13"/>
-          <Constant key="Parameter_4695" name="KicrotC4AcetoacylCoA" value="1.6"/>
-          <Constant key="Parameter_4694" name="KmcrotC10EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_4693" name="KmcrotC10HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_4692" name="KmcrotC12EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_4691" name="KmcrotC12HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_4690" name="KmcrotC14EnoylCoAMAT" value="100"/>
-          <Constant key="Parameter_4689" name="KmcrotC14HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_4688" name="KmcrotC16EnoylCoAMAT" value="150"/>
-          <Constant key="Parameter_4687" name="KmcrotC16HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_4686" name="KmcrotC4EnoylCoAMAT" value="40"/>
-          <Constant key="Parameter_4685" name="KmcrotC4HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_4684" name="KmcrotC6EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_4683" name="KmcrotC6HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_4682" name="KmcrotC8EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_4681" name="KmcrotC8HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_4680" name="Vcrot" value="0.171057"/>
+          <Constant key="Parameter_4705" name="sfcrotC6" value="0.83"/>
+          <Constant key="Parameter_4704" name="Keqcrot" value="3.13"/>
+          <Constant key="Parameter_4703" name="KicrotC4AcetoacylCoA" value="1.6"/>
+          <Constant key="Parameter_4702" name="KmcrotC10EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_4701" name="KmcrotC10HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_4700" name="KmcrotC12EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_4699" name="KmcrotC12HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_4698" name="KmcrotC14EnoylCoAMAT" value="100"/>
+          <Constant key="Parameter_4697" name="KmcrotC14HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_4696" name="KmcrotC16EnoylCoAMAT" value="150"/>
+          <Constant key="Parameter_4695" name="KmcrotC16HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_4694" name="KmcrotC4EnoylCoAMAT" value="40"/>
+          <Constant key="Parameter_4693" name="KmcrotC4HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_4692" name="KmcrotC6EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_4691" name="KmcrotC6HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_4690" name="KmcrotC8EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_4689" name="KmcrotC8HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_4688" name="Vcrot" value="0.171057"/>
         </ListOfConstants>
         <KineticLaw function="Function_89" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -11720,7 +11720,7 @@
               <SourceParameter reference="ModelValue_46"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1628">
-              <SourceParameter reference="Parameter_4697"/>
+              <SourceParameter reference="Parameter_4705"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -11759,24 +11759,24 @@
           <Modifier metabolite="Metabolite_45" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_4679" name="sfcrotC4" value="1"/>
-          <Constant key="Parameter_4678" name="Keqcrot" value="3.13"/>
-          <Constant key="Parameter_4677" name="KicrotC4AcetoacylCoA" value="1.6"/>
-          <Constant key="Parameter_4676" name="KmcrotC10EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_4675" name="KmcrotC10HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_4674" name="KmcrotC12EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_4673" name="KmcrotC12HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_4672" name="KmcrotC14EnoylCoAMAT" value="100"/>
-          <Constant key="Parameter_4671" name="KmcrotC14HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_4670" name="KmcrotC16EnoylCoAMAT" value="150"/>
-          <Constant key="Parameter_4669" name="KmcrotC16HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_4668" name="KmcrotC4EnoylCoAMAT" value="40"/>
-          <Constant key="Parameter_4667" name="KmcrotC4HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_4666" name="KmcrotC6EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_4665" name="KmcrotC6HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_4664" name="KmcrotC8EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_4663" name="KmcrotC8HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_4662" name="Vcrot" value="0.171057"/>
+          <Constant key="Parameter_4687" name="sfcrotC4" value="1"/>
+          <Constant key="Parameter_4686" name="Keqcrot" value="3.13"/>
+          <Constant key="Parameter_4685" name="KicrotC4AcetoacylCoA" value="1.6"/>
+          <Constant key="Parameter_4684" name="KmcrotC10EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_4683" name="KmcrotC10HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_4682" name="KmcrotC12EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_4681" name="KmcrotC12HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_4680" name="KmcrotC14EnoylCoAMAT" value="100"/>
+          <Constant key="Parameter_4679" name="KmcrotC14HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_4678" name="KmcrotC16EnoylCoAMAT" value="150"/>
+          <Constant key="Parameter_4677" name="KmcrotC16HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_4676" name="KmcrotC4EnoylCoAMAT" value="40"/>
+          <Constant key="Parameter_4675" name="KmcrotC4HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_4674" name="KmcrotC6EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_4673" name="KmcrotC6HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_4672" name="KmcrotC8EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_4671" name="KmcrotC8HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_4670" name="Vcrot" value="0.171057"/>
         </ListOfConstants>
         <KineticLaw function="Function_90" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -11880,7 +11880,7 @@
               <SourceParameter reference="ModelValue_46"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1662">
-              <SourceParameter reference="Parameter_4679"/>
+              <SourceParameter reference="Parameter_4687"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -11920,25 +11920,25 @@
           <Modifier metabolite="Metabolite_45" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_4661" name="sfmschadC16" value="0.6"/>
-          <Constant key="Parameter_4660" name="Keqmschad" value="0.000217"/>
-          <Constant key="Parameter_4659" name="KmmschadC10HydroxyacylCoAMAT" value="8.8"/>
-          <Constant key="Parameter_4658" name="KmmschadC10KetoacylCoAMAT" value="2.3"/>
-          <Constant key="Parameter_4657" name="KmmschadC12HydroxyacylCoAMAT" value="3.7"/>
-          <Constant key="Parameter_4656" name="KmmschadC12KetoacylCoAMAT" value="1.6"/>
-          <Constant key="Parameter_4655" name="KmmschadC14HydroxyacylCoAMAT" value="1.8"/>
-          <Constant key="Parameter_4654" name="KmmschadC14KetoacylCoAMAT" value="1.4"/>
-          <Constant key="Parameter_4653" name="KmmschadC16HydroxyacylCoAMAT" value="1.5"/>
-          <Constant key="Parameter_4652" name="KmmschadC16KetoacylCoAMAT" value="1.4"/>
-          <Constant key="Parameter_4651" name="KmmschadC4AcetoacylCoAMAT" value="16.9"/>
-          <Constant key="Parameter_4650" name="KmmschadC4HydroxyacylCoAMAT" value="69.9"/>
-          <Constant key="Parameter_4649" name="KmmschadC6HydroxyacylCoAMAT" value="28.6"/>
-          <Constant key="Parameter_4648" name="KmmschadC6KetoacylCoAMAT" value="5.8"/>
-          <Constant key="Parameter_4647" name="KmmschadC8HydroxyacylCoAMAT" value="16.3"/>
-          <Constant key="Parameter_4646" name="KmmschadC8KetoacylCoAMAT" value="4.1"/>
-          <Constant key="Parameter_4645" name="KmmschadNADHMAT" value="5.4"/>
-          <Constant key="Parameter_4644" name="KmmschadNADMAT" value="58.5"/>
-          <Constant key="Parameter_4643" name="Vmschad" value="3"/>
+          <Constant key="Parameter_4669" name="sfmschadC16" value="0.6"/>
+          <Constant key="Parameter_4668" name="Keqmschad" value="0.000217"/>
+          <Constant key="Parameter_4667" name="KmmschadC10HydroxyacylCoAMAT" value="8.8"/>
+          <Constant key="Parameter_4666" name="KmmschadC10KetoacylCoAMAT" value="2.3"/>
+          <Constant key="Parameter_4665" name="KmmschadC12HydroxyacylCoAMAT" value="3.7"/>
+          <Constant key="Parameter_4664" name="KmmschadC12KetoacylCoAMAT" value="1.6"/>
+          <Constant key="Parameter_4663" name="KmmschadC14HydroxyacylCoAMAT" value="1.8"/>
+          <Constant key="Parameter_4662" name="KmmschadC14KetoacylCoAMAT" value="1.4"/>
+          <Constant key="Parameter_4661" name="KmmschadC16HydroxyacylCoAMAT" value="1.5"/>
+          <Constant key="Parameter_4660" name="KmmschadC16KetoacylCoAMAT" value="1.4"/>
+          <Constant key="Parameter_4659" name="KmmschadC4AcetoacylCoAMAT" value="16.9"/>
+          <Constant key="Parameter_4658" name="KmmschadC4HydroxyacylCoAMAT" value="69.9"/>
+          <Constant key="Parameter_4657" name="KmmschadC6HydroxyacylCoAMAT" value="28.6"/>
+          <Constant key="Parameter_4656" name="KmmschadC6KetoacylCoAMAT" value="5.8"/>
+          <Constant key="Parameter_4655" name="KmmschadC8HydroxyacylCoAMAT" value="16.3"/>
+          <Constant key="Parameter_4654" name="KmmschadC8KetoacylCoAMAT" value="4.1"/>
+          <Constant key="Parameter_4653" name="KmmschadNADHMAT" value="5.4"/>
+          <Constant key="Parameter_4652" name="KmmschadNADMAT" value="58.5"/>
+          <Constant key="Parameter_4651" name="Vmschad" value="3"/>
         </ListOfConstants>
         <KineticLaw function="Function_92" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -12048,7 +12048,7 @@
               <SourceParameter reference="ModelValue_63"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1732">
-              <SourceParameter reference="Parameter_4661"/>
+              <SourceParameter reference="Parameter_4669"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -12088,25 +12088,25 @@
           <Modifier metabolite="Metabolite_45" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_4642" name="sfmschadC14" value="0.5"/>
-          <Constant key="Parameter_4641" name="Keqmschad" value="0.000217"/>
-          <Constant key="Parameter_4640" name="KmmschadC10HydroxyacylCoAMAT" value="8.8"/>
-          <Constant key="Parameter_4639" name="KmmschadC10KetoacylCoAMAT" value="2.3"/>
-          <Constant key="Parameter_4638" name="KmmschadC12HydroxyacylCoAMAT" value="3.7"/>
-          <Constant key="Parameter_4637" name="KmmschadC12KetoacylCoAMAT" value="1.6"/>
-          <Constant key="Parameter_4636" name="KmmschadC14HydroxyacylCoAMAT" value="1.8"/>
-          <Constant key="Parameter_4635" name="KmmschadC14KetoacylCoAMAT" value="1.4"/>
-          <Constant key="Parameter_4634" name="KmmschadC16HydroxyacylCoAMAT" value="1.5"/>
-          <Constant key="Parameter_4633" name="KmmschadC16KetoacylCoAMAT" value="1.4"/>
-          <Constant key="Parameter_4632" name="KmmschadC4AcetoacylCoAMAT" value="16.9"/>
-          <Constant key="Parameter_4631" name="KmmschadC4HydroxyacylCoAMAT" value="69.9"/>
-          <Constant key="Parameter_4630" name="KmmschadC6HydroxyacylCoAMAT" value="28.6"/>
-          <Constant key="Parameter_4629" name="KmmschadC6KetoacylCoAMAT" value="5.8"/>
-          <Constant key="Parameter_4628" name="KmmschadC8HydroxyacylCoAMAT" value="16.3"/>
-          <Constant key="Parameter_4627" name="KmmschadC8KetoacylCoAMAT" value="4.1"/>
-          <Constant key="Parameter_4626" name="KmmschadNADHMAT" value="5.4"/>
-          <Constant key="Parameter_4625" name="KmmschadNADMAT" value="58.5"/>
-          <Constant key="Parameter_4624" name="Vmschad" value="3"/>
+          <Constant key="Parameter_4650" name="sfmschadC14" value="0.5"/>
+          <Constant key="Parameter_4649" name="Keqmschad" value="0.000217"/>
+          <Constant key="Parameter_4648" name="KmmschadC10HydroxyacylCoAMAT" value="8.8"/>
+          <Constant key="Parameter_4647" name="KmmschadC10KetoacylCoAMAT" value="2.3"/>
+          <Constant key="Parameter_4646" name="KmmschadC12HydroxyacylCoAMAT" value="3.7"/>
+          <Constant key="Parameter_4645" name="KmmschadC12KetoacylCoAMAT" value="1.6"/>
+          <Constant key="Parameter_4644" name="KmmschadC14HydroxyacylCoAMAT" value="1.8"/>
+          <Constant key="Parameter_4643" name="KmmschadC14KetoacylCoAMAT" value="1.4"/>
+          <Constant key="Parameter_4642" name="KmmschadC16HydroxyacylCoAMAT" value="1.5"/>
+          <Constant key="Parameter_4641" name="KmmschadC16KetoacylCoAMAT" value="1.4"/>
+          <Constant key="Parameter_4640" name="KmmschadC4AcetoacylCoAMAT" value="16.9"/>
+          <Constant key="Parameter_4639" name="KmmschadC4HydroxyacylCoAMAT" value="69.9"/>
+          <Constant key="Parameter_4638" name="KmmschadC6HydroxyacylCoAMAT" value="28.6"/>
+          <Constant key="Parameter_4637" name="KmmschadC6KetoacylCoAMAT" value="5.8"/>
+          <Constant key="Parameter_4636" name="KmmschadC8HydroxyacylCoAMAT" value="16.3"/>
+          <Constant key="Parameter_4635" name="KmmschadC8KetoacylCoAMAT" value="4.1"/>
+          <Constant key="Parameter_4634" name="KmmschadNADHMAT" value="5.4"/>
+          <Constant key="Parameter_4633" name="KmmschadNADMAT" value="58.5"/>
+          <Constant key="Parameter_4632" name="Vmschad" value="3"/>
         </ListOfConstants>
         <KineticLaw function="Function_91" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -12216,7 +12216,7 @@
               <SourceParameter reference="ModelValue_63"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1731">
-              <SourceParameter reference="Parameter_4642"/>
+              <SourceParameter reference="Parameter_4650"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -12256,25 +12256,25 @@
           <Modifier metabolite="Metabolite_45" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_4623" name="sfmschadC12" value="0.43"/>
-          <Constant key="Parameter_4622" name="Keqmschad" value="0.000217"/>
-          <Constant key="Parameter_4621" name="KmmschadC10HydroxyacylCoAMAT" value="8.8"/>
-          <Constant key="Parameter_4620" name="KmmschadC10KetoacylCoAMAT" value="2.3"/>
-          <Constant key="Parameter_4619" name="KmmschadC12HydroxyacylCoAMAT" value="3.7"/>
-          <Constant key="Parameter_4618" name="KmmschadC12KetoacylCoAMAT" value="1.6"/>
-          <Constant key="Parameter_4617" name="KmmschadC14HydroxyacylCoAMAT" value="1.8"/>
-          <Constant key="Parameter_4616" name="KmmschadC14KetoacylCoAMAT" value="1.4"/>
-          <Constant key="Parameter_4615" name="KmmschadC16HydroxyacylCoAMAT" value="1.5"/>
-          <Constant key="Parameter_4614" name="KmmschadC16KetoacylCoAMAT" value="1.4"/>
-          <Constant key="Parameter_4613" name="KmmschadC4AcetoacylCoAMAT" value="16.9"/>
-          <Constant key="Parameter_4612" name="KmmschadC4HydroxyacylCoAMAT" value="69.9"/>
-          <Constant key="Parameter_4611" name="KmmschadC6HydroxyacylCoAMAT" value="28.6"/>
-          <Constant key="Parameter_4610" name="KmmschadC6KetoacylCoAMAT" value="5.8"/>
-          <Constant key="Parameter_4609" name="KmmschadC8HydroxyacylCoAMAT" value="16.3"/>
-          <Constant key="Parameter_4608" name="KmmschadC8KetoacylCoAMAT" value="4.1"/>
-          <Constant key="Parameter_4607" name="KmmschadNADHMAT" value="5.4"/>
-          <Constant key="Parameter_4606" name="KmmschadNADMAT" value="58.5"/>
-          <Constant key="Parameter_4605" name="Vmschad" value="3"/>
+          <Constant key="Parameter_4631" name="sfmschadC12" value="0.43"/>
+          <Constant key="Parameter_4630" name="Keqmschad" value="0.000217"/>
+          <Constant key="Parameter_4629" name="KmmschadC10HydroxyacylCoAMAT" value="8.8"/>
+          <Constant key="Parameter_4628" name="KmmschadC10KetoacylCoAMAT" value="2.3"/>
+          <Constant key="Parameter_4627" name="KmmschadC12HydroxyacylCoAMAT" value="3.7"/>
+          <Constant key="Parameter_4626" name="KmmschadC12KetoacylCoAMAT" value="1.6"/>
+          <Constant key="Parameter_4625" name="KmmschadC14HydroxyacylCoAMAT" value="1.8"/>
+          <Constant key="Parameter_4624" name="KmmschadC14KetoacylCoAMAT" value="1.4"/>
+          <Constant key="Parameter_4623" name="KmmschadC16HydroxyacylCoAMAT" value="1.5"/>
+          <Constant key="Parameter_4622" name="KmmschadC16KetoacylCoAMAT" value="1.4"/>
+          <Constant key="Parameter_4621" name="KmmschadC4AcetoacylCoAMAT" value="16.9"/>
+          <Constant key="Parameter_4620" name="KmmschadC4HydroxyacylCoAMAT" value="69.9"/>
+          <Constant key="Parameter_4619" name="KmmschadC6HydroxyacylCoAMAT" value="28.6"/>
+          <Constant key="Parameter_4618" name="KmmschadC6KetoacylCoAMAT" value="5.8"/>
+          <Constant key="Parameter_4617" name="KmmschadC8HydroxyacylCoAMAT" value="16.3"/>
+          <Constant key="Parameter_4616" name="KmmschadC8KetoacylCoAMAT" value="4.1"/>
+          <Constant key="Parameter_4615" name="KmmschadNADHMAT" value="5.4"/>
+          <Constant key="Parameter_4614" name="KmmschadNADMAT" value="58.5"/>
+          <Constant key="Parameter_4613" name="Vmschad" value="3"/>
         </ListOfConstants>
         <KineticLaw function="Function_68" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -12384,7 +12384,7 @@
               <SourceParameter reference="ModelValue_63"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_994">
-              <SourceParameter reference="Parameter_4623"/>
+              <SourceParameter reference="Parameter_4631"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -12424,25 +12424,25 @@
           <Modifier metabolite="Metabolite_45" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_4604" name="sfmschadC10" value="0.64"/>
-          <Constant key="Parameter_4603" name="Keqmschad" value="0.000217"/>
-          <Constant key="Parameter_4602" name="KmmschadC10HydroxyacylCoAMAT" value="8.8"/>
-          <Constant key="Parameter_4601" name="KmmschadC10KetoacylCoAMAT" value="2.3"/>
-          <Constant key="Parameter_4600" name="KmmschadC12HydroxyacylCoAMAT" value="3.7"/>
-          <Constant key="Parameter_4599" name="KmmschadC12KetoacylCoAMAT" value="1.6"/>
-          <Constant key="Parameter_4598" name="KmmschadC14HydroxyacylCoAMAT" value="1.8"/>
-          <Constant key="Parameter_4597" name="KmmschadC14KetoacylCoAMAT" value="1.4"/>
-          <Constant key="Parameter_4596" name="KmmschadC16HydroxyacylCoAMAT" value="1.5"/>
-          <Constant key="Parameter_4595" name="KmmschadC16KetoacylCoAMAT" value="1.4"/>
-          <Constant key="Parameter_4594" name="KmmschadC4AcetoacylCoAMAT" value="16.9"/>
-          <Constant key="Parameter_4593" name="KmmschadC4HydroxyacylCoAMAT" value="69.9"/>
-          <Constant key="Parameter_4592" name="KmmschadC6HydroxyacylCoAMAT" value="28.6"/>
-          <Constant key="Parameter_4591" name="KmmschadC6KetoacylCoAMAT" value="5.8"/>
-          <Constant key="Parameter_4590" name="KmmschadC8HydroxyacylCoAMAT" value="16.3"/>
-          <Constant key="Parameter_4589" name="KmmschadC8KetoacylCoAMAT" value="4.1"/>
-          <Constant key="Parameter_4588" name="KmmschadNADHMAT" value="5.4"/>
-          <Constant key="Parameter_4587" name="KmmschadNADMAT" value="58.5"/>
-          <Constant key="Parameter_4586" name="Vmschad" value="3"/>
+          <Constant key="Parameter_4612" name="sfmschadC10" value="0.64"/>
+          <Constant key="Parameter_4611" name="Keqmschad" value="0.000217"/>
+          <Constant key="Parameter_4610" name="KmmschadC10HydroxyacylCoAMAT" value="8.8"/>
+          <Constant key="Parameter_4609" name="KmmschadC10KetoacylCoAMAT" value="2.3"/>
+          <Constant key="Parameter_4608" name="KmmschadC12HydroxyacylCoAMAT" value="3.7"/>
+          <Constant key="Parameter_4607" name="KmmschadC12KetoacylCoAMAT" value="1.6"/>
+          <Constant key="Parameter_4606" name="KmmschadC14HydroxyacylCoAMAT" value="1.8"/>
+          <Constant key="Parameter_4605" name="KmmschadC14KetoacylCoAMAT" value="1.4"/>
+          <Constant key="Parameter_4604" name="KmmschadC16HydroxyacylCoAMAT" value="1.5"/>
+          <Constant key="Parameter_4603" name="KmmschadC16KetoacylCoAMAT" value="1.4"/>
+          <Constant key="Parameter_4602" name="KmmschadC4AcetoacylCoAMAT" value="16.9"/>
+          <Constant key="Parameter_4601" name="KmmschadC4HydroxyacylCoAMAT" value="69.9"/>
+          <Constant key="Parameter_4600" name="KmmschadC6HydroxyacylCoAMAT" value="28.6"/>
+          <Constant key="Parameter_4599" name="KmmschadC6KetoacylCoAMAT" value="5.8"/>
+          <Constant key="Parameter_4598" name="KmmschadC8HydroxyacylCoAMAT" value="16.3"/>
+          <Constant key="Parameter_4597" name="KmmschadC8KetoacylCoAMAT" value="4.1"/>
+          <Constant key="Parameter_4596" name="KmmschadNADHMAT" value="5.4"/>
+          <Constant key="Parameter_4595" name="KmmschadNADMAT" value="58.5"/>
+          <Constant key="Parameter_4594" name="Vmschad" value="3"/>
         </ListOfConstants>
         <KineticLaw function="Function_69" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -12552,7 +12552,7 @@
               <SourceParameter reference="ModelValue_63"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1030">
-              <SourceParameter reference="Parameter_4604"/>
+              <SourceParameter reference="Parameter_4612"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -12592,25 +12592,25 @@
           <Modifier metabolite="Metabolite_45" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_4585" name="sfmschadC8" value="0.89"/>
-          <Constant key="Parameter_4584" name="Keqmschad" value="0.000217"/>
-          <Constant key="Parameter_4583" name="KmmschadC10HydroxyacylCoAMAT" value="8.8"/>
-          <Constant key="Parameter_4582" name="KmmschadC10KetoacylCoAMAT" value="2.3"/>
-          <Constant key="Parameter_4581" name="KmmschadC12HydroxyacylCoAMAT" value="3.7"/>
-          <Constant key="Parameter_4580" name="KmmschadC12KetoacylCoAMAT" value="1.6"/>
-          <Constant key="Parameter_4579" name="KmmschadC14HydroxyacylCoAMAT" value="1.8"/>
-          <Constant key="Parameter_4578" name="KmmschadC14KetoacylCoAMAT" value="1.4"/>
-          <Constant key="Parameter_4577" name="KmmschadC16HydroxyacylCoAMAT" value="1.5"/>
-          <Constant key="Parameter_4576" name="KmmschadC16KetoacylCoAMAT" value="1.4"/>
-          <Constant key="Parameter_4575" name="KmmschadC4AcetoacylCoAMAT" value="16.9"/>
-          <Constant key="Parameter_4574" name="KmmschadC4HydroxyacylCoAMAT" value="69.9"/>
-          <Constant key="Parameter_4573" name="KmmschadC6HydroxyacylCoAMAT" value="28.6"/>
-          <Constant key="Parameter_4572" name="KmmschadC6KetoacylCoAMAT" value="5.8"/>
-          <Constant key="Parameter_4571" name="KmmschadC8HydroxyacylCoAMAT" value="16.3"/>
-          <Constant key="Parameter_4570" name="KmmschadC8KetoacylCoAMAT" value="4.1"/>
-          <Constant key="Parameter_4569" name="KmmschadNADHMAT" value="5.4"/>
-          <Constant key="Parameter_4568" name="KmmschadNADMAT" value="58.5"/>
-          <Constant key="Parameter_4567" name="Vmschad" value="3"/>
+          <Constant key="Parameter_4593" name="sfmschadC8" value="0.89"/>
+          <Constant key="Parameter_4592" name="Keqmschad" value="0.000217"/>
+          <Constant key="Parameter_4591" name="KmmschadC10HydroxyacylCoAMAT" value="8.8"/>
+          <Constant key="Parameter_4590" name="KmmschadC10KetoacylCoAMAT" value="2.3"/>
+          <Constant key="Parameter_4589" name="KmmschadC12HydroxyacylCoAMAT" value="3.7"/>
+          <Constant key="Parameter_4588" name="KmmschadC12KetoacylCoAMAT" value="1.6"/>
+          <Constant key="Parameter_4587" name="KmmschadC14HydroxyacylCoAMAT" value="1.8"/>
+          <Constant key="Parameter_4586" name="KmmschadC14KetoacylCoAMAT" value="1.4"/>
+          <Constant key="Parameter_4585" name="KmmschadC16HydroxyacylCoAMAT" value="1.5"/>
+          <Constant key="Parameter_4584" name="KmmschadC16KetoacylCoAMAT" value="1.4"/>
+          <Constant key="Parameter_4583" name="KmmschadC4AcetoacylCoAMAT" value="16.9"/>
+          <Constant key="Parameter_4582" name="KmmschadC4HydroxyacylCoAMAT" value="69.9"/>
+          <Constant key="Parameter_4581" name="KmmschadC6HydroxyacylCoAMAT" value="28.6"/>
+          <Constant key="Parameter_4580" name="KmmschadC6KetoacylCoAMAT" value="5.8"/>
+          <Constant key="Parameter_4579" name="KmmschadC8HydroxyacylCoAMAT" value="16.3"/>
+          <Constant key="Parameter_4578" name="KmmschadC8KetoacylCoAMAT" value="4.1"/>
+          <Constant key="Parameter_4577" name="KmmschadNADHMAT" value="5.4"/>
+          <Constant key="Parameter_4576" name="KmmschadNADMAT" value="58.5"/>
+          <Constant key="Parameter_4575" name="Vmschad" value="3"/>
         </ListOfConstants>
         <KineticLaw function="Function_71" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -12720,7 +12720,7 @@
               <SourceParameter reference="ModelValue_63"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1102">
-              <SourceParameter reference="Parameter_4585"/>
+              <SourceParameter reference="Parameter_4593"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -12760,25 +12760,25 @@
           <Modifier metabolite="Metabolite_45" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_4566" name="sfmschadC6" value="1"/>
-          <Constant key="Parameter_4565" name="Keqmschad" value="0.000217"/>
-          <Constant key="Parameter_4564" name="KmmschadC10HydroxyacylCoAMAT" value="8.8"/>
-          <Constant key="Parameter_4563" name="KmmschadC10KetoacylCoAMAT" value="2.3"/>
-          <Constant key="Parameter_4562" name="KmmschadC12HydroxyacylCoAMAT" value="3.7"/>
-          <Constant key="Parameter_4561" name="KmmschadC12KetoacylCoAMAT" value="1.6"/>
-          <Constant key="Parameter_4560" name="KmmschadC14HydroxyacylCoAMAT" value="1.8"/>
-          <Constant key="Parameter_4559" name="KmmschadC14KetoacylCoAMAT" value="1.4"/>
-          <Constant key="Parameter_4558" name="KmmschadC16HydroxyacylCoAMAT" value="1.5"/>
-          <Constant key="Parameter_4557" name="KmmschadC16KetoacylCoAMAT" value="1.4"/>
-          <Constant key="Parameter_4556" name="KmmschadC4AcetoacylCoAMAT" value="16.9"/>
-          <Constant key="Parameter_4555" name="KmmschadC4HydroxyacylCoAMAT" value="69.9"/>
-          <Constant key="Parameter_4554" name="KmmschadC6HydroxyacylCoAMAT" value="28.6"/>
-          <Constant key="Parameter_4553" name="KmmschadC6KetoacylCoAMAT" value="5.8"/>
-          <Constant key="Parameter_4552" name="KmmschadC8HydroxyacylCoAMAT" value="16.3"/>
-          <Constant key="Parameter_4551" name="KmmschadC8KetoacylCoAMAT" value="4.1"/>
-          <Constant key="Parameter_4550" name="KmmschadNADHMAT" value="5.4"/>
-          <Constant key="Parameter_4549" name="KmmschadNADMAT" value="58.5"/>
-          <Constant key="Parameter_4548" name="Vmschad" value="3"/>
+          <Constant key="Parameter_4574" name="sfmschadC6" value="1"/>
+          <Constant key="Parameter_4573" name="Keqmschad" value="0.000217"/>
+          <Constant key="Parameter_4572" name="KmmschadC10HydroxyacylCoAMAT" value="8.8"/>
+          <Constant key="Parameter_4571" name="KmmschadC10KetoacylCoAMAT" value="2.3"/>
+          <Constant key="Parameter_4570" name="KmmschadC12HydroxyacylCoAMAT" value="3.7"/>
+          <Constant key="Parameter_4569" name="KmmschadC12KetoacylCoAMAT" value="1.6"/>
+          <Constant key="Parameter_4568" name="KmmschadC14HydroxyacylCoAMAT" value="1.8"/>
+          <Constant key="Parameter_4567" name="KmmschadC14KetoacylCoAMAT" value="1.4"/>
+          <Constant key="Parameter_4566" name="KmmschadC16HydroxyacylCoAMAT" value="1.5"/>
+          <Constant key="Parameter_4565" name="KmmschadC16KetoacylCoAMAT" value="1.4"/>
+          <Constant key="Parameter_4564" name="KmmschadC4AcetoacylCoAMAT" value="16.9"/>
+          <Constant key="Parameter_4563" name="KmmschadC4HydroxyacylCoAMAT" value="69.9"/>
+          <Constant key="Parameter_4562" name="KmmschadC6HydroxyacylCoAMAT" value="28.6"/>
+          <Constant key="Parameter_4561" name="KmmschadC6KetoacylCoAMAT" value="5.8"/>
+          <Constant key="Parameter_4560" name="KmmschadC8HydroxyacylCoAMAT" value="16.3"/>
+          <Constant key="Parameter_4559" name="KmmschadC8KetoacylCoAMAT" value="4.1"/>
+          <Constant key="Parameter_4558" name="KmmschadNADHMAT" value="5.4"/>
+          <Constant key="Parameter_4557" name="KmmschadNADMAT" value="58.5"/>
+          <Constant key="Parameter_4556" name="Vmschad" value="3"/>
         </ListOfConstants>
         <KineticLaw function="Function_67" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -12888,7 +12888,7 @@
               <SourceParameter reference="ModelValue_63"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_993">
-              <SourceParameter reference="Parameter_4566"/>
+              <SourceParameter reference="Parameter_4574"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -12928,25 +12928,25 @@
           <Modifier metabolite="Metabolite_40" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_4547" name="sfmschadC4" value="0.67"/>
-          <Constant key="Parameter_4546" name="Keqmschad" value="0.000217"/>
-          <Constant key="Parameter_4545" name="KmmschadC10HydroxyacylCoAMAT" value="8.8"/>
-          <Constant key="Parameter_4544" name="KmmschadC10KetoacylCoAMAT" value="2.3"/>
-          <Constant key="Parameter_4543" name="KmmschadC12HydroxyacylCoAMAT" value="3.7"/>
-          <Constant key="Parameter_4542" name="KmmschadC12KetoacylCoAMAT" value="1.6"/>
-          <Constant key="Parameter_4541" name="KmmschadC14HydroxyacylCoAMAT" value="1.8"/>
-          <Constant key="Parameter_4540" name="KmmschadC14KetoacylCoAMAT" value="1.4"/>
-          <Constant key="Parameter_4539" name="KmmschadC16HydroxyacylCoAMAT" value="1.5"/>
-          <Constant key="Parameter_4538" name="KmmschadC16KetoacylCoAMAT" value="1.4"/>
-          <Constant key="Parameter_4537" name="KmmschadC4AcetoacylCoAMAT" value="16.9"/>
-          <Constant key="Parameter_4536" name="KmmschadC4HydroxyacylCoAMAT" value="69.9"/>
-          <Constant key="Parameter_4535" name="KmmschadC6HydroxyacylCoAMAT" value="28.6"/>
-          <Constant key="Parameter_4534" name="KmmschadC6KetoacylCoAMAT" value="5.8"/>
-          <Constant key="Parameter_4533" name="KmmschadC8HydroxyacylCoAMAT" value="16.3"/>
-          <Constant key="Parameter_4532" name="KmmschadC8KetoacylCoAMAT" value="4.1"/>
-          <Constant key="Parameter_4531" name="KmmschadNADHMAT" value="5.4"/>
-          <Constant key="Parameter_4530" name="KmmschadNADMAT" value="58.5"/>
-          <Constant key="Parameter_4529" name="Vmschad" value="3"/>
+          <Constant key="Parameter_4555" name="sfmschadC4" value="0.67"/>
+          <Constant key="Parameter_4554" name="Keqmschad" value="0.000217"/>
+          <Constant key="Parameter_4553" name="KmmschadC10HydroxyacylCoAMAT" value="8.8"/>
+          <Constant key="Parameter_4552" name="KmmschadC10KetoacylCoAMAT" value="2.3"/>
+          <Constant key="Parameter_4551" name="KmmschadC12HydroxyacylCoAMAT" value="3.7"/>
+          <Constant key="Parameter_4550" name="KmmschadC12KetoacylCoAMAT" value="1.6"/>
+          <Constant key="Parameter_4549" name="KmmschadC14HydroxyacylCoAMAT" value="1.8"/>
+          <Constant key="Parameter_4548" name="KmmschadC14KetoacylCoAMAT" value="1.4"/>
+          <Constant key="Parameter_4547" name="KmmschadC16HydroxyacylCoAMAT" value="1.5"/>
+          <Constant key="Parameter_4546" name="KmmschadC16KetoacylCoAMAT" value="1.4"/>
+          <Constant key="Parameter_4545" name="KmmschadC4AcetoacylCoAMAT" value="16.9"/>
+          <Constant key="Parameter_4544" name="KmmschadC4HydroxyacylCoAMAT" value="69.9"/>
+          <Constant key="Parameter_4543" name="KmmschadC6HydroxyacylCoAMAT" value="28.6"/>
+          <Constant key="Parameter_4542" name="KmmschadC6KetoacylCoAMAT" value="5.8"/>
+          <Constant key="Parameter_4541" name="KmmschadC8HydroxyacylCoAMAT" value="16.3"/>
+          <Constant key="Parameter_4540" name="KmmschadC8KetoacylCoAMAT" value="4.1"/>
+          <Constant key="Parameter_4539" name="KmmschadNADHMAT" value="5.4"/>
+          <Constant key="Parameter_4538" name="KmmschadNADMAT" value="58.5"/>
+          <Constant key="Parameter_4537" name="Vmschad" value="3"/>
         </ListOfConstants>
         <KineticLaw function="Function_70" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -13056,7 +13056,7 @@
               <SourceParameter reference="ModelValue_63"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1066">
-              <SourceParameter reference="Parameter_4547"/>
+              <SourceParameter reference="Parameter_4555"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -13096,25 +13096,25 @@
           <Modifier metabolite="Metabolite_42" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_4528" name="sfmckatC16" value="0"/>
-          <Constant key="Parameter_4527" name="Keqmckat" value="1051"/>
-          <Constant key="Parameter_4526" name="KmmckatAcetylCoAMAT" value="68.1103"/>
-          <Constant key="Parameter_4525" name="KmmckatC10AcylCoAMAT" value="25.3702"/>
-          <Constant key="Parameter_4524" name="KmmckatC10KetoacylCoAMAT" value="2.1"/>
-          <Constant key="Parameter_4523" name="KmmckatC12AcylCoAMAT" value="29.8783"/>
-          <Constant key="Parameter_4522" name="KmmckatC12KetoacylCoAMAT" value="1.3"/>
-          <Constant key="Parameter_4521" name="KmmckatC14AcylCoAMAT" value="16.9185"/>
-          <Constant key="Parameter_4520" name="KmmckatC14KetoacylCoAMAT" value="1.2"/>
-          <Constant key="Parameter_4519" name="KmmckatC16AcylCoAMAT" value="16.4137"/>
-          <Constant key="Parameter_4518" name="KmmckatC16KetoacylCoAMAT" value="1.1"/>
-          <Constant key="Parameter_4517" name="KmmckatC4AcetoacylCoAMAT" value="12.4"/>
-          <Constant key="Parameter_4516" name="KmmckatC4AcylCoAMAT" value="16.1136"/>
-          <Constant key="Parameter_4515" name="KmmckatC6AcylCoAMAT" value="15.4765"/>
-          <Constant key="Parameter_4514" name="KmmckatC6KetoacylCoAMAT" value="6.7"/>
-          <Constant key="Parameter_4513" name="KmmckatC8AcylCoAMAT" value="23.4696"/>
-          <Constant key="Parameter_4512" name="KmmckatC8KetoacylCoAMAT" value="3.2"/>
-          <Constant key="Parameter_4511" name="KmmckatCoAMAT" value="26.6"/>
-          <Constant key="Parameter_4510" name="Vmckat" value="3.85124"/>
+          <Constant key="Parameter_4536" name="sfmckatC16" value="0"/>
+          <Constant key="Parameter_4535" name="Keqmckat" value="1051"/>
+          <Constant key="Parameter_4534" name="KmmckatAcetylCoAMAT" value="68.1103"/>
+          <Constant key="Parameter_4533" name="KmmckatC10AcylCoAMAT" value="25.3702"/>
+          <Constant key="Parameter_4532" name="KmmckatC10KetoacylCoAMAT" value="2.1"/>
+          <Constant key="Parameter_4531" name="KmmckatC12AcylCoAMAT" value="29.8783"/>
+          <Constant key="Parameter_4530" name="KmmckatC12KetoacylCoAMAT" value="1.3"/>
+          <Constant key="Parameter_4529" name="KmmckatC14AcylCoAMAT" value="16.9185"/>
+          <Constant key="Parameter_4528" name="KmmckatC14KetoacylCoAMAT" value="1.2"/>
+          <Constant key="Parameter_4527" name="KmmckatC16AcylCoAMAT" value="16.4137"/>
+          <Constant key="Parameter_4526" name="KmmckatC16KetoacylCoAMAT" value="1.1"/>
+          <Constant key="Parameter_4525" name="KmmckatC4AcetoacylCoAMAT" value="12.4"/>
+          <Constant key="Parameter_4524" name="KmmckatC4AcylCoAMAT" value="16.1136"/>
+          <Constant key="Parameter_4523" name="KmmckatC6AcylCoAMAT" value="15.4765"/>
+          <Constant key="Parameter_4522" name="KmmckatC6KetoacylCoAMAT" value="6.7"/>
+          <Constant key="Parameter_4521" name="KmmckatC8AcylCoAMAT" value="23.4696"/>
+          <Constant key="Parameter_4520" name="KmmckatC8KetoacylCoAMAT" value="3.2"/>
+          <Constant key="Parameter_4519" name="KmmckatCoAMAT" value="26.6"/>
+          <Constant key="Parameter_4518" name="Vmckat" value="3.85124"/>
         </ListOfConstants>
         <KineticLaw function="Function_65" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -13224,7 +13224,7 @@
               <SourceParameter reference="ModelValue_81"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_923">
-              <SourceParameter reference="Parameter_4528"/>
+              <SourceParameter reference="Parameter_4536"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -13264,25 +13264,25 @@
           <Modifier metabolite="Metabolite_42" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_4509" name="sfmckatC14" value="0.2"/>
-          <Constant key="Parameter_4508" name="Keqmckat" value="1051"/>
-          <Constant key="Parameter_4507" name="KmmckatAcetylCoAMAT" value="68.1103"/>
-          <Constant key="Parameter_4506" name="KmmckatC10AcylCoAMAT" value="25.3702"/>
-          <Constant key="Parameter_4505" name="KmmckatC10KetoacylCoAMAT" value="2.1"/>
-          <Constant key="Parameter_4504" name="KmmckatC12AcylCoAMAT" value="29.8783"/>
-          <Constant key="Parameter_4503" name="KmmckatC12KetoacylCoAMAT" value="1.3"/>
-          <Constant key="Parameter_4502" name="KmmckatC14AcylCoAMAT" value="16.9185"/>
-          <Constant key="Parameter_4501" name="KmmckatC14KetoacylCoAMAT" value="1.2"/>
-          <Constant key="Parameter_4500" name="KmmckatC16AcylCoAMAT" value="16.4137"/>
-          <Constant key="Parameter_4499" name="KmmckatC16KetoacylCoAMAT" value="1.1"/>
-          <Constant key="Parameter_4498" name="KmmckatC4AcetoacylCoAMAT" value="12.4"/>
-          <Constant key="Parameter_4497" name="KmmckatC4AcylCoAMAT" value="16.1136"/>
-          <Constant key="Parameter_4496" name="KmmckatC6AcylCoAMAT" value="15.4765"/>
-          <Constant key="Parameter_4495" name="KmmckatC6KetoacylCoAMAT" value="6.7"/>
-          <Constant key="Parameter_4494" name="KmmckatC8AcylCoAMAT" value="23.4696"/>
-          <Constant key="Parameter_4493" name="KmmckatC8KetoacylCoAMAT" value="3.2"/>
-          <Constant key="Parameter_4492" name="KmmckatCoAMAT" value="26.6"/>
-          <Constant key="Parameter_4491" name="Vmckat" value="3.85124"/>
+          <Constant key="Parameter_4517" name="sfmckatC14" value="0.2"/>
+          <Constant key="Parameter_4516" name="Keqmckat" value="1051"/>
+          <Constant key="Parameter_4515" name="KmmckatAcetylCoAMAT" value="68.1103"/>
+          <Constant key="Parameter_4514" name="KmmckatC10AcylCoAMAT" value="25.3702"/>
+          <Constant key="Parameter_4513" name="KmmckatC10KetoacylCoAMAT" value="2.1"/>
+          <Constant key="Parameter_4512" name="KmmckatC12AcylCoAMAT" value="29.8783"/>
+          <Constant key="Parameter_4511" name="KmmckatC12KetoacylCoAMAT" value="1.3"/>
+          <Constant key="Parameter_4510" name="KmmckatC14AcylCoAMAT" value="16.9185"/>
+          <Constant key="Parameter_4509" name="KmmckatC14KetoacylCoAMAT" value="1.2"/>
+          <Constant key="Parameter_4508" name="KmmckatC16AcylCoAMAT" value="16.4137"/>
+          <Constant key="Parameter_4507" name="KmmckatC16KetoacylCoAMAT" value="1.1"/>
+          <Constant key="Parameter_4506" name="KmmckatC4AcetoacylCoAMAT" value="12.4"/>
+          <Constant key="Parameter_4505" name="KmmckatC4AcylCoAMAT" value="16.1136"/>
+          <Constant key="Parameter_4504" name="KmmckatC6AcylCoAMAT" value="15.4765"/>
+          <Constant key="Parameter_4503" name="KmmckatC6KetoacylCoAMAT" value="6.7"/>
+          <Constant key="Parameter_4502" name="KmmckatC8AcylCoAMAT" value="23.4696"/>
+          <Constant key="Parameter_4501" name="KmmckatC8KetoacylCoAMAT" value="3.2"/>
+          <Constant key="Parameter_4500" name="KmmckatCoAMAT" value="26.6"/>
+          <Constant key="Parameter_4499" name="Vmckat" value="3.85124"/>
         </ListOfConstants>
         <KineticLaw function="Function_73" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -13392,7 +13392,7 @@
               <SourceParameter reference="ModelValue_81"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1174">
-              <SourceParameter reference="Parameter_4509"/>
+              <SourceParameter reference="Parameter_4517"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -13432,25 +13432,25 @@
           <Modifier metabolite="Metabolite_42" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_4490" name="sfmckatC12" value="0.38"/>
-          <Constant key="Parameter_4489" name="Keqmckat" value="1051"/>
-          <Constant key="Parameter_4488" name="KmmckatAcetylCoAMAT" value="68.1103"/>
-          <Constant key="Parameter_4487" name="KmmckatC10AcylCoAMAT" value="25.3702"/>
-          <Constant key="Parameter_4486" name="KmmckatC10KetoacylCoAMAT" value="2.1"/>
-          <Constant key="Parameter_4485" name="KmmckatC12AcylCoAMAT" value="29.8783"/>
-          <Constant key="Parameter_4484" name="KmmckatC12KetoacylCoAMAT" value="1.3"/>
-          <Constant key="Parameter_4483" name="KmmckatC14AcylCoAMAT" value="16.9185"/>
-          <Constant key="Parameter_4482" name="KmmckatC14KetoacylCoAMAT" value="1.2"/>
-          <Constant key="Parameter_4481" name="KmmckatC16AcylCoAMAT" value="16.4137"/>
-          <Constant key="Parameter_4480" name="KmmckatC16KetoacylCoAMAT" value="1.1"/>
-          <Constant key="Parameter_4479" name="KmmckatC4AcetoacylCoAMAT" value="12.4"/>
-          <Constant key="Parameter_4478" name="KmmckatC4AcylCoAMAT" value="16.1136"/>
-          <Constant key="Parameter_4477" name="KmmckatC6AcylCoAMAT" value="15.4765"/>
-          <Constant key="Parameter_4476" name="KmmckatC6KetoacylCoAMAT" value="6.7"/>
-          <Constant key="Parameter_4475" name="KmmckatC8AcylCoAMAT" value="23.4696"/>
-          <Constant key="Parameter_4474" name="KmmckatC8KetoacylCoAMAT" value="3.2"/>
-          <Constant key="Parameter_4473" name="KmmckatCoAMAT" value="26.6"/>
-          <Constant key="Parameter_4472" name="Vmckat" value="3.85124"/>
+          <Constant key="Parameter_4498" name="sfmckatC12" value="0.38"/>
+          <Constant key="Parameter_4497" name="Keqmckat" value="1051"/>
+          <Constant key="Parameter_4496" name="KmmckatAcetylCoAMAT" value="68.1103"/>
+          <Constant key="Parameter_4495" name="KmmckatC10AcylCoAMAT" value="25.3702"/>
+          <Constant key="Parameter_4494" name="KmmckatC10KetoacylCoAMAT" value="2.1"/>
+          <Constant key="Parameter_4493" name="KmmckatC12AcylCoAMAT" value="29.8783"/>
+          <Constant key="Parameter_4492" name="KmmckatC12KetoacylCoAMAT" value="1.3"/>
+          <Constant key="Parameter_4491" name="KmmckatC14AcylCoAMAT" value="16.9185"/>
+          <Constant key="Parameter_4490" name="KmmckatC14KetoacylCoAMAT" value="1.2"/>
+          <Constant key="Parameter_4489" name="KmmckatC16AcylCoAMAT" value="16.4137"/>
+          <Constant key="Parameter_4488" name="KmmckatC16KetoacylCoAMAT" value="1.1"/>
+          <Constant key="Parameter_4487" name="KmmckatC4AcetoacylCoAMAT" value="12.4"/>
+          <Constant key="Parameter_4486" name="KmmckatC4AcylCoAMAT" value="16.1136"/>
+          <Constant key="Parameter_4485" name="KmmckatC6AcylCoAMAT" value="15.4765"/>
+          <Constant key="Parameter_4484" name="KmmckatC6KetoacylCoAMAT" value="6.7"/>
+          <Constant key="Parameter_4483" name="KmmckatC8AcylCoAMAT" value="23.4696"/>
+          <Constant key="Parameter_4482" name="KmmckatC8KetoacylCoAMAT" value="3.2"/>
+          <Constant key="Parameter_4481" name="KmmckatCoAMAT" value="26.6"/>
+          <Constant key="Parameter_4480" name="Vmckat" value="3.85124"/>
         </ListOfConstants>
         <KineticLaw function="Function_74" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -13560,7 +13560,7 @@
               <SourceParameter reference="ModelValue_81"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1210">
-              <SourceParameter reference="Parameter_4490"/>
+              <SourceParameter reference="Parameter_4498"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -13600,25 +13600,25 @@
           <Modifier metabolite="Metabolite_42" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_4471" name="sfmckatC10" value="0.65"/>
-          <Constant key="Parameter_4470" name="Keqmckat" value="1051"/>
-          <Constant key="Parameter_4469" name="KmmckatAcetylCoAMAT" value="68.1103"/>
-          <Constant key="Parameter_4468" name="KmmckatC10AcylCoAMAT" value="25.3702"/>
-          <Constant key="Parameter_4467" name="KmmckatC10KetoacylCoAMAT" value="2.1"/>
-          <Constant key="Parameter_4466" name="KmmckatC12AcylCoAMAT" value="29.8783"/>
-          <Constant key="Parameter_4465" name="KmmckatC12KetoacylCoAMAT" value="1.3"/>
-          <Constant key="Parameter_4464" name="KmmckatC14AcylCoAMAT" value="16.9185"/>
-          <Constant key="Parameter_4463" name="KmmckatC14KetoacylCoAMAT" value="1.2"/>
-          <Constant key="Parameter_4462" name="KmmckatC16AcylCoAMAT" value="16.4137"/>
-          <Constant key="Parameter_4461" name="KmmckatC16KetoacylCoAMAT" value="1.1"/>
-          <Constant key="Parameter_4460" name="KmmckatC4AcetoacylCoAMAT" value="12.4"/>
-          <Constant key="Parameter_4459" name="KmmckatC4AcylCoAMAT" value="16.1136"/>
-          <Constant key="Parameter_4458" name="KmmckatC6AcylCoAMAT" value="15.4765"/>
-          <Constant key="Parameter_4457" name="KmmckatC6KetoacylCoAMAT" value="6.7"/>
-          <Constant key="Parameter_4456" name="KmmckatC8AcylCoAMAT" value="23.4696"/>
-          <Constant key="Parameter_4455" name="KmmckatC8KetoacylCoAMAT" value="3.2"/>
-          <Constant key="Parameter_4454" name="KmmckatCoAMAT" value="26.6"/>
-          <Constant key="Parameter_4453" name="Vmckat" value="3.85124"/>
+          <Constant key="Parameter_4479" name="sfmckatC10" value="0.65"/>
+          <Constant key="Parameter_4478" name="Keqmckat" value="1051"/>
+          <Constant key="Parameter_4477" name="KmmckatAcetylCoAMAT" value="68.1103"/>
+          <Constant key="Parameter_4476" name="KmmckatC10AcylCoAMAT" value="25.3702"/>
+          <Constant key="Parameter_4475" name="KmmckatC10KetoacylCoAMAT" value="2.1"/>
+          <Constant key="Parameter_4474" name="KmmckatC12AcylCoAMAT" value="29.8783"/>
+          <Constant key="Parameter_4473" name="KmmckatC12KetoacylCoAMAT" value="1.3"/>
+          <Constant key="Parameter_4472" name="KmmckatC14AcylCoAMAT" value="16.9185"/>
+          <Constant key="Parameter_4471" name="KmmckatC14KetoacylCoAMAT" value="1.2"/>
+          <Constant key="Parameter_4470" name="KmmckatC16AcylCoAMAT" value="16.4137"/>
+          <Constant key="Parameter_4469" name="KmmckatC16KetoacylCoAMAT" value="1.1"/>
+          <Constant key="Parameter_4468" name="KmmckatC4AcetoacylCoAMAT" value="12.4"/>
+          <Constant key="Parameter_4467" name="KmmckatC4AcylCoAMAT" value="16.1136"/>
+          <Constant key="Parameter_4466" name="KmmckatC6AcylCoAMAT" value="15.4765"/>
+          <Constant key="Parameter_4465" name="KmmckatC6KetoacylCoAMAT" value="6.7"/>
+          <Constant key="Parameter_4464" name="KmmckatC8AcylCoAMAT" value="23.4696"/>
+          <Constant key="Parameter_4463" name="KmmckatC8KetoacylCoAMAT" value="3.2"/>
+          <Constant key="Parameter_4462" name="KmmckatCoAMAT" value="26.6"/>
+          <Constant key="Parameter_4461" name="Vmckat" value="3.85124"/>
         </ListOfConstants>
         <KineticLaw function="Function_72" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -13728,7 +13728,7 @@
               <SourceParameter reference="ModelValue_81"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1138">
-              <SourceParameter reference="Parameter_4471"/>
+              <SourceParameter reference="Parameter_4479"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -13768,25 +13768,25 @@
           <Modifier metabolite="Metabolite_42" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_4452" name="sfmckatC8" value="0.81"/>
-          <Constant key="Parameter_4451" name="Keqmckat" value="1051"/>
-          <Constant key="Parameter_4450" name="KmmckatAcetylCoAMAT" value="68.1103"/>
-          <Constant key="Parameter_4449" name="KmmckatC10AcylCoAMAT" value="25.3702"/>
-          <Constant key="Parameter_4448" name="KmmckatC10KetoacylCoAMAT" value="2.1"/>
-          <Constant key="Parameter_4447" name="KmmckatC12AcylCoAMAT" value="29.8783"/>
-          <Constant key="Parameter_4446" name="KmmckatC12KetoacylCoAMAT" value="1.3"/>
-          <Constant key="Parameter_4445" name="KmmckatC14AcylCoAMAT" value="16.9185"/>
-          <Constant key="Parameter_4444" name="KmmckatC14KetoacylCoAMAT" value="1.2"/>
-          <Constant key="Parameter_4443" name="KmmckatC16AcylCoAMAT" value="16.4137"/>
-          <Constant key="Parameter_4442" name="KmmckatC16KetoacylCoAMAT" value="1.1"/>
-          <Constant key="Parameter_4441" name="KmmckatC4AcetoacylCoAMAT" value="12.4"/>
-          <Constant key="Parameter_4440" name="KmmckatC4AcylCoAMAT" value="16.1136"/>
-          <Constant key="Parameter_4439" name="KmmckatC6AcylCoAMAT" value="15.4765"/>
-          <Constant key="Parameter_4438" name="KmmckatC6KetoacylCoAMAT" value="6.7"/>
-          <Constant key="Parameter_4437" name="KmmckatC8AcylCoAMAT" value="23.4696"/>
-          <Constant key="Parameter_4436" name="KmmckatC8KetoacylCoAMAT" value="3.2"/>
-          <Constant key="Parameter_4435" name="KmmckatCoAMAT" value="26.6"/>
-          <Constant key="Parameter_4434" name="Vmckat" value="3.85124"/>
+          <Constant key="Parameter_4460" name="sfmckatC8" value="0.81"/>
+          <Constant key="Parameter_4459" name="Keqmckat" value="1051"/>
+          <Constant key="Parameter_4458" name="KmmckatAcetylCoAMAT" value="68.1103"/>
+          <Constant key="Parameter_4457" name="KmmckatC10AcylCoAMAT" value="25.3702"/>
+          <Constant key="Parameter_4456" name="KmmckatC10KetoacylCoAMAT" value="2.1"/>
+          <Constant key="Parameter_4455" name="KmmckatC12AcylCoAMAT" value="29.8783"/>
+          <Constant key="Parameter_4454" name="KmmckatC12KetoacylCoAMAT" value="1.3"/>
+          <Constant key="Parameter_4453" name="KmmckatC14AcylCoAMAT" value="16.9185"/>
+          <Constant key="Parameter_4452" name="KmmckatC14KetoacylCoAMAT" value="1.2"/>
+          <Constant key="Parameter_4451" name="KmmckatC16AcylCoAMAT" value="16.4137"/>
+          <Constant key="Parameter_4450" name="KmmckatC16KetoacylCoAMAT" value="1.1"/>
+          <Constant key="Parameter_4449" name="KmmckatC4AcetoacylCoAMAT" value="12.4"/>
+          <Constant key="Parameter_4448" name="KmmckatC4AcylCoAMAT" value="16.1136"/>
+          <Constant key="Parameter_4447" name="KmmckatC6AcylCoAMAT" value="15.4765"/>
+          <Constant key="Parameter_4446" name="KmmckatC6KetoacylCoAMAT" value="6.7"/>
+          <Constant key="Parameter_4445" name="KmmckatC8AcylCoAMAT" value="23.4696"/>
+          <Constant key="Parameter_4444" name="KmmckatC8KetoacylCoAMAT" value="3.2"/>
+          <Constant key="Parameter_4443" name="KmmckatCoAMAT" value="26.6"/>
+          <Constant key="Parameter_4442" name="Vmckat" value="3.85124"/>
         </ListOfConstants>
         <KineticLaw function="Function_76" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -13896,7 +13896,7 @@
               <SourceParameter reference="ModelValue_81"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1282">
-              <SourceParameter reference="Parameter_4452"/>
+              <SourceParameter reference="Parameter_4460"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -13936,25 +13936,25 @@
           <Modifier metabolite="Metabolite_37" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_4433" name="sfmckatC6" value="1"/>
-          <Constant key="Parameter_4432" name="Keqmckat" value="1051"/>
-          <Constant key="Parameter_4431" name="KmmckatAcetylCoAMAT" value="68.1103"/>
-          <Constant key="Parameter_4430" name="KmmckatC10AcylCoAMAT" value="25.3702"/>
-          <Constant key="Parameter_4429" name="KmmckatC10KetoacylCoAMAT" value="2.1"/>
-          <Constant key="Parameter_4428" name="KmmckatC12AcylCoAMAT" value="29.8783"/>
-          <Constant key="Parameter_4427" name="KmmckatC12KetoacylCoAMAT" value="1.3"/>
-          <Constant key="Parameter_4426" name="KmmckatC14AcylCoAMAT" value="16.9185"/>
-          <Constant key="Parameter_4425" name="KmmckatC14KetoacylCoAMAT" value="1.2"/>
-          <Constant key="Parameter_4424" name="KmmckatC16AcylCoAMAT" value="16.4137"/>
-          <Constant key="Parameter_4423" name="KmmckatC16KetoacylCoAMAT" value="1.1"/>
-          <Constant key="Parameter_4422" name="KmmckatC4AcetoacylCoAMAT" value="12.4"/>
-          <Constant key="Parameter_4421" name="KmmckatC4AcylCoAMAT" value="16.1136"/>
-          <Constant key="Parameter_4420" name="KmmckatC6AcylCoAMAT" value="15.4765"/>
-          <Constant key="Parameter_4419" name="KmmckatC6KetoacylCoAMAT" value="6.7"/>
-          <Constant key="Parameter_4418" name="KmmckatC8AcylCoAMAT" value="23.4696"/>
-          <Constant key="Parameter_4417" name="KmmckatC8KetoacylCoAMAT" value="3.2"/>
-          <Constant key="Parameter_4416" name="KmmckatCoAMAT" value="26.6"/>
-          <Constant key="Parameter_4415" name="Vmckat" value="3.85124"/>
+          <Constant key="Parameter_4441" name="sfmckatC6" value="1"/>
+          <Constant key="Parameter_4440" name="Keqmckat" value="1051"/>
+          <Constant key="Parameter_4439" name="KmmckatAcetylCoAMAT" value="68.1103"/>
+          <Constant key="Parameter_4438" name="KmmckatC10AcylCoAMAT" value="25.3702"/>
+          <Constant key="Parameter_4437" name="KmmckatC10KetoacylCoAMAT" value="2.1"/>
+          <Constant key="Parameter_4436" name="KmmckatC12AcylCoAMAT" value="29.8783"/>
+          <Constant key="Parameter_4435" name="KmmckatC12KetoacylCoAMAT" value="1.3"/>
+          <Constant key="Parameter_4434" name="KmmckatC14AcylCoAMAT" value="16.9185"/>
+          <Constant key="Parameter_4433" name="KmmckatC14KetoacylCoAMAT" value="1.2"/>
+          <Constant key="Parameter_4432" name="KmmckatC16AcylCoAMAT" value="16.4137"/>
+          <Constant key="Parameter_4431" name="KmmckatC16KetoacylCoAMAT" value="1.1"/>
+          <Constant key="Parameter_4430" name="KmmckatC4AcetoacylCoAMAT" value="12.4"/>
+          <Constant key="Parameter_4429" name="KmmckatC4AcylCoAMAT" value="16.1136"/>
+          <Constant key="Parameter_4428" name="KmmckatC6AcylCoAMAT" value="15.4765"/>
+          <Constant key="Parameter_4427" name="KmmckatC6KetoacylCoAMAT" value="6.7"/>
+          <Constant key="Parameter_4426" name="KmmckatC8AcylCoAMAT" value="23.4696"/>
+          <Constant key="Parameter_4425" name="KmmckatC8KetoacylCoAMAT" value="3.2"/>
+          <Constant key="Parameter_4424" name="KmmckatCoAMAT" value="26.6"/>
+          <Constant key="Parameter_4423" name="Vmckat" value="3.85124"/>
         </ListOfConstants>
         <KineticLaw function="Function_75" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -14064,7 +14064,7 @@
               <SourceParameter reference="ModelValue_81"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1246">
-              <SourceParameter reference="Parameter_4433"/>
+              <SourceParameter reference="Parameter_4441"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -14104,25 +14104,25 @@
           <Modifier metabolite="Metabolite_37" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_4414" name="sfmckatC4" value="0.49"/>
-          <Constant key="Parameter_4413" name="Keqmckat" value="1051"/>
-          <Constant key="Parameter_4412" name="KmmckatAcetylCoAMAT" value="68.1103"/>
-          <Constant key="Parameter_4411" name="KmmckatC10AcylCoAMAT" value="25.3702"/>
-          <Constant key="Parameter_4410" name="KmmckatC10KetoacylCoAMAT" value="2.1"/>
-          <Constant key="Parameter_4409" name="KmmckatC12AcylCoAMAT" value="29.8783"/>
-          <Constant key="Parameter_4408" name="KmmckatC12KetoacylCoAMAT" value="1.3"/>
-          <Constant key="Parameter_4407" name="KmmckatC14AcylCoAMAT" value="16.9185"/>
-          <Constant key="Parameter_4406" name="KmmckatC14KetoacylCoAMAT" value="1.2"/>
-          <Constant key="Parameter_4405" name="KmmckatC16AcylCoAMAT" value="16.4137"/>
-          <Constant key="Parameter_4404" name="KmmckatC16KetoacylCoAMAT" value="1.1"/>
-          <Constant key="Parameter_4403" name="KmmckatC4AcetoacylCoAMAT" value="12.4"/>
-          <Constant key="Parameter_4402" name="KmmckatC4AcylCoAMAT" value="16.1136"/>
-          <Constant key="Parameter_4401" name="KmmckatC6AcylCoAMAT" value="15.4765"/>
-          <Constant key="Parameter_4400" name="KmmckatC6KetoacylCoAMAT" value="6.7"/>
-          <Constant key="Parameter_4399" name="KmmckatC8AcylCoAMAT" value="23.4696"/>
-          <Constant key="Parameter_4398" name="KmmckatC8KetoacylCoAMAT" value="3.2"/>
-          <Constant key="Parameter_4397" name="KmmckatCoAMAT" value="26.6"/>
-          <Constant key="Parameter_4396" name="Vmckat" value="3.85124"/>
+          <Constant key="Parameter_4422" name="sfmckatC4" value="0.49"/>
+          <Constant key="Parameter_4421" name="Keqmckat" value="1051"/>
+          <Constant key="Parameter_4420" name="KmmckatAcetylCoAMAT" value="68.1103"/>
+          <Constant key="Parameter_4419" name="KmmckatC10AcylCoAMAT" value="25.3702"/>
+          <Constant key="Parameter_4418" name="KmmckatC10KetoacylCoAMAT" value="2.1"/>
+          <Constant key="Parameter_4417" name="KmmckatC12AcylCoAMAT" value="29.8783"/>
+          <Constant key="Parameter_4416" name="KmmckatC12KetoacylCoAMAT" value="1.3"/>
+          <Constant key="Parameter_4415" name="KmmckatC14AcylCoAMAT" value="16.9185"/>
+          <Constant key="Parameter_4414" name="KmmckatC14KetoacylCoAMAT" value="1.2"/>
+          <Constant key="Parameter_4413" name="KmmckatC16AcylCoAMAT" value="16.4137"/>
+          <Constant key="Parameter_4412" name="KmmckatC16KetoacylCoAMAT" value="1.1"/>
+          <Constant key="Parameter_4411" name="KmmckatC4AcetoacylCoAMAT" value="12.4"/>
+          <Constant key="Parameter_4410" name="KmmckatC4AcylCoAMAT" value="16.1136"/>
+          <Constant key="Parameter_4409" name="KmmckatC6AcylCoAMAT" value="15.4765"/>
+          <Constant key="Parameter_4408" name="KmmckatC6KetoacylCoAMAT" value="6.7"/>
+          <Constant key="Parameter_4407" name="KmmckatC8AcylCoAMAT" value="23.4696"/>
+          <Constant key="Parameter_4406" name="KmmckatC8KetoacylCoAMAT" value="3.2"/>
+          <Constant key="Parameter_4405" name="KmmckatCoAMAT" value="26.6"/>
+          <Constant key="Parameter_4404" name="Vmckat" value="3.85124"/>
         </ListOfConstants>
         <KineticLaw function="Function_78" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -14232,7 +14232,7 @@
               <SourceParameter reference="ModelValue_81"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1357">
-              <SourceParameter reference="Parameter_4414"/>
+              <SourceParameter reference="Parameter_4422"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -14272,25 +14272,25 @@
           <Modifier metabolite="Metabolite_45" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_4395" name="sfmtpC16" value="1"/>
-          <Constant key="Parameter_4394" name="Keqmtp" value="0.71"/>
-          <Constant key="Parameter_4393" name="KicrotC4AcetoacylCoA" value="1.6"/>
-          <Constant key="Parameter_4392" name="KmmtpAcetylCoAMAT" value="30"/>
-          <Constant key="Parameter_4391" name="KmmtpC10AcylCoAMAT" value="13.83"/>
-          <Constant key="Parameter_4390" name="KmmtpC10EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_4389" name="KmmtpC12AcylCoAMAT" value="13.83"/>
-          <Constant key="Parameter_4388" name="KmmtpC12EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_4387" name="KmmtpC14AcylCoAMAT" value="13.83"/>
-          <Constant key="Parameter_4386" name="KmmtpC14EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_4385" name="KmmtpC16AcylCoAMAT" value="13.83"/>
-          <Constant key="Parameter_4384" name="KmmtpC16EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_4383" name="KmmtpC6AcylCoAMAT" value="13.83"/>
-          <Constant key="Parameter_4382" name="KmmtpC8AcylCoAMAT" value="13.83"/>
-          <Constant key="Parameter_4381" name="KmmtpC8EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_4380" name="KmmtpCoAMAT" value="30"/>
-          <Constant key="Parameter_4379" name="KmmtpNADHMAT" value="50"/>
-          <Constant key="Parameter_4378" name="KmmtpNADMAT" value="60"/>
-          <Constant key="Parameter_4377" name="Vmtp" value="0.1"/>
+          <Constant key="Parameter_4403" name="sfmtpC16" value="1"/>
+          <Constant key="Parameter_4402" name="Keqmtp" value="0.71"/>
+          <Constant key="Parameter_4401" name="KicrotC4AcetoacylCoA" value="1.6"/>
+          <Constant key="Parameter_4400" name="KmmtpAcetylCoAMAT" value="30"/>
+          <Constant key="Parameter_4399" name="KmmtpC10AcylCoAMAT" value="13.83"/>
+          <Constant key="Parameter_4398" name="KmmtpC10EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_4397" name="KmmtpC12AcylCoAMAT" value="13.83"/>
+          <Constant key="Parameter_4396" name="KmmtpC12EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_4395" name="KmmtpC14AcylCoAMAT" value="13.83"/>
+          <Constant key="Parameter_4394" name="KmmtpC14EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_4393" name="KmmtpC16AcylCoAMAT" value="13.83"/>
+          <Constant key="Parameter_4392" name="KmmtpC16EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_4391" name="KmmtpC6AcylCoAMAT" value="13.83"/>
+          <Constant key="Parameter_4390" name="KmmtpC8AcylCoAMAT" value="13.83"/>
+          <Constant key="Parameter_4389" name="KmmtpC8EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_4388" name="KmmtpCoAMAT" value="30"/>
+          <Constant key="Parameter_4387" name="KmmtpNADHMAT" value="50"/>
+          <Constant key="Parameter_4386" name="KmmtpNADMAT" value="60"/>
+          <Constant key="Parameter_4385" name="Vmtp" value="0.1"/>
         </ListOfConstants>
         <KineticLaw function="Function_80" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -14400,7 +14400,7 @@
               <SourceParameter reference="ModelValue_99"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1394">
-              <SourceParameter reference="Parameter_4395"/>
+              <SourceParameter reference="Parameter_4403"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -14440,25 +14440,25 @@
           <Modifier metabolite="Metabolite_45" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_4376" name="sfmtpC14" value="0.9"/>
-          <Constant key="Parameter_4375" name="Keqmtp" value="0.71"/>
-          <Constant key="Parameter_4374" name="KicrotC4AcetoacylCoA" value="1.6"/>
-          <Constant key="Parameter_4373" name="KmmtpAcetylCoAMAT" value="30"/>
-          <Constant key="Parameter_4372" name="KmmtpC10AcylCoAMAT" value="13.83"/>
-          <Constant key="Parameter_4371" name="KmmtpC10EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_4370" name="KmmtpC12AcylCoAMAT" value="13.83"/>
-          <Constant key="Parameter_4369" name="KmmtpC12EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_4368" name="KmmtpC14AcylCoAMAT" value="13.83"/>
-          <Constant key="Parameter_4367" name="KmmtpC14EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_4366" name="KmmtpC16AcylCoAMAT" value="13.83"/>
-          <Constant key="Parameter_4365" name="KmmtpC16EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_4364" name="KmmtpC6AcylCoAMAT" value="13.83"/>
-          <Constant key="Parameter_4363" name="KmmtpC8AcylCoAMAT" value="13.83"/>
-          <Constant key="Parameter_4362" name="KmmtpC8EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_4361" name="KmmtpCoAMAT" value="30"/>
-          <Constant key="Parameter_4360" name="KmmtpNADHMAT" value="50"/>
-          <Constant key="Parameter_4359" name="KmmtpNADMAT" value="60"/>
-          <Constant key="Parameter_4358" name="Vmtp" value="0.1"/>
+          <Constant key="Parameter_4384" name="sfmtpC14" value="0.9"/>
+          <Constant key="Parameter_4383" name="Keqmtp" value="0.71"/>
+          <Constant key="Parameter_4382" name="KicrotC4AcetoacylCoA" value="1.6"/>
+          <Constant key="Parameter_4381" name="KmmtpAcetylCoAMAT" value="30"/>
+          <Constant key="Parameter_4380" name="KmmtpC10AcylCoAMAT" value="13.83"/>
+          <Constant key="Parameter_4379" name="KmmtpC10EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_4378" name="KmmtpC12AcylCoAMAT" value="13.83"/>
+          <Constant key="Parameter_4377" name="KmmtpC12EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_4376" name="KmmtpC14AcylCoAMAT" value="13.83"/>
+          <Constant key="Parameter_4375" name="KmmtpC14EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_4374" name="KmmtpC16AcylCoAMAT" value="13.83"/>
+          <Constant key="Parameter_4373" name="KmmtpC16EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_4372" name="KmmtpC6AcylCoAMAT" value="13.83"/>
+          <Constant key="Parameter_4371" name="KmmtpC8AcylCoAMAT" value="13.83"/>
+          <Constant key="Parameter_4370" name="KmmtpC8EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_4369" name="KmmtpCoAMAT" value="30"/>
+          <Constant key="Parameter_4368" name="KmmtpNADHMAT" value="50"/>
+          <Constant key="Parameter_4367" name="KmmtpNADMAT" value="60"/>
+          <Constant key="Parameter_4366" name="Vmtp" value="0.1"/>
         </ListOfConstants>
         <KineticLaw function="Function_94" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -14568,7 +14568,7 @@
               <SourceParameter reference="ModelValue_99"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1804">
-              <SourceParameter reference="Parameter_4376"/>
+              <SourceParameter reference="Parameter_4384"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -14608,25 +14608,25 @@
           <Modifier metabolite="Metabolite_45" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_4357" name="sfmtpC12" value="0.81"/>
-          <Constant key="Parameter_4356" name="Keqmtp" value="0.71"/>
-          <Constant key="Parameter_4355" name="KicrotC4AcetoacylCoA" value="1.6"/>
-          <Constant key="Parameter_4354" name="KmmtpAcetylCoAMAT" value="30"/>
-          <Constant key="Parameter_4353" name="KmmtpC10AcylCoAMAT" value="13.83"/>
-          <Constant key="Parameter_4352" name="KmmtpC10EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_4351" name="KmmtpC12AcylCoAMAT" value="13.83"/>
-          <Constant key="Parameter_4350" name="KmmtpC12EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_4349" name="KmmtpC14AcylCoAMAT" value="13.83"/>
-          <Constant key="Parameter_4348" name="KmmtpC14EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_4347" name="KmmtpC16AcylCoAMAT" value="13.83"/>
-          <Constant key="Parameter_4346" name="KmmtpC16EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_4345" name="KmmtpC6AcylCoAMAT" value="13.83"/>
-          <Constant key="Parameter_4344" name="KmmtpC8AcylCoAMAT" value="13.83"/>
-          <Constant key="Parameter_4343" name="KmmtpC8EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_4342" name="KmmtpCoAMAT" value="30"/>
-          <Constant key="Parameter_4341" name="KmmtpNADHMAT" value="50"/>
-          <Constant key="Parameter_4340" name="KmmtpNADMAT" value="60"/>
-          <Constant key="Parameter_4339" name="Vmtp" value="0.1"/>
+          <Constant key="Parameter_4365" name="sfmtpC12" value="0.81"/>
+          <Constant key="Parameter_4364" name="Keqmtp" value="0.71"/>
+          <Constant key="Parameter_4363" name="KicrotC4AcetoacylCoA" value="1.6"/>
+          <Constant key="Parameter_4362" name="KmmtpAcetylCoAMAT" value="30"/>
+          <Constant key="Parameter_4361" name="KmmtpC10AcylCoAMAT" value="13.83"/>
+          <Constant key="Parameter_4360" name="KmmtpC10EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_4359" name="KmmtpC12AcylCoAMAT" value="13.83"/>
+          <Constant key="Parameter_4358" name="KmmtpC12EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_4357" name="KmmtpC14AcylCoAMAT" value="13.83"/>
+          <Constant key="Parameter_4356" name="KmmtpC14EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_4355" name="KmmtpC16AcylCoAMAT" value="13.83"/>
+          <Constant key="Parameter_4354" name="KmmtpC16EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_4353" name="KmmtpC6AcylCoAMAT" value="13.83"/>
+          <Constant key="Parameter_4352" name="KmmtpC8AcylCoAMAT" value="13.83"/>
+          <Constant key="Parameter_4351" name="KmmtpC8EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_4350" name="KmmtpCoAMAT" value="30"/>
+          <Constant key="Parameter_4349" name="KmmtpNADHMAT" value="50"/>
+          <Constant key="Parameter_4348" name="KmmtpNADMAT" value="60"/>
+          <Constant key="Parameter_4347" name="Vmtp" value="0.1"/>
         </ListOfConstants>
         <KineticLaw function="Function_93" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -14736,7 +14736,7 @@
               <SourceParameter reference="ModelValue_99"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1768">
-              <SourceParameter reference="Parameter_4357"/>
+              <SourceParameter reference="Parameter_4365"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -14776,25 +14776,25 @@
           <Modifier metabolite="Metabolite_45" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_4338" name="sfmtpC10" value="0.73"/>
-          <Constant key="Parameter_4337" name="Keqmtp" value="0.71"/>
-          <Constant key="Parameter_4336" name="KicrotC4AcetoacylCoA" value="1.6"/>
-          <Constant key="Parameter_4335" name="KmmtpAcetylCoAMAT" value="30"/>
-          <Constant key="Parameter_4334" name="KmmtpC10AcylCoAMAT" value="13.83"/>
-          <Constant key="Parameter_4333" name="KmmtpC10EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_4332" name="KmmtpC12AcylCoAMAT" value="13.83"/>
-          <Constant key="Parameter_4331" name="KmmtpC12EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_4330" name="KmmtpC14AcylCoAMAT" value="13.83"/>
-          <Constant key="Parameter_4329" name="KmmtpC14EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_4328" name="KmmtpC16AcylCoAMAT" value="13.83"/>
-          <Constant key="Parameter_4327" name="KmmtpC16EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_4326" name="KmmtpC6AcylCoAMAT" value="13.83"/>
-          <Constant key="Parameter_4325" name="KmmtpC8AcylCoAMAT" value="13.83"/>
-          <Constant key="Parameter_4324" name="KmmtpC8EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_4323" name="KmmtpCoAMAT" value="30"/>
-          <Constant key="Parameter_4322" name="KmmtpNADHMAT" value="50"/>
-          <Constant key="Parameter_4321" name="KmmtpNADMAT" value="60"/>
-          <Constant key="Parameter_4320" name="Vmtp" value="0.1"/>
+          <Constant key="Parameter_4346" name="sfmtpC10" value="0.73"/>
+          <Constant key="Parameter_4345" name="Keqmtp" value="0.71"/>
+          <Constant key="Parameter_4344" name="KicrotC4AcetoacylCoA" value="1.6"/>
+          <Constant key="Parameter_4343" name="KmmtpAcetylCoAMAT" value="30"/>
+          <Constant key="Parameter_4342" name="KmmtpC10AcylCoAMAT" value="13.83"/>
+          <Constant key="Parameter_4341" name="KmmtpC10EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_4340" name="KmmtpC12AcylCoAMAT" value="13.83"/>
+          <Constant key="Parameter_4339" name="KmmtpC12EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_4338" name="KmmtpC14AcylCoAMAT" value="13.83"/>
+          <Constant key="Parameter_4337" name="KmmtpC14EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_4336" name="KmmtpC16AcylCoAMAT" value="13.83"/>
+          <Constant key="Parameter_4335" name="KmmtpC16EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_4334" name="KmmtpC6AcylCoAMAT" value="13.83"/>
+          <Constant key="Parameter_4333" name="KmmtpC8AcylCoAMAT" value="13.83"/>
+          <Constant key="Parameter_4332" name="KmmtpC8EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_4331" name="KmmtpCoAMAT" value="30"/>
+          <Constant key="Parameter_4330" name="KmmtpNADHMAT" value="50"/>
+          <Constant key="Parameter_4329" name="KmmtpNADMAT" value="60"/>
+          <Constant key="Parameter_4328" name="Vmtp" value="0.1"/>
         </ListOfConstants>
         <KineticLaw function="Function_95" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -14904,7 +14904,7 @@
               <SourceParameter reference="ModelValue_99"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1840">
-              <SourceParameter reference="Parameter_4338"/>
+              <SourceParameter reference="Parameter_4346"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -14944,25 +14944,25 @@
           <Modifier metabolite="Metabolite_45" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_4319" name="sfmtpC8" value="0.34"/>
-          <Constant key="Parameter_4318" name="Keqmtp" value="0.71"/>
-          <Constant key="Parameter_4317" name="KicrotC4AcetoacylCoA" value="1.6"/>
-          <Constant key="Parameter_4316" name="KmmtpAcetylCoAMAT" value="30"/>
-          <Constant key="Parameter_4315" name="KmmtpC10AcylCoAMAT" value="13.83"/>
-          <Constant key="Parameter_4314" name="KmmtpC10EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_4313" name="KmmtpC12AcylCoAMAT" value="13.83"/>
-          <Constant key="Parameter_4312" name="KmmtpC12EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_4311" name="KmmtpC14AcylCoAMAT" value="13.83"/>
-          <Constant key="Parameter_4310" name="KmmtpC14EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_4309" name="KmmtpC16AcylCoAMAT" value="13.83"/>
-          <Constant key="Parameter_4308" name="KmmtpC16EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_4307" name="KmmtpC6AcylCoAMAT" value="13.83"/>
-          <Constant key="Parameter_4306" name="KmmtpC8AcylCoAMAT" value="13.83"/>
-          <Constant key="Parameter_4305" name="KmmtpC8EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_4304" name="KmmtpCoAMAT" value="30"/>
-          <Constant key="Parameter_4303" name="KmmtpNADHMAT" value="50"/>
-          <Constant key="Parameter_4302" name="KmmtpNADMAT" value="60"/>
-          <Constant key="Parameter_4301" name="Vmtp" value="0.1"/>
+          <Constant key="Parameter_4327" name="sfmtpC8" value="0.34"/>
+          <Constant key="Parameter_4326" name="Keqmtp" value="0.71"/>
+          <Constant key="Parameter_4325" name="KicrotC4AcetoacylCoA" value="1.6"/>
+          <Constant key="Parameter_4324" name="KmmtpAcetylCoAMAT" value="30"/>
+          <Constant key="Parameter_4323" name="KmmtpC10AcylCoAMAT" value="13.83"/>
+          <Constant key="Parameter_4322" name="KmmtpC10EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_4321" name="KmmtpC12AcylCoAMAT" value="13.83"/>
+          <Constant key="Parameter_4320" name="KmmtpC12EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_4319" name="KmmtpC14AcylCoAMAT" value="13.83"/>
+          <Constant key="Parameter_4318" name="KmmtpC14EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_4317" name="KmmtpC16AcylCoAMAT" value="13.83"/>
+          <Constant key="Parameter_4316" name="KmmtpC16EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_4315" name="KmmtpC6AcylCoAMAT" value="13.83"/>
+          <Constant key="Parameter_4314" name="KmmtpC8AcylCoAMAT" value="13.83"/>
+          <Constant key="Parameter_4313" name="KmmtpC8EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_4312" name="KmmtpCoAMAT" value="30"/>
+          <Constant key="Parameter_4311" name="KmmtpNADHMAT" value="50"/>
+          <Constant key="Parameter_4310" name="KmmtpNADMAT" value="60"/>
+          <Constant key="Parameter_4309" name="Vmtp" value="0.1"/>
         </ListOfConstants>
         <KineticLaw function="Function_79" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -15072,7 +15072,7 @@
               <SourceParameter reference="ModelValue_99"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1358">
-              <SourceParameter reference="Parameter_4319"/>
+              <SourceParameter reference="Parameter_4327"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -15093,8 +15093,8 @@
           <Substrate metabolite="Metabolite_46" stoichiometry="1"/>
         </ListOfSubstrates>
         <ListOfConstants>
-          <Constant key="Parameter_4300" name="K1acesink" value="21.1414"/>
-          <Constant key="Parameter_4299" name="Ksacesink" value="6e+06"/>
+          <Constant key="Parameter_4308" name="K1acesink" value="21.1414"/>
+          <Constant key="Parameter_4307" name="Ksacesink" value="6e+06"/>
         </ListOfConstants>
         <KineticLaw function="Function_81" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -15102,7 +15102,7 @@
               <SourceParameter reference="Metabolite_46"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1464">
-              <SourceParameter reference="Parameter_4300"/>
+              <SourceParameter reference="Parameter_4308"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1463">
               <SourceParameter reference="ModelValue_295"/>
@@ -15129,8 +15129,8 @@
           <Substrate metabolite="Metabolite_47" stoichiometry="1"/>
         </ListOfSubstrates>
         <ListOfConstants>
-          <Constant key="Parameter_4298" name="K1fadhsink" value="0.430198"/>
-          <Constant key="Parameter_4297" name="Ksfadhsink" value="6e+06"/>
+          <Constant key="Parameter_4306" name="K1fadhsink" value="0.430198"/>
+          <Constant key="Parameter_4305" name="Ksfadhsink" value="6e+06"/>
         </ListOfConstants>
         <KineticLaw function="Function_82" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -15138,7 +15138,7 @@
               <SourceParameter reference="Metabolite_47"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1459">
-              <SourceParameter reference="Parameter_4298"/>
+              <SourceParameter reference="Parameter_4306"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1460">
               <SourceParameter reference="ModelValue_296"/>
@@ -15165,16 +15165,16 @@
           <Substrate metabolite="Metabolite_48" stoichiometry="1"/>
         </ListOfSubstrates>
         <ListOfConstants>
-          <Constant key="Parameter_4296" name="K1nadhsink" value="15.3482"/>
-          <Constant key="Parameter_4295" name="Ksnadhsink" value="6e+06"/>
+          <Constant key="Parameter_4304" name="K1nadhsink" value="15.3482"/>
+          <Constant key="Parameter_4303" name="Ksnadhsink" value="6e+06"/>
         </ListOfConstants>
         <KineticLaw function="Function_77" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
             <CallParameter functionParameter="FunctionParameter_1353">
-              <SourceParameter reference="Parameter_4296"/>
+              <SourceParameter reference="Parameter_4304"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1352">
-              <SourceParameter reference="Parameter_4295"/>
+              <SourceParameter reference="Parameter_4303"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1351">
               <SourceParameter reference="Metabolite_48"/>
@@ -15218,23 +15218,23 @@
           <Modifier metabolite="Metabolite_38" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_4294" name="sfvlcadC16" value="0.51"/>
-          <Constant key="Parameter_4293" name="parameter_1" value="0.105883"/>
-          <Constant key="Parameter_4292" name="parameter_10" value="1.08"/>
-          <Constant key="Parameter_4291" name="parameter_11" value="1.08"/>
-          <Constant key="Parameter_4290" name="parameter_12" value="1.08"/>
-          <Constant key="Parameter_4289" name="parameter_13" value="1.08"/>
-          <Constant key="Parameter_4288" name="parameter_14" value="1.08"/>
-          <Constant key="Parameter_4287" name="parameter_15" value="24.2"/>
-          <Constant key="Parameter_4286" name="parameter_16" value="6"/>
-          <Constant key="Parameter_4285" name="parameter_2" value="8.71603"/>
-          <Constant key="Parameter_4284" name="parameter_3" value="5"/>
-          <Constant key="Parameter_4283" name="parameter_4" value="14"/>
-          <Constant key="Parameter_4282" name="parameter_5" value="18.7504"/>
-          <Constant key="Parameter_4281" name="parameter_6" value="12.1189"/>
-          <Constant key="Parameter_4280" name="parameter_7" value="14.5"/>
-          <Constant key="Parameter_4279" name="parameter_8" value="0.100638"/>
-          <Constant key="Parameter_4278" name="parameter_9" value="1.08"/>
+          <Constant key="Parameter_4302" name="sfvlcadC16" value="0.51"/>
+          <Constant key="Parameter_4301" name="parameter_1" value="0.105883"/>
+          <Constant key="Parameter_4300" name="parameter_10" value="1.08"/>
+          <Constant key="Parameter_4299" name="parameter_11" value="1.08"/>
+          <Constant key="Parameter_4298" name="parameter_12" value="1.08"/>
+          <Constant key="Parameter_4297" name="parameter_13" value="1.08"/>
+          <Constant key="Parameter_4296" name="parameter_14" value="1.08"/>
+          <Constant key="Parameter_4295" name="parameter_15" value="24.2"/>
+          <Constant key="Parameter_4294" name="parameter_16" value="6"/>
+          <Constant key="Parameter_4293" name="parameter_2" value="8.71603"/>
+          <Constant key="Parameter_4292" name="parameter_3" value="5"/>
+          <Constant key="Parameter_4291" name="parameter_4" value="14"/>
+          <Constant key="Parameter_4290" name="parameter_5" value="18.7504"/>
+          <Constant key="Parameter_4289" name="parameter_6" value="12.1189"/>
+          <Constant key="Parameter_4288" name="parameter_7" value="14.5"/>
+          <Constant key="Parameter_4287" name="parameter_8" value="0.100638"/>
+          <Constant key="Parameter_4286" name="parameter_9" value="1.08"/>
         </ListOfConstants>
         <KineticLaw function="Function_97" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -15332,7 +15332,7 @@
               <SourceParameter reference="ModelValue_124"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1920">
-              <SourceParameter reference="Parameter_4294"/>
+              <SourceParameter reference="Parameter_4302"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -15370,23 +15370,23 @@
           <Modifier metabolite="Metabolite_38" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_4277" name="sfvlcadC14" value="0.57"/>
-          <Constant key="Parameter_4276" name="parameter_1" value="0.105883"/>
-          <Constant key="Parameter_4275" name="parameter_10" value="1.08"/>
-          <Constant key="Parameter_4274" name="parameter_11" value="1.08"/>
-          <Constant key="Parameter_4273" name="parameter_12" value="1.08"/>
-          <Constant key="Parameter_4272" name="parameter_13" value="1.08"/>
-          <Constant key="Parameter_4271" name="parameter_14" value="1.08"/>
-          <Constant key="Parameter_4270" name="parameter_15" value="24.2"/>
-          <Constant key="Parameter_4269" name="parameter_16" value="6"/>
-          <Constant key="Parameter_4268" name="parameter_2" value="8.71603"/>
-          <Constant key="Parameter_4267" name="parameter_3" value="5"/>
-          <Constant key="Parameter_4266" name="parameter_4" value="14"/>
-          <Constant key="Parameter_4265" name="parameter_5" value="18.7504"/>
-          <Constant key="Parameter_4264" name="parameter_6" value="12.1189"/>
-          <Constant key="Parameter_4263" name="parameter_7" value="14.5"/>
-          <Constant key="Parameter_4262" name="parameter_8" value="0.100638"/>
-          <Constant key="Parameter_4261" name="parameter_9" value="1.08"/>
+          <Constant key="Parameter_4285" name="sfvlcadC14" value="0.57"/>
+          <Constant key="Parameter_4284" name="parameter_1" value="0.105883"/>
+          <Constant key="Parameter_4283" name="parameter_10" value="1.08"/>
+          <Constant key="Parameter_4282" name="parameter_11" value="1.08"/>
+          <Constant key="Parameter_4281" name="parameter_12" value="1.08"/>
+          <Constant key="Parameter_4280" name="parameter_13" value="1.08"/>
+          <Constant key="Parameter_4279" name="parameter_14" value="1.08"/>
+          <Constant key="Parameter_4278" name="parameter_15" value="24.2"/>
+          <Constant key="Parameter_4277" name="parameter_16" value="6"/>
+          <Constant key="Parameter_4276" name="parameter_2" value="8.71603"/>
+          <Constant key="Parameter_4275" name="parameter_3" value="5"/>
+          <Constant key="Parameter_4274" name="parameter_4" value="14"/>
+          <Constant key="Parameter_4273" name="parameter_5" value="18.7504"/>
+          <Constant key="Parameter_4272" name="parameter_6" value="12.1189"/>
+          <Constant key="Parameter_4271" name="parameter_7" value="14.5"/>
+          <Constant key="Parameter_4270" name="parameter_8" value="0.100638"/>
+          <Constant key="Parameter_4269" name="parameter_9" value="1.08"/>
         </ListOfConstants>
         <KineticLaw function="Function_98" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -15484,7 +15484,7 @@
               <SourceParameter reference="ModelValue_124"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1921">
-              <SourceParameter reference="Parameter_4277"/>
+              <SourceParameter reference="Parameter_4285"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -15522,23 +15522,23 @@
           <Modifier metabolite="Metabolite_38" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_4260" name="sfvlcadC12" value="1"/>
-          <Constant key="Parameter_4259" name="parameter_1" value="0.105883"/>
-          <Constant key="Parameter_4258" name="parameter_10" value="1.08"/>
-          <Constant key="Parameter_4257" name="parameter_11" value="1.08"/>
-          <Constant key="Parameter_4256" name="parameter_12" value="1.08"/>
-          <Constant key="Parameter_4255" name="parameter_13" value="1.08"/>
-          <Constant key="Parameter_4254" name="parameter_14" value="1.08"/>
-          <Constant key="Parameter_4253" name="parameter_15" value="24.2"/>
-          <Constant key="Parameter_4252" name="parameter_16" value="6"/>
-          <Constant key="Parameter_4251" name="parameter_2" value="8.71603"/>
-          <Constant key="Parameter_4250" name="parameter_3" value="5"/>
-          <Constant key="Parameter_4249" name="parameter_4" value="14"/>
-          <Constant key="Parameter_4248" name="parameter_5" value="18.7504"/>
-          <Constant key="Parameter_4247" name="parameter_6" value="12.1189"/>
-          <Constant key="Parameter_4246" name="parameter_7" value="14.5"/>
-          <Constant key="Parameter_4245" name="parameter_8" value="0.100638"/>
-          <Constant key="Parameter_4244" name="parameter_9" value="1.08"/>
+          <Constant key="Parameter_4268" name="sfvlcadC12" value="1"/>
+          <Constant key="Parameter_4267" name="parameter_1" value="0.105883"/>
+          <Constant key="Parameter_4266" name="parameter_10" value="1.08"/>
+          <Constant key="Parameter_4265" name="parameter_11" value="1.08"/>
+          <Constant key="Parameter_4264" name="parameter_12" value="1.08"/>
+          <Constant key="Parameter_4263" name="parameter_13" value="1.08"/>
+          <Constant key="Parameter_4262" name="parameter_14" value="1.08"/>
+          <Constant key="Parameter_4261" name="parameter_15" value="24.2"/>
+          <Constant key="Parameter_4260" name="parameter_16" value="6"/>
+          <Constant key="Parameter_4259" name="parameter_2" value="8.71603"/>
+          <Constant key="Parameter_4258" name="parameter_3" value="5"/>
+          <Constant key="Parameter_4257" name="parameter_4" value="14"/>
+          <Constant key="Parameter_4256" name="parameter_5" value="18.7504"/>
+          <Constant key="Parameter_4255" name="parameter_6" value="12.1189"/>
+          <Constant key="Parameter_4254" name="parameter_7" value="14.5"/>
+          <Constant key="Parameter_4253" name="parameter_8" value="0.100638"/>
+          <Constant key="Parameter_4252" name="parameter_9" value="1.08"/>
         </ListOfConstants>
         <KineticLaw function="Function_99" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -15636,7 +15636,7 @@
               <SourceParameter reference="ModelValue_124"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1953">
-              <SourceParameter reference="Parameter_4260"/>
+              <SourceParameter reference="Parameter_4268"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -15674,23 +15674,23 @@
           <Modifier metabolite="Metabolite_38" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_4243" name="sfvlcadC10" value="1"/>
-          <Constant key="Parameter_4242" name="parameter_1" value="0.105883"/>
-          <Constant key="Parameter_4241" name="parameter_10" value="1.08"/>
-          <Constant key="Parameter_4240" name="parameter_11" value="1.08"/>
-          <Constant key="Parameter_4239" name="parameter_12" value="1.08"/>
-          <Constant key="Parameter_4238" name="parameter_13" value="1.08"/>
-          <Constant key="Parameter_4237" name="parameter_14" value="1.08"/>
-          <Constant key="Parameter_4236" name="parameter_15" value="24.2"/>
-          <Constant key="Parameter_4235" name="parameter_16" value="6"/>
-          <Constant key="Parameter_4234" name="parameter_2" value="8.71603"/>
-          <Constant key="Parameter_4233" name="parameter_3" value="5"/>
-          <Constant key="Parameter_4232" name="parameter_4" value="14"/>
-          <Constant key="Parameter_4231" name="parameter_5" value="18.7504"/>
-          <Constant key="Parameter_4230" name="parameter_6" value="12.1189"/>
-          <Constant key="Parameter_4229" name="parameter_7" value="14.5"/>
-          <Constant key="Parameter_4228" name="parameter_8" value="0.100638"/>
-          <Constant key="Parameter_4227" name="parameter_9" value="1.08"/>
+          <Constant key="Parameter_4251" name="sfvlcadC10" value="1"/>
+          <Constant key="Parameter_4250" name="parameter_1" value="0.105883"/>
+          <Constant key="Parameter_4249" name="parameter_10" value="1.08"/>
+          <Constant key="Parameter_4248" name="parameter_11" value="1.08"/>
+          <Constant key="Parameter_4247" name="parameter_12" value="1.08"/>
+          <Constant key="Parameter_4246" name="parameter_13" value="1.08"/>
+          <Constant key="Parameter_4245" name="parameter_14" value="1.08"/>
+          <Constant key="Parameter_4244" name="parameter_15" value="24.2"/>
+          <Constant key="Parameter_4243" name="parameter_16" value="6"/>
+          <Constant key="Parameter_4242" name="parameter_2" value="8.71603"/>
+          <Constant key="Parameter_4241" name="parameter_3" value="5"/>
+          <Constant key="Parameter_4240" name="parameter_4" value="14"/>
+          <Constant key="Parameter_4239" name="parameter_5" value="18.7504"/>
+          <Constant key="Parameter_4238" name="parameter_6" value="12.1189"/>
+          <Constant key="Parameter_4237" name="parameter_7" value="14.5"/>
+          <Constant key="Parameter_4236" name="parameter_8" value="0.100638"/>
+          <Constant key="Parameter_4235" name="parameter_9" value="1.08"/>
         </ListOfConstants>
         <KineticLaw function="Function_100" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -15788,7 +15788,7 @@
               <SourceParameter reference="ModelValue_124"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1985">
-              <SourceParameter reference="Parameter_4243"/>
+              <SourceParameter reference="Parameter_4251"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -15826,23 +15826,23 @@
           <Modifier metabolite="Metabolite_38" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_4226" name="sfvlcadC8" value="0.64"/>
-          <Constant key="Parameter_4225" name="parameter_1" value="0.105883"/>
-          <Constant key="Parameter_4224" name="parameter_10" value="1.08"/>
-          <Constant key="Parameter_4223" name="parameter_11" value="1.08"/>
-          <Constant key="Parameter_4222" name="parameter_12" value="1.08"/>
-          <Constant key="Parameter_4221" name="parameter_13" value="1.08"/>
-          <Constant key="Parameter_4220" name="parameter_14" value="1.08"/>
-          <Constant key="Parameter_4219" name="parameter_15" value="24.2"/>
-          <Constant key="Parameter_4218" name="parameter_16" value="6"/>
-          <Constant key="Parameter_4217" name="parameter_2" value="8.71603"/>
-          <Constant key="Parameter_4216" name="parameter_3" value="5"/>
-          <Constant key="Parameter_4215" name="parameter_4" value="14"/>
-          <Constant key="Parameter_4214" name="parameter_5" value="18.7504"/>
-          <Constant key="Parameter_4213" name="parameter_6" value="12.1189"/>
-          <Constant key="Parameter_4212" name="parameter_7" value="14.5"/>
-          <Constant key="Parameter_4211" name="parameter_8" value="0.100638"/>
-          <Constant key="Parameter_4210" name="parameter_9" value="1.08"/>
+          <Constant key="Parameter_4234" name="sfvlcadC8" value="0.64"/>
+          <Constant key="Parameter_4233" name="parameter_1" value="0.105883"/>
+          <Constant key="Parameter_4232" name="parameter_10" value="1.08"/>
+          <Constant key="Parameter_4231" name="parameter_11" value="1.08"/>
+          <Constant key="Parameter_4230" name="parameter_12" value="1.08"/>
+          <Constant key="Parameter_4229" name="parameter_13" value="1.08"/>
+          <Constant key="Parameter_4228" name="parameter_14" value="1.08"/>
+          <Constant key="Parameter_4227" name="parameter_15" value="24.2"/>
+          <Constant key="Parameter_4226" name="parameter_16" value="6"/>
+          <Constant key="Parameter_4225" name="parameter_2" value="8.71603"/>
+          <Constant key="Parameter_4224" name="parameter_3" value="5"/>
+          <Constant key="Parameter_4223" name="parameter_4" value="14"/>
+          <Constant key="Parameter_4222" name="parameter_5" value="18.7504"/>
+          <Constant key="Parameter_4221" name="parameter_6" value="12.1189"/>
+          <Constant key="Parameter_4220" name="parameter_7" value="14.5"/>
+          <Constant key="Parameter_4219" name="parameter_8" value="0.100638"/>
+          <Constant key="Parameter_4218" name="parameter_9" value="1.08"/>
         </ListOfConstants>
         <KineticLaw function="Function_101" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -15940,7 +15940,7 @@
               <SourceParameter reference="ModelValue_124"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_2017">
-              <SourceParameter reference="Parameter_4226"/>
+              <SourceParameter reference="Parameter_4234"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -15978,23 +15978,23 @@
           <Modifier metabolite="Metabolite_33" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_4209" name="sfvlcadC6" value="0.54"/>
-          <Constant key="Parameter_4208" name="parameter_1" value="0.105883"/>
-          <Constant key="Parameter_4207" name="parameter_10" value="1.08"/>
-          <Constant key="Parameter_4206" name="parameter_11" value="1.08"/>
-          <Constant key="Parameter_4205" name="parameter_12" value="1.08"/>
-          <Constant key="Parameter_4204" name="parameter_13" value="1.08"/>
-          <Constant key="Parameter_4203" name="parameter_14" value="1.08"/>
-          <Constant key="Parameter_4202" name="parameter_15" value="24.2"/>
-          <Constant key="Parameter_4201" name="parameter_16" value="6"/>
-          <Constant key="Parameter_4200" name="parameter_2" value="8.71603"/>
-          <Constant key="Parameter_4199" name="parameter_3" value="5"/>
-          <Constant key="Parameter_4198" name="parameter_4" value="14"/>
-          <Constant key="Parameter_4197" name="parameter_5" value="18.7504"/>
-          <Constant key="Parameter_4196" name="parameter_6" value="12.1189"/>
-          <Constant key="Parameter_4195" name="parameter_7" value="14.5"/>
-          <Constant key="Parameter_4194" name="parameter_8" value="0.100638"/>
-          <Constant key="Parameter_4193" name="parameter_9" value="1.08"/>
+          <Constant key="Parameter_4217" name="sfvlcadC6" value="0.54"/>
+          <Constant key="Parameter_4216" name="parameter_1" value="0.105883"/>
+          <Constant key="Parameter_4215" name="parameter_10" value="1.08"/>
+          <Constant key="Parameter_4214" name="parameter_11" value="1.08"/>
+          <Constant key="Parameter_4213" name="parameter_12" value="1.08"/>
+          <Constant key="Parameter_4212" name="parameter_13" value="1.08"/>
+          <Constant key="Parameter_4211" name="parameter_14" value="1.08"/>
+          <Constant key="Parameter_4210" name="parameter_15" value="24.2"/>
+          <Constant key="Parameter_4209" name="parameter_16" value="6"/>
+          <Constant key="Parameter_4208" name="parameter_2" value="8.71603"/>
+          <Constant key="Parameter_4207" name="parameter_3" value="5"/>
+          <Constant key="Parameter_4206" name="parameter_4" value="14"/>
+          <Constant key="Parameter_4205" name="parameter_5" value="18.7504"/>
+          <Constant key="Parameter_4204" name="parameter_6" value="12.1189"/>
+          <Constant key="Parameter_4203" name="parameter_7" value="14.5"/>
+          <Constant key="Parameter_4202" name="parameter_8" value="0.100638"/>
+          <Constant key="Parameter_4201" name="parameter_9" value="1.08"/>
         </ListOfConstants>
         <KineticLaw function="Function_102" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -16092,7 +16092,7 @@
               <SourceParameter reference="ModelValue_124"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_2049">
-              <SourceParameter reference="Parameter_4209"/>
+              <SourceParameter reference="Parameter_4217"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -16132,25 +16132,25 @@
           <Modifier metabolite="Metabolite_43" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_4192" name="sfmcadC16" value="0.15"/>
-          <Constant key="Parameter_4191" name="Keqmcad" value="6"/>
-          <Constant key="Parameter_4190" name="KmmcadC10AcylCoAMAT" value="16.7092"/>
-          <Constant key="Parameter_4189" name="KmmcadC10EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_4188" name="KmmcadC12AcylCoAMAT" value="18.6"/>
-          <Constant key="Parameter_4187" name="KmmcadC12EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_4186" name="KmmcadC4AcylCoAMAT" value="142.8"/>
-          <Constant key="Parameter_4185" name="KmmcadC4EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_4184" name="KmmcadC6AcylCoAMAT" value="10.8"/>
-          <Constant key="Parameter_4183" name="KmmcadC6EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_4182" name="KmmcadC8AcylCoAMAT" value="15.7644"/>
-          <Constant key="Parameter_4181" name="KmmcadC8EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_4180" name="KmmcadFAD" value="0.100638"/>
-          <Constant key="Parameter_4179" name="KmmcadFADH" value="24.2"/>
-          <Constant key="Parameter_4178" name="Vmcad" value="0.0248899"/>
-          <Constant key="Parameter_4177" name="parameter_17" value="24.393"/>
-          <Constant key="Parameter_4176" name="parameter_18" value="5"/>
-          <Constant key="Parameter_4175" name="parameter_19" value="1.08"/>
-          <Constant key="Parameter_4174" name="parameter_20" value="1.08"/>
+          <Constant key="Parameter_4200" name="sfmcadC16" value="0.15"/>
+          <Constant key="Parameter_4199" name="Keqmcad" value="6"/>
+          <Constant key="Parameter_4198" name="KmmcadC10AcylCoAMAT" value="16.7092"/>
+          <Constant key="Parameter_4197" name="KmmcadC10EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_4196" name="KmmcadC12AcylCoAMAT" value="18.6"/>
+          <Constant key="Parameter_4195" name="KmmcadC12EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_4194" name="KmmcadC4AcylCoAMAT" value="142.8"/>
+          <Constant key="Parameter_4193" name="KmmcadC4EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_4192" name="KmmcadC6AcylCoAMAT" value="10.8"/>
+          <Constant key="Parameter_4191" name="KmmcadC6EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_4190" name="KmmcadC8AcylCoAMAT" value="15.7644"/>
+          <Constant key="Parameter_4189" name="KmmcadC8EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_4188" name="KmmcadFAD" value="0.100638"/>
+          <Constant key="Parameter_4187" name="KmmcadFADH" value="24.2"/>
+          <Constant key="Parameter_4186" name="Vmcad" value="0.0248899"/>
+          <Constant key="Parameter_4185" name="parameter_17" value="24.393"/>
+          <Constant key="Parameter_4184" name="parameter_18" value="5"/>
+          <Constant key="Parameter_4183" name="parameter_19" value="1.08"/>
+          <Constant key="Parameter_4182" name="parameter_20" value="1.08"/>
         </ListOfConstants>
         <KineticLaw function="Function_103" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -16260,7 +16260,7 @@
               <SourceParameter reference="ModelValue_135"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_2116">
-              <SourceParameter reference="Parameter_4192"/>
+              <SourceParameter reference="Parameter_4200"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -16300,25 +16300,25 @@
           <Modifier metabolite="Metabolite_43" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_4173" name="sfmcadC14" value="0.24"/>
-          <Constant key="Parameter_4172" name="Keqmcad" value="6"/>
-          <Constant key="Parameter_4171" name="KmmcadC10AcylCoAMAT" value="16.7092"/>
-          <Constant key="Parameter_4170" name="KmmcadC10EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_4169" name="KmmcadC12AcylCoAMAT" value="18.6"/>
-          <Constant key="Parameter_4168" name="KmmcadC12EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_4167" name="KmmcadC4AcylCoAMAT" value="142.8"/>
-          <Constant key="Parameter_4166" name="KmmcadC4EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_4165" name="KmmcadC6AcylCoAMAT" value="10.8"/>
-          <Constant key="Parameter_4164" name="KmmcadC6EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_4163" name="KmmcadC8AcylCoAMAT" value="15.7644"/>
-          <Constant key="Parameter_4162" name="KmmcadC8EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_4161" name="KmmcadFAD" value="0.100638"/>
-          <Constant key="Parameter_4160" name="KmmcadFADH" value="24.2"/>
-          <Constant key="Parameter_4159" name="Vmcad" value="0.0248899"/>
-          <Constant key="Parameter_4158" name="parameter_17" value="24.393"/>
-          <Constant key="Parameter_4157" name="parameter_18" value="5"/>
-          <Constant key="Parameter_4156" name="parameter_19" value="1.08"/>
-          <Constant key="Parameter_4155" name="parameter_20" value="1.08"/>
+          <Constant key="Parameter_4181" name="sfmcadC14" value="0.24"/>
+          <Constant key="Parameter_4180" name="Keqmcad" value="6"/>
+          <Constant key="Parameter_4179" name="KmmcadC10AcylCoAMAT" value="16.7092"/>
+          <Constant key="Parameter_4178" name="KmmcadC10EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_4177" name="KmmcadC12AcylCoAMAT" value="18.6"/>
+          <Constant key="Parameter_4176" name="KmmcadC12EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_4175" name="KmmcadC4AcylCoAMAT" value="142.8"/>
+          <Constant key="Parameter_4174" name="KmmcadC4EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_4173" name="KmmcadC6AcylCoAMAT" value="10.8"/>
+          <Constant key="Parameter_4172" name="KmmcadC6EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_4171" name="KmmcadC8AcylCoAMAT" value="15.7644"/>
+          <Constant key="Parameter_4170" name="KmmcadC8EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_4169" name="KmmcadFAD" value="0.100638"/>
+          <Constant key="Parameter_4168" name="KmmcadFADH" value="24.2"/>
+          <Constant key="Parameter_4167" name="Vmcad" value="0.0248899"/>
+          <Constant key="Parameter_4166" name="parameter_17" value="24.393"/>
+          <Constant key="Parameter_4165" name="parameter_18" value="5"/>
+          <Constant key="Parameter_4164" name="parameter_19" value="1.08"/>
+          <Constant key="Parameter_4163" name="parameter_20" value="1.08"/>
         </ListOfConstants>
         <KineticLaw function="Function_104" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -16428,7 +16428,7 @@
               <SourceParameter reference="ModelValue_135"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_2117">
-              <SourceParameter reference="Parameter_4173"/>
+              <SourceParameter reference="Parameter_4181"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -16468,25 +16468,25 @@
           <Modifier metabolite="Metabolite_43" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_4154" name="sfmcadC12" value="0.5"/>
-          <Constant key="Parameter_4153" name="Keqmcad" value="6"/>
-          <Constant key="Parameter_4152" name="KmmcadC10AcylCoAMAT" value="16.7092"/>
-          <Constant key="Parameter_4151" name="KmmcadC10EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_4150" name="KmmcadC12AcylCoAMAT" value="18.6"/>
-          <Constant key="Parameter_4149" name="KmmcadC12EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_4148" name="KmmcadC4AcylCoAMAT" value="142.8"/>
-          <Constant key="Parameter_4147" name="KmmcadC4EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_4146" name="KmmcadC6AcylCoAMAT" value="10.8"/>
-          <Constant key="Parameter_4145" name="KmmcadC6EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_4144" name="KmmcadC8AcylCoAMAT" value="15.7644"/>
-          <Constant key="Parameter_4143" name="KmmcadC8EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_4142" name="KmmcadFAD" value="0.100638"/>
-          <Constant key="Parameter_4141" name="KmmcadFADH" value="24.2"/>
-          <Constant key="Parameter_4140" name="Vmcad" value="0.0248899"/>
-          <Constant key="Parameter_4139" name="parameter_17" value="24.393"/>
-          <Constant key="Parameter_4138" name="parameter_18" value="5"/>
-          <Constant key="Parameter_4137" name="parameter_19" value="1.08"/>
-          <Constant key="Parameter_4136" name="parameter_20" value="1.08"/>
+          <Constant key="Parameter_4162" name="sfmcadC12" value="0.5"/>
+          <Constant key="Parameter_4161" name="Keqmcad" value="6"/>
+          <Constant key="Parameter_4160" name="KmmcadC10AcylCoAMAT" value="16.7092"/>
+          <Constant key="Parameter_4159" name="KmmcadC10EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_4158" name="KmmcadC12AcylCoAMAT" value="18.6"/>
+          <Constant key="Parameter_4157" name="KmmcadC12EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_4156" name="KmmcadC4AcylCoAMAT" value="142.8"/>
+          <Constant key="Parameter_4155" name="KmmcadC4EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_4154" name="KmmcadC6AcylCoAMAT" value="10.8"/>
+          <Constant key="Parameter_4153" name="KmmcadC6EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_4152" name="KmmcadC8AcylCoAMAT" value="15.7644"/>
+          <Constant key="Parameter_4151" name="KmmcadC8EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_4150" name="KmmcadFAD" value="0.100638"/>
+          <Constant key="Parameter_4149" name="KmmcadFADH" value="24.2"/>
+          <Constant key="Parameter_4148" name="Vmcad" value="0.0248899"/>
+          <Constant key="Parameter_4147" name="parameter_17" value="24.393"/>
+          <Constant key="Parameter_4146" name="parameter_18" value="5"/>
+          <Constant key="Parameter_4145" name="parameter_19" value="1.08"/>
+          <Constant key="Parameter_4144" name="parameter_20" value="1.08"/>
         </ListOfConstants>
         <KineticLaw function="Function_105" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -16596,7 +16596,7 @@
               <SourceParameter reference="ModelValue_135"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_2153">
-              <SourceParameter reference="Parameter_4154"/>
+              <SourceParameter reference="Parameter_4162"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -16636,25 +16636,25 @@
           <Modifier metabolite="Metabolite_43" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_4135" name="sfmcadC10" value="0.54"/>
-          <Constant key="Parameter_4134" name="Keqmcad" value="6"/>
-          <Constant key="Parameter_4133" name="KmmcadC10AcylCoAMAT" value="16.7092"/>
-          <Constant key="Parameter_4132" name="KmmcadC10EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_4131" name="KmmcadC12AcylCoAMAT" value="18.6"/>
-          <Constant key="Parameter_4130" name="KmmcadC12EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_4129" name="KmmcadC4AcylCoAMAT" value="142.8"/>
-          <Constant key="Parameter_4128" name="KmmcadC4EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_4127" name="KmmcadC6AcylCoAMAT" value="10.8"/>
-          <Constant key="Parameter_4126" name="KmmcadC6EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_4125" name="KmmcadC8AcylCoAMAT" value="15.7644"/>
-          <Constant key="Parameter_4124" name="KmmcadC8EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_4123" name="KmmcadFAD" value="0.100638"/>
-          <Constant key="Parameter_4122" name="KmmcadFADH" value="24.2"/>
-          <Constant key="Parameter_4121" name="Vmcad" value="0.0248899"/>
-          <Constant key="Parameter_4120" name="parameter_17" value="24.393"/>
-          <Constant key="Parameter_4119" name="parameter_18" value="5"/>
-          <Constant key="Parameter_4118" name="parameter_19" value="1.08"/>
-          <Constant key="Parameter_4117" name="parameter_20" value="1.08"/>
+          <Constant key="Parameter_4143" name="sfmcadC10" value="0.54"/>
+          <Constant key="Parameter_4142" name="Keqmcad" value="6"/>
+          <Constant key="Parameter_4141" name="KmmcadC10AcylCoAMAT" value="16.7092"/>
+          <Constant key="Parameter_4140" name="KmmcadC10EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_4139" name="KmmcadC12AcylCoAMAT" value="18.6"/>
+          <Constant key="Parameter_4138" name="KmmcadC12EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_4137" name="KmmcadC4AcylCoAMAT" value="142.8"/>
+          <Constant key="Parameter_4136" name="KmmcadC4EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_4135" name="KmmcadC6AcylCoAMAT" value="10.8"/>
+          <Constant key="Parameter_4134" name="KmmcadC6EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_4133" name="KmmcadC8AcylCoAMAT" value="15.7644"/>
+          <Constant key="Parameter_4132" name="KmmcadC8EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_4131" name="KmmcadFAD" value="0.100638"/>
+          <Constant key="Parameter_4130" name="KmmcadFADH" value="24.2"/>
+          <Constant key="Parameter_4129" name="Vmcad" value="0.0248899"/>
+          <Constant key="Parameter_4128" name="parameter_17" value="24.393"/>
+          <Constant key="Parameter_4127" name="parameter_18" value="5"/>
+          <Constant key="Parameter_4126" name="parameter_19" value="1.08"/>
+          <Constant key="Parameter_4125" name="parameter_20" value="1.08"/>
         </ListOfConstants>
         <KineticLaw function="Function_106" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -16764,7 +16764,7 @@
               <SourceParameter reference="ModelValue_135"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_2189">
-              <SourceParameter reference="Parameter_4135"/>
+              <SourceParameter reference="Parameter_4143"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -16804,25 +16804,25 @@
           <Modifier metabolite="Metabolite_43" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_4116" name="sfmcadC8" value="0.86"/>
-          <Constant key="Parameter_4115" name="Keqmcad" value="6"/>
-          <Constant key="Parameter_4114" name="KmmcadC10AcylCoAMAT" value="16.7092"/>
-          <Constant key="Parameter_4113" name="KmmcadC10EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_4112" name="KmmcadC12AcylCoAMAT" value="18.6"/>
-          <Constant key="Parameter_4111" name="KmmcadC12EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_4110" name="KmmcadC4AcylCoAMAT" value="142.8"/>
-          <Constant key="Parameter_4109" name="KmmcadC4EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_4108" name="KmmcadC6AcylCoAMAT" value="10.8"/>
-          <Constant key="Parameter_4107" name="KmmcadC6EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_4106" name="KmmcadC8AcylCoAMAT" value="15.7644"/>
-          <Constant key="Parameter_4105" name="KmmcadC8EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_4104" name="KmmcadFAD" value="0.100638"/>
-          <Constant key="Parameter_4103" name="KmmcadFADH" value="24.2"/>
-          <Constant key="Parameter_4102" name="Vmcad" value="0.0248899"/>
-          <Constant key="Parameter_4101" name="parameter_17" value="24.393"/>
-          <Constant key="Parameter_4100" name="parameter_18" value="5"/>
-          <Constant key="Parameter_4099" name="parameter_19" value="1.08"/>
-          <Constant key="Parameter_4098" name="parameter_20" value="1.08"/>
+          <Constant key="Parameter_4124" name="sfmcadC8" value="0.86"/>
+          <Constant key="Parameter_4123" name="Keqmcad" value="6"/>
+          <Constant key="Parameter_4122" name="KmmcadC10AcylCoAMAT" value="16.7092"/>
+          <Constant key="Parameter_4121" name="KmmcadC10EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_4120" name="KmmcadC12AcylCoAMAT" value="18.6"/>
+          <Constant key="Parameter_4119" name="KmmcadC12EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_4118" name="KmmcadC4AcylCoAMAT" value="142.8"/>
+          <Constant key="Parameter_4117" name="KmmcadC4EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_4116" name="KmmcadC6AcylCoAMAT" value="10.8"/>
+          <Constant key="Parameter_4115" name="KmmcadC6EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_4114" name="KmmcadC8AcylCoAMAT" value="15.7644"/>
+          <Constant key="Parameter_4113" name="KmmcadC8EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_4112" name="KmmcadFAD" value="0.100638"/>
+          <Constant key="Parameter_4111" name="KmmcadFADH" value="24.2"/>
+          <Constant key="Parameter_4110" name="Vmcad" value="0.0248899"/>
+          <Constant key="Parameter_4109" name="parameter_17" value="24.393"/>
+          <Constant key="Parameter_4108" name="parameter_18" value="5"/>
+          <Constant key="Parameter_4107" name="parameter_19" value="1.08"/>
+          <Constant key="Parameter_4106" name="parameter_20" value="1.08"/>
         </ListOfConstants>
         <KineticLaw function="Function_107" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -16932,7 +16932,7 @@
               <SourceParameter reference="ModelValue_135"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_2225">
-              <SourceParameter reference="Parameter_4116"/>
+              <SourceParameter reference="Parameter_4124"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -16972,25 +16972,25 @@
           <Modifier metabolite="Metabolite_43" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_4097" name="sfmcadC6" value="1"/>
-          <Constant key="Parameter_4096" name="Keqmcad" value="6"/>
-          <Constant key="Parameter_4095" name="KmmcadC10AcylCoAMAT" value="16.7092"/>
-          <Constant key="Parameter_4094" name="KmmcadC10EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_4093" name="KmmcadC12AcylCoAMAT" value="18.6"/>
-          <Constant key="Parameter_4092" name="KmmcadC12EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_4091" name="KmmcadC4AcylCoAMAT" value="142.8"/>
-          <Constant key="Parameter_4090" name="KmmcadC4EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_4089" name="KmmcadC6AcylCoAMAT" value="10.8"/>
-          <Constant key="Parameter_4088" name="KmmcadC6EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_4087" name="KmmcadC8AcylCoAMAT" value="15.7644"/>
-          <Constant key="Parameter_4086" name="KmmcadC8EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_4085" name="KmmcadFAD" value="0.100638"/>
-          <Constant key="Parameter_4084" name="KmmcadFADH" value="24.2"/>
-          <Constant key="Parameter_4083" name="Vmcad" value="0.0248899"/>
-          <Constant key="Parameter_4082" name="parameter_17" value="24.393"/>
-          <Constant key="Parameter_4081" name="parameter_18" value="5"/>
-          <Constant key="Parameter_4080" name="parameter_19" value="1.08"/>
-          <Constant key="Parameter_4079" name="parameter_20" value="1.08"/>
+          <Constant key="Parameter_4105" name="sfmcadC6" value="1"/>
+          <Constant key="Parameter_4104" name="Keqmcad" value="6"/>
+          <Constant key="Parameter_4103" name="KmmcadC10AcylCoAMAT" value="16.7092"/>
+          <Constant key="Parameter_4102" name="KmmcadC10EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_4101" name="KmmcadC12AcylCoAMAT" value="18.6"/>
+          <Constant key="Parameter_4100" name="KmmcadC12EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_4099" name="KmmcadC4AcylCoAMAT" value="142.8"/>
+          <Constant key="Parameter_4098" name="KmmcadC4EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_4097" name="KmmcadC6AcylCoAMAT" value="10.8"/>
+          <Constant key="Parameter_4096" name="KmmcadC6EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_4095" name="KmmcadC8AcylCoAMAT" value="15.7644"/>
+          <Constant key="Parameter_4094" name="KmmcadC8EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_4093" name="KmmcadFAD" value="0.100638"/>
+          <Constant key="Parameter_4092" name="KmmcadFADH" value="24.2"/>
+          <Constant key="Parameter_4091" name="Vmcad" value="0.0248899"/>
+          <Constant key="Parameter_4090" name="parameter_17" value="24.393"/>
+          <Constant key="Parameter_4089" name="parameter_18" value="5"/>
+          <Constant key="Parameter_4088" name="parameter_19" value="1.08"/>
+          <Constant key="Parameter_4087" name="parameter_20" value="1.08"/>
         </ListOfConstants>
         <KineticLaw function="Function_108" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -17100,7 +17100,7 @@
               <SourceParameter reference="ModelValue_135"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_2261">
-              <SourceParameter reference="Parameter_4097"/>
+              <SourceParameter reference="Parameter_4105"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -17140,25 +17140,25 @@
           <Modifier metabolite="Metabolite_38" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_4078" name="sfmcadC4" value="0.31"/>
-          <Constant key="Parameter_4077" name="Keqmcad" value="6"/>
-          <Constant key="Parameter_4076" name="KmmcadC10AcylCoAMAT" value="16.7092"/>
-          <Constant key="Parameter_4075" name="KmmcadC10EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_4074" name="KmmcadC12AcylCoAMAT" value="18.6"/>
-          <Constant key="Parameter_4073" name="KmmcadC12EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_4072" name="KmmcadC4AcylCoAMAT" value="142.8"/>
-          <Constant key="Parameter_4071" name="KmmcadC4EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_4070" name="KmmcadC6AcylCoAMAT" value="10.8"/>
-          <Constant key="Parameter_4069" name="KmmcadC6EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_4068" name="KmmcadC8AcylCoAMAT" value="15.7644"/>
-          <Constant key="Parameter_4067" name="KmmcadC8EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_4066" name="KmmcadFAD" value="0.100638"/>
-          <Constant key="Parameter_4065" name="KmmcadFADH" value="24.2"/>
-          <Constant key="Parameter_4064" name="Vmcad" value="0.0248899"/>
-          <Constant key="Parameter_4063" name="parameter_17" value="24.393"/>
-          <Constant key="Parameter_4062" name="parameter_18" value="5"/>
-          <Constant key="Parameter_4061" name="parameter_19" value="1.08"/>
-          <Constant key="Parameter_4060" name="parameter_20" value="1.08"/>
+          <Constant key="Parameter_4086" name="sfmcadC4" value="0.31"/>
+          <Constant key="Parameter_4085" name="Keqmcad" value="6"/>
+          <Constant key="Parameter_4084" name="KmmcadC10AcylCoAMAT" value="16.7092"/>
+          <Constant key="Parameter_4083" name="KmmcadC10EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_4082" name="KmmcadC12AcylCoAMAT" value="18.6"/>
+          <Constant key="Parameter_4081" name="KmmcadC12EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_4080" name="KmmcadC4AcylCoAMAT" value="142.8"/>
+          <Constant key="Parameter_4079" name="KmmcadC4EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_4078" name="KmmcadC6AcylCoAMAT" value="10.8"/>
+          <Constant key="Parameter_4077" name="KmmcadC6EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_4076" name="KmmcadC8AcylCoAMAT" value="15.7644"/>
+          <Constant key="Parameter_4075" name="KmmcadC8EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_4074" name="KmmcadFAD" value="0.100638"/>
+          <Constant key="Parameter_4073" name="KmmcadFADH" value="24.2"/>
+          <Constant key="Parameter_4072" name="Vmcad" value="0.0248899"/>
+          <Constant key="Parameter_4071" name="parameter_17" value="24.393"/>
+          <Constant key="Parameter_4070" name="parameter_18" value="5"/>
+          <Constant key="Parameter_4069" name="parameter_19" value="1.08"/>
+          <Constant key="Parameter_4068" name="parameter_20" value="1.08"/>
         </ListOfConstants>
         <KineticLaw function="Function_109" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT]">
           <ListOfCallParameters>
@@ -17268,7 +17268,7 @@
               <SourceParameter reference="ModelValue_135"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_2297">
-              <SourceParameter reference="Parameter_4078"/>
+              <SourceParameter reference="Parameter_4086"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -17297,15 +17297,15 @@
           <Modifier metabolite="Metabolite_64" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_4059" name="Keqcpt1" value="0.45"/>
-          <Constant key="Parameter_4058" name="Kicpt1MalCoACYT" value="9.1"/>
-          <Constant key="Parameter_4057" name="Kmcpt1C16AcylCarCYT" value="136"/>
-          <Constant key="Parameter_4056" name="Kmcpt1C16AcylCoACYT" value="17.6693"/>
-          <Constant key="Parameter_4055" name="Kmcpt1CarCYT" value="279.902"/>
-          <Constant key="Parameter_4054" name="Kmcpt1CoACYT" value="40.7"/>
-          <Constant key="Parameter_4053" name="Vcpt1" value="0.0108985"/>
-          <Constant key="Parameter_4052" name="ncpt1" value="2.4799"/>
-          <Constant key="Parameter_4051" name="sfcpt1C16" value="1"/>
+          <Constant key="Parameter_4067" name="Keqcpt1" value="0.45"/>
+          <Constant key="Parameter_4066" name="Kicpt1MalCoACYT" value="9.1"/>
+          <Constant key="Parameter_4065" name="Kmcpt1C16AcylCarCYT" value="136"/>
+          <Constant key="Parameter_4064" name="Kmcpt1C16AcylCoACYT" value="17.6693"/>
+          <Constant key="Parameter_4063" name="Kmcpt1CarCYT" value="279.902"/>
+          <Constant key="Parameter_4062" name="Kmcpt1CoACYT" value="40.7"/>
+          <Constant key="Parameter_4061" name="Vcpt1" value="0.0108985"/>
+          <Constant key="Parameter_4060" name="ncpt1" value="2.4799"/>
+          <Constant key="Parameter_4059" name="sfcpt1C16" value="1"/>
         </ListOfConstants>
         <KineticLaw function="Function_86" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VCYT\[merge\]]">
           <ListOfCallParameters>
@@ -17322,22 +17322,22 @@
               <SourceParameter reference="Metabolite_63"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1576">
-              <SourceParameter reference="Parameter_4059"/>
+              <SourceParameter reference="Parameter_4067"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1575">
-              <SourceParameter reference="Parameter_4058"/>
+              <SourceParameter reference="Parameter_4066"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1574">
-              <SourceParameter reference="Parameter_4057"/>
+              <SourceParameter reference="Parameter_4065"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1573">
-              <SourceParameter reference="Parameter_4056"/>
+              <SourceParameter reference="Parameter_4064"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1572">
-              <SourceParameter reference="Parameter_4055"/>
+              <SourceParameter reference="Parameter_4063"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1571">
-              <SourceParameter reference="Parameter_4054"/>
+              <SourceParameter reference="Parameter_4062"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1570">
               <SourceParameter reference="Metabolite_64"/>
@@ -17346,13 +17346,13 @@
               <SourceParameter reference="Compartment_2"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1568">
-              <SourceParameter reference="Parameter_4053"/>
+              <SourceParameter reference="Parameter_4061"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1567">
-              <SourceParameter reference="Parameter_4052"/>
+              <SourceParameter reference="Parameter_4060"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1566">
-              <SourceParameter reference="Parameter_4051"/>
+              <SourceParameter reference="Parameter_4059"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -17378,15 +17378,15 @@
           <Product metabolite="Metabolite_62" stoichiometry="1"/>
         </ListOfProducts>
         <ListOfConstants>
-          <Constant key="Parameter_4050" name="Keqcact" value="1"/>
-          <Constant key="Parameter_4049" name="KicactC16AcylCarCYT" value="56"/>
-          <Constant key="Parameter_4048" name="KicactCarCYT" value="200"/>
-          <Constant key="Parameter_4047" name="KmcactC16AcylCarCYT" value="15"/>
-          <Constant key="Parameter_4046" name="KmcactC16AcylCarMAT" value="15"/>
-          <Constant key="Parameter_4045" name="KmcactCarCYT" value="130"/>
-          <Constant key="Parameter_4044" name="KmcactCarMAT" value="130"/>
-          <Constant key="Parameter_4043" name="Vfcact" value="2.1"/>
-          <Constant key="Parameter_4042" name="Vrcact" value="2.1"/>
+          <Constant key="Parameter_4058" name="Keqcact" value="1"/>
+          <Constant key="Parameter_4057" name="KicactC16AcylCarCYT" value="56"/>
+          <Constant key="Parameter_4056" name="KicactCarCYT" value="200"/>
+          <Constant key="Parameter_4055" name="KmcactC16AcylCarCYT" value="15"/>
+          <Constant key="Parameter_4054" name="KmcactC16AcylCarMAT" value="15"/>
+          <Constant key="Parameter_4053" name="KmcactCarCYT" value="130"/>
+          <Constant key="Parameter_4052" name="KmcactCarMAT" value="130"/>
+          <Constant key="Parameter_4051" name="Vfcact" value="2.1"/>
+          <Constant key="Parameter_4050" name="Vrcact" value="2.1"/>
         </ListOfConstants>
         <KineticLaw function="Function_41" unitType="Default">
           <ListOfCallParameters>
@@ -17406,16 +17406,16 @@
               <SourceParameter reference="ModelValue_136"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_280">
-              <SourceParameter reference="Parameter_4049"/>
+              <SourceParameter reference="Parameter_4057"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_279">
               <SourceParameter reference="ModelValue_137"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_278">
-              <SourceParameter reference="Parameter_4047"/>
+              <SourceParameter reference="Parameter_4055"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_277">
-              <SourceParameter reference="Parameter_4046"/>
+              <SourceParameter reference="Parameter_4054"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_276">
               <SourceParameter reference="ModelValue_138"/>
@@ -17453,15 +17453,15 @@
           <Product metabolite="Metabolite_62" stoichiometry="1"/>
         </ListOfProducts>
         <ListOfConstants>
-          <Constant key="Parameter_4041" name="Keqcact" value="1"/>
-          <Constant key="Parameter_4040" name="KicactC14AcylCarCYT" value="56"/>
-          <Constant key="Parameter_4039" name="KicactCarCYT" value="200"/>
-          <Constant key="Parameter_4038" name="KmcactC14AcylCarCYT" value="15"/>
-          <Constant key="Parameter_4037" name="KmcactC14AcylCarMAT" value="15"/>
-          <Constant key="Parameter_4036" name="KmcactCarCYT" value="130"/>
-          <Constant key="Parameter_4035" name="KmcactCarMAT" value="130"/>
-          <Constant key="Parameter_4034" name="Vfcact" value="2.1"/>
-          <Constant key="Parameter_4033" name="Vrcact" value="2.1"/>
+          <Constant key="Parameter_4049" name="Keqcact" value="1"/>
+          <Constant key="Parameter_4048" name="KicactC14AcylCarCYT" value="56"/>
+          <Constant key="Parameter_4047" name="KicactCarCYT" value="200"/>
+          <Constant key="Parameter_4046" name="KmcactC14AcylCarCYT" value="15"/>
+          <Constant key="Parameter_4045" name="KmcactC14AcylCarMAT" value="15"/>
+          <Constant key="Parameter_4044" name="KmcactCarCYT" value="130"/>
+          <Constant key="Parameter_4043" name="KmcactCarMAT" value="130"/>
+          <Constant key="Parameter_4042" name="Vfcact" value="2.1"/>
+          <Constant key="Parameter_4041" name="Vrcact" value="2.1"/>
         </ListOfConstants>
         <KineticLaw function="Function_96" unitType="Default">
           <ListOfCallParameters>
@@ -17481,16 +17481,16 @@
               <SourceParameter reference="ModelValue_136"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1906">
-              <SourceParameter reference="Parameter_4040"/>
+              <SourceParameter reference="Parameter_4048"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1905">
               <SourceParameter reference="ModelValue_137"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1904">
-              <SourceParameter reference="Parameter_4038"/>
+              <SourceParameter reference="Parameter_4046"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1903">
-              <SourceParameter reference="Parameter_4037"/>
+              <SourceParameter reference="Parameter_4045"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1902">
               <SourceParameter reference="ModelValue_138"/>
@@ -17528,15 +17528,15 @@
           <Product metabolite="Metabolite_62" stoichiometry="1"/>
         </ListOfProducts>
         <ListOfConstants>
-          <Constant key="Parameter_4032" name="Keqcact" value="1"/>
-          <Constant key="Parameter_4031" name="KicactC12AcylCarCYT" value="56"/>
-          <Constant key="Parameter_4030" name="KicactCarCYT" value="200"/>
-          <Constant key="Parameter_4029" name="KmcactC12AcylCarCYT" value="15"/>
-          <Constant key="Parameter_4028" name="KmcactC12AcylCarMAT" value="15"/>
-          <Constant key="Parameter_4027" name="KmcactCarCYT" value="130"/>
-          <Constant key="Parameter_4026" name="KmcactCarMAT" value="130"/>
-          <Constant key="Parameter_4025" name="Vfcact" value="2.1"/>
-          <Constant key="Parameter_4024" name="Vrcact" value="2.1"/>
+          <Constant key="Parameter_4040" name="Keqcact" value="1"/>
+          <Constant key="Parameter_4039" name="KicactC12AcylCarCYT" value="56"/>
+          <Constant key="Parameter_4038" name="KicactCarCYT" value="200"/>
+          <Constant key="Parameter_4037" name="KmcactC12AcylCarCYT" value="15"/>
+          <Constant key="Parameter_4036" name="KmcactC12AcylCarMAT" value="15"/>
+          <Constant key="Parameter_4035" name="KmcactCarCYT" value="130"/>
+          <Constant key="Parameter_4034" name="KmcactCarMAT" value="130"/>
+          <Constant key="Parameter_4033" name="Vfcact" value="2.1"/>
+          <Constant key="Parameter_4032" name="Vrcact" value="2.1"/>
         </ListOfConstants>
         <KineticLaw function="Function_40" unitType="Default">
           <ListOfCallParameters>
@@ -17556,16 +17556,16 @@
               <SourceParameter reference="ModelValue_136"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_265">
-              <SourceParameter reference="Parameter_4031"/>
+              <SourceParameter reference="Parameter_4039"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_266">
               <SourceParameter reference="ModelValue_137"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_267">
-              <SourceParameter reference="Parameter_4029"/>
+              <SourceParameter reference="Parameter_4037"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_268">
-              <SourceParameter reference="Parameter_4028"/>
+              <SourceParameter reference="Parameter_4036"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_269">
               <SourceParameter reference="ModelValue_138"/>
@@ -17603,15 +17603,15 @@
           <Product metabolite="Metabolite_62" stoichiometry="1"/>
         </ListOfProducts>
         <ListOfConstants>
-          <Constant key="Parameter_4023" name="Keqcact" value="1"/>
-          <Constant key="Parameter_4022" name="KicactC10AcylCarCYT" value="56"/>
-          <Constant key="Parameter_4021" name="KicactCarCYT" value="200"/>
-          <Constant key="Parameter_4020" name="KmcactC10AcylCarCYT" value="15"/>
-          <Constant key="Parameter_4019" name="KmcactC10AcylCarMAT" value="15"/>
-          <Constant key="Parameter_4018" name="KmcactCarCYT" value="130"/>
-          <Constant key="Parameter_4017" name="KmcactCarMAT" value="130"/>
-          <Constant key="Parameter_4016" name="Vfcact" value="2.1"/>
-          <Constant key="Parameter_4015" name="Vrcact" value="2.1"/>
+          <Constant key="Parameter_4031" name="Keqcact" value="1"/>
+          <Constant key="Parameter_4030" name="KicactC10AcylCarCYT" value="56"/>
+          <Constant key="Parameter_4029" name="KicactCarCYT" value="200"/>
+          <Constant key="Parameter_4028" name="KmcactC10AcylCarCYT" value="15"/>
+          <Constant key="Parameter_4027" name="KmcactC10AcylCarMAT" value="15"/>
+          <Constant key="Parameter_4026" name="KmcactCarCYT" value="130"/>
+          <Constant key="Parameter_4025" name="KmcactCarMAT" value="130"/>
+          <Constant key="Parameter_4024" name="Vfcact" value="2.1"/>
+          <Constant key="Parameter_4023" name="Vrcact" value="2.1"/>
         </ListOfConstants>
         <KineticLaw function="Function_43" unitType="Default">
           <ListOfCallParameters>
@@ -17631,16 +17631,16 @@
               <SourceParameter reference="ModelValue_136"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_306">
-              <SourceParameter reference="Parameter_4022"/>
+              <SourceParameter reference="Parameter_4030"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_305">
               <SourceParameter reference="ModelValue_137"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_304">
-              <SourceParameter reference="Parameter_4020"/>
+              <SourceParameter reference="Parameter_4028"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_303">
-              <SourceParameter reference="Parameter_4019"/>
+              <SourceParameter reference="Parameter_4027"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_302">
               <SourceParameter reference="ModelValue_138"/>
@@ -17678,15 +17678,15 @@
           <Product metabolite="Metabolite_62" stoichiometry="1"/>
         </ListOfProducts>
         <ListOfConstants>
-          <Constant key="Parameter_4014" name="Keqcact" value="1"/>
-          <Constant key="Parameter_4013" name="KicactC8AcylCarCYT" value="56"/>
-          <Constant key="Parameter_4012" name="KicactCarCYT" value="200"/>
-          <Constant key="Parameter_4011" name="KmcactC8AcylCarCYT" value="15"/>
-          <Constant key="Parameter_4010" name="KmcactC8AcylCarMAT" value="15"/>
-          <Constant key="Parameter_4009" name="KmcactCarCYT" value="130"/>
-          <Constant key="Parameter_4008" name="KmcactCarMAT" value="130"/>
-          <Constant key="Parameter_4007" name="Vfcact" value="2.1"/>
-          <Constant key="Parameter_4006" name="Vrcact" value="2.1"/>
+          <Constant key="Parameter_4022" name="Keqcact" value="1"/>
+          <Constant key="Parameter_4021" name="KicactC8AcylCarCYT" value="56"/>
+          <Constant key="Parameter_4020" name="KicactCarCYT" value="200"/>
+          <Constant key="Parameter_4019" name="KmcactC8AcylCarCYT" value="15"/>
+          <Constant key="Parameter_4018" name="KmcactC8AcylCarMAT" value="15"/>
+          <Constant key="Parameter_4017" name="KmcactCarCYT" value="130"/>
+          <Constant key="Parameter_4016" name="KmcactCarMAT" value="130"/>
+          <Constant key="Parameter_4015" name="Vfcact" value="2.1"/>
+          <Constant key="Parameter_4014" name="Vrcact" value="2.1"/>
         </ListOfConstants>
         <KineticLaw function="Function_42" unitType="Default">
           <ListOfCallParameters>
@@ -17706,16 +17706,16 @@
               <SourceParameter reference="ModelValue_136"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_293">
-              <SourceParameter reference="Parameter_4013"/>
+              <SourceParameter reference="Parameter_4021"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_292">
               <SourceParameter reference="ModelValue_137"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_291">
-              <SourceParameter reference="Parameter_4011"/>
+              <SourceParameter reference="Parameter_4019"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_290">
-              <SourceParameter reference="Parameter_4010"/>
+              <SourceParameter reference="Parameter_4018"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_289">
               <SourceParameter reference="ModelValue_138"/>
@@ -17753,15 +17753,15 @@
           <Product metabolite="Metabolite_62" stoichiometry="1"/>
         </ListOfProducts>
         <ListOfConstants>
-          <Constant key="Parameter_4005" name="Keqcact" value="1"/>
-          <Constant key="Parameter_4004" name="KicactC6AcylCarCYT" value="56"/>
-          <Constant key="Parameter_4003" name="KicactCarCYT" value="200"/>
-          <Constant key="Parameter_4002" name="KmcactC6AcylCarCYT" value="15"/>
-          <Constant key="Parameter_4001" name="KmcactC6AcylCarMAT" value="15"/>
-          <Constant key="Parameter_4000" name="KmcactCarCYT" value="130"/>
-          <Constant key="Parameter_3999" name="KmcactCarMAT" value="130"/>
-          <Constant key="Parameter_3998" name="Vfcact" value="2.1"/>
-          <Constant key="Parameter_3997" name="Vrcact" value="2.1"/>
+          <Constant key="Parameter_4013" name="Keqcact" value="1"/>
+          <Constant key="Parameter_4012" name="KicactC6AcylCarCYT" value="56"/>
+          <Constant key="Parameter_4011" name="KicactCarCYT" value="200"/>
+          <Constant key="Parameter_4010" name="KmcactC6AcylCarCYT" value="15"/>
+          <Constant key="Parameter_4009" name="KmcactC6AcylCarMAT" value="15"/>
+          <Constant key="Parameter_4008" name="KmcactCarCYT" value="130"/>
+          <Constant key="Parameter_4007" name="KmcactCarMAT" value="130"/>
+          <Constant key="Parameter_4006" name="Vfcact" value="2.1"/>
+          <Constant key="Parameter_4005" name="Vrcact" value="2.1"/>
         </ListOfConstants>
         <KineticLaw function="Function_45" unitType="Default">
           <ListOfCallParameters>
@@ -17781,16 +17781,16 @@
               <SourceParameter reference="ModelValue_136"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_332">
-              <SourceParameter reference="Parameter_4004"/>
+              <SourceParameter reference="Parameter_4012"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_331">
               <SourceParameter reference="ModelValue_137"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_330">
-              <SourceParameter reference="Parameter_4002"/>
+              <SourceParameter reference="Parameter_4010"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_329">
-              <SourceParameter reference="Parameter_4001"/>
+              <SourceParameter reference="Parameter_4009"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_328">
               <SourceParameter reference="ModelValue_138"/>
@@ -17828,15 +17828,15 @@
           <Product metabolite="Metabolite_62" stoichiometry="1"/>
         </ListOfProducts>
         <ListOfConstants>
-          <Constant key="Parameter_3996" name="Keqcact" value="1"/>
-          <Constant key="Parameter_3995" name="KicactC4AcylCarCYT" value="56"/>
-          <Constant key="Parameter_3994" name="KicactCarCYT" value="200"/>
-          <Constant key="Parameter_3993" name="KmcactC4AcylCarCYT" value="15"/>
-          <Constant key="Parameter_3992" name="KmcactC4AcylCarMAT" value="15"/>
-          <Constant key="Parameter_3991" name="KmcactCarCYT" value="130"/>
-          <Constant key="Parameter_3990" name="KmcactCarMAT" value="130"/>
-          <Constant key="Parameter_3989" name="Vfcact" value="2.1"/>
-          <Constant key="Parameter_3988" name="Vrcact" value="2.1"/>
+          <Constant key="Parameter_4004" name="Keqcact" value="1"/>
+          <Constant key="Parameter_4003" name="KicactC4AcylCarCYT" value="56"/>
+          <Constant key="Parameter_4002" name="KicactCarCYT" value="200"/>
+          <Constant key="Parameter_4001" name="KmcactC4AcylCarCYT" value="15"/>
+          <Constant key="Parameter_4000" name="KmcactC4AcylCarMAT" value="15"/>
+          <Constant key="Parameter_3999" name="KmcactCarCYT" value="130"/>
+          <Constant key="Parameter_3998" name="KmcactCarMAT" value="130"/>
+          <Constant key="Parameter_3997" name="Vfcact" value="2.1"/>
+          <Constant key="Parameter_3996" name="Vrcact" value="2.1"/>
         </ListOfConstants>
         <KineticLaw function="Function_44" unitType="Default">
           <ListOfCallParameters>
@@ -17856,16 +17856,16 @@
               <SourceParameter reference="ModelValue_136"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_319">
-              <SourceParameter reference="Parameter_3995"/>
+              <SourceParameter reference="Parameter_4003"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_318">
               <SourceParameter reference="ModelValue_137"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_317">
-              <SourceParameter reference="Parameter_3993"/>
+              <SourceParameter reference="Parameter_4001"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_316">
-              <SourceParameter reference="Parameter_3992"/>
+              <SourceParameter reference="Parameter_4000"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_315">
               <SourceParameter reference="ModelValue_138"/>
@@ -17917,25 +17917,25 @@
           <Modifier metabolite="Metabolite_105" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_3987" name="Keqcpt2" value="2.22"/>
-          <Constant key="Parameter_3986" name="Kmcpt2C10AcylCarMAT" value="51"/>
-          <Constant key="Parameter_3985" name="Kmcpt2C10AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_3984" name="Kmcpt2C12AcylCarMAT" value="51"/>
-          <Constant key="Parameter_3983" name="Kmcpt2C12AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_3982" name="Kmcpt2C14AcylCarMAT" value="51"/>
-          <Constant key="Parameter_3981" name="Kmcpt2C14AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_3980" name="Kmcpt2C16AcylCarMAT" value="51"/>
-          <Constant key="Parameter_3979" name="Kmcpt2C16AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_3978" name="Kmcpt2C4AcylCarMAT" value="51"/>
-          <Constant key="Parameter_3977" name="Kmcpt2C4AcylCoAMAT" value="1e+06"/>
-          <Constant key="Parameter_3976" name="Kmcpt2C6AcylCarMAT" value="51"/>
-          <Constant key="Parameter_3975" name="Kmcpt2C6AcylCoAMAT" value="1000"/>
-          <Constant key="Parameter_3974" name="Kmcpt2C8AcylCarMAT" value="51"/>
-          <Constant key="Parameter_3973" name="Kmcpt2C8AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_3972" name="Kmcpt2CarMAT" value="350"/>
-          <Constant key="Parameter_3971" name="Kmcpt2CoAMAT" value="30"/>
-          <Constant key="Parameter_3970" name="Vcpt2" value="0.387998"/>
-          <Constant key="Parameter_3969" name="sfcpt2C16" value="0.85"/>
+          <Constant key="Parameter_3995" name="Keqcpt2" value="2.22"/>
+          <Constant key="Parameter_3994" name="Kmcpt2C10AcylCarMAT" value="51"/>
+          <Constant key="Parameter_3993" name="Kmcpt2C10AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_3992" name="Kmcpt2C12AcylCarMAT" value="51"/>
+          <Constant key="Parameter_3991" name="Kmcpt2C12AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_3990" name="Kmcpt2C14AcylCarMAT" value="51"/>
+          <Constant key="Parameter_3989" name="Kmcpt2C14AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_3988" name="Kmcpt2C16AcylCarMAT" value="51"/>
+          <Constant key="Parameter_3987" name="Kmcpt2C16AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_3986" name="Kmcpt2C4AcylCarMAT" value="51"/>
+          <Constant key="Parameter_3985" name="Kmcpt2C4AcylCoAMAT" value="1e+06"/>
+          <Constant key="Parameter_3984" name="Kmcpt2C6AcylCarMAT" value="51"/>
+          <Constant key="Parameter_3983" name="Kmcpt2C6AcylCoAMAT" value="1000"/>
+          <Constant key="Parameter_3982" name="Kmcpt2C8AcylCarMAT" value="51"/>
+          <Constant key="Parameter_3981" name="Kmcpt2C8AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_3980" name="Kmcpt2CarMAT" value="350"/>
+          <Constant key="Parameter_3979" name="Kmcpt2CoAMAT" value="30"/>
+          <Constant key="Parameter_3978" name="Vcpt2" value="0.387998"/>
+          <Constant key="Parameter_3977" name="sfcpt2C16" value="0.85"/>
         </ListOfConstants>
         <KineticLaw function="Function_84" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
           <ListOfCallParameters>
@@ -18045,7 +18045,7 @@
               <SourceParameter reference="ModelValue_159"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1508">
-              <SourceParameter reference="Parameter_3969"/>
+              <SourceParameter reference="Parameter_3977"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -18085,24 +18085,24 @@
           <Modifier metabolite="Metabolite_105" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_3968" name="Keqcpt2" value="2.22"/>
-          <Constant key="Parameter_3967" name="Kmcpt2C10AcylCarMAT" value="51"/>
-          <Constant key="Parameter_3966" name="Kmcpt2C10AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_3965" name="Kmcpt2C12AcylCarMAT" value="51"/>
-          <Constant key="Parameter_3964" name="Kmcpt2C12AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_3963" name="Kmcpt2C14AcylCarMAT" value="51"/>
-          <Constant key="Parameter_3962" name="Kmcpt2C14AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_3961" name="Kmcpt2C16AcylCarMAT" value="51"/>
-          <Constant key="Parameter_3960" name="Kmcpt2C16AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_3959" name="Kmcpt2C4AcylCoAMAT" value="1e+06"/>
-          <Constant key="Parameter_3958" name="Kmcpt2C6AcylCarMAT" value="51"/>
-          <Constant key="Parameter_3957" name="Kmcpt2C6AcylCoAMAT" value="1000"/>
-          <Constant key="Parameter_3956" name="Kmcpt2C8AcylCarMAT" value="51"/>
-          <Constant key="Parameter_3955" name="Kmcpt2C8AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_3954" name="Kmcpt2CarMAT" value="350"/>
-          <Constant key="Parameter_3953" name="Kmcpt2CoAMAT" value="30"/>
-          <Constant key="Parameter_3952" name="Vcpt2" value="0.387998"/>
-          <Constant key="Parameter_3951" name="sfcpt2C14" value="1"/>
+          <Constant key="Parameter_3976" name="Keqcpt2" value="2.22"/>
+          <Constant key="Parameter_3975" name="Kmcpt2C10AcylCarMAT" value="51"/>
+          <Constant key="Parameter_3974" name="Kmcpt2C10AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_3973" name="Kmcpt2C12AcylCarMAT" value="51"/>
+          <Constant key="Parameter_3972" name="Kmcpt2C12AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_3971" name="Kmcpt2C14AcylCarMAT" value="51"/>
+          <Constant key="Parameter_3970" name="Kmcpt2C14AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_3969" name="Kmcpt2C16AcylCarMAT" value="51"/>
+          <Constant key="Parameter_3968" name="Kmcpt2C16AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_3967" name="Kmcpt2C4AcylCoAMAT" value="1e+06"/>
+          <Constant key="Parameter_3966" name="Kmcpt2C6AcylCarMAT" value="51"/>
+          <Constant key="Parameter_3965" name="Kmcpt2C6AcylCoAMAT" value="1000"/>
+          <Constant key="Parameter_3964" name="Kmcpt2C8AcylCarMAT" value="51"/>
+          <Constant key="Parameter_3963" name="Kmcpt2C8AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_3962" name="Kmcpt2CarMAT" value="350"/>
+          <Constant key="Parameter_3961" name="Kmcpt2CoAMAT" value="30"/>
+          <Constant key="Parameter_3960" name="Vcpt2" value="0.387998"/>
+          <Constant key="Parameter_3959" name="sfcpt2C14" value="1"/>
         </ListOfConstants>
         <KineticLaw function="Function_83" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
           <ListOfCallParameters>
@@ -18209,7 +18209,7 @@
               <SourceParameter reference="ModelValue_159"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1472">
-              <SourceParameter reference="Parameter_3951"/>
+              <SourceParameter reference="Parameter_3959"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -18249,25 +18249,25 @@
           <Modifier metabolite="Metabolite_105" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_3950" name="Keqcpt2" value="2.22"/>
-          <Constant key="Parameter_3949" name="Kmcpt2C10AcylCarMAT" value="51"/>
-          <Constant key="Parameter_3948" name="Kmcpt2C10AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_3947" name="Kmcpt2C12AcylCarMAT" value="51"/>
-          <Constant key="Parameter_3946" name="Kmcpt2C12AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_3945" name="Kmcpt2C14AcylCarMAT" value="51"/>
-          <Constant key="Parameter_3944" name="Kmcpt2C14AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_3943" name="Kmcpt2C16AcylCarMAT" value="51"/>
-          <Constant key="Parameter_3942" name="Kmcpt2C16AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_3941" name="Kmcpt2C4AcylCarMAT" value="51"/>
-          <Constant key="Parameter_3940" name="Kmcpt2C4AcylCoAMAT" value="1e+06"/>
-          <Constant key="Parameter_3939" name="Kmcpt2C6AcylCarMAT" value="51"/>
-          <Constant key="Parameter_3938" name="Kmcpt2C6AcylCoAMAT" value="1000"/>
-          <Constant key="Parameter_3937" name="Kmcpt2C8AcylCarMAT" value="51"/>
-          <Constant key="Parameter_3936" name="Kmcpt2C8AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_3935" name="Kmcpt2CarMAT" value="350"/>
-          <Constant key="Parameter_3934" name="Kmcpt2CoAMAT" value="30"/>
-          <Constant key="Parameter_3933" name="Vcpt2" value="0.387998"/>
-          <Constant key="Parameter_3932" name="sfcpt2C12" value="0.95"/>
+          <Constant key="Parameter_3958" name="Keqcpt2" value="2.22"/>
+          <Constant key="Parameter_3957" name="Kmcpt2C10AcylCarMAT" value="51"/>
+          <Constant key="Parameter_3956" name="Kmcpt2C10AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_3955" name="Kmcpt2C12AcylCarMAT" value="51"/>
+          <Constant key="Parameter_3954" name="Kmcpt2C12AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_3953" name="Kmcpt2C14AcylCarMAT" value="51"/>
+          <Constant key="Parameter_3952" name="Kmcpt2C14AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_3951" name="Kmcpt2C16AcylCarMAT" value="51"/>
+          <Constant key="Parameter_3950" name="Kmcpt2C16AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_3949" name="Kmcpt2C4AcylCarMAT" value="51"/>
+          <Constant key="Parameter_3948" name="Kmcpt2C4AcylCoAMAT" value="1e+06"/>
+          <Constant key="Parameter_3947" name="Kmcpt2C6AcylCarMAT" value="51"/>
+          <Constant key="Parameter_3946" name="Kmcpt2C6AcylCoAMAT" value="1000"/>
+          <Constant key="Parameter_3945" name="Kmcpt2C8AcylCarMAT" value="51"/>
+          <Constant key="Parameter_3944" name="Kmcpt2C8AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_3943" name="Kmcpt2CarMAT" value="350"/>
+          <Constant key="Parameter_3942" name="Kmcpt2CoAMAT" value="30"/>
+          <Constant key="Parameter_3941" name="Vcpt2" value="0.387998"/>
+          <Constant key="Parameter_3940" name="sfcpt2C12" value="0.95"/>
         </ListOfConstants>
         <KineticLaw function="Function_85" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
           <ListOfCallParameters>
@@ -18377,7 +18377,7 @@
               <SourceParameter reference="ModelValue_159"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1509">
-              <SourceParameter reference="Parameter_3932"/>
+              <SourceParameter reference="Parameter_3940"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -18417,25 +18417,25 @@
           <Modifier metabolite="Metabolite_105" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_3931" name="Keqcpt2" value="2.22"/>
-          <Constant key="Parameter_3930" name="Kmcpt2C10AcylCarMAT" value="51"/>
-          <Constant key="Parameter_3929" name="Kmcpt2C10AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_3928" name="Kmcpt2C12AcylCarMAT" value="51"/>
-          <Constant key="Parameter_3927" name="Kmcpt2C12AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_3926" name="Kmcpt2C14AcylCarMAT" value="51"/>
-          <Constant key="Parameter_3925" name="Kmcpt2C14AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_3924" name="Kmcpt2C16AcylCarMAT" value="51"/>
-          <Constant key="Parameter_3923" name="Kmcpt2C16AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_3922" name="Kmcpt2C4AcylCarMAT" value="51"/>
-          <Constant key="Parameter_3921" name="Kmcpt2C4AcylCoAMAT" value="1e+06"/>
-          <Constant key="Parameter_3920" name="Kmcpt2C6AcylCarMAT" value="51"/>
-          <Constant key="Parameter_3919" name="Kmcpt2C6AcylCoAMAT" value="1000"/>
-          <Constant key="Parameter_3918" name="Kmcpt2C8AcylCarMAT" value="51"/>
-          <Constant key="Parameter_3917" name="Kmcpt2C8AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_3916" name="Kmcpt2CarMAT" value="350"/>
-          <Constant key="Parameter_3915" name="Kmcpt2CoAMAT" value="30"/>
-          <Constant key="Parameter_3914" name="Vcpt2" value="0.387998"/>
-          <Constant key="Parameter_3913" name="sfcpt2C10" value="0.95"/>
+          <Constant key="Parameter_3939" name="Keqcpt2" value="2.22"/>
+          <Constant key="Parameter_3938" name="Kmcpt2C10AcylCarMAT" value="51"/>
+          <Constant key="Parameter_3937" name="Kmcpt2C10AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_3936" name="Kmcpt2C12AcylCarMAT" value="51"/>
+          <Constant key="Parameter_3935" name="Kmcpt2C12AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_3934" name="Kmcpt2C14AcylCarMAT" value="51"/>
+          <Constant key="Parameter_3933" name="Kmcpt2C14AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_3932" name="Kmcpt2C16AcylCarMAT" value="51"/>
+          <Constant key="Parameter_3931" name="Kmcpt2C16AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_3930" name="Kmcpt2C4AcylCarMAT" value="51"/>
+          <Constant key="Parameter_3929" name="Kmcpt2C4AcylCoAMAT" value="1e+06"/>
+          <Constant key="Parameter_3928" name="Kmcpt2C6AcylCarMAT" value="51"/>
+          <Constant key="Parameter_3927" name="Kmcpt2C6AcylCoAMAT" value="1000"/>
+          <Constant key="Parameter_3926" name="Kmcpt2C8AcylCarMAT" value="51"/>
+          <Constant key="Parameter_3925" name="Kmcpt2C8AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_3924" name="Kmcpt2CarMAT" value="350"/>
+          <Constant key="Parameter_3923" name="Kmcpt2CoAMAT" value="30"/>
+          <Constant key="Parameter_3922" name="Vcpt2" value="0.387998"/>
+          <Constant key="Parameter_3921" name="sfcpt2C10" value="0.95"/>
         </ListOfConstants>
         <KineticLaw function="Function_56" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
           <ListOfCallParameters>
@@ -18545,7 +18545,7 @@
               <SourceParameter reference="ModelValue_159"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_646">
-              <SourceParameter reference="Parameter_3913"/>
+              <SourceParameter reference="Parameter_3921"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -18585,25 +18585,25 @@
           <Modifier metabolite="Metabolite_105" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_3912" name="Keqcpt2" value="2.22"/>
-          <Constant key="Parameter_3911" name="Kmcpt2C10AcylCarMAT" value="51"/>
-          <Constant key="Parameter_3910" name="Kmcpt2C10AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_3909" name="Kmcpt2C12AcylCarMAT" value="51"/>
-          <Constant key="Parameter_3908" name="Kmcpt2C12AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_3907" name="Kmcpt2C14AcylCarMAT" value="51"/>
-          <Constant key="Parameter_3906" name="Kmcpt2C14AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_3905" name="Kmcpt2C16AcylCarMAT" value="51"/>
-          <Constant key="Parameter_3904" name="Kmcpt2C16AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_3903" name="Kmcpt2C4AcylCarMAT" value="51"/>
-          <Constant key="Parameter_3902" name="Kmcpt2C4AcylCoAMAT" value="1e+06"/>
-          <Constant key="Parameter_3901" name="Kmcpt2C6AcylCarMAT" value="51"/>
-          <Constant key="Parameter_3900" name="Kmcpt2C6AcylCoAMAT" value="1000"/>
-          <Constant key="Parameter_3899" name="Kmcpt2C8AcylCarMAT" value="51"/>
-          <Constant key="Parameter_3898" name="Kmcpt2C8AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_3897" name="Kmcpt2CarMAT" value="350"/>
-          <Constant key="Parameter_3896" name="Kmcpt2CoAMAT" value="30"/>
-          <Constant key="Parameter_3895" name="Vcpt2" value="0.387998"/>
-          <Constant key="Parameter_3894" name="sfcpt2C8" value="0.35"/>
+          <Constant key="Parameter_3920" name="Keqcpt2" value="2.22"/>
+          <Constant key="Parameter_3919" name="Kmcpt2C10AcylCarMAT" value="51"/>
+          <Constant key="Parameter_3918" name="Kmcpt2C10AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_3917" name="Kmcpt2C12AcylCarMAT" value="51"/>
+          <Constant key="Parameter_3916" name="Kmcpt2C12AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_3915" name="Kmcpt2C14AcylCarMAT" value="51"/>
+          <Constant key="Parameter_3914" name="Kmcpt2C14AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_3913" name="Kmcpt2C16AcylCarMAT" value="51"/>
+          <Constant key="Parameter_3912" name="Kmcpt2C16AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_3911" name="Kmcpt2C4AcylCarMAT" value="51"/>
+          <Constant key="Parameter_3910" name="Kmcpt2C4AcylCoAMAT" value="1e+06"/>
+          <Constant key="Parameter_3909" name="Kmcpt2C6AcylCarMAT" value="51"/>
+          <Constant key="Parameter_3908" name="Kmcpt2C6AcylCoAMAT" value="1000"/>
+          <Constant key="Parameter_3907" name="Kmcpt2C8AcylCarMAT" value="51"/>
+          <Constant key="Parameter_3906" name="Kmcpt2C8AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_3905" name="Kmcpt2CarMAT" value="350"/>
+          <Constant key="Parameter_3904" name="Kmcpt2CoAMAT" value="30"/>
+          <Constant key="Parameter_3903" name="Vcpt2" value="0.387998"/>
+          <Constant key="Parameter_3902" name="sfcpt2C8" value="0.35"/>
         </ListOfConstants>
         <KineticLaw function="Function_60" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
           <ListOfCallParameters>
@@ -18713,7 +18713,7 @@
               <SourceParameter reference="ModelValue_159"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_785">
-              <SourceParameter reference="Parameter_3894"/>
+              <SourceParameter reference="Parameter_3902"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -18753,25 +18753,25 @@
           <Modifier metabolite="Metabolite_105" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_3893" name="Keqcpt2" value="2.22"/>
-          <Constant key="Parameter_3892" name="Kmcpt2C10AcylCarMAT" value="51"/>
-          <Constant key="Parameter_3891" name="Kmcpt2C10AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_3890" name="Kmcpt2C12AcylCarMAT" value="51"/>
-          <Constant key="Parameter_3889" name="Kmcpt2C12AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_3888" name="Kmcpt2C14AcylCarMAT" value="51"/>
-          <Constant key="Parameter_3887" name="Kmcpt2C14AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_3886" name="Kmcpt2C16AcylCarMAT" value="51"/>
-          <Constant key="Parameter_3885" name="Kmcpt2C16AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_3884" name="Kmcpt2C4AcylCarMAT" value="51"/>
-          <Constant key="Parameter_3883" name="Kmcpt2C4AcylCoAMAT" value="1e+06"/>
-          <Constant key="Parameter_3882" name="Kmcpt2C6AcylCarMAT" value="51"/>
-          <Constant key="Parameter_3881" name="Kmcpt2C6AcylCoAMAT" value="1000"/>
-          <Constant key="Parameter_3880" name="Kmcpt2C8AcylCarMAT" value="51"/>
-          <Constant key="Parameter_3879" name="Kmcpt2C8AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_3878" name="Kmcpt2CarMAT" value="350"/>
-          <Constant key="Parameter_3877" name="Kmcpt2CoAMAT" value="30"/>
-          <Constant key="Parameter_3876" name="Vcpt2" value="0.387998"/>
-          <Constant key="Parameter_3875" name="sfcpt2C6" value="0.15"/>
+          <Constant key="Parameter_3901" name="Keqcpt2" value="2.22"/>
+          <Constant key="Parameter_3900" name="Kmcpt2C10AcylCarMAT" value="51"/>
+          <Constant key="Parameter_3899" name="Kmcpt2C10AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_3898" name="Kmcpt2C12AcylCarMAT" value="51"/>
+          <Constant key="Parameter_3897" name="Kmcpt2C12AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_3896" name="Kmcpt2C14AcylCarMAT" value="51"/>
+          <Constant key="Parameter_3895" name="Kmcpt2C14AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_3894" name="Kmcpt2C16AcylCarMAT" value="51"/>
+          <Constant key="Parameter_3893" name="Kmcpt2C16AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_3892" name="Kmcpt2C4AcylCarMAT" value="51"/>
+          <Constant key="Parameter_3891" name="Kmcpt2C4AcylCoAMAT" value="1e+06"/>
+          <Constant key="Parameter_3890" name="Kmcpt2C6AcylCarMAT" value="51"/>
+          <Constant key="Parameter_3889" name="Kmcpt2C6AcylCoAMAT" value="1000"/>
+          <Constant key="Parameter_3888" name="Kmcpt2C8AcylCarMAT" value="51"/>
+          <Constant key="Parameter_3887" name="Kmcpt2C8AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_3886" name="Kmcpt2CarMAT" value="350"/>
+          <Constant key="Parameter_3885" name="Kmcpt2CoAMAT" value="30"/>
+          <Constant key="Parameter_3884" name="Vcpt2" value="0.387998"/>
+          <Constant key="Parameter_3883" name="sfcpt2C6" value="0.15"/>
         </ListOfConstants>
         <KineticLaw function="Function_58" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
           <ListOfCallParameters>
@@ -18881,7 +18881,7 @@
               <SourceParameter reference="ModelValue_159"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_715">
-              <SourceParameter reference="Parameter_3875"/>
+              <SourceParameter reference="Parameter_3883"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -18921,25 +18921,25 @@
           <Modifier metabolite="Metabolite_105" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_3874" name="Keqcpt2" value="2.22"/>
-          <Constant key="Parameter_3873" name="Kmcpt2C10AcylCarMAT" value="51"/>
-          <Constant key="Parameter_3872" name="Kmcpt2C10AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_3871" name="Kmcpt2C12AcylCarMAT" value="51"/>
-          <Constant key="Parameter_3870" name="Kmcpt2C12AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_3869" name="Kmcpt2C14AcylCarMAT" value="51"/>
-          <Constant key="Parameter_3868" name="Kmcpt2C14AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_3867" name="Kmcpt2C16AcylCarMAT" value="51"/>
-          <Constant key="Parameter_3866" name="Kmcpt2C16AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_3865" name="Kmcpt2C4AcylCarMAT" value="51"/>
-          <Constant key="Parameter_3864" name="Kmcpt2C4AcylCoAMAT" value="1e+06"/>
-          <Constant key="Parameter_3863" name="Kmcpt2C6AcylCarMAT" value="51"/>
-          <Constant key="Parameter_3862" name="Kmcpt2C6AcylCoAMAT" value="1000"/>
-          <Constant key="Parameter_3861" name="Kmcpt2C8AcylCarMAT" value="51"/>
-          <Constant key="Parameter_3860" name="Kmcpt2C8AcylCoAMAT" value="38"/>
-          <Constant key="Parameter_3859" name="Kmcpt2CarMAT" value="350"/>
-          <Constant key="Parameter_3858" name="Kmcpt2CoAMAT" value="30"/>
-          <Constant key="Parameter_3857" name="Vcpt2" value="0.387998"/>
-          <Constant key="Parameter_3856" name="sfcpt2C4" value="0.01"/>
+          <Constant key="Parameter_3882" name="Keqcpt2" value="2.22"/>
+          <Constant key="Parameter_3881" name="Kmcpt2C10AcylCarMAT" value="51"/>
+          <Constant key="Parameter_3880" name="Kmcpt2C10AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_3879" name="Kmcpt2C12AcylCarMAT" value="51"/>
+          <Constant key="Parameter_3878" name="Kmcpt2C12AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_3877" name="Kmcpt2C14AcylCarMAT" value="51"/>
+          <Constant key="Parameter_3876" name="Kmcpt2C14AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_3875" name="Kmcpt2C16AcylCarMAT" value="51"/>
+          <Constant key="Parameter_3874" name="Kmcpt2C16AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_3873" name="Kmcpt2C4AcylCarMAT" value="51"/>
+          <Constant key="Parameter_3872" name="Kmcpt2C4AcylCoAMAT" value="1e+06"/>
+          <Constant key="Parameter_3871" name="Kmcpt2C6AcylCarMAT" value="51"/>
+          <Constant key="Parameter_3870" name="Kmcpt2C6AcylCoAMAT" value="1000"/>
+          <Constant key="Parameter_3869" name="Kmcpt2C8AcylCarMAT" value="51"/>
+          <Constant key="Parameter_3868" name="Kmcpt2C8AcylCoAMAT" value="38"/>
+          <Constant key="Parameter_3867" name="Kmcpt2CarMAT" value="350"/>
+          <Constant key="Parameter_3866" name="Kmcpt2CoAMAT" value="30"/>
+          <Constant key="Parameter_3865" name="Vcpt2" value="0.387998"/>
+          <Constant key="Parameter_3864" name="sfcpt2C4" value="0.01"/>
         </ListOfConstants>
         <KineticLaw function="Function_63" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
           <ListOfCallParameters>
@@ -19049,7 +19049,7 @@
               <SourceParameter reference="ModelValue_159"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_871">
-              <SourceParameter reference="Parameter_3856"/>
+              <SourceParameter reference="Parameter_3864"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -19079,15 +19079,15 @@
           <Modifier metabolite="Metabolite_97" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_3855" name="Keqscad" value="6"/>
-          <Constant key="Parameter_3854" name="KmscadC4AcylCoAMAT" value="18.146"/>
-          <Constant key="Parameter_3853" name="KmscadC4EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_3852" name="KmscadC6AcylCoAMAT" value="16.95"/>
-          <Constant key="Parameter_3851" name="KmscadC6EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_3850" name="KmscadFAD" value="0.100638"/>
-          <Constant key="Parameter_3849" name="KmscadFADH" value="24.2"/>
-          <Constant key="Parameter_3848" name="Vscad" value="0.00223413"/>
-          <Constant key="Parameter_3847" name="sfscadC6" value="0.79"/>
+          <Constant key="Parameter_3863" name="Keqscad" value="6"/>
+          <Constant key="Parameter_3862" name="KmscadC4AcylCoAMAT" value="18.146"/>
+          <Constant key="Parameter_3861" name="KmscadC4EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_3860" name="KmscadC6AcylCoAMAT" value="16.95"/>
+          <Constant key="Parameter_3859" name="KmscadC6EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_3858" name="KmscadFAD" value="0.100638"/>
+          <Constant key="Parameter_3857" name="KmscadFADH" value="24.2"/>
+          <Constant key="Parameter_3856" name="Vscad" value="0.00223413"/>
+          <Constant key="Parameter_3855" name="sfscadC6" value="0.79"/>
         </ListOfConstants>
         <KineticLaw function="Function_61" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
           <ListOfCallParameters>
@@ -19137,7 +19137,7 @@
               <SourceParameter reference="ModelValue_167"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_806">
-              <SourceParameter reference="Parameter_3847"/>
+              <SourceParameter reference="Parameter_3855"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -19167,15 +19167,15 @@
           <Modifier metabolite="Metabolite_92" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_3846" name="Keqscad" value="6"/>
-          <Constant key="Parameter_3845" name="KmscadC4AcylCoAMAT" value="18.146"/>
-          <Constant key="Parameter_3844" name="KmscadC4EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_3843" name="KmscadC6AcylCoAMAT" value="16.95"/>
-          <Constant key="Parameter_3842" name="KmscadC6EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_3841" name="KmscadFAD" value="0.100638"/>
-          <Constant key="Parameter_3840" name="KmscadFADH" value="24.2"/>
-          <Constant key="Parameter_3839" name="Vscad" value="0.00223413"/>
-          <Constant key="Parameter_3838" name="sfscadC4" value="1"/>
+          <Constant key="Parameter_3854" name="Keqscad" value="6"/>
+          <Constant key="Parameter_3853" name="KmscadC4AcylCoAMAT" value="18.146"/>
+          <Constant key="Parameter_3852" name="KmscadC4EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_3851" name="KmscadC6AcylCoAMAT" value="16.95"/>
+          <Constant key="Parameter_3850" name="KmscadC6EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_3849" name="KmscadFAD" value="0.100638"/>
+          <Constant key="Parameter_3848" name="KmscadFADH" value="24.2"/>
+          <Constant key="Parameter_3847" name="Vscad" value="0.00223413"/>
+          <Constant key="Parameter_3846" name="sfscadC4" value="1"/>
         </ListOfConstants>
         <KineticLaw function="Function_64" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
           <ListOfCallParameters>
@@ -19225,7 +19225,7 @@
               <SourceParameter reference="ModelValue_167"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_892">
-              <SourceParameter reference="Parameter_3838"/>
+              <SourceParameter reference="Parameter_3846"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -19264,24 +19264,24 @@
           <Modifier metabolite="Metabolite_99" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_3837" name="Keqcrot" value="3.13"/>
-          <Constant key="Parameter_3836" name="KicrotC4AcetoacylCoA" value="1.6"/>
-          <Constant key="Parameter_3835" name="KmcrotC10EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_3834" name="KmcrotC10HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_3833" name="KmcrotC12EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_3832" name="KmcrotC12HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_3831" name="KmcrotC14EnoylCoAMAT" value="100"/>
-          <Constant key="Parameter_3830" name="KmcrotC14HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_3829" name="KmcrotC16EnoylCoAMAT" value="150"/>
-          <Constant key="Parameter_3828" name="KmcrotC16HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_3827" name="KmcrotC4EnoylCoAMAT" value="40"/>
-          <Constant key="Parameter_3826" name="KmcrotC4HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_3825" name="KmcrotC6EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_3824" name="KmcrotC6HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_3823" name="KmcrotC8EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_3822" name="KmcrotC8HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_3821" name="Vcrot" value="0.122166"/>
-          <Constant key="Parameter_3820" name="sfcrotC16" value="0.13"/>
+          <Constant key="Parameter_3845" name="Keqcrot" value="3.13"/>
+          <Constant key="Parameter_3844" name="KicrotC4AcetoacylCoA" value="1.6"/>
+          <Constant key="Parameter_3843" name="KmcrotC10EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_3842" name="KmcrotC10HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_3841" name="KmcrotC12EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_3840" name="KmcrotC12HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_3839" name="KmcrotC14EnoylCoAMAT" value="100"/>
+          <Constant key="Parameter_3838" name="KmcrotC14HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_3837" name="KmcrotC16EnoylCoAMAT" value="150"/>
+          <Constant key="Parameter_3836" name="KmcrotC16HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_3835" name="KmcrotC4EnoylCoAMAT" value="40"/>
+          <Constant key="Parameter_3834" name="KmcrotC4HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_3833" name="KmcrotC6EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_3832" name="KmcrotC6HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_3831" name="KmcrotC8EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_3830" name="KmcrotC8HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_3829" name="Vcrot" value="0.122166"/>
+          <Constant key="Parameter_3828" name="sfcrotC16" value="0.13"/>
         </ListOfConstants>
         <KineticLaw function="Function_59" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
           <ListOfCallParameters>
@@ -19385,7 +19385,7 @@
               <SourceParameter reference="ModelValue_184"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_718">
-              <SourceParameter reference="Parameter_3820"/>
+              <SourceParameter reference="Parameter_3828"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -19424,24 +19424,24 @@
           <Modifier metabolite="Metabolite_99" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_3819" name="Keqcrot" value="3.13"/>
-          <Constant key="Parameter_3818" name="KicrotC4AcetoacylCoA" value="1.6"/>
-          <Constant key="Parameter_3817" name="KmcrotC10EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_3816" name="KmcrotC10HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_3815" name="KmcrotC12EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_3814" name="KmcrotC12HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_3813" name="KmcrotC14EnoylCoAMAT" value="100"/>
-          <Constant key="Parameter_3812" name="KmcrotC14HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_3811" name="KmcrotC16EnoylCoAMAT" value="150"/>
-          <Constant key="Parameter_3810" name="KmcrotC16HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_3809" name="KmcrotC4EnoylCoAMAT" value="40"/>
-          <Constant key="Parameter_3808" name="KmcrotC4HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_3807" name="KmcrotC6EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_3806" name="KmcrotC6HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_3805" name="KmcrotC8EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_3804" name="KmcrotC8HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_3803" name="Vcrot" value="0.122166"/>
-          <Constant key="Parameter_3802" name="sfcrotC14" value="0.2"/>
+          <Constant key="Parameter_3827" name="Keqcrot" value="3.13"/>
+          <Constant key="Parameter_3826" name="KicrotC4AcetoacylCoA" value="1.6"/>
+          <Constant key="Parameter_3825" name="KmcrotC10EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_3824" name="KmcrotC10HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_3823" name="KmcrotC12EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_3822" name="KmcrotC12HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_3821" name="KmcrotC14EnoylCoAMAT" value="100"/>
+          <Constant key="Parameter_3820" name="KmcrotC14HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_3819" name="KmcrotC16EnoylCoAMAT" value="150"/>
+          <Constant key="Parameter_3818" name="KmcrotC16HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_3817" name="KmcrotC4EnoylCoAMAT" value="40"/>
+          <Constant key="Parameter_3816" name="KmcrotC4HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_3815" name="KmcrotC6EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_3814" name="KmcrotC6HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_3813" name="KmcrotC8EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_3812" name="KmcrotC8HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_3811" name="Vcrot" value="0.122166"/>
+          <Constant key="Parameter_3810" name="sfcrotC14" value="0.2"/>
         </ListOfConstants>
         <KineticLaw function="Function_62" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
           <ListOfCallParameters>
@@ -19545,7 +19545,7 @@
               <SourceParameter reference="ModelValue_184"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_835">
-              <SourceParameter reference="Parameter_3802"/>
+              <SourceParameter reference="Parameter_3810"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -19584,24 +19584,24 @@
           <Modifier metabolite="Metabolite_99" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_3801" name="Keqcrot" value="3.13"/>
-          <Constant key="Parameter_3800" name="KicrotC4AcetoacylCoA" value="1.6"/>
-          <Constant key="Parameter_3799" name="KmcrotC10EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_3798" name="KmcrotC10HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_3797" name="KmcrotC12EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_3796" name="KmcrotC12HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_3795" name="KmcrotC14EnoylCoAMAT" value="100"/>
-          <Constant key="Parameter_3794" name="KmcrotC14HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_3793" name="KmcrotC16EnoylCoAMAT" value="150"/>
-          <Constant key="Parameter_3792" name="KmcrotC16HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_3791" name="KmcrotC4EnoylCoAMAT" value="40"/>
-          <Constant key="Parameter_3790" name="KmcrotC4HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_3789" name="KmcrotC6EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_3788" name="KmcrotC6HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_3787" name="KmcrotC8EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_3786" name="KmcrotC8HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_3785" name="Vcrot" value="0.122166"/>
-          <Constant key="Parameter_3784" name="sfcrotC12" value="0.25"/>
+          <Constant key="Parameter_3809" name="Keqcrot" value="3.13"/>
+          <Constant key="Parameter_3808" name="KicrotC4AcetoacylCoA" value="1.6"/>
+          <Constant key="Parameter_3807" name="KmcrotC10EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_3806" name="KmcrotC10HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_3805" name="KmcrotC12EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_3804" name="KmcrotC12HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_3803" name="KmcrotC14EnoylCoAMAT" value="100"/>
+          <Constant key="Parameter_3802" name="KmcrotC14HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_3801" name="KmcrotC16EnoylCoAMAT" value="150"/>
+          <Constant key="Parameter_3800" name="KmcrotC16HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_3799" name="KmcrotC4EnoylCoAMAT" value="40"/>
+          <Constant key="Parameter_3798" name="KmcrotC4HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_3797" name="KmcrotC6EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_3796" name="KmcrotC6HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_3795" name="KmcrotC8EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_3794" name="KmcrotC8HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_3793" name="Vcrot" value="0.122166"/>
+          <Constant key="Parameter_3792" name="sfcrotC12" value="0.25"/>
         </ListOfConstants>
         <KineticLaw function="Function_66" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
           <ListOfCallParameters>
@@ -19705,7 +19705,7 @@
               <SourceParameter reference="ModelValue_184"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_926">
-              <SourceParameter reference="Parameter_3784"/>
+              <SourceParameter reference="Parameter_3792"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -19744,24 +19744,24 @@
           <Modifier metabolite="Metabolite_99" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_3783" name="Keqcrot" value="3.13"/>
-          <Constant key="Parameter_3782" name="KicrotC4AcetoacylCoA" value="1.6"/>
-          <Constant key="Parameter_3781" name="KmcrotC10EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_3780" name="KmcrotC10HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_3779" name="KmcrotC12EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_3778" name="KmcrotC12HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_3777" name="KmcrotC14EnoylCoAMAT" value="100"/>
-          <Constant key="Parameter_3776" name="KmcrotC14HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_3775" name="KmcrotC16EnoylCoAMAT" value="150"/>
-          <Constant key="Parameter_3774" name="KmcrotC16HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_3773" name="KmcrotC4EnoylCoAMAT" value="40"/>
-          <Constant key="Parameter_3772" name="KmcrotC4HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_3771" name="KmcrotC6EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_3770" name="KmcrotC6HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_3769" name="KmcrotC8EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_3768" name="KmcrotC8HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_3767" name="Vcrot" value="0.122166"/>
-          <Constant key="Parameter_3766" name="sfcrotC10" value="0.33"/>
+          <Constant key="Parameter_3791" name="Keqcrot" value="3.13"/>
+          <Constant key="Parameter_3790" name="KicrotC4AcetoacylCoA" value="1.6"/>
+          <Constant key="Parameter_3789" name="KmcrotC10EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_3788" name="KmcrotC10HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_3787" name="KmcrotC12EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_3786" name="KmcrotC12HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_3785" name="KmcrotC14EnoylCoAMAT" value="100"/>
+          <Constant key="Parameter_3784" name="KmcrotC14HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_3783" name="KmcrotC16EnoylCoAMAT" value="150"/>
+          <Constant key="Parameter_3782" name="KmcrotC16HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_3781" name="KmcrotC4EnoylCoAMAT" value="40"/>
+          <Constant key="Parameter_3780" name="KmcrotC4HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_3779" name="KmcrotC6EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_3778" name="KmcrotC6HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_3777" name="KmcrotC8EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_3776" name="KmcrotC8HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_3775" name="Vcrot" value="0.122166"/>
+          <Constant key="Parameter_3774" name="sfcrotC10" value="0.33"/>
         </ListOfConstants>
         <KineticLaw function="Function_87" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
           <ListOfCallParameters>
@@ -19865,7 +19865,7 @@
               <SourceParameter reference="ModelValue_184"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1593">
-              <SourceParameter reference="Parameter_3766"/>
+              <SourceParameter reference="Parameter_3774"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -19904,24 +19904,24 @@
           <Modifier metabolite="Metabolite_99" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_3765" name="Keqcrot" value="3.13"/>
-          <Constant key="Parameter_3764" name="KicrotC4AcetoacylCoA" value="1.6"/>
-          <Constant key="Parameter_3763" name="KmcrotC10EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_3762" name="KmcrotC10HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_3761" name="KmcrotC12EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_3760" name="KmcrotC12HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_3759" name="KmcrotC14EnoylCoAMAT" value="100"/>
-          <Constant key="Parameter_3758" name="KmcrotC14HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_3757" name="KmcrotC16EnoylCoAMAT" value="150"/>
-          <Constant key="Parameter_3756" name="KmcrotC16HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_3755" name="KmcrotC4EnoylCoAMAT" value="40"/>
-          <Constant key="Parameter_3754" name="KmcrotC4HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_3753" name="KmcrotC6EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_3752" name="KmcrotC6HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_3751" name="KmcrotC8EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_3750" name="KmcrotC8HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_3749" name="Vcrot" value="0.122166"/>
-          <Constant key="Parameter_3748" name="sfcrotC8" value="0.58"/>
+          <Constant key="Parameter_3773" name="Keqcrot" value="3.13"/>
+          <Constant key="Parameter_3772" name="KicrotC4AcetoacylCoA" value="1.6"/>
+          <Constant key="Parameter_3771" name="KmcrotC10EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_3770" name="KmcrotC10HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_3769" name="KmcrotC12EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_3768" name="KmcrotC12HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_3767" name="KmcrotC14EnoylCoAMAT" value="100"/>
+          <Constant key="Parameter_3766" name="KmcrotC14HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_3765" name="KmcrotC16EnoylCoAMAT" value="150"/>
+          <Constant key="Parameter_3764" name="KmcrotC16HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_3763" name="KmcrotC4EnoylCoAMAT" value="40"/>
+          <Constant key="Parameter_3762" name="KmcrotC4HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_3761" name="KmcrotC6EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_3760" name="KmcrotC6HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_3759" name="KmcrotC8EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_3758" name="KmcrotC8HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_3757" name="Vcrot" value="0.122166"/>
+          <Constant key="Parameter_3756" name="sfcrotC8" value="0.58"/>
         </ListOfConstants>
         <KineticLaw function="Function_88" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
           <ListOfCallParameters>
@@ -20025,7 +20025,7 @@
               <SourceParameter reference="ModelValue_184"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1594">
-              <SourceParameter reference="Parameter_3748"/>
+              <SourceParameter reference="Parameter_3756"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -20064,24 +20064,24 @@
           <Modifier metabolite="Metabolite_99" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_3747" name="Keqcrot" value="3.13"/>
-          <Constant key="Parameter_3746" name="KicrotC4AcetoacylCoA" value="1.6"/>
-          <Constant key="Parameter_3745" name="KmcrotC10EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_3744" name="KmcrotC10HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_3743" name="KmcrotC12EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_3742" name="KmcrotC12HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_3741" name="KmcrotC14EnoylCoAMAT" value="100"/>
-          <Constant key="Parameter_3740" name="KmcrotC14HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_3739" name="KmcrotC16EnoylCoAMAT" value="150"/>
-          <Constant key="Parameter_3738" name="KmcrotC16HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_3737" name="KmcrotC4EnoylCoAMAT" value="40"/>
-          <Constant key="Parameter_3736" name="KmcrotC4HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_3735" name="KmcrotC6EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_3734" name="KmcrotC6HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_3733" name="KmcrotC8EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_3732" name="KmcrotC8HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_3731" name="Vcrot" value="0.122166"/>
-          <Constant key="Parameter_3730" name="sfcrotC6" value="0.83"/>
+          <Constant key="Parameter_3755" name="Keqcrot" value="3.13"/>
+          <Constant key="Parameter_3754" name="KicrotC4AcetoacylCoA" value="1.6"/>
+          <Constant key="Parameter_3753" name="KmcrotC10EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_3752" name="KmcrotC10HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_3751" name="KmcrotC12EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_3750" name="KmcrotC12HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_3749" name="KmcrotC14EnoylCoAMAT" value="100"/>
+          <Constant key="Parameter_3748" name="KmcrotC14HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_3747" name="KmcrotC16EnoylCoAMAT" value="150"/>
+          <Constant key="Parameter_3746" name="KmcrotC16HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_3745" name="KmcrotC4EnoylCoAMAT" value="40"/>
+          <Constant key="Parameter_3744" name="KmcrotC4HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_3743" name="KmcrotC6EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_3742" name="KmcrotC6HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_3741" name="KmcrotC8EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_3740" name="KmcrotC8HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_3739" name="Vcrot" value="0.122166"/>
+          <Constant key="Parameter_3738" name="sfcrotC6" value="0.83"/>
         </ListOfConstants>
         <KineticLaw function="Function_89" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
           <ListOfCallParameters>
@@ -20185,7 +20185,7 @@
               <SourceParameter reference="ModelValue_184"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1628">
-              <SourceParameter reference="Parameter_3730"/>
+              <SourceParameter reference="Parameter_3738"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -20224,24 +20224,24 @@
           <Modifier metabolite="Metabolite_99" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_3729" name="Keqcrot" value="3.13"/>
-          <Constant key="Parameter_3728" name="KicrotC4AcetoacylCoA" value="1.6"/>
-          <Constant key="Parameter_3727" name="KmcrotC10EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_3726" name="KmcrotC10HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_3725" name="KmcrotC12EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_3724" name="KmcrotC12HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_3723" name="KmcrotC14EnoylCoAMAT" value="100"/>
-          <Constant key="Parameter_3722" name="KmcrotC14HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_3721" name="KmcrotC16EnoylCoAMAT" value="150"/>
-          <Constant key="Parameter_3720" name="KmcrotC16HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_3719" name="KmcrotC4EnoylCoAMAT" value="40"/>
-          <Constant key="Parameter_3718" name="KmcrotC4HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_3717" name="KmcrotC6EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_3716" name="KmcrotC6HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_3715" name="KmcrotC8EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_3714" name="KmcrotC8HydroxyacylCoAMAT" value="45"/>
-          <Constant key="Parameter_3713" name="Vcrot" value="0.122166"/>
-          <Constant key="Parameter_3712" name="sfcrotC4" value="1"/>
+          <Constant key="Parameter_3737" name="Keqcrot" value="3.13"/>
+          <Constant key="Parameter_3736" name="KicrotC4AcetoacylCoA" value="1.6"/>
+          <Constant key="Parameter_3735" name="KmcrotC10EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_3734" name="KmcrotC10HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_3733" name="KmcrotC12EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_3732" name="KmcrotC12HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_3731" name="KmcrotC14EnoylCoAMAT" value="100"/>
+          <Constant key="Parameter_3730" name="KmcrotC14HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_3729" name="KmcrotC16EnoylCoAMAT" value="150"/>
+          <Constant key="Parameter_3728" name="KmcrotC16HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_3727" name="KmcrotC4EnoylCoAMAT" value="40"/>
+          <Constant key="Parameter_3726" name="KmcrotC4HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_3725" name="KmcrotC6EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_3724" name="KmcrotC6HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_3723" name="KmcrotC8EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_3722" name="KmcrotC8HydroxyacylCoAMAT" value="45"/>
+          <Constant key="Parameter_3721" name="Vcrot" value="0.122166"/>
+          <Constant key="Parameter_3720" name="sfcrotC4" value="1"/>
         </ListOfConstants>
         <KineticLaw function="Function_90" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
           <ListOfCallParameters>
@@ -20345,7 +20345,7 @@
               <SourceParameter reference="ModelValue_184"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1662">
-              <SourceParameter reference="Parameter_3712"/>
+              <SourceParameter reference="Parameter_3720"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -20385,25 +20385,25 @@
           <Modifier metabolite="Metabolite_99" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_3711" name="Keqmschad" value="0.000217"/>
-          <Constant key="Parameter_3710" name="KmmschadC10HydroxyacylCoAMAT" value="8.8"/>
-          <Constant key="Parameter_3709" name="KmmschadC10KetoacylCoAMAT" value="2.3"/>
-          <Constant key="Parameter_3708" name="KmmschadC12HydroxyacylCoAMAT" value="3.7"/>
-          <Constant key="Parameter_3707" name="KmmschadC12KetoacylCoAMAT" value="1.6"/>
-          <Constant key="Parameter_3706" name="KmmschadC14HydroxyacylCoAMAT" value="1.8"/>
-          <Constant key="Parameter_3705" name="KmmschadC14KetoacylCoAMAT" value="1.4"/>
-          <Constant key="Parameter_3704" name="KmmschadC16HydroxyacylCoAMAT" value="1.5"/>
-          <Constant key="Parameter_3703" name="KmmschadC16KetoacylCoAMAT" value="1.4"/>
-          <Constant key="Parameter_3702" name="KmmschadC4AcetoacylCoAMAT" value="16.9"/>
-          <Constant key="Parameter_3701" name="KmmschadC4HydroxyacylCoAMAT" value="69.9"/>
-          <Constant key="Parameter_3700" name="KmmschadC6HydroxyacylCoAMAT" value="28.6"/>
-          <Constant key="Parameter_3699" name="KmmschadC6KetoacylCoAMAT" value="5.8"/>
-          <Constant key="Parameter_3698" name="KmmschadC8HydroxyacylCoAMAT" value="16.3"/>
-          <Constant key="Parameter_3697" name="KmmschadC8KetoacylCoAMAT" value="4.1"/>
-          <Constant key="Parameter_3696" name="KmmschadNADHMAT" value="5.4"/>
-          <Constant key="Parameter_3695" name="KmmschadNADMAT" value="58.5"/>
-          <Constant key="Parameter_3694" name="Vmschad" value="0.174021"/>
-          <Constant key="Parameter_3693" name="sfmschadC16" value="0.6"/>
+          <Constant key="Parameter_3719" name="Keqmschad" value="0.000217"/>
+          <Constant key="Parameter_3718" name="KmmschadC10HydroxyacylCoAMAT" value="8.8"/>
+          <Constant key="Parameter_3717" name="KmmschadC10KetoacylCoAMAT" value="2.3"/>
+          <Constant key="Parameter_3716" name="KmmschadC12HydroxyacylCoAMAT" value="3.7"/>
+          <Constant key="Parameter_3715" name="KmmschadC12KetoacylCoAMAT" value="1.6"/>
+          <Constant key="Parameter_3714" name="KmmschadC14HydroxyacylCoAMAT" value="1.8"/>
+          <Constant key="Parameter_3713" name="KmmschadC14KetoacylCoAMAT" value="1.4"/>
+          <Constant key="Parameter_3712" name="KmmschadC16HydroxyacylCoAMAT" value="1.5"/>
+          <Constant key="Parameter_3711" name="KmmschadC16KetoacylCoAMAT" value="1.4"/>
+          <Constant key="Parameter_3710" name="KmmschadC4AcetoacylCoAMAT" value="16.9"/>
+          <Constant key="Parameter_3709" name="KmmschadC4HydroxyacylCoAMAT" value="69.9"/>
+          <Constant key="Parameter_3708" name="KmmschadC6HydroxyacylCoAMAT" value="28.6"/>
+          <Constant key="Parameter_3707" name="KmmschadC6KetoacylCoAMAT" value="5.8"/>
+          <Constant key="Parameter_3706" name="KmmschadC8HydroxyacylCoAMAT" value="16.3"/>
+          <Constant key="Parameter_3705" name="KmmschadC8KetoacylCoAMAT" value="4.1"/>
+          <Constant key="Parameter_3704" name="KmmschadNADHMAT" value="5.4"/>
+          <Constant key="Parameter_3703" name="KmmschadNADMAT" value="58.5"/>
+          <Constant key="Parameter_3702" name="Vmschad" value="0.174021"/>
+          <Constant key="Parameter_3701" name="sfmschadC16" value="0.6"/>
         </ListOfConstants>
         <KineticLaw function="Function_92" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
           <ListOfCallParameters>
@@ -20513,7 +20513,7 @@
               <SourceParameter reference="ModelValue_202"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1732">
-              <SourceParameter reference="Parameter_3693"/>
+              <SourceParameter reference="Parameter_3701"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -20553,25 +20553,25 @@
           <Modifier metabolite="Metabolite_99" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_3692" name="Keqmschad" value="0.000217"/>
-          <Constant key="Parameter_3691" name="KmmschadC10HydroxyacylCoAMAT" value="8.8"/>
-          <Constant key="Parameter_3690" name="KmmschadC10KetoacylCoAMAT" value="2.3"/>
-          <Constant key="Parameter_3689" name="KmmschadC12HydroxyacylCoAMAT" value="3.7"/>
-          <Constant key="Parameter_3688" name="KmmschadC12KetoacylCoAMAT" value="1.6"/>
-          <Constant key="Parameter_3687" name="KmmschadC14HydroxyacylCoAMAT" value="1.8"/>
-          <Constant key="Parameter_3686" name="KmmschadC14KetoacylCoAMAT" value="1.4"/>
-          <Constant key="Parameter_3685" name="KmmschadC16HydroxyacylCoAMAT" value="1.5"/>
-          <Constant key="Parameter_3684" name="KmmschadC16KetoacylCoAMAT" value="1.4"/>
-          <Constant key="Parameter_3683" name="KmmschadC4AcetoacylCoAMAT" value="16.9"/>
-          <Constant key="Parameter_3682" name="KmmschadC4HydroxyacylCoAMAT" value="69.9"/>
-          <Constant key="Parameter_3681" name="KmmschadC6HydroxyacylCoAMAT" value="28.6"/>
-          <Constant key="Parameter_3680" name="KmmschadC6KetoacylCoAMAT" value="5.8"/>
-          <Constant key="Parameter_3679" name="KmmschadC8HydroxyacylCoAMAT" value="16.3"/>
-          <Constant key="Parameter_3678" name="KmmschadC8KetoacylCoAMAT" value="4.1"/>
-          <Constant key="Parameter_3677" name="KmmschadNADHMAT" value="5.4"/>
-          <Constant key="Parameter_3676" name="KmmschadNADMAT" value="58.5"/>
-          <Constant key="Parameter_3675" name="Vmschad" value="0.174021"/>
-          <Constant key="Parameter_3674" name="sfmschadC14" value="0.5"/>
+          <Constant key="Parameter_3700" name="Keqmschad" value="0.000217"/>
+          <Constant key="Parameter_3699" name="KmmschadC10HydroxyacylCoAMAT" value="8.8"/>
+          <Constant key="Parameter_3698" name="KmmschadC10KetoacylCoAMAT" value="2.3"/>
+          <Constant key="Parameter_3697" name="KmmschadC12HydroxyacylCoAMAT" value="3.7"/>
+          <Constant key="Parameter_3696" name="KmmschadC12KetoacylCoAMAT" value="1.6"/>
+          <Constant key="Parameter_3695" name="KmmschadC14HydroxyacylCoAMAT" value="1.8"/>
+          <Constant key="Parameter_3694" name="KmmschadC14KetoacylCoAMAT" value="1.4"/>
+          <Constant key="Parameter_3693" name="KmmschadC16HydroxyacylCoAMAT" value="1.5"/>
+          <Constant key="Parameter_3692" name="KmmschadC16KetoacylCoAMAT" value="1.4"/>
+          <Constant key="Parameter_3691" name="KmmschadC4AcetoacylCoAMAT" value="16.9"/>
+          <Constant key="Parameter_3690" name="KmmschadC4HydroxyacylCoAMAT" value="69.9"/>
+          <Constant key="Parameter_3689" name="KmmschadC6HydroxyacylCoAMAT" value="28.6"/>
+          <Constant key="Parameter_3688" name="KmmschadC6KetoacylCoAMAT" value="5.8"/>
+          <Constant key="Parameter_3687" name="KmmschadC8HydroxyacylCoAMAT" value="16.3"/>
+          <Constant key="Parameter_3686" name="KmmschadC8KetoacylCoAMAT" value="4.1"/>
+          <Constant key="Parameter_3685" name="KmmschadNADHMAT" value="5.4"/>
+          <Constant key="Parameter_3684" name="KmmschadNADMAT" value="58.5"/>
+          <Constant key="Parameter_3683" name="Vmschad" value="0.174021"/>
+          <Constant key="Parameter_3682" name="sfmschadC14" value="0.5"/>
         </ListOfConstants>
         <KineticLaw function="Function_91" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
           <ListOfCallParameters>
@@ -20681,7 +20681,7 @@
               <SourceParameter reference="ModelValue_202"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1731">
-              <SourceParameter reference="Parameter_3674"/>
+              <SourceParameter reference="Parameter_3682"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -20721,25 +20721,25 @@
           <Modifier metabolite="Metabolite_99" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_3673" name="Keqmschad" value="0.000217"/>
-          <Constant key="Parameter_3672" name="KmmschadC10HydroxyacylCoAMAT" value="8.8"/>
-          <Constant key="Parameter_3671" name="KmmschadC10KetoacylCoAMAT" value="2.3"/>
-          <Constant key="Parameter_3670" name="KmmschadC12HydroxyacylCoAMAT" value="3.7"/>
-          <Constant key="Parameter_3669" name="KmmschadC12KetoacylCoAMAT" value="1.6"/>
-          <Constant key="Parameter_3668" name="KmmschadC14HydroxyacylCoAMAT" value="1.8"/>
-          <Constant key="Parameter_3667" name="KmmschadC14KetoacylCoAMAT" value="1.4"/>
-          <Constant key="Parameter_3666" name="KmmschadC16HydroxyacylCoAMAT" value="1.5"/>
-          <Constant key="Parameter_3665" name="KmmschadC16KetoacylCoAMAT" value="1.4"/>
-          <Constant key="Parameter_3664" name="KmmschadC4AcetoacylCoAMAT" value="16.9"/>
-          <Constant key="Parameter_3663" name="KmmschadC4HydroxyacylCoAMAT" value="69.9"/>
-          <Constant key="Parameter_3662" name="KmmschadC6HydroxyacylCoAMAT" value="28.6"/>
-          <Constant key="Parameter_3661" name="KmmschadC6KetoacylCoAMAT" value="5.8"/>
-          <Constant key="Parameter_3660" name="KmmschadC8HydroxyacylCoAMAT" value="16.3"/>
-          <Constant key="Parameter_3659" name="KmmschadC8KetoacylCoAMAT" value="4.1"/>
-          <Constant key="Parameter_3658" name="KmmschadNADHMAT" value="5.4"/>
-          <Constant key="Parameter_3657" name="KmmschadNADMAT" value="58.5"/>
-          <Constant key="Parameter_3656" name="Vmschad" value="0.174021"/>
-          <Constant key="Parameter_3655" name="sfmschadC12" value="0.43"/>
+          <Constant key="Parameter_3681" name="Keqmschad" value="0.000217"/>
+          <Constant key="Parameter_3680" name="KmmschadC10HydroxyacylCoAMAT" value="8.8"/>
+          <Constant key="Parameter_3679" name="KmmschadC10KetoacylCoAMAT" value="2.3"/>
+          <Constant key="Parameter_3678" name="KmmschadC12HydroxyacylCoAMAT" value="3.7"/>
+          <Constant key="Parameter_3677" name="KmmschadC12KetoacylCoAMAT" value="1.6"/>
+          <Constant key="Parameter_3676" name="KmmschadC14HydroxyacylCoAMAT" value="1.8"/>
+          <Constant key="Parameter_3675" name="KmmschadC14KetoacylCoAMAT" value="1.4"/>
+          <Constant key="Parameter_3674" name="KmmschadC16HydroxyacylCoAMAT" value="1.5"/>
+          <Constant key="Parameter_3673" name="KmmschadC16KetoacylCoAMAT" value="1.4"/>
+          <Constant key="Parameter_3672" name="KmmschadC4AcetoacylCoAMAT" value="16.9"/>
+          <Constant key="Parameter_3671" name="KmmschadC4HydroxyacylCoAMAT" value="69.9"/>
+          <Constant key="Parameter_3670" name="KmmschadC6HydroxyacylCoAMAT" value="28.6"/>
+          <Constant key="Parameter_3669" name="KmmschadC6KetoacylCoAMAT" value="5.8"/>
+          <Constant key="Parameter_3668" name="KmmschadC8HydroxyacylCoAMAT" value="16.3"/>
+          <Constant key="Parameter_3667" name="KmmschadC8KetoacylCoAMAT" value="4.1"/>
+          <Constant key="Parameter_3666" name="KmmschadNADHMAT" value="5.4"/>
+          <Constant key="Parameter_3665" name="KmmschadNADMAT" value="58.5"/>
+          <Constant key="Parameter_3664" name="Vmschad" value="0.174021"/>
+          <Constant key="Parameter_3663" name="sfmschadC12" value="0.43"/>
         </ListOfConstants>
         <KineticLaw function="Function_68" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
           <ListOfCallParameters>
@@ -20849,7 +20849,7 @@
               <SourceParameter reference="ModelValue_202"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_994">
-              <SourceParameter reference="Parameter_3655"/>
+              <SourceParameter reference="Parameter_3663"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -20889,25 +20889,25 @@
           <Modifier metabolite="Metabolite_99" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_3654" name="Keqmschad" value="0.000217"/>
-          <Constant key="Parameter_3653" name="KmmschadC10HydroxyacylCoAMAT" value="8.8"/>
-          <Constant key="Parameter_3652" name="KmmschadC10KetoacylCoAMAT" value="2.3"/>
-          <Constant key="Parameter_3651" name="KmmschadC12HydroxyacylCoAMAT" value="3.7"/>
-          <Constant key="Parameter_3650" name="KmmschadC12KetoacylCoAMAT" value="1.6"/>
-          <Constant key="Parameter_3649" name="KmmschadC14HydroxyacylCoAMAT" value="1.8"/>
-          <Constant key="Parameter_3648" name="KmmschadC14KetoacylCoAMAT" value="1.4"/>
-          <Constant key="Parameter_3647" name="KmmschadC16HydroxyacylCoAMAT" value="1.5"/>
-          <Constant key="Parameter_3646" name="KmmschadC16KetoacylCoAMAT" value="1.4"/>
-          <Constant key="Parameter_3645" name="KmmschadC4AcetoacylCoAMAT" value="16.9"/>
-          <Constant key="Parameter_3644" name="KmmschadC4HydroxyacylCoAMAT" value="69.9"/>
-          <Constant key="Parameter_3643" name="KmmschadC6HydroxyacylCoAMAT" value="28.6"/>
-          <Constant key="Parameter_3642" name="KmmschadC6KetoacylCoAMAT" value="5.8"/>
-          <Constant key="Parameter_3641" name="KmmschadC8HydroxyacylCoAMAT" value="16.3"/>
-          <Constant key="Parameter_3640" name="KmmschadC8KetoacylCoAMAT" value="4.1"/>
-          <Constant key="Parameter_3639" name="KmmschadNADHMAT" value="5.4"/>
-          <Constant key="Parameter_3638" name="KmmschadNADMAT" value="58.5"/>
-          <Constant key="Parameter_3637" name="Vmschad" value="0.174021"/>
-          <Constant key="Parameter_3636" name="sfmschadC10" value="0.64"/>
+          <Constant key="Parameter_3662" name="Keqmschad" value="0.000217"/>
+          <Constant key="Parameter_3661" name="KmmschadC10HydroxyacylCoAMAT" value="8.8"/>
+          <Constant key="Parameter_3660" name="KmmschadC10KetoacylCoAMAT" value="2.3"/>
+          <Constant key="Parameter_3659" name="KmmschadC12HydroxyacylCoAMAT" value="3.7"/>
+          <Constant key="Parameter_3658" name="KmmschadC12KetoacylCoAMAT" value="1.6"/>
+          <Constant key="Parameter_3657" name="KmmschadC14HydroxyacylCoAMAT" value="1.8"/>
+          <Constant key="Parameter_3656" name="KmmschadC14KetoacylCoAMAT" value="1.4"/>
+          <Constant key="Parameter_3655" name="KmmschadC16HydroxyacylCoAMAT" value="1.5"/>
+          <Constant key="Parameter_3654" name="KmmschadC16KetoacylCoAMAT" value="1.4"/>
+          <Constant key="Parameter_3653" name="KmmschadC4AcetoacylCoAMAT" value="16.9"/>
+          <Constant key="Parameter_3652" name="KmmschadC4HydroxyacylCoAMAT" value="69.9"/>
+          <Constant key="Parameter_3651" name="KmmschadC6HydroxyacylCoAMAT" value="28.6"/>
+          <Constant key="Parameter_3650" name="KmmschadC6KetoacylCoAMAT" value="5.8"/>
+          <Constant key="Parameter_3649" name="KmmschadC8HydroxyacylCoAMAT" value="16.3"/>
+          <Constant key="Parameter_3648" name="KmmschadC8KetoacylCoAMAT" value="4.1"/>
+          <Constant key="Parameter_3647" name="KmmschadNADHMAT" value="5.4"/>
+          <Constant key="Parameter_3646" name="KmmschadNADMAT" value="58.5"/>
+          <Constant key="Parameter_3645" name="Vmschad" value="0.174021"/>
+          <Constant key="Parameter_3644" name="sfmschadC10" value="0.64"/>
         </ListOfConstants>
         <KineticLaw function="Function_69" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
           <ListOfCallParameters>
@@ -21017,7 +21017,7 @@
               <SourceParameter reference="ModelValue_202"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1030">
-              <SourceParameter reference="Parameter_3636"/>
+              <SourceParameter reference="Parameter_3644"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -21057,25 +21057,25 @@
           <Modifier metabolite="Metabolite_99" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_3635" name="Keqmschad" value="0.000217"/>
-          <Constant key="Parameter_3634" name="KmmschadC10HydroxyacylCoAMAT" value="8.8"/>
-          <Constant key="Parameter_3633" name="KmmschadC10KetoacylCoAMAT" value="2.3"/>
-          <Constant key="Parameter_3632" name="KmmschadC12HydroxyacylCoAMAT" value="3.7"/>
-          <Constant key="Parameter_3631" name="KmmschadC12KetoacylCoAMAT" value="1.6"/>
-          <Constant key="Parameter_3630" name="KmmschadC14HydroxyacylCoAMAT" value="1.8"/>
-          <Constant key="Parameter_3629" name="KmmschadC14KetoacylCoAMAT" value="1.4"/>
-          <Constant key="Parameter_3628" name="KmmschadC16HydroxyacylCoAMAT" value="1.5"/>
-          <Constant key="Parameter_3627" name="KmmschadC16KetoacylCoAMAT" value="1.4"/>
-          <Constant key="Parameter_3626" name="KmmschadC4AcetoacylCoAMAT" value="16.9"/>
-          <Constant key="Parameter_3625" name="KmmschadC4HydroxyacylCoAMAT" value="69.9"/>
-          <Constant key="Parameter_3624" name="KmmschadC6HydroxyacylCoAMAT" value="28.6"/>
-          <Constant key="Parameter_3623" name="KmmschadC6KetoacylCoAMAT" value="5.8"/>
-          <Constant key="Parameter_3622" name="KmmschadC8HydroxyacylCoAMAT" value="16.3"/>
-          <Constant key="Parameter_3621" name="KmmschadC8KetoacylCoAMAT" value="4.1"/>
-          <Constant key="Parameter_3620" name="KmmschadNADHMAT" value="5.4"/>
-          <Constant key="Parameter_3619" name="KmmschadNADMAT" value="58.5"/>
-          <Constant key="Parameter_3618" name="Vmschad" value="0.174021"/>
-          <Constant key="Parameter_3617" name="sfmschadC8" value="0.89"/>
+          <Constant key="Parameter_3643" name="Keqmschad" value="0.000217"/>
+          <Constant key="Parameter_3642" name="KmmschadC10HydroxyacylCoAMAT" value="8.8"/>
+          <Constant key="Parameter_3641" name="KmmschadC10KetoacylCoAMAT" value="2.3"/>
+          <Constant key="Parameter_3640" name="KmmschadC12HydroxyacylCoAMAT" value="3.7"/>
+          <Constant key="Parameter_3639" name="KmmschadC12KetoacylCoAMAT" value="1.6"/>
+          <Constant key="Parameter_3638" name="KmmschadC14HydroxyacylCoAMAT" value="1.8"/>
+          <Constant key="Parameter_3637" name="KmmschadC14KetoacylCoAMAT" value="1.4"/>
+          <Constant key="Parameter_3636" name="KmmschadC16HydroxyacylCoAMAT" value="1.5"/>
+          <Constant key="Parameter_3635" name="KmmschadC16KetoacylCoAMAT" value="1.4"/>
+          <Constant key="Parameter_3634" name="KmmschadC4AcetoacylCoAMAT" value="16.9"/>
+          <Constant key="Parameter_3633" name="KmmschadC4HydroxyacylCoAMAT" value="69.9"/>
+          <Constant key="Parameter_3632" name="KmmschadC6HydroxyacylCoAMAT" value="28.6"/>
+          <Constant key="Parameter_3631" name="KmmschadC6KetoacylCoAMAT" value="5.8"/>
+          <Constant key="Parameter_3630" name="KmmschadC8HydroxyacylCoAMAT" value="16.3"/>
+          <Constant key="Parameter_3629" name="KmmschadC8KetoacylCoAMAT" value="4.1"/>
+          <Constant key="Parameter_3628" name="KmmschadNADHMAT" value="5.4"/>
+          <Constant key="Parameter_3627" name="KmmschadNADMAT" value="58.5"/>
+          <Constant key="Parameter_3626" name="Vmschad" value="0.174021"/>
+          <Constant key="Parameter_3625" name="sfmschadC8" value="0.89"/>
         </ListOfConstants>
         <KineticLaw function="Function_71" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
           <ListOfCallParameters>
@@ -21185,7 +21185,7 @@
               <SourceParameter reference="ModelValue_202"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1102">
-              <SourceParameter reference="Parameter_3617"/>
+              <SourceParameter reference="Parameter_3625"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -21225,25 +21225,25 @@
           <Modifier metabolite="Metabolite_99" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_3616" name="Keqmschad" value="0.000217"/>
-          <Constant key="Parameter_3615" name="KmmschadC10HydroxyacylCoAMAT" value="8.8"/>
-          <Constant key="Parameter_3614" name="KmmschadC10KetoacylCoAMAT" value="2.3"/>
-          <Constant key="Parameter_3613" name="KmmschadC12HydroxyacylCoAMAT" value="3.7"/>
-          <Constant key="Parameter_3612" name="KmmschadC12KetoacylCoAMAT" value="1.6"/>
-          <Constant key="Parameter_3611" name="KmmschadC14HydroxyacylCoAMAT" value="1.8"/>
-          <Constant key="Parameter_3610" name="KmmschadC14KetoacylCoAMAT" value="1.4"/>
-          <Constant key="Parameter_3609" name="KmmschadC16HydroxyacylCoAMAT" value="1.5"/>
-          <Constant key="Parameter_3608" name="KmmschadC16KetoacylCoAMAT" value="1.4"/>
-          <Constant key="Parameter_3607" name="KmmschadC4AcetoacylCoAMAT" value="16.9"/>
-          <Constant key="Parameter_3606" name="KmmschadC4HydroxyacylCoAMAT" value="69.9"/>
-          <Constant key="Parameter_3605" name="KmmschadC6HydroxyacylCoAMAT" value="28.6"/>
-          <Constant key="Parameter_3604" name="KmmschadC6KetoacylCoAMAT" value="5.8"/>
-          <Constant key="Parameter_3603" name="KmmschadC8HydroxyacylCoAMAT" value="16.3"/>
-          <Constant key="Parameter_3602" name="KmmschadC8KetoacylCoAMAT" value="4.1"/>
-          <Constant key="Parameter_3601" name="KmmschadNADHMAT" value="5.4"/>
-          <Constant key="Parameter_3600" name="KmmschadNADMAT" value="58.5"/>
-          <Constant key="Parameter_3599" name="Vmschad" value="0.174021"/>
-          <Constant key="Parameter_3598" name="sfmschadC6" value="1"/>
+          <Constant key="Parameter_3624" name="Keqmschad" value="0.000217"/>
+          <Constant key="Parameter_3623" name="KmmschadC10HydroxyacylCoAMAT" value="8.8"/>
+          <Constant key="Parameter_3622" name="KmmschadC10KetoacylCoAMAT" value="2.3"/>
+          <Constant key="Parameter_3621" name="KmmschadC12HydroxyacylCoAMAT" value="3.7"/>
+          <Constant key="Parameter_3620" name="KmmschadC12KetoacylCoAMAT" value="1.6"/>
+          <Constant key="Parameter_3619" name="KmmschadC14HydroxyacylCoAMAT" value="1.8"/>
+          <Constant key="Parameter_3618" name="KmmschadC14KetoacylCoAMAT" value="1.4"/>
+          <Constant key="Parameter_3617" name="KmmschadC16HydroxyacylCoAMAT" value="1.5"/>
+          <Constant key="Parameter_3616" name="KmmschadC16KetoacylCoAMAT" value="1.4"/>
+          <Constant key="Parameter_3615" name="KmmschadC4AcetoacylCoAMAT" value="16.9"/>
+          <Constant key="Parameter_3614" name="KmmschadC4HydroxyacylCoAMAT" value="69.9"/>
+          <Constant key="Parameter_3613" name="KmmschadC6HydroxyacylCoAMAT" value="28.6"/>
+          <Constant key="Parameter_3612" name="KmmschadC6KetoacylCoAMAT" value="5.8"/>
+          <Constant key="Parameter_3611" name="KmmschadC8HydroxyacylCoAMAT" value="16.3"/>
+          <Constant key="Parameter_3610" name="KmmschadC8KetoacylCoAMAT" value="4.1"/>
+          <Constant key="Parameter_3609" name="KmmschadNADHMAT" value="5.4"/>
+          <Constant key="Parameter_3608" name="KmmschadNADMAT" value="58.5"/>
+          <Constant key="Parameter_3607" name="Vmschad" value="0.174021"/>
+          <Constant key="Parameter_3606" name="sfmschadC6" value="1"/>
         </ListOfConstants>
         <KineticLaw function="Function_67" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
           <ListOfCallParameters>
@@ -21353,7 +21353,7 @@
               <SourceParameter reference="ModelValue_202"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_993">
-              <SourceParameter reference="Parameter_3598"/>
+              <SourceParameter reference="Parameter_3606"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -21393,25 +21393,25 @@
           <Modifier metabolite="Metabolite_94" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_3597" name="Keqmschad" value="0.000217"/>
-          <Constant key="Parameter_3596" name="KmmschadC10HydroxyacylCoAMAT" value="8.8"/>
-          <Constant key="Parameter_3595" name="KmmschadC10KetoacylCoAMAT" value="2.3"/>
-          <Constant key="Parameter_3594" name="KmmschadC12HydroxyacylCoAMAT" value="3.7"/>
-          <Constant key="Parameter_3593" name="KmmschadC12KetoacylCoAMAT" value="1.6"/>
-          <Constant key="Parameter_3592" name="KmmschadC14HydroxyacylCoAMAT" value="1.8"/>
-          <Constant key="Parameter_3591" name="KmmschadC14KetoacylCoAMAT" value="1.4"/>
-          <Constant key="Parameter_3590" name="KmmschadC16HydroxyacylCoAMAT" value="1.5"/>
-          <Constant key="Parameter_3589" name="KmmschadC16KetoacylCoAMAT" value="1.4"/>
-          <Constant key="Parameter_3588" name="KmmschadC4AcetoacylCoAMAT" value="16.9"/>
-          <Constant key="Parameter_3587" name="KmmschadC4HydroxyacylCoAMAT" value="69.9"/>
-          <Constant key="Parameter_3586" name="KmmschadC6HydroxyacylCoAMAT" value="28.6"/>
-          <Constant key="Parameter_3585" name="KmmschadC6KetoacylCoAMAT" value="5.8"/>
-          <Constant key="Parameter_3584" name="KmmschadC8HydroxyacylCoAMAT" value="16.3"/>
-          <Constant key="Parameter_3583" name="KmmschadC8KetoacylCoAMAT" value="4.1"/>
-          <Constant key="Parameter_3582" name="KmmschadNADHMAT" value="5.4"/>
-          <Constant key="Parameter_3581" name="KmmschadNADMAT" value="58.5"/>
-          <Constant key="Parameter_3580" name="Vmschad" value="0.174021"/>
-          <Constant key="Parameter_3579" name="sfmschadC4" value="0.67"/>
+          <Constant key="Parameter_3605" name="Keqmschad" value="0.000217"/>
+          <Constant key="Parameter_3604" name="KmmschadC10HydroxyacylCoAMAT" value="8.8"/>
+          <Constant key="Parameter_3603" name="KmmschadC10KetoacylCoAMAT" value="2.3"/>
+          <Constant key="Parameter_3602" name="KmmschadC12HydroxyacylCoAMAT" value="3.7"/>
+          <Constant key="Parameter_3601" name="KmmschadC12KetoacylCoAMAT" value="1.6"/>
+          <Constant key="Parameter_3600" name="KmmschadC14HydroxyacylCoAMAT" value="1.8"/>
+          <Constant key="Parameter_3599" name="KmmschadC14KetoacylCoAMAT" value="1.4"/>
+          <Constant key="Parameter_3598" name="KmmschadC16HydroxyacylCoAMAT" value="1.5"/>
+          <Constant key="Parameter_3597" name="KmmschadC16KetoacylCoAMAT" value="1.4"/>
+          <Constant key="Parameter_3596" name="KmmschadC4AcetoacylCoAMAT" value="16.9"/>
+          <Constant key="Parameter_3595" name="KmmschadC4HydroxyacylCoAMAT" value="69.9"/>
+          <Constant key="Parameter_3594" name="KmmschadC6HydroxyacylCoAMAT" value="28.6"/>
+          <Constant key="Parameter_3593" name="KmmschadC6KetoacylCoAMAT" value="5.8"/>
+          <Constant key="Parameter_3592" name="KmmschadC8HydroxyacylCoAMAT" value="16.3"/>
+          <Constant key="Parameter_3591" name="KmmschadC8KetoacylCoAMAT" value="4.1"/>
+          <Constant key="Parameter_3590" name="KmmschadNADHMAT" value="5.4"/>
+          <Constant key="Parameter_3589" name="KmmschadNADMAT" value="58.5"/>
+          <Constant key="Parameter_3588" name="Vmschad" value="0.174021"/>
+          <Constant key="Parameter_3587" name="sfmschadC4" value="0.67"/>
         </ListOfConstants>
         <KineticLaw function="Function_70" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
           <ListOfCallParameters>
@@ -21521,7 +21521,7 @@
               <SourceParameter reference="ModelValue_202"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1066">
-              <SourceParameter reference="Parameter_3579"/>
+              <SourceParameter reference="Parameter_3587"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -21561,25 +21561,25 @@
           <Modifier metabolite="Metabolite_96" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_3578" name="Keqmckat" value="1051"/>
-          <Constant key="Parameter_3577" name="KmmckatAcetylCoAMAT" value="68.1103"/>
-          <Constant key="Parameter_3576" name="KmmckatC10AcylCoAMAT" value="25.3702"/>
-          <Constant key="Parameter_3575" name="KmmckatC10KetoacylCoAMAT" value="2.1"/>
-          <Constant key="Parameter_3574" name="KmmckatC12AcylCoAMAT" value="29.8783"/>
-          <Constant key="Parameter_3573" name="KmmckatC12KetoacylCoAMAT" value="1.3"/>
-          <Constant key="Parameter_3572" name="KmmckatC14AcylCoAMAT" value="16.9185"/>
-          <Constant key="Parameter_3571" name="KmmckatC14KetoacylCoAMAT" value="1.2"/>
-          <Constant key="Parameter_3570" name="KmmckatC16AcylCoAMAT" value="16.4137"/>
-          <Constant key="Parameter_3569" name="KmmckatC16KetoacylCoAMAT" value="1.1"/>
-          <Constant key="Parameter_3568" name="KmmckatC4AcetoacylCoAMAT" value="12.4"/>
-          <Constant key="Parameter_3567" name="KmmckatC4AcylCoAMAT" value="16.1136"/>
-          <Constant key="Parameter_3566" name="KmmckatC6AcylCoAMAT" value="15.4765"/>
-          <Constant key="Parameter_3565" name="KmmckatC6KetoacylCoAMAT" value="6.7"/>
-          <Constant key="Parameter_3564" name="KmmckatC8AcylCoAMAT" value="23.4696"/>
-          <Constant key="Parameter_3563" name="KmmckatC8KetoacylCoAMAT" value="3.2"/>
-          <Constant key="Parameter_3562" name="KmmckatCoAMAT" value="26.6"/>
-          <Constant key="Parameter_3561" name="Vmckat" value="4"/>
-          <Constant key="Parameter_3560" name="sfmckatC16" value="0"/>
+          <Constant key="Parameter_3586" name="Keqmckat" value="1051"/>
+          <Constant key="Parameter_3585" name="KmmckatAcetylCoAMAT" value="68.1103"/>
+          <Constant key="Parameter_3584" name="KmmckatC10AcylCoAMAT" value="25.3702"/>
+          <Constant key="Parameter_3583" name="KmmckatC10KetoacylCoAMAT" value="2.1"/>
+          <Constant key="Parameter_3582" name="KmmckatC12AcylCoAMAT" value="29.8783"/>
+          <Constant key="Parameter_3581" name="KmmckatC12KetoacylCoAMAT" value="1.3"/>
+          <Constant key="Parameter_3580" name="KmmckatC14AcylCoAMAT" value="16.9185"/>
+          <Constant key="Parameter_3579" name="KmmckatC14KetoacylCoAMAT" value="1.2"/>
+          <Constant key="Parameter_3578" name="KmmckatC16AcylCoAMAT" value="16.4137"/>
+          <Constant key="Parameter_3577" name="KmmckatC16KetoacylCoAMAT" value="1.1"/>
+          <Constant key="Parameter_3576" name="KmmckatC4AcetoacylCoAMAT" value="12.4"/>
+          <Constant key="Parameter_3575" name="KmmckatC4AcylCoAMAT" value="16.1136"/>
+          <Constant key="Parameter_3574" name="KmmckatC6AcylCoAMAT" value="15.4765"/>
+          <Constant key="Parameter_3573" name="KmmckatC6KetoacylCoAMAT" value="6.7"/>
+          <Constant key="Parameter_3572" name="KmmckatC8AcylCoAMAT" value="23.4696"/>
+          <Constant key="Parameter_3571" name="KmmckatC8KetoacylCoAMAT" value="3.2"/>
+          <Constant key="Parameter_3570" name="KmmckatCoAMAT" value="26.6"/>
+          <Constant key="Parameter_3569" name="Vmckat" value="4"/>
+          <Constant key="Parameter_3568" name="sfmckatC16" value="0"/>
         </ListOfConstants>
         <KineticLaw function="Function_65" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
           <ListOfCallParameters>
@@ -21689,7 +21689,7 @@
               <SourceParameter reference="ModelValue_220"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_923">
-              <SourceParameter reference="Parameter_3560"/>
+              <SourceParameter reference="Parameter_3568"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -21729,25 +21729,25 @@
           <Modifier metabolite="Metabolite_96" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_3559" name="Keqmckat" value="1051"/>
-          <Constant key="Parameter_3558" name="KmmckatAcetylCoAMAT" value="68.1103"/>
-          <Constant key="Parameter_3557" name="KmmckatC10AcylCoAMAT" value="25.3702"/>
-          <Constant key="Parameter_3556" name="KmmckatC10KetoacylCoAMAT" value="2.1"/>
-          <Constant key="Parameter_3555" name="KmmckatC12AcylCoAMAT" value="29.8783"/>
-          <Constant key="Parameter_3554" name="KmmckatC12KetoacylCoAMAT" value="1.3"/>
-          <Constant key="Parameter_3553" name="KmmckatC14AcylCoAMAT" value="16.9185"/>
-          <Constant key="Parameter_3552" name="KmmckatC14KetoacylCoAMAT" value="1.2"/>
-          <Constant key="Parameter_3551" name="KmmckatC16AcylCoAMAT" value="16.4137"/>
-          <Constant key="Parameter_3550" name="KmmckatC16KetoacylCoAMAT" value="1.1"/>
-          <Constant key="Parameter_3549" name="KmmckatC4AcetoacylCoAMAT" value="12.4"/>
-          <Constant key="Parameter_3548" name="KmmckatC4AcylCoAMAT" value="16.1136"/>
-          <Constant key="Parameter_3547" name="KmmckatC6AcylCoAMAT" value="15.4765"/>
-          <Constant key="Parameter_3546" name="KmmckatC6KetoacylCoAMAT" value="6.7"/>
-          <Constant key="Parameter_3545" name="KmmckatC8AcylCoAMAT" value="23.4696"/>
-          <Constant key="Parameter_3544" name="KmmckatC8KetoacylCoAMAT" value="3.2"/>
-          <Constant key="Parameter_3543" name="KmmckatCoAMAT" value="26.6"/>
-          <Constant key="Parameter_3542" name="Vmckat" value="4"/>
-          <Constant key="Parameter_3541" name="sfmckatC14" value="0.2"/>
+          <Constant key="Parameter_3567" name="Keqmckat" value="1051"/>
+          <Constant key="Parameter_3566" name="KmmckatAcetylCoAMAT" value="68.1103"/>
+          <Constant key="Parameter_3565" name="KmmckatC10AcylCoAMAT" value="25.3702"/>
+          <Constant key="Parameter_3564" name="KmmckatC10KetoacylCoAMAT" value="2.1"/>
+          <Constant key="Parameter_3563" name="KmmckatC12AcylCoAMAT" value="29.8783"/>
+          <Constant key="Parameter_3562" name="KmmckatC12KetoacylCoAMAT" value="1.3"/>
+          <Constant key="Parameter_3561" name="KmmckatC14AcylCoAMAT" value="16.9185"/>
+          <Constant key="Parameter_3560" name="KmmckatC14KetoacylCoAMAT" value="1.2"/>
+          <Constant key="Parameter_3559" name="KmmckatC16AcylCoAMAT" value="16.4137"/>
+          <Constant key="Parameter_3558" name="KmmckatC16KetoacylCoAMAT" value="1.1"/>
+          <Constant key="Parameter_3557" name="KmmckatC4AcetoacylCoAMAT" value="12.4"/>
+          <Constant key="Parameter_3556" name="KmmckatC4AcylCoAMAT" value="16.1136"/>
+          <Constant key="Parameter_3555" name="KmmckatC6AcylCoAMAT" value="15.4765"/>
+          <Constant key="Parameter_3554" name="KmmckatC6KetoacylCoAMAT" value="6.7"/>
+          <Constant key="Parameter_3553" name="KmmckatC8AcylCoAMAT" value="23.4696"/>
+          <Constant key="Parameter_3552" name="KmmckatC8KetoacylCoAMAT" value="3.2"/>
+          <Constant key="Parameter_3551" name="KmmckatCoAMAT" value="26.6"/>
+          <Constant key="Parameter_3550" name="Vmckat" value="4"/>
+          <Constant key="Parameter_3549" name="sfmckatC14" value="0.2"/>
         </ListOfConstants>
         <KineticLaw function="Function_73" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
           <ListOfCallParameters>
@@ -21857,7 +21857,7 @@
               <SourceParameter reference="ModelValue_220"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1174">
-              <SourceParameter reference="Parameter_3541"/>
+              <SourceParameter reference="Parameter_3549"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -21897,25 +21897,25 @@
           <Modifier metabolite="Metabolite_96" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_3540" name="Keqmckat" value="1051"/>
-          <Constant key="Parameter_3539" name="KmmckatAcetylCoAMAT" value="68.1103"/>
-          <Constant key="Parameter_3538" name="KmmckatC10AcylCoAMAT" value="25.3702"/>
-          <Constant key="Parameter_3537" name="KmmckatC10KetoacylCoAMAT" value="2.1"/>
-          <Constant key="Parameter_3536" name="KmmckatC12AcylCoAMAT" value="29.8783"/>
-          <Constant key="Parameter_3535" name="KmmckatC12KetoacylCoAMAT" value="1.3"/>
-          <Constant key="Parameter_3534" name="KmmckatC14AcylCoAMAT" value="16.9185"/>
-          <Constant key="Parameter_3533" name="KmmckatC14KetoacylCoAMAT" value="1.2"/>
-          <Constant key="Parameter_3532" name="KmmckatC16AcylCoAMAT" value="16.4137"/>
-          <Constant key="Parameter_3531" name="KmmckatC16KetoacylCoAMAT" value="1.1"/>
-          <Constant key="Parameter_3530" name="KmmckatC4AcetoacylCoAMAT" value="12.4"/>
-          <Constant key="Parameter_3529" name="KmmckatC4AcylCoAMAT" value="16.1136"/>
-          <Constant key="Parameter_3528" name="KmmckatC6AcylCoAMAT" value="15.4765"/>
-          <Constant key="Parameter_3527" name="KmmckatC6KetoacylCoAMAT" value="6.7"/>
-          <Constant key="Parameter_3526" name="KmmckatC8AcylCoAMAT" value="23.4696"/>
-          <Constant key="Parameter_3525" name="KmmckatC8KetoacylCoAMAT" value="3.2"/>
-          <Constant key="Parameter_3524" name="KmmckatCoAMAT" value="26.6"/>
-          <Constant key="Parameter_3523" name="Vmckat" value="4"/>
-          <Constant key="Parameter_3522" name="sfmckatC12" value="0.38"/>
+          <Constant key="Parameter_3548" name="Keqmckat" value="1051"/>
+          <Constant key="Parameter_3547" name="KmmckatAcetylCoAMAT" value="68.1103"/>
+          <Constant key="Parameter_3546" name="KmmckatC10AcylCoAMAT" value="25.3702"/>
+          <Constant key="Parameter_3545" name="KmmckatC10KetoacylCoAMAT" value="2.1"/>
+          <Constant key="Parameter_3544" name="KmmckatC12AcylCoAMAT" value="29.8783"/>
+          <Constant key="Parameter_3543" name="KmmckatC12KetoacylCoAMAT" value="1.3"/>
+          <Constant key="Parameter_3542" name="KmmckatC14AcylCoAMAT" value="16.9185"/>
+          <Constant key="Parameter_3541" name="KmmckatC14KetoacylCoAMAT" value="1.2"/>
+          <Constant key="Parameter_3540" name="KmmckatC16AcylCoAMAT" value="16.4137"/>
+          <Constant key="Parameter_3539" name="KmmckatC16KetoacylCoAMAT" value="1.1"/>
+          <Constant key="Parameter_3538" name="KmmckatC4AcetoacylCoAMAT" value="12.4"/>
+          <Constant key="Parameter_3537" name="KmmckatC4AcylCoAMAT" value="16.1136"/>
+          <Constant key="Parameter_3536" name="KmmckatC6AcylCoAMAT" value="15.4765"/>
+          <Constant key="Parameter_3535" name="KmmckatC6KetoacylCoAMAT" value="6.7"/>
+          <Constant key="Parameter_3534" name="KmmckatC8AcylCoAMAT" value="23.4696"/>
+          <Constant key="Parameter_3533" name="KmmckatC8KetoacylCoAMAT" value="3.2"/>
+          <Constant key="Parameter_3532" name="KmmckatCoAMAT" value="26.6"/>
+          <Constant key="Parameter_3531" name="Vmckat" value="4"/>
+          <Constant key="Parameter_3530" name="sfmckatC12" value="0.38"/>
         </ListOfConstants>
         <KineticLaw function="Function_74" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
           <ListOfCallParameters>
@@ -22025,7 +22025,7 @@
               <SourceParameter reference="ModelValue_220"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1210">
-              <SourceParameter reference="Parameter_3522"/>
+              <SourceParameter reference="Parameter_3530"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -22065,25 +22065,25 @@
           <Modifier metabolite="Metabolite_96" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_3521" name="Keqmckat" value="1051"/>
-          <Constant key="Parameter_3520" name="KmmckatAcetylCoAMAT" value="68.1103"/>
-          <Constant key="Parameter_3519" name="KmmckatC10AcylCoAMAT" value="25.3702"/>
-          <Constant key="Parameter_3518" name="KmmckatC10KetoacylCoAMAT" value="2.1"/>
-          <Constant key="Parameter_3517" name="KmmckatC12AcylCoAMAT" value="29.8783"/>
-          <Constant key="Parameter_3516" name="KmmckatC12KetoacylCoAMAT" value="1.3"/>
-          <Constant key="Parameter_3515" name="KmmckatC14AcylCoAMAT" value="16.9185"/>
-          <Constant key="Parameter_3514" name="KmmckatC14KetoacylCoAMAT" value="1.2"/>
-          <Constant key="Parameter_3513" name="KmmckatC16AcylCoAMAT" value="16.4137"/>
-          <Constant key="Parameter_3512" name="KmmckatC16KetoacylCoAMAT" value="1.1"/>
-          <Constant key="Parameter_3511" name="KmmckatC4AcetoacylCoAMAT" value="12.4"/>
-          <Constant key="Parameter_3510" name="KmmckatC4AcylCoAMAT" value="16.1136"/>
-          <Constant key="Parameter_3509" name="KmmckatC6AcylCoAMAT" value="15.4765"/>
-          <Constant key="Parameter_3508" name="KmmckatC6KetoacylCoAMAT" value="6.7"/>
-          <Constant key="Parameter_3507" name="KmmckatC8AcylCoAMAT" value="23.4696"/>
-          <Constant key="Parameter_3506" name="KmmckatC8KetoacylCoAMAT" value="3.2"/>
-          <Constant key="Parameter_3505" name="KmmckatCoAMAT" value="26.6"/>
-          <Constant key="Parameter_3504" name="Vmckat" value="4"/>
-          <Constant key="Parameter_3503" name="sfmckatC10" value="0.65"/>
+          <Constant key="Parameter_3529" name="Keqmckat" value="1051"/>
+          <Constant key="Parameter_3528" name="KmmckatAcetylCoAMAT" value="68.1103"/>
+          <Constant key="Parameter_3527" name="KmmckatC10AcylCoAMAT" value="25.3702"/>
+          <Constant key="Parameter_3526" name="KmmckatC10KetoacylCoAMAT" value="2.1"/>
+          <Constant key="Parameter_3525" name="KmmckatC12AcylCoAMAT" value="29.8783"/>
+          <Constant key="Parameter_3524" name="KmmckatC12KetoacylCoAMAT" value="1.3"/>
+          <Constant key="Parameter_3523" name="KmmckatC14AcylCoAMAT" value="16.9185"/>
+          <Constant key="Parameter_3522" name="KmmckatC14KetoacylCoAMAT" value="1.2"/>
+          <Constant key="Parameter_3521" name="KmmckatC16AcylCoAMAT" value="16.4137"/>
+          <Constant key="Parameter_3520" name="KmmckatC16KetoacylCoAMAT" value="1.1"/>
+          <Constant key="Parameter_3519" name="KmmckatC4AcetoacylCoAMAT" value="12.4"/>
+          <Constant key="Parameter_3518" name="KmmckatC4AcylCoAMAT" value="16.1136"/>
+          <Constant key="Parameter_3517" name="KmmckatC6AcylCoAMAT" value="15.4765"/>
+          <Constant key="Parameter_3516" name="KmmckatC6KetoacylCoAMAT" value="6.7"/>
+          <Constant key="Parameter_3515" name="KmmckatC8AcylCoAMAT" value="23.4696"/>
+          <Constant key="Parameter_3514" name="KmmckatC8KetoacylCoAMAT" value="3.2"/>
+          <Constant key="Parameter_3513" name="KmmckatCoAMAT" value="26.6"/>
+          <Constant key="Parameter_3512" name="Vmckat" value="4"/>
+          <Constant key="Parameter_3511" name="sfmckatC10" value="0.65"/>
         </ListOfConstants>
         <KineticLaw function="Function_72" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
           <ListOfCallParameters>
@@ -22193,7 +22193,7 @@
               <SourceParameter reference="ModelValue_220"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1138">
-              <SourceParameter reference="Parameter_3503"/>
+              <SourceParameter reference="Parameter_3511"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -22233,25 +22233,25 @@
           <Modifier metabolite="Metabolite_96" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_3502" name="Keqmckat" value="1051"/>
-          <Constant key="Parameter_3501" name="KmmckatAcetylCoAMAT" value="68.1103"/>
-          <Constant key="Parameter_3500" name="KmmckatC10AcylCoAMAT" value="25.3702"/>
-          <Constant key="Parameter_3499" name="KmmckatC10KetoacylCoAMAT" value="2.1"/>
-          <Constant key="Parameter_3498" name="KmmckatC12AcylCoAMAT" value="29.8783"/>
-          <Constant key="Parameter_3497" name="KmmckatC12KetoacylCoAMAT" value="1.3"/>
-          <Constant key="Parameter_3496" name="KmmckatC14AcylCoAMAT" value="16.9185"/>
-          <Constant key="Parameter_3495" name="KmmckatC14KetoacylCoAMAT" value="1.2"/>
-          <Constant key="Parameter_3494" name="KmmckatC16AcylCoAMAT" value="16.4137"/>
-          <Constant key="Parameter_3493" name="KmmckatC16KetoacylCoAMAT" value="1.1"/>
-          <Constant key="Parameter_3492" name="KmmckatC4AcetoacylCoAMAT" value="12.4"/>
-          <Constant key="Parameter_3491" name="KmmckatC4AcylCoAMAT" value="16.1136"/>
-          <Constant key="Parameter_3490" name="KmmckatC6AcylCoAMAT" value="15.4765"/>
-          <Constant key="Parameter_3489" name="KmmckatC6KetoacylCoAMAT" value="6.7"/>
-          <Constant key="Parameter_3488" name="KmmckatC8AcylCoAMAT" value="23.4696"/>
-          <Constant key="Parameter_3487" name="KmmckatC8KetoacylCoAMAT" value="3.2"/>
-          <Constant key="Parameter_3486" name="KmmckatCoAMAT" value="26.6"/>
-          <Constant key="Parameter_3485" name="Vmckat" value="4"/>
-          <Constant key="Parameter_3484" name="sfmckatC8" value="0.81"/>
+          <Constant key="Parameter_3510" name="Keqmckat" value="1051"/>
+          <Constant key="Parameter_3509" name="KmmckatAcetylCoAMAT" value="68.1103"/>
+          <Constant key="Parameter_3508" name="KmmckatC10AcylCoAMAT" value="25.3702"/>
+          <Constant key="Parameter_3507" name="KmmckatC10KetoacylCoAMAT" value="2.1"/>
+          <Constant key="Parameter_3506" name="KmmckatC12AcylCoAMAT" value="29.8783"/>
+          <Constant key="Parameter_3505" name="KmmckatC12KetoacylCoAMAT" value="1.3"/>
+          <Constant key="Parameter_3504" name="KmmckatC14AcylCoAMAT" value="16.9185"/>
+          <Constant key="Parameter_3503" name="KmmckatC14KetoacylCoAMAT" value="1.2"/>
+          <Constant key="Parameter_3502" name="KmmckatC16AcylCoAMAT" value="16.4137"/>
+          <Constant key="Parameter_3501" name="KmmckatC16KetoacylCoAMAT" value="1.1"/>
+          <Constant key="Parameter_3500" name="KmmckatC4AcetoacylCoAMAT" value="12.4"/>
+          <Constant key="Parameter_3499" name="KmmckatC4AcylCoAMAT" value="16.1136"/>
+          <Constant key="Parameter_3498" name="KmmckatC6AcylCoAMAT" value="15.4765"/>
+          <Constant key="Parameter_3497" name="KmmckatC6KetoacylCoAMAT" value="6.7"/>
+          <Constant key="Parameter_3496" name="KmmckatC8AcylCoAMAT" value="23.4696"/>
+          <Constant key="Parameter_3495" name="KmmckatC8KetoacylCoAMAT" value="3.2"/>
+          <Constant key="Parameter_3494" name="KmmckatCoAMAT" value="26.6"/>
+          <Constant key="Parameter_3493" name="Vmckat" value="4"/>
+          <Constant key="Parameter_3492" name="sfmckatC8" value="0.81"/>
         </ListOfConstants>
         <KineticLaw function="Function_76" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
           <ListOfCallParameters>
@@ -22361,7 +22361,7 @@
               <SourceParameter reference="ModelValue_220"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1282">
-              <SourceParameter reference="Parameter_3484"/>
+              <SourceParameter reference="Parameter_3492"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -22401,25 +22401,25 @@
           <Modifier metabolite="Metabolite_91" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_3483" name="Keqmckat" value="1051"/>
-          <Constant key="Parameter_3482" name="KmmckatAcetylCoAMAT" value="68.1103"/>
-          <Constant key="Parameter_3481" name="KmmckatC10AcylCoAMAT" value="25.3702"/>
-          <Constant key="Parameter_3480" name="KmmckatC10KetoacylCoAMAT" value="2.1"/>
-          <Constant key="Parameter_3479" name="KmmckatC12AcylCoAMAT" value="29.8783"/>
-          <Constant key="Parameter_3478" name="KmmckatC12KetoacylCoAMAT" value="1.3"/>
-          <Constant key="Parameter_3477" name="KmmckatC14AcylCoAMAT" value="16.9185"/>
-          <Constant key="Parameter_3476" name="KmmckatC14KetoacylCoAMAT" value="1.2"/>
-          <Constant key="Parameter_3475" name="KmmckatC16AcylCoAMAT" value="16.4137"/>
-          <Constant key="Parameter_3474" name="KmmckatC16KetoacylCoAMAT" value="1.1"/>
-          <Constant key="Parameter_3473" name="KmmckatC4AcetoacylCoAMAT" value="12.4"/>
-          <Constant key="Parameter_3472" name="KmmckatC4AcylCoAMAT" value="16.1136"/>
-          <Constant key="Parameter_3471" name="KmmckatC6AcylCoAMAT" value="15.4765"/>
-          <Constant key="Parameter_3470" name="KmmckatC6KetoacylCoAMAT" value="6.7"/>
-          <Constant key="Parameter_3469" name="KmmckatC8AcylCoAMAT" value="23.4696"/>
-          <Constant key="Parameter_3468" name="KmmckatC8KetoacylCoAMAT" value="3.2"/>
-          <Constant key="Parameter_3467" name="KmmckatCoAMAT" value="26.6"/>
-          <Constant key="Parameter_3466" name="Vmckat" value="4"/>
-          <Constant key="Parameter_3465" name="sfmckatC6" value="1"/>
+          <Constant key="Parameter_3491" name="Keqmckat" value="1051"/>
+          <Constant key="Parameter_3490" name="KmmckatAcetylCoAMAT" value="68.1103"/>
+          <Constant key="Parameter_3489" name="KmmckatC10AcylCoAMAT" value="25.3702"/>
+          <Constant key="Parameter_3488" name="KmmckatC10KetoacylCoAMAT" value="2.1"/>
+          <Constant key="Parameter_3487" name="KmmckatC12AcylCoAMAT" value="29.8783"/>
+          <Constant key="Parameter_3486" name="KmmckatC12KetoacylCoAMAT" value="1.3"/>
+          <Constant key="Parameter_3485" name="KmmckatC14AcylCoAMAT" value="16.9185"/>
+          <Constant key="Parameter_3484" name="KmmckatC14KetoacylCoAMAT" value="1.2"/>
+          <Constant key="Parameter_3483" name="KmmckatC16AcylCoAMAT" value="16.4137"/>
+          <Constant key="Parameter_3482" name="KmmckatC16KetoacylCoAMAT" value="1.1"/>
+          <Constant key="Parameter_3481" name="KmmckatC4AcetoacylCoAMAT" value="12.4"/>
+          <Constant key="Parameter_3480" name="KmmckatC4AcylCoAMAT" value="16.1136"/>
+          <Constant key="Parameter_3479" name="KmmckatC6AcylCoAMAT" value="15.4765"/>
+          <Constant key="Parameter_3478" name="KmmckatC6KetoacylCoAMAT" value="6.7"/>
+          <Constant key="Parameter_3477" name="KmmckatC8AcylCoAMAT" value="23.4696"/>
+          <Constant key="Parameter_3476" name="KmmckatC8KetoacylCoAMAT" value="3.2"/>
+          <Constant key="Parameter_3475" name="KmmckatCoAMAT" value="26.6"/>
+          <Constant key="Parameter_3474" name="Vmckat" value="4"/>
+          <Constant key="Parameter_3473" name="sfmckatC6" value="1"/>
         </ListOfConstants>
         <KineticLaw function="Function_75" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
           <ListOfCallParameters>
@@ -22529,7 +22529,7 @@
               <SourceParameter reference="ModelValue_220"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1246">
-              <SourceParameter reference="Parameter_3465"/>
+              <SourceParameter reference="Parameter_3473"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -22569,25 +22569,25 @@
           <Modifier metabolite="Metabolite_91" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_3464" name="Keqmckat" value="1051"/>
-          <Constant key="Parameter_3463" name="KmmckatAcetylCoAMAT" value="68.1103"/>
-          <Constant key="Parameter_3462" name="KmmckatC10AcylCoAMAT" value="25.3702"/>
-          <Constant key="Parameter_3461" name="KmmckatC10KetoacylCoAMAT" value="2.1"/>
-          <Constant key="Parameter_3460" name="KmmckatC12AcylCoAMAT" value="29.8783"/>
-          <Constant key="Parameter_3459" name="KmmckatC12KetoacylCoAMAT" value="1.3"/>
-          <Constant key="Parameter_3458" name="KmmckatC14AcylCoAMAT" value="16.9185"/>
-          <Constant key="Parameter_3457" name="KmmckatC14KetoacylCoAMAT" value="1.2"/>
-          <Constant key="Parameter_3456" name="KmmckatC16AcylCoAMAT" value="16.4137"/>
-          <Constant key="Parameter_3455" name="KmmckatC16KetoacylCoAMAT" value="1.1"/>
-          <Constant key="Parameter_3454" name="KmmckatC4AcetoacylCoAMAT" value="12.4"/>
-          <Constant key="Parameter_3453" name="KmmckatC4AcylCoAMAT" value="16.1136"/>
-          <Constant key="Parameter_3452" name="KmmckatC6AcylCoAMAT" value="15.4765"/>
-          <Constant key="Parameter_3451" name="KmmckatC6KetoacylCoAMAT" value="6.7"/>
-          <Constant key="Parameter_3450" name="KmmckatC8AcylCoAMAT" value="23.4696"/>
-          <Constant key="Parameter_3449" name="KmmckatC8KetoacylCoAMAT" value="3.2"/>
-          <Constant key="Parameter_3448" name="KmmckatCoAMAT" value="26.6"/>
-          <Constant key="Parameter_3447" name="Vmckat" value="4"/>
-          <Constant key="Parameter_3446" name="sfmckatC4" value="0.49"/>
+          <Constant key="Parameter_3472" name="Keqmckat" value="1051"/>
+          <Constant key="Parameter_3471" name="KmmckatAcetylCoAMAT" value="68.1103"/>
+          <Constant key="Parameter_3470" name="KmmckatC10AcylCoAMAT" value="25.3702"/>
+          <Constant key="Parameter_3469" name="KmmckatC10KetoacylCoAMAT" value="2.1"/>
+          <Constant key="Parameter_3468" name="KmmckatC12AcylCoAMAT" value="29.8783"/>
+          <Constant key="Parameter_3467" name="KmmckatC12KetoacylCoAMAT" value="1.3"/>
+          <Constant key="Parameter_3466" name="KmmckatC14AcylCoAMAT" value="16.9185"/>
+          <Constant key="Parameter_3465" name="KmmckatC14KetoacylCoAMAT" value="1.2"/>
+          <Constant key="Parameter_3464" name="KmmckatC16AcylCoAMAT" value="16.4137"/>
+          <Constant key="Parameter_3463" name="KmmckatC16KetoacylCoAMAT" value="1.1"/>
+          <Constant key="Parameter_3462" name="KmmckatC4AcetoacylCoAMAT" value="12.4"/>
+          <Constant key="Parameter_3461" name="KmmckatC4AcylCoAMAT" value="16.1136"/>
+          <Constant key="Parameter_3460" name="KmmckatC6AcylCoAMAT" value="15.4765"/>
+          <Constant key="Parameter_3459" name="KmmckatC6KetoacylCoAMAT" value="6.7"/>
+          <Constant key="Parameter_3458" name="KmmckatC8AcylCoAMAT" value="23.4696"/>
+          <Constant key="Parameter_3457" name="KmmckatC8KetoacylCoAMAT" value="3.2"/>
+          <Constant key="Parameter_3456" name="KmmckatCoAMAT" value="26.6"/>
+          <Constant key="Parameter_3455" name="Vmckat" value="4"/>
+          <Constant key="Parameter_3454" name="sfmckatC4" value="0.49"/>
         </ListOfConstants>
         <KineticLaw function="Function_78" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
           <ListOfCallParameters>
@@ -22697,7 +22697,7 @@
               <SourceParameter reference="ModelValue_220"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1357">
-              <SourceParameter reference="Parameter_3446"/>
+              <SourceParameter reference="Parameter_3454"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -22737,25 +22737,25 @@
           <Modifier metabolite="Metabolite_99" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_3445" name="Keqmtp" value="0.71"/>
-          <Constant key="Parameter_3444" name="KicrotC4AcetoacylCoA" value="1.6"/>
-          <Constant key="Parameter_3443" name="KmmtpAcetylCoAMAT" value="30"/>
-          <Constant key="Parameter_3442" name="KmmtpC10AcylCoAMAT" value="13.83"/>
-          <Constant key="Parameter_3441" name="KmmtpC10EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_3440" name="KmmtpC12AcylCoAMAT" value="13.83"/>
-          <Constant key="Parameter_3439" name="KmmtpC12EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_3438" name="KmmtpC14AcylCoAMAT" value="13.83"/>
-          <Constant key="Parameter_3437" name="KmmtpC14EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_3436" name="KmmtpC16AcylCoAMAT" value="13.83"/>
-          <Constant key="Parameter_3435" name="KmmtpC16EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_3434" name="KmmtpC6AcylCoAMAT" value="13.83"/>
-          <Constant key="Parameter_3433" name="KmmtpC8AcylCoAMAT" value="13.83"/>
-          <Constant key="Parameter_3432" name="KmmtpC8EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_3431" name="KmmtpCoAMAT" value="30"/>
-          <Constant key="Parameter_3430" name="KmmtpNADHMAT" value="50"/>
-          <Constant key="Parameter_3429" name="KmmtpNADMAT" value="60"/>
-          <Constant key="Parameter_3428" name="Vmtp" value="0.1"/>
-          <Constant key="Parameter_3427" name="sfmtpC16" value="1"/>
+          <Constant key="Parameter_3453" name="Keqmtp" value="0.71"/>
+          <Constant key="Parameter_3452" name="KicrotC4AcetoacylCoA" value="1.6"/>
+          <Constant key="Parameter_3451" name="KmmtpAcetylCoAMAT" value="30"/>
+          <Constant key="Parameter_3450" name="KmmtpC10AcylCoAMAT" value="13.83"/>
+          <Constant key="Parameter_3449" name="KmmtpC10EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_3448" name="KmmtpC12AcylCoAMAT" value="13.83"/>
+          <Constant key="Parameter_3447" name="KmmtpC12EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_3446" name="KmmtpC14AcylCoAMAT" value="13.83"/>
+          <Constant key="Parameter_3445" name="KmmtpC14EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_3444" name="KmmtpC16AcylCoAMAT" value="13.83"/>
+          <Constant key="Parameter_3443" name="KmmtpC16EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_3442" name="KmmtpC6AcylCoAMAT" value="13.83"/>
+          <Constant key="Parameter_3441" name="KmmtpC8AcylCoAMAT" value="13.83"/>
+          <Constant key="Parameter_3440" name="KmmtpC8EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_3439" name="KmmtpCoAMAT" value="30"/>
+          <Constant key="Parameter_3438" name="KmmtpNADHMAT" value="50"/>
+          <Constant key="Parameter_3437" name="KmmtpNADMAT" value="60"/>
+          <Constant key="Parameter_3436" name="Vmtp" value="0.1"/>
+          <Constant key="Parameter_3435" name="sfmtpC16" value="1"/>
         </ListOfConstants>
         <KineticLaw function="Function_80" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
           <ListOfCallParameters>
@@ -22865,7 +22865,7 @@
               <SourceParameter reference="ModelValue_237"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1394">
-              <SourceParameter reference="Parameter_3427"/>
+              <SourceParameter reference="Parameter_3435"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -22905,25 +22905,25 @@
           <Modifier metabolite="Metabolite_99" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_3426" name="Keqmtp" value="0.71"/>
-          <Constant key="Parameter_3425" name="KicrotC4AcetoacylCoA" value="1.6"/>
-          <Constant key="Parameter_3424" name="KmmtpAcetylCoAMAT" value="30"/>
-          <Constant key="Parameter_3423" name="KmmtpC10AcylCoAMAT" value="13.83"/>
-          <Constant key="Parameter_3422" name="KmmtpC10EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_3421" name="KmmtpC12AcylCoAMAT" value="13.83"/>
-          <Constant key="Parameter_3420" name="KmmtpC12EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_3419" name="KmmtpC14AcylCoAMAT" value="13.83"/>
-          <Constant key="Parameter_3418" name="KmmtpC14EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_3417" name="KmmtpC16AcylCoAMAT" value="13.83"/>
-          <Constant key="Parameter_3416" name="KmmtpC16EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_3415" name="KmmtpC6AcylCoAMAT" value="13.83"/>
-          <Constant key="Parameter_3414" name="KmmtpC8AcylCoAMAT" value="13.83"/>
-          <Constant key="Parameter_3413" name="KmmtpC8EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_3412" name="KmmtpCoAMAT" value="30"/>
-          <Constant key="Parameter_3411" name="KmmtpNADHMAT" value="50"/>
-          <Constant key="Parameter_3410" name="KmmtpNADMAT" value="60"/>
-          <Constant key="Parameter_3409" name="Vmtp" value="0.1"/>
-          <Constant key="Parameter_3408" name="sfmtpC14" value="0.9"/>
+          <Constant key="Parameter_3434" name="Keqmtp" value="0.71"/>
+          <Constant key="Parameter_3433" name="KicrotC4AcetoacylCoA" value="1.6"/>
+          <Constant key="Parameter_3432" name="KmmtpAcetylCoAMAT" value="30"/>
+          <Constant key="Parameter_3431" name="KmmtpC10AcylCoAMAT" value="13.83"/>
+          <Constant key="Parameter_3430" name="KmmtpC10EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_3429" name="KmmtpC12AcylCoAMAT" value="13.83"/>
+          <Constant key="Parameter_3428" name="KmmtpC12EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_3427" name="KmmtpC14AcylCoAMAT" value="13.83"/>
+          <Constant key="Parameter_3426" name="KmmtpC14EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_3425" name="KmmtpC16AcylCoAMAT" value="13.83"/>
+          <Constant key="Parameter_3424" name="KmmtpC16EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_3423" name="KmmtpC6AcylCoAMAT" value="13.83"/>
+          <Constant key="Parameter_3422" name="KmmtpC8AcylCoAMAT" value="13.83"/>
+          <Constant key="Parameter_3421" name="KmmtpC8EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_3420" name="KmmtpCoAMAT" value="30"/>
+          <Constant key="Parameter_3419" name="KmmtpNADHMAT" value="50"/>
+          <Constant key="Parameter_3418" name="KmmtpNADMAT" value="60"/>
+          <Constant key="Parameter_3417" name="Vmtp" value="0.1"/>
+          <Constant key="Parameter_3416" name="sfmtpC14" value="0.9"/>
         </ListOfConstants>
         <KineticLaw function="Function_94" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
           <ListOfCallParameters>
@@ -23033,7 +23033,7 @@
               <SourceParameter reference="ModelValue_237"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1804">
-              <SourceParameter reference="Parameter_3408"/>
+              <SourceParameter reference="Parameter_3416"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -23073,25 +23073,25 @@
           <Modifier metabolite="Metabolite_99" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_3407" name="Keqmtp" value="0.71"/>
-          <Constant key="Parameter_3406" name="KicrotC4AcetoacylCoA" value="1.6"/>
-          <Constant key="Parameter_3405" name="KmmtpAcetylCoAMAT" value="30"/>
-          <Constant key="Parameter_3404" name="KmmtpC10AcylCoAMAT" value="13.83"/>
-          <Constant key="Parameter_3403" name="KmmtpC10EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_3402" name="KmmtpC12AcylCoAMAT" value="13.83"/>
-          <Constant key="Parameter_3401" name="KmmtpC12EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_3400" name="KmmtpC14AcylCoAMAT" value="13.83"/>
-          <Constant key="Parameter_3399" name="KmmtpC14EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_3398" name="KmmtpC16AcylCoAMAT" value="13.83"/>
-          <Constant key="Parameter_3397" name="KmmtpC16EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_3396" name="KmmtpC6AcylCoAMAT" value="13.83"/>
-          <Constant key="Parameter_3395" name="KmmtpC8AcylCoAMAT" value="13.83"/>
-          <Constant key="Parameter_3394" name="KmmtpC8EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_3393" name="KmmtpCoAMAT" value="30"/>
-          <Constant key="Parameter_3392" name="KmmtpNADHMAT" value="50"/>
-          <Constant key="Parameter_3391" name="KmmtpNADMAT" value="60"/>
-          <Constant key="Parameter_3390" name="Vmtp" value="0.1"/>
-          <Constant key="Parameter_3389" name="sfmtpC12" value="0.81"/>
+          <Constant key="Parameter_3415" name="Keqmtp" value="0.71"/>
+          <Constant key="Parameter_3414" name="KicrotC4AcetoacylCoA" value="1.6"/>
+          <Constant key="Parameter_3413" name="KmmtpAcetylCoAMAT" value="30"/>
+          <Constant key="Parameter_3412" name="KmmtpC10AcylCoAMAT" value="13.83"/>
+          <Constant key="Parameter_3411" name="KmmtpC10EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_3410" name="KmmtpC12AcylCoAMAT" value="13.83"/>
+          <Constant key="Parameter_3409" name="KmmtpC12EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_3408" name="KmmtpC14AcylCoAMAT" value="13.83"/>
+          <Constant key="Parameter_3407" name="KmmtpC14EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_3406" name="KmmtpC16AcylCoAMAT" value="13.83"/>
+          <Constant key="Parameter_3405" name="KmmtpC16EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_3404" name="KmmtpC6AcylCoAMAT" value="13.83"/>
+          <Constant key="Parameter_3403" name="KmmtpC8AcylCoAMAT" value="13.83"/>
+          <Constant key="Parameter_3402" name="KmmtpC8EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_3401" name="KmmtpCoAMAT" value="30"/>
+          <Constant key="Parameter_3400" name="KmmtpNADHMAT" value="50"/>
+          <Constant key="Parameter_3399" name="KmmtpNADMAT" value="60"/>
+          <Constant key="Parameter_3398" name="Vmtp" value="0.1"/>
+          <Constant key="Parameter_3397" name="sfmtpC12" value="0.81"/>
         </ListOfConstants>
         <KineticLaw function="Function_93" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
           <ListOfCallParameters>
@@ -23201,7 +23201,7 @@
               <SourceParameter reference="ModelValue_237"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1768">
-              <SourceParameter reference="Parameter_3389"/>
+              <SourceParameter reference="Parameter_3397"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -23241,25 +23241,25 @@
           <Modifier metabolite="Metabolite_99" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_3388" name="Keqmtp" value="0.71"/>
-          <Constant key="Parameter_3387" name="KicrotC4AcetoacylCoA" value="1.6"/>
-          <Constant key="Parameter_3386" name="KmmtpAcetylCoAMAT" value="30"/>
-          <Constant key="Parameter_3385" name="KmmtpC10AcylCoAMAT" value="13.83"/>
-          <Constant key="Parameter_3384" name="KmmtpC10EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_3383" name="KmmtpC12AcylCoAMAT" value="13.83"/>
-          <Constant key="Parameter_3382" name="KmmtpC12EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_3381" name="KmmtpC14AcylCoAMAT" value="13.83"/>
-          <Constant key="Parameter_3380" name="KmmtpC14EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_3379" name="KmmtpC16AcylCoAMAT" value="13.83"/>
-          <Constant key="Parameter_3378" name="KmmtpC16EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_3377" name="KmmtpC6AcylCoAMAT" value="13.83"/>
-          <Constant key="Parameter_3376" name="KmmtpC8AcylCoAMAT" value="13.83"/>
-          <Constant key="Parameter_3375" name="KmmtpC8EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_3374" name="KmmtpCoAMAT" value="30"/>
-          <Constant key="Parameter_3373" name="KmmtpNADHMAT" value="50"/>
-          <Constant key="Parameter_3372" name="KmmtpNADMAT" value="60"/>
-          <Constant key="Parameter_3371" name="Vmtp" value="0.1"/>
-          <Constant key="Parameter_3370" name="sfmtpC10" value="0.73"/>
+          <Constant key="Parameter_3396" name="Keqmtp" value="0.71"/>
+          <Constant key="Parameter_3395" name="KicrotC4AcetoacylCoA" value="1.6"/>
+          <Constant key="Parameter_3394" name="KmmtpAcetylCoAMAT" value="30"/>
+          <Constant key="Parameter_3393" name="KmmtpC10AcylCoAMAT" value="13.83"/>
+          <Constant key="Parameter_3392" name="KmmtpC10EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_3391" name="KmmtpC12AcylCoAMAT" value="13.83"/>
+          <Constant key="Parameter_3390" name="KmmtpC12EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_3389" name="KmmtpC14AcylCoAMAT" value="13.83"/>
+          <Constant key="Parameter_3388" name="KmmtpC14EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_3387" name="KmmtpC16AcylCoAMAT" value="13.83"/>
+          <Constant key="Parameter_3386" name="KmmtpC16EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_3385" name="KmmtpC6AcylCoAMAT" value="13.83"/>
+          <Constant key="Parameter_3384" name="KmmtpC8AcylCoAMAT" value="13.83"/>
+          <Constant key="Parameter_3383" name="KmmtpC8EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_3382" name="KmmtpCoAMAT" value="30"/>
+          <Constant key="Parameter_3381" name="KmmtpNADHMAT" value="50"/>
+          <Constant key="Parameter_3380" name="KmmtpNADMAT" value="60"/>
+          <Constant key="Parameter_3379" name="Vmtp" value="0.1"/>
+          <Constant key="Parameter_3378" name="sfmtpC10" value="0.73"/>
         </ListOfConstants>
         <KineticLaw function="Function_95" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
           <ListOfCallParameters>
@@ -23369,7 +23369,7 @@
               <SourceParameter reference="ModelValue_237"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1840">
-              <SourceParameter reference="Parameter_3370"/>
+              <SourceParameter reference="Parameter_3378"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -23409,25 +23409,25 @@
           <Modifier metabolite="Metabolite_99" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_3369" name="Keqmtp" value="0.71"/>
-          <Constant key="Parameter_3368" name="KicrotC4AcetoacylCoA" value="1.6"/>
-          <Constant key="Parameter_3367" name="KmmtpAcetylCoAMAT" value="30"/>
-          <Constant key="Parameter_3366" name="KmmtpC10AcylCoAMAT" value="13.83"/>
-          <Constant key="Parameter_3365" name="KmmtpC10EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_3364" name="KmmtpC12AcylCoAMAT" value="13.83"/>
-          <Constant key="Parameter_3363" name="KmmtpC12EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_3362" name="KmmtpC14AcylCoAMAT" value="13.83"/>
-          <Constant key="Parameter_3361" name="KmmtpC14EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_3360" name="KmmtpC16AcylCoAMAT" value="13.83"/>
-          <Constant key="Parameter_3359" name="KmmtpC16EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_3358" name="KmmtpC6AcylCoAMAT" value="13.83"/>
-          <Constant key="Parameter_3357" name="KmmtpC8AcylCoAMAT" value="13.83"/>
-          <Constant key="Parameter_3356" name="KmmtpC8EnoylCoAMAT" value="25"/>
-          <Constant key="Parameter_3355" name="KmmtpCoAMAT" value="30"/>
-          <Constant key="Parameter_3354" name="KmmtpNADHMAT" value="50"/>
-          <Constant key="Parameter_3353" name="KmmtpNADMAT" value="60"/>
-          <Constant key="Parameter_3352" name="Vmtp" value="0.1"/>
-          <Constant key="Parameter_3351" name="sfmtpC8" value="0.34"/>
+          <Constant key="Parameter_3377" name="Keqmtp" value="0.71"/>
+          <Constant key="Parameter_3376" name="KicrotC4AcetoacylCoA" value="1.6"/>
+          <Constant key="Parameter_3375" name="KmmtpAcetylCoAMAT" value="30"/>
+          <Constant key="Parameter_3374" name="KmmtpC10AcylCoAMAT" value="13.83"/>
+          <Constant key="Parameter_3373" name="KmmtpC10EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_3372" name="KmmtpC12AcylCoAMAT" value="13.83"/>
+          <Constant key="Parameter_3371" name="KmmtpC12EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_3370" name="KmmtpC14AcylCoAMAT" value="13.83"/>
+          <Constant key="Parameter_3369" name="KmmtpC14EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_3368" name="KmmtpC16AcylCoAMAT" value="13.83"/>
+          <Constant key="Parameter_3367" name="KmmtpC16EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_3366" name="KmmtpC6AcylCoAMAT" value="13.83"/>
+          <Constant key="Parameter_3365" name="KmmtpC8AcylCoAMAT" value="13.83"/>
+          <Constant key="Parameter_3364" name="KmmtpC8EnoylCoAMAT" value="25"/>
+          <Constant key="Parameter_3363" name="KmmtpCoAMAT" value="30"/>
+          <Constant key="Parameter_3362" name="KmmtpNADHMAT" value="50"/>
+          <Constant key="Parameter_3361" name="KmmtpNADMAT" value="60"/>
+          <Constant key="Parameter_3360" name="Vmtp" value="0.1"/>
+          <Constant key="Parameter_3359" name="sfmtpC8" value="0.34"/>
         </ListOfConstants>
         <KineticLaw function="Function_79" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
           <ListOfCallParameters>
@@ -23537,7 +23537,7 @@
               <SourceParameter reference="ModelValue_237"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1358">
-              <SourceParameter reference="Parameter_3351"/>
+              <SourceParameter reference="Parameter_3359"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -23558,8 +23558,8 @@
           <Substrate metabolite="Metabolite_100" stoichiometry="1"/>
         </ListOfSubstrates>
         <ListOfConstants>
-          <Constant key="Parameter_3350" name="K1acesink" value="21.1414"/>
-          <Constant key="Parameter_3349" name="Ksacesink" value="6e+06"/>
+          <Constant key="Parameter_3358" name="K1acesink" value="21.1414"/>
+          <Constant key="Parameter_3357" name="Ksacesink" value="6e+06"/>
         </ListOfConstants>
         <KineticLaw function="Function_81" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
           <ListOfCallParameters>
@@ -23567,7 +23567,7 @@
               <SourceParameter reference="Metabolite_100"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1464">
-              <SourceParameter reference="Parameter_3350"/>
+              <SourceParameter reference="Parameter_3358"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1463">
               <SourceParameter reference="ModelValue_297"/>
@@ -23594,8 +23594,8 @@
           <Substrate metabolite="Metabolite_101" stoichiometry="1"/>
         </ListOfSubstrates>
         <ListOfConstants>
-          <Constant key="Parameter_3348" name="K1fadhsink" value="0.430198"/>
-          <Constant key="Parameter_3347" name="Ksfadhsink" value="6e+06"/>
+          <Constant key="Parameter_3356" name="K1fadhsink" value="0.430198"/>
+          <Constant key="Parameter_3355" name="Ksfadhsink" value="6e+06"/>
         </ListOfConstants>
         <KineticLaw function="Function_82" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
           <ListOfCallParameters>
@@ -23603,7 +23603,7 @@
               <SourceParameter reference="Metabolite_101"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1459">
-              <SourceParameter reference="Parameter_3348"/>
+              <SourceParameter reference="Parameter_3356"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1460">
               <SourceParameter reference="ModelValue_298"/>
@@ -23630,16 +23630,16 @@
           <Substrate metabolite="Metabolite_102" stoichiometry="1"/>
         </ListOfSubstrates>
         <ListOfConstants>
-          <Constant key="Parameter_3346" name="K1nadhsink" value="15.3482"/>
-          <Constant key="Parameter_3345" name="Ksnadhsink" value="6e+06"/>
+          <Constant key="Parameter_3354" name="K1nadhsink" value="15.3482"/>
+          <Constant key="Parameter_3353" name="Ksnadhsink" value="6e+06"/>
         </ListOfConstants>
         <KineticLaw function="Function_77" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
           <ListOfCallParameters>
             <CallParameter functionParameter="FunctionParameter_1353">
-              <SourceParameter reference="Parameter_3346"/>
+              <SourceParameter reference="Parameter_3354"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1352">
-              <SourceParameter reference="Parameter_3345"/>
+              <SourceParameter reference="Parameter_3353"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1351">
               <SourceParameter reference="Metabolite_102"/>
@@ -23683,23 +23683,23 @@
           <Modifier metabolite="Metabolite_92" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_3344" name="parameter_1" value="0.183912"/>
-          <Constant key="Parameter_3343" name="parameter_10" value="1.08"/>
-          <Constant key="Parameter_3342" name="parameter_11" value="1.08"/>
-          <Constant key="Parameter_3341" name="parameter_12" value="1.08"/>
-          <Constant key="Parameter_3340" name="parameter_13" value="1.08"/>
-          <Constant key="Parameter_3339" name="parameter_14" value="1.08"/>
-          <Constant key="Parameter_3338" name="parameter_15" value="24.2"/>
-          <Constant key="Parameter_3337" name="parameter_16" value="6"/>
-          <Constant key="Parameter_3336" name="parameter_2" value="8.71603"/>
-          <Constant key="Parameter_3335" name="parameter_3" value="5"/>
-          <Constant key="Parameter_3334" name="parameter_4" value="14"/>
-          <Constant key="Parameter_3333" name="parameter_5" value="18.7504"/>
-          <Constant key="Parameter_3332" name="parameter_6" value="12.1189"/>
-          <Constant key="Parameter_3331" name="parameter_7" value="14.5"/>
-          <Constant key="Parameter_3330" name="parameter_8" value="0.100638"/>
-          <Constant key="Parameter_3329" name="parameter_9" value="1.08"/>
-          <Constant key="Parameter_3328" name="sfvlcadC16" value="0.51"/>
+          <Constant key="Parameter_3352" name="parameter_1" value="0.183912"/>
+          <Constant key="Parameter_3351" name="parameter_10" value="1.08"/>
+          <Constant key="Parameter_3350" name="parameter_11" value="1.08"/>
+          <Constant key="Parameter_3349" name="parameter_12" value="1.08"/>
+          <Constant key="Parameter_3348" name="parameter_13" value="1.08"/>
+          <Constant key="Parameter_3347" name="parameter_14" value="1.08"/>
+          <Constant key="Parameter_3346" name="parameter_15" value="24.2"/>
+          <Constant key="Parameter_3345" name="parameter_16" value="6"/>
+          <Constant key="Parameter_3344" name="parameter_2" value="8.71603"/>
+          <Constant key="Parameter_3343" name="parameter_3" value="5"/>
+          <Constant key="Parameter_3342" name="parameter_4" value="14"/>
+          <Constant key="Parameter_3341" name="parameter_5" value="18.7504"/>
+          <Constant key="Parameter_3340" name="parameter_6" value="12.1189"/>
+          <Constant key="Parameter_3339" name="parameter_7" value="14.5"/>
+          <Constant key="Parameter_3338" name="parameter_8" value="0.100638"/>
+          <Constant key="Parameter_3337" name="parameter_9" value="1.08"/>
+          <Constant key="Parameter_3336" name="sfvlcadC16" value="0.51"/>
         </ListOfConstants>
         <KineticLaw function="Function_97" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
           <ListOfCallParameters>
@@ -23797,7 +23797,7 @@
               <SourceParameter reference="ModelValue_253"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1920">
-              <SourceParameter reference="Parameter_3328"/>
+              <SourceParameter reference="Parameter_3336"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -23835,23 +23835,23 @@
           <Modifier metabolite="Metabolite_92" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_3327" name="parameter_1" value="0.183912"/>
-          <Constant key="Parameter_3326" name="parameter_10" value="1.08"/>
-          <Constant key="Parameter_3325" name="parameter_11" value="1.08"/>
-          <Constant key="Parameter_3324" name="parameter_12" value="1.08"/>
-          <Constant key="Parameter_3323" name="parameter_13" value="1.08"/>
-          <Constant key="Parameter_3322" name="parameter_14" value="1.08"/>
-          <Constant key="Parameter_3321" name="parameter_15" value="24.2"/>
-          <Constant key="Parameter_3320" name="parameter_16" value="6"/>
-          <Constant key="Parameter_3319" name="parameter_2" value="8.71603"/>
-          <Constant key="Parameter_3318" name="parameter_3" value="5"/>
-          <Constant key="Parameter_3317" name="parameter_4" value="14"/>
-          <Constant key="Parameter_3316" name="parameter_5" value="18.7504"/>
-          <Constant key="Parameter_3315" name="parameter_6" value="12.1189"/>
-          <Constant key="Parameter_3314" name="parameter_7" value="14.5"/>
-          <Constant key="Parameter_3313" name="parameter_8" value="0.100638"/>
-          <Constant key="Parameter_3312" name="parameter_9" value="1.08"/>
-          <Constant key="Parameter_3311" name="sfvlcadC14" value="0.57"/>
+          <Constant key="Parameter_3335" name="parameter_1" value="0.183912"/>
+          <Constant key="Parameter_3334" name="parameter_10" value="1.08"/>
+          <Constant key="Parameter_3333" name="parameter_11" value="1.08"/>
+          <Constant key="Parameter_3332" name="parameter_12" value="1.08"/>
+          <Constant key="Parameter_3331" name="parameter_13" value="1.08"/>
+          <Constant key="Parameter_3330" name="parameter_14" value="1.08"/>
+          <Constant key="Parameter_3329" name="parameter_15" value="24.2"/>
+          <Constant key="Parameter_3328" name="parameter_16" value="6"/>
+          <Constant key="Parameter_3327" name="parameter_2" value="8.71603"/>
+          <Constant key="Parameter_3326" name="parameter_3" value="5"/>
+          <Constant key="Parameter_3325" name="parameter_4" value="14"/>
+          <Constant key="Parameter_3324" name="parameter_5" value="18.7504"/>
+          <Constant key="Parameter_3323" name="parameter_6" value="12.1189"/>
+          <Constant key="Parameter_3322" name="parameter_7" value="14.5"/>
+          <Constant key="Parameter_3321" name="parameter_8" value="0.100638"/>
+          <Constant key="Parameter_3320" name="parameter_9" value="1.08"/>
+          <Constant key="Parameter_3319" name="sfvlcadC14" value="0.57"/>
         </ListOfConstants>
         <KineticLaw function="Function_98" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
           <ListOfCallParameters>
@@ -23949,7 +23949,7 @@
               <SourceParameter reference="ModelValue_253"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1921">
-              <SourceParameter reference="Parameter_3311"/>
+              <SourceParameter reference="Parameter_3319"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -23987,23 +23987,23 @@
           <Modifier metabolite="Metabolite_92" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_3310" name="parameter_1" value="0.183912"/>
-          <Constant key="Parameter_3309" name="parameter_10" value="1.08"/>
-          <Constant key="Parameter_3308" name="parameter_11" value="1.08"/>
-          <Constant key="Parameter_3307" name="parameter_12" value="1.08"/>
-          <Constant key="Parameter_3306" name="parameter_13" value="1.08"/>
-          <Constant key="Parameter_3305" name="parameter_14" value="1.08"/>
-          <Constant key="Parameter_3304" name="parameter_15" value="24.2"/>
-          <Constant key="Parameter_3303" name="parameter_16" value="6"/>
-          <Constant key="Parameter_3302" name="parameter_2" value="8.71603"/>
-          <Constant key="Parameter_3301" name="parameter_3" value="5"/>
-          <Constant key="Parameter_3300" name="parameter_4" value="14"/>
-          <Constant key="Parameter_3299" name="parameter_5" value="18.7504"/>
-          <Constant key="Parameter_3298" name="parameter_6" value="12.1189"/>
-          <Constant key="Parameter_3297" name="parameter_7" value="14.5"/>
-          <Constant key="Parameter_3296" name="parameter_8" value="0.100638"/>
-          <Constant key="Parameter_3295" name="parameter_9" value="1.08"/>
-          <Constant key="Parameter_3294" name="sfvlcadC12" value="1"/>
+          <Constant key="Parameter_3318" name="parameter_1" value="0.183912"/>
+          <Constant key="Parameter_3317" name="parameter_10" value="1.08"/>
+          <Constant key="Parameter_3316" name="parameter_11" value="1.08"/>
+          <Constant key="Parameter_3315" name="parameter_12" value="1.08"/>
+          <Constant key="Parameter_3314" name="parameter_13" value="1.08"/>
+          <Constant key="Parameter_3313" name="parameter_14" value="1.08"/>
+          <Constant key="Parameter_3312" name="parameter_15" value="24.2"/>
+          <Constant key="Parameter_3311" name="parameter_16" value="6"/>
+          <Constant key="Parameter_3310" name="parameter_2" value="8.71603"/>
+          <Constant key="Parameter_3309" name="parameter_3" value="5"/>
+          <Constant key="Parameter_3308" name="parameter_4" value="14"/>
+          <Constant key="Parameter_3307" name="parameter_5" value="18.7504"/>
+          <Constant key="Parameter_3306" name="parameter_6" value="12.1189"/>
+          <Constant key="Parameter_3305" name="parameter_7" value="14.5"/>
+          <Constant key="Parameter_3304" name="parameter_8" value="0.100638"/>
+          <Constant key="Parameter_3303" name="parameter_9" value="1.08"/>
+          <Constant key="Parameter_3302" name="sfvlcadC12" value="1"/>
         </ListOfConstants>
         <KineticLaw function="Function_99" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
           <ListOfCallParameters>
@@ -24101,7 +24101,7 @@
               <SourceParameter reference="ModelValue_253"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1953">
-              <SourceParameter reference="Parameter_3294"/>
+              <SourceParameter reference="Parameter_3302"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -24139,23 +24139,23 @@
           <Modifier metabolite="Metabolite_92" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_3293" name="parameter_1" value="0.183912"/>
-          <Constant key="Parameter_3292" name="parameter_10" value="1.08"/>
-          <Constant key="Parameter_3291" name="parameter_11" value="1.08"/>
-          <Constant key="Parameter_3290" name="parameter_12" value="1.08"/>
-          <Constant key="Parameter_3289" name="parameter_13" value="1.08"/>
-          <Constant key="Parameter_3288" name="parameter_14" value="1.08"/>
-          <Constant key="Parameter_3287" name="parameter_15" value="24.2"/>
-          <Constant key="Parameter_3286" name="parameter_16" value="6"/>
-          <Constant key="Parameter_3285" name="parameter_2" value="8.71603"/>
-          <Constant key="Parameter_3284" name="parameter_3" value="5"/>
-          <Constant key="Parameter_3283" name="parameter_4" value="14"/>
-          <Constant key="Parameter_3282" name="parameter_5" value="18.7504"/>
-          <Constant key="Parameter_3281" name="parameter_6" value="12.1189"/>
-          <Constant key="Parameter_3280" name="parameter_7" value="14.5"/>
-          <Constant key="Parameter_3279" name="parameter_8" value="0.100638"/>
-          <Constant key="Parameter_3278" name="parameter_9" value="1.08"/>
-          <Constant key="Parameter_3277" name="sfvlcadC10" value="1"/>
+          <Constant key="Parameter_3301" name="parameter_1" value="0.183912"/>
+          <Constant key="Parameter_3300" name="parameter_10" value="1.08"/>
+          <Constant key="Parameter_3299" name="parameter_11" value="1.08"/>
+          <Constant key="Parameter_3298" name="parameter_12" value="1.08"/>
+          <Constant key="Parameter_3297" name="parameter_13" value="1.08"/>
+          <Constant key="Parameter_3296" name="parameter_14" value="1.08"/>
+          <Constant key="Parameter_3295" name="parameter_15" value="24.2"/>
+          <Constant key="Parameter_3294" name="parameter_16" value="6"/>
+          <Constant key="Parameter_3293" name="parameter_2" value="8.71603"/>
+          <Constant key="Parameter_3292" name="parameter_3" value="5"/>
+          <Constant key="Parameter_3291" name="parameter_4" value="14"/>
+          <Constant key="Parameter_3290" name="parameter_5" value="18.7504"/>
+          <Constant key="Parameter_3289" name="parameter_6" value="12.1189"/>
+          <Constant key="Parameter_3288" name="parameter_7" value="14.5"/>
+          <Constant key="Parameter_3287" name="parameter_8" value="0.100638"/>
+          <Constant key="Parameter_3286" name="parameter_9" value="1.08"/>
+          <Constant key="Parameter_3285" name="sfvlcadC10" value="1"/>
         </ListOfConstants>
         <KineticLaw function="Function_100" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
           <ListOfCallParameters>
@@ -24253,7 +24253,7 @@
               <SourceParameter reference="ModelValue_253"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_1985">
-              <SourceParameter reference="Parameter_3277"/>
+              <SourceParameter reference="Parameter_3285"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -24291,23 +24291,23 @@
           <Modifier metabolite="Metabolite_92" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_3276" name="parameter_1" value="0.183912"/>
-          <Constant key="Parameter_3275" name="parameter_10" value="1.08"/>
-          <Constant key="Parameter_3274" name="parameter_11" value="1.08"/>
-          <Constant key="Parameter_3273" name="parameter_12" value="1.08"/>
-          <Constant key="Parameter_3272" name="parameter_13" value="1.08"/>
-          <Constant key="Parameter_3271" name="parameter_14" value="1.08"/>
-          <Constant key="Parameter_3270" name="parameter_15" value="24.2"/>
-          <Constant key="Parameter_3269" name="parameter_16" value="6"/>
-          <Constant key="Parameter_3268" name="parameter_2" value="8.71603"/>
-          <Constant key="Parameter_3267" name="parameter_3" value="5"/>
-          <Constant key="Parameter_3266" name="parameter_4" value="14"/>
-          <Constant key="Parameter_3265" name="parameter_5" value="18.7504"/>
-          <Constant key="Parameter_3264" name="parameter_6" value="12.1189"/>
-          <Constant key="Parameter_3263" name="parameter_7" value="14.5"/>
-          <Constant key="Parameter_3262" name="parameter_8" value="0.100638"/>
-          <Constant key="Parameter_3261" name="parameter_9" value="1.08"/>
-          <Constant key="Parameter_3260" name="sfvlcadC8" value="0.64"/>
+          <Constant key="Parameter_3284" name="parameter_1" value="0.183912"/>
+          <Constant key="Parameter_3283" name="parameter_10" value="1.08"/>
+          <Constant key="Parameter_3282" name="parameter_11" value="1.08"/>
+          <Constant key="Parameter_3281" name="parameter_12" value="1.08"/>
+          <Constant key="Parameter_3280" name="parameter_13" value="1.08"/>
+          <Constant key="Parameter_3279" name="parameter_14" value="1.08"/>
+          <Constant key="Parameter_3278" name="parameter_15" value="24.2"/>
+          <Constant key="Parameter_3277" name="parameter_16" value="6"/>
+          <Constant key="Parameter_3276" name="parameter_2" value="8.71603"/>
+          <Constant key="Parameter_3275" name="parameter_3" value="5"/>
+          <Constant key="Parameter_3274" name="parameter_4" value="14"/>
+          <Constant key="Parameter_3273" name="parameter_5" value="18.7504"/>
+          <Constant key="Parameter_3272" name="parameter_6" value="12.1189"/>
+          <Constant key="Parameter_3271" name="parameter_7" value="14.5"/>
+          <Constant key="Parameter_3270" name="parameter_8" value="0.100638"/>
+          <Constant key="Parameter_3269" name="parameter_9" value="1.08"/>
+          <Constant key="Parameter_3268" name="sfvlcadC8" value="0.64"/>
         </ListOfConstants>
         <KineticLaw function="Function_101" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
           <ListOfCallParameters>
@@ -24405,7 +24405,7 @@
               <SourceParameter reference="ModelValue_253"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_2017">
-              <SourceParameter reference="Parameter_3260"/>
+              <SourceParameter reference="Parameter_3268"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -24443,23 +24443,23 @@
           <Modifier metabolite="Metabolite_87" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_3259" name="parameter_1" value="0.183912"/>
-          <Constant key="Parameter_3258" name="parameter_10" value="1.08"/>
-          <Constant key="Parameter_3257" name="parameter_11" value="1.08"/>
-          <Constant key="Parameter_3256" name="parameter_12" value="1.08"/>
-          <Constant key="Parameter_3255" name="parameter_13" value="1.08"/>
-          <Constant key="Parameter_3254" name="parameter_14" value="1.08"/>
-          <Constant key="Parameter_3253" name="parameter_15" value="24.2"/>
-          <Constant key="Parameter_3252" name="parameter_16" value="6"/>
-          <Constant key="Parameter_3251" name="parameter_2" value="8.71603"/>
-          <Constant key="Parameter_3250" name="parameter_3" value="5"/>
-          <Constant key="Parameter_3249" name="parameter_4" value="14"/>
-          <Constant key="Parameter_3248" name="parameter_5" value="18.7504"/>
-          <Constant key="Parameter_3247" name="parameter_6" value="12.1189"/>
-          <Constant key="Parameter_3246" name="parameter_7" value="14.5"/>
-          <Constant key="Parameter_3245" name="parameter_8" value="0.100638"/>
-          <Constant key="Parameter_3244" name="parameter_9" value="1.08"/>
-          <Constant key="Parameter_3243" name="sfvlcadC6" value="0.54"/>
+          <Constant key="Parameter_3267" name="parameter_1" value="0.183912"/>
+          <Constant key="Parameter_3266" name="parameter_10" value="1.08"/>
+          <Constant key="Parameter_3265" name="parameter_11" value="1.08"/>
+          <Constant key="Parameter_3264" name="parameter_12" value="1.08"/>
+          <Constant key="Parameter_3263" name="parameter_13" value="1.08"/>
+          <Constant key="Parameter_3262" name="parameter_14" value="1.08"/>
+          <Constant key="Parameter_3261" name="parameter_15" value="24.2"/>
+          <Constant key="Parameter_3260" name="parameter_16" value="6"/>
+          <Constant key="Parameter_3259" name="parameter_2" value="8.71603"/>
+          <Constant key="Parameter_3258" name="parameter_3" value="5"/>
+          <Constant key="Parameter_3257" name="parameter_4" value="14"/>
+          <Constant key="Parameter_3256" name="parameter_5" value="18.7504"/>
+          <Constant key="Parameter_3255" name="parameter_6" value="12.1189"/>
+          <Constant key="Parameter_3254" name="parameter_7" value="14.5"/>
+          <Constant key="Parameter_3253" name="parameter_8" value="0.100638"/>
+          <Constant key="Parameter_3252" name="parameter_9" value="1.08"/>
+          <Constant key="Parameter_3251" name="sfvlcadC6" value="0.54"/>
         </ListOfConstants>
         <KineticLaw function="Function_102" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
           <ListOfCallParameters>
@@ -24557,7 +24557,7 @@
               <SourceParameter reference="ModelValue_253"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_2049">
-              <SourceParameter reference="Parameter_3243"/>
+              <SourceParameter reference="Parameter_3251"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -24597,25 +24597,25 @@
           <Modifier metabolite="Metabolite_97" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_3242" name="Keqmcad" value="6"/>
-          <Constant key="Parameter_3241" name="KmmcadC10AcylCoAMAT" value="16.7092"/>
-          <Constant key="Parameter_3240" name="KmmcadC10EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_3239" name="KmmcadC12AcylCoAMAT" value="18.6"/>
-          <Constant key="Parameter_3238" name="KmmcadC12EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_3237" name="KmmcadC4AcylCoAMAT" value="142.8"/>
-          <Constant key="Parameter_3236" name="KmmcadC4EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_3235" name="KmmcadC6AcylCoAMAT" value="10.8"/>
-          <Constant key="Parameter_3234" name="KmmcadC6EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_3233" name="KmmcadC8AcylCoAMAT" value="15.7644"/>
-          <Constant key="Parameter_3232" name="KmmcadC8EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_3231" name="KmmcadFAD" value="0.100638"/>
-          <Constant key="Parameter_3230" name="KmmcadFADH" value="24.2"/>
-          <Constant key="Parameter_3229" name="Vmcad" value="0.001"/>
-          <Constant key="Parameter_3228" name="parameter_17" value="24.393"/>
-          <Constant key="Parameter_3227" name="parameter_18" value="5"/>
-          <Constant key="Parameter_3226" name="parameter_19" value="1.08"/>
-          <Constant key="Parameter_3225" name="parameter_20" value="1.08"/>
-          <Constant key="Parameter_3224" name="sfmcadC16" value="0.15"/>
+          <Constant key="Parameter_3250" name="Keqmcad" value="6"/>
+          <Constant key="Parameter_3249" name="KmmcadC10AcylCoAMAT" value="16.7092"/>
+          <Constant key="Parameter_3248" name="KmmcadC10EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_3247" name="KmmcadC12AcylCoAMAT" value="18.6"/>
+          <Constant key="Parameter_3246" name="KmmcadC12EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_3245" name="KmmcadC4AcylCoAMAT" value="142.8"/>
+          <Constant key="Parameter_3244" name="KmmcadC4EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_3243" name="KmmcadC6AcylCoAMAT" value="10.8"/>
+          <Constant key="Parameter_3242" name="KmmcadC6EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_3241" name="KmmcadC8AcylCoAMAT" value="15.7644"/>
+          <Constant key="Parameter_3240" name="KmmcadC8EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_3239" name="KmmcadFAD" value="0.100638"/>
+          <Constant key="Parameter_3238" name="KmmcadFADH" value="24.2"/>
+          <Constant key="Parameter_3237" name="Vmcad" value="0.001"/>
+          <Constant key="Parameter_3236" name="parameter_17" value="24.393"/>
+          <Constant key="Parameter_3235" name="parameter_18" value="5"/>
+          <Constant key="Parameter_3234" name="parameter_19" value="1.08"/>
+          <Constant key="Parameter_3233" name="parameter_20" value="1.08"/>
+          <Constant key="Parameter_3232" name="sfmcadC16" value="0.15"/>
         </ListOfConstants>
         <KineticLaw function="Function_103" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
           <ListOfCallParameters>
@@ -24725,7 +24725,7 @@
               <SourceParameter reference="ModelValue_271"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_2116">
-              <SourceParameter reference="Parameter_3224"/>
+              <SourceParameter reference="Parameter_3232"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -24765,25 +24765,25 @@
           <Modifier metabolite="Metabolite_97" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_3223" name="Keqmcad" value="6"/>
-          <Constant key="Parameter_3222" name="KmmcadC10AcylCoAMAT" value="16.7092"/>
-          <Constant key="Parameter_3221" name="KmmcadC10EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_3220" name="KmmcadC12AcylCoAMAT" value="18.6"/>
-          <Constant key="Parameter_3219" name="KmmcadC12EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_3218" name="KmmcadC4AcylCoAMAT" value="142.8"/>
-          <Constant key="Parameter_3217" name="KmmcadC4EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_3216" name="KmmcadC6AcylCoAMAT" value="10.8"/>
-          <Constant key="Parameter_3215" name="KmmcadC6EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_3214" name="KmmcadC8AcylCoAMAT" value="15.7644"/>
-          <Constant key="Parameter_3213" name="KmmcadC8EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_3212" name="KmmcadFAD" value="0.100638"/>
-          <Constant key="Parameter_3211" name="KmmcadFADH" value="24.2"/>
-          <Constant key="Parameter_3210" name="Vmcad" value="0.001"/>
-          <Constant key="Parameter_3209" name="parameter_17" value="24.393"/>
-          <Constant key="Parameter_3208" name="parameter_18" value="5"/>
-          <Constant key="Parameter_3207" name="parameter_19" value="1.08"/>
-          <Constant key="Parameter_3206" name="parameter_20" value="1.08"/>
-          <Constant key="Parameter_3205" name="sfmcadC14" value="0.24"/>
+          <Constant key="Parameter_3231" name="Keqmcad" value="6"/>
+          <Constant key="Parameter_3230" name="KmmcadC10AcylCoAMAT" value="16.7092"/>
+          <Constant key="Parameter_3229" name="KmmcadC10EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_3228" name="KmmcadC12AcylCoAMAT" value="18.6"/>
+          <Constant key="Parameter_3227" name="KmmcadC12EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_3226" name="KmmcadC4AcylCoAMAT" value="142.8"/>
+          <Constant key="Parameter_3225" name="KmmcadC4EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_3224" name="KmmcadC6AcylCoAMAT" value="10.8"/>
+          <Constant key="Parameter_3223" name="KmmcadC6EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_3222" name="KmmcadC8AcylCoAMAT" value="15.7644"/>
+          <Constant key="Parameter_3221" name="KmmcadC8EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_3220" name="KmmcadFAD" value="0.100638"/>
+          <Constant key="Parameter_3219" name="KmmcadFADH" value="24.2"/>
+          <Constant key="Parameter_3218" name="Vmcad" value="0.001"/>
+          <Constant key="Parameter_3217" name="parameter_17" value="24.393"/>
+          <Constant key="Parameter_3216" name="parameter_18" value="5"/>
+          <Constant key="Parameter_3215" name="parameter_19" value="1.08"/>
+          <Constant key="Parameter_3214" name="parameter_20" value="1.08"/>
+          <Constant key="Parameter_3213" name="sfmcadC14" value="0.24"/>
         </ListOfConstants>
         <KineticLaw function="Function_104" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
           <ListOfCallParameters>
@@ -24893,7 +24893,7 @@
               <SourceParameter reference="ModelValue_271"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_2117">
-              <SourceParameter reference="Parameter_3205"/>
+              <SourceParameter reference="Parameter_3213"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -24933,25 +24933,25 @@
           <Modifier metabolite="Metabolite_97" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_3204" name="Keqmcad" value="6"/>
-          <Constant key="Parameter_3203" name="KmmcadC10AcylCoAMAT" value="16.7092"/>
-          <Constant key="Parameter_3202" name="KmmcadC10EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_3201" name="KmmcadC12AcylCoAMAT" value="18.6"/>
-          <Constant key="Parameter_3200" name="KmmcadC12EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_3199" name="KmmcadC4AcylCoAMAT" value="142.8"/>
-          <Constant key="Parameter_3198" name="KmmcadC4EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_3197" name="KmmcadC6AcylCoAMAT" value="10.8"/>
-          <Constant key="Parameter_3196" name="KmmcadC6EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_3195" name="KmmcadC8AcylCoAMAT" value="15.7644"/>
-          <Constant key="Parameter_3194" name="KmmcadC8EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_3193" name="KmmcadFAD" value="0.100638"/>
-          <Constant key="Parameter_3192" name="KmmcadFADH" value="24.2"/>
-          <Constant key="Parameter_3191" name="Vmcad" value="0.001"/>
-          <Constant key="Parameter_3190" name="parameter_17" value="24.393"/>
-          <Constant key="Parameter_3189" name="parameter_18" value="5"/>
-          <Constant key="Parameter_3188" name="parameter_19" value="1.08"/>
-          <Constant key="Parameter_3187" name="parameter_20" value="1.08"/>
-          <Constant key="Parameter_3186" name="sfmcadC12" value="0.5"/>
+          <Constant key="Parameter_3212" name="Keqmcad" value="6"/>
+          <Constant key="Parameter_3211" name="KmmcadC10AcylCoAMAT" value="16.7092"/>
+          <Constant key="Parameter_3210" name="KmmcadC10EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_3209" name="KmmcadC12AcylCoAMAT" value="18.6"/>
+          <Constant key="Parameter_3208" name="KmmcadC12EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_3207" name="KmmcadC4AcylCoAMAT" value="142.8"/>
+          <Constant key="Parameter_3206" name="KmmcadC4EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_3205" name="KmmcadC6AcylCoAMAT" value="10.8"/>
+          <Constant key="Parameter_3204" name="KmmcadC6EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_3203" name="KmmcadC8AcylCoAMAT" value="15.7644"/>
+          <Constant key="Parameter_3202" name="KmmcadC8EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_3201" name="KmmcadFAD" value="0.100638"/>
+          <Constant key="Parameter_3200" name="KmmcadFADH" value="24.2"/>
+          <Constant key="Parameter_3199" name="Vmcad" value="0.001"/>
+          <Constant key="Parameter_3198" name="parameter_17" value="24.393"/>
+          <Constant key="Parameter_3197" name="parameter_18" value="5"/>
+          <Constant key="Parameter_3196" name="parameter_19" value="1.08"/>
+          <Constant key="Parameter_3195" name="parameter_20" value="1.08"/>
+          <Constant key="Parameter_3194" name="sfmcadC12" value="0.5"/>
         </ListOfConstants>
         <KineticLaw function="Function_105" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
           <ListOfCallParameters>
@@ -25061,7 +25061,7 @@
               <SourceParameter reference="ModelValue_271"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_2153">
-              <SourceParameter reference="Parameter_3186"/>
+              <SourceParameter reference="Parameter_3194"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -25101,25 +25101,25 @@
           <Modifier metabolite="Metabolite_97" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_3185" name="Keqmcad" value="6"/>
-          <Constant key="Parameter_3184" name="KmmcadC10AcylCoAMAT" value="16.7092"/>
-          <Constant key="Parameter_3183" name="KmmcadC10EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_3182" name="KmmcadC12AcylCoAMAT" value="18.6"/>
-          <Constant key="Parameter_3181" name="KmmcadC12EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_3180" name="KmmcadC4AcylCoAMAT" value="142.8"/>
-          <Constant key="Parameter_3179" name="KmmcadC4EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_3178" name="KmmcadC6AcylCoAMAT" value="10.8"/>
-          <Constant key="Parameter_3177" name="KmmcadC6EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_3176" name="KmmcadC8AcylCoAMAT" value="15.7644"/>
-          <Constant key="Parameter_3175" name="KmmcadC8EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_3174" name="KmmcadFAD" value="0.100638"/>
-          <Constant key="Parameter_3173" name="KmmcadFADH" value="24.2"/>
-          <Constant key="Parameter_3172" name="Vmcad" value="0.001"/>
-          <Constant key="Parameter_3171" name="parameter_17" value="24.393"/>
-          <Constant key="Parameter_3170" name="parameter_18" value="5"/>
-          <Constant key="Parameter_3169" name="parameter_19" value="1.08"/>
-          <Constant key="Parameter_3168" name="parameter_20" value="1.08"/>
-          <Constant key="Parameter_3167" name="sfmcadC10" value="0.54"/>
+          <Constant key="Parameter_3193" name="Keqmcad" value="6"/>
+          <Constant key="Parameter_3192" name="KmmcadC10AcylCoAMAT" value="16.7092"/>
+          <Constant key="Parameter_3191" name="KmmcadC10EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_3190" name="KmmcadC12AcylCoAMAT" value="18.6"/>
+          <Constant key="Parameter_3189" name="KmmcadC12EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_3188" name="KmmcadC4AcylCoAMAT" value="142.8"/>
+          <Constant key="Parameter_3187" name="KmmcadC4EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_3186" name="KmmcadC6AcylCoAMAT" value="10.8"/>
+          <Constant key="Parameter_3185" name="KmmcadC6EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_3184" name="KmmcadC8AcylCoAMAT" value="15.7644"/>
+          <Constant key="Parameter_3183" name="KmmcadC8EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_3182" name="KmmcadFAD" value="0.100638"/>
+          <Constant key="Parameter_3181" name="KmmcadFADH" value="24.2"/>
+          <Constant key="Parameter_3180" name="Vmcad" value="0.001"/>
+          <Constant key="Parameter_3179" name="parameter_17" value="24.393"/>
+          <Constant key="Parameter_3178" name="parameter_18" value="5"/>
+          <Constant key="Parameter_3177" name="parameter_19" value="1.08"/>
+          <Constant key="Parameter_3176" name="parameter_20" value="1.08"/>
+          <Constant key="Parameter_3175" name="sfmcadC10" value="0.54"/>
         </ListOfConstants>
         <KineticLaw function="Function_106" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
           <ListOfCallParameters>
@@ -25229,7 +25229,7 @@
               <SourceParameter reference="ModelValue_271"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_2189">
-              <SourceParameter reference="Parameter_3167"/>
+              <SourceParameter reference="Parameter_3175"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -25269,25 +25269,25 @@
           <Modifier metabolite="Metabolite_97" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_3166" name="Keqmcad" value="6"/>
-          <Constant key="Parameter_3165" name="KmmcadC10AcylCoAMAT" value="16.7092"/>
-          <Constant key="Parameter_3164" name="KmmcadC10EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_3163" name="KmmcadC12AcylCoAMAT" value="18.6"/>
-          <Constant key="Parameter_3162" name="KmmcadC12EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_3161" name="KmmcadC4AcylCoAMAT" value="142.8"/>
-          <Constant key="Parameter_3160" name="KmmcadC4EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_3159" name="KmmcadC6AcylCoAMAT" value="10.8"/>
-          <Constant key="Parameter_3158" name="KmmcadC6EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_3157" name="KmmcadC8AcylCoAMAT" value="15.7644"/>
-          <Constant key="Parameter_3156" name="KmmcadC8EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_3155" name="KmmcadFAD" value="0.100638"/>
-          <Constant key="Parameter_3154" name="KmmcadFADH" value="24.2"/>
-          <Constant key="Parameter_3153" name="Vmcad" value="0.001"/>
-          <Constant key="Parameter_3152" name="parameter_17" value="24.393"/>
-          <Constant key="Parameter_3151" name="parameter_18" value="5"/>
-          <Constant key="Parameter_3150" name="parameter_19" value="1.08"/>
-          <Constant key="Parameter_3149" name="parameter_20" value="1.08"/>
-          <Constant key="Parameter_3148" name="sfmcadC8" value="0.86"/>
+          <Constant key="Parameter_3174" name="Keqmcad" value="6"/>
+          <Constant key="Parameter_3173" name="KmmcadC10AcylCoAMAT" value="16.7092"/>
+          <Constant key="Parameter_3172" name="KmmcadC10EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_3171" name="KmmcadC12AcylCoAMAT" value="18.6"/>
+          <Constant key="Parameter_3170" name="KmmcadC12EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_3169" name="KmmcadC4AcylCoAMAT" value="142.8"/>
+          <Constant key="Parameter_3168" name="KmmcadC4EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_3167" name="KmmcadC6AcylCoAMAT" value="10.8"/>
+          <Constant key="Parameter_3166" name="KmmcadC6EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_3165" name="KmmcadC8AcylCoAMAT" value="15.7644"/>
+          <Constant key="Parameter_3164" name="KmmcadC8EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_3163" name="KmmcadFAD" value="0.100638"/>
+          <Constant key="Parameter_3162" name="KmmcadFADH" value="24.2"/>
+          <Constant key="Parameter_3161" name="Vmcad" value="0.001"/>
+          <Constant key="Parameter_3160" name="parameter_17" value="24.393"/>
+          <Constant key="Parameter_3159" name="parameter_18" value="5"/>
+          <Constant key="Parameter_3158" name="parameter_19" value="1.08"/>
+          <Constant key="Parameter_3157" name="parameter_20" value="1.08"/>
+          <Constant key="Parameter_3156" name="sfmcadC8" value="0.86"/>
         </ListOfConstants>
         <KineticLaw function="Function_107" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
           <ListOfCallParameters>
@@ -25397,7 +25397,7 @@
               <SourceParameter reference="ModelValue_271"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_2225">
-              <SourceParameter reference="Parameter_3148"/>
+              <SourceParameter reference="Parameter_3156"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -25437,25 +25437,25 @@
           <Modifier metabolite="Metabolite_97" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_3147" name="Keqmcad" value="6"/>
-          <Constant key="Parameter_3146" name="KmmcadC10AcylCoAMAT" value="16.7092"/>
-          <Constant key="Parameter_3145" name="KmmcadC10EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_3144" name="KmmcadC12AcylCoAMAT" value="18.6"/>
-          <Constant key="Parameter_3143" name="KmmcadC12EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_3142" name="KmmcadC4AcylCoAMAT" value="142.8"/>
-          <Constant key="Parameter_3141" name="KmmcadC4EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_3140" name="KmmcadC6AcylCoAMAT" value="10.8"/>
-          <Constant key="Parameter_3139" name="KmmcadC6EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_3138" name="KmmcadC8AcylCoAMAT" value="15.7644"/>
-          <Constant key="Parameter_3137" name="KmmcadC8EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_3136" name="KmmcadFAD" value="0.100638"/>
-          <Constant key="Parameter_3135" name="KmmcadFADH" value="24.2"/>
-          <Constant key="Parameter_3134" name="Vmcad" value="0.001"/>
-          <Constant key="Parameter_3133" name="parameter_17" value="24.393"/>
-          <Constant key="Parameter_3132" name="parameter_18" value="5"/>
-          <Constant key="Parameter_3131" name="parameter_19" value="1.08"/>
-          <Constant key="Parameter_3130" name="parameter_20" value="1.08"/>
-          <Constant key="Parameter_3129" name="sfmcadC6" value="1"/>
+          <Constant key="Parameter_3155" name="Keqmcad" value="6"/>
+          <Constant key="Parameter_3154" name="KmmcadC10AcylCoAMAT" value="16.7092"/>
+          <Constant key="Parameter_3153" name="KmmcadC10EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_3152" name="KmmcadC12AcylCoAMAT" value="18.6"/>
+          <Constant key="Parameter_3151" name="KmmcadC12EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_3150" name="KmmcadC4AcylCoAMAT" value="142.8"/>
+          <Constant key="Parameter_3149" name="KmmcadC4EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_3148" name="KmmcadC6AcylCoAMAT" value="10.8"/>
+          <Constant key="Parameter_3147" name="KmmcadC6EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_3146" name="KmmcadC8AcylCoAMAT" value="15.7644"/>
+          <Constant key="Parameter_3145" name="KmmcadC8EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_3144" name="KmmcadFAD" value="0.100638"/>
+          <Constant key="Parameter_3143" name="KmmcadFADH" value="24.2"/>
+          <Constant key="Parameter_3142" name="Vmcad" value="0.001"/>
+          <Constant key="Parameter_3141" name="parameter_17" value="24.393"/>
+          <Constant key="Parameter_3140" name="parameter_18" value="5"/>
+          <Constant key="Parameter_3139" name="parameter_19" value="1.08"/>
+          <Constant key="Parameter_3138" name="parameter_20" value="1.08"/>
+          <Constant key="Parameter_3137" name="sfmcadC6" value="1"/>
         </ListOfConstants>
         <KineticLaw function="Function_108" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
           <ListOfCallParameters>
@@ -25565,7 +25565,7 @@
               <SourceParameter reference="ModelValue_271"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_2261">
-              <SourceParameter reference="Parameter_3129"/>
+              <SourceParameter reference="Parameter_3137"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -25605,25 +25605,25 @@
           <Modifier metabolite="Metabolite_92" stoichiometry="1"/>
         </ListOfModifiers>
         <ListOfConstants>
-          <Constant key="Parameter_3128" name="Keqmcad" value="6"/>
-          <Constant key="Parameter_3127" name="KmmcadC10AcylCoAMAT" value="16.7092"/>
-          <Constant key="Parameter_3126" name="KmmcadC10EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_3125" name="KmmcadC12AcylCoAMAT" value="18.6"/>
-          <Constant key="Parameter_3124" name="KmmcadC12EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_3123" name="KmmcadC4AcylCoAMAT" value="142.8"/>
-          <Constant key="Parameter_3122" name="KmmcadC4EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_3121" name="KmmcadC6AcylCoAMAT" value="10.8"/>
-          <Constant key="Parameter_3120" name="KmmcadC6EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_3119" name="KmmcadC8AcylCoAMAT" value="15.7644"/>
-          <Constant key="Parameter_3118" name="KmmcadC8EnoylCoAMAT" value="1.08"/>
-          <Constant key="Parameter_3117" name="KmmcadFAD" value="0.100638"/>
-          <Constant key="Parameter_3116" name="KmmcadFADH" value="24.2"/>
-          <Constant key="Parameter_3115" name="Vmcad" value="0.001"/>
-          <Constant key="Parameter_3114" name="parameter_17" value="24.393"/>
-          <Constant key="Parameter_3113" name="parameter_18" value="5"/>
-          <Constant key="Parameter_3112" name="parameter_19" value="1.08"/>
-          <Constant key="Parameter_3111" name="parameter_20" value="1.08"/>
-          <Constant key="Parameter_3110" name="sfmcadC4" value="0.31"/>
+          <Constant key="Parameter_3136" name="Keqmcad" value="6"/>
+          <Constant key="Parameter_3135" name="KmmcadC10AcylCoAMAT" value="16.7092"/>
+          <Constant key="Parameter_3134" name="KmmcadC10EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_3133" name="KmmcadC12AcylCoAMAT" value="18.6"/>
+          <Constant key="Parameter_3132" name="KmmcadC12EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_3131" name="KmmcadC4AcylCoAMAT" value="142.8"/>
+          <Constant key="Parameter_3130" name="KmmcadC4EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_3129" name="KmmcadC6AcylCoAMAT" value="10.8"/>
+          <Constant key="Parameter_3128" name="KmmcadC6EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_3127" name="KmmcadC8AcylCoAMAT" value="15.7644"/>
+          <Constant key="Parameter_3126" name="KmmcadC8EnoylCoAMAT" value="1.08"/>
+          <Constant key="Parameter_3125" name="KmmcadFAD" value="0.100638"/>
+          <Constant key="Parameter_3124" name="KmmcadFADH" value="24.2"/>
+          <Constant key="Parameter_3123" name="Vmcad" value="0.001"/>
+          <Constant key="Parameter_3122" name="parameter_17" value="24.393"/>
+          <Constant key="Parameter_3121" name="parameter_18" value="5"/>
+          <Constant key="Parameter_3120" name="parameter_19" value="1.08"/>
+          <Constant key="Parameter_3119" name="parameter_20" value="1.08"/>
+          <Constant key="Parameter_3118" name="sfmcadC4" value="0.31"/>
         </ListOfConstants>
         <KineticLaw function="Function_109" unitType="Default" scalingCompartment="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]]">
           <ListOfCallParameters>
@@ -25733,7 +25733,7 @@
               <SourceParameter reference="ModelValue_271"/>
             </CallParameter>
             <CallParameter functionParameter="FunctionParameter_2297">
-              <SourceParameter reference="Parameter_3110"/>
+              <SourceParameter reference="Parameter_3118"/>
             </CallParameter>
           </ListOfCallParameters>
         </KineticLaw>
@@ -25748,7 +25748,7 @@ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
 <rdf:Description rdf:about="#ModelParameterSet_0">
 <dcterms:created>
 <rdf:Description>
-<dcterms:W3CDTF>2019-04-16T07:10:09Z</dcterms:W3CDTF>
+<dcterms:W3CDTF>2019-06-06T13:00:02Z</dcterms:W3CDTF>
 </rdf:Description>
 </dcterms:created>
 </rdf:Description>
@@ -25777,7 +25777,7 @@ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VCYT],Vector=Metabolites[MalCoACYT]" value="10672307137765.893" type="Species" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C16AcylCarMAT]" value="20550571996696.656" type="Species" simulationType="reactions"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C16AcylCoAMAT]" value="9063307918102.4902" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C16EnoylCoAMAT]" value="148778993558.06061" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C16EnoylCoAMAT]" value="148778993558.06052" type="Species" simulationType="reactions"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C16HydroxyacylCoAMAT]" value="767560538482.88684" type="Species" simulationType="reactions"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C16KetoacylCoAMAT]" value="492920083.23465902" type="Species" simulationType="reactions"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C14AcylCarMAT]" value="8894568638367.498" type="Species" simulationType="reactions"/>
@@ -25789,8 +25789,8 @@ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C12AcylCoAMAT]" value="2633110581528.0146" type="Species" simulationType="reactions"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C12EnoylCoAMAT]" value="46106188332.568993" type="Species" simulationType="reactions"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C12HydroxyacylCoAMAT]" value="4448587418064.9121" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C12KetoacylCoAMAT]" value="31726904743.888412" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C10AcylCarMAT]" value="216884345439.63174" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C12KetoacylCoAMAT]" value="31726904743.88839" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C10AcylCarMAT]" value="216884345439.63159" type="Species" simulationType="reactions"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C10AcylCoAMAT]" value="3750672784616.4653" type="Species" simulationType="reactions"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C10EnoylCoAMAT]" value="3222819765178.6953" type="Species" simulationType="reactions"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C10HydroxyacylCoAMAT]" value="9122169494401.1133" type="Species" simulationType="reactions"/>
@@ -25799,7 +25799,7 @@ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C8AcylCoAMAT]" value="4338185073519.3364" type="Species" simulationType="reactions"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C8EnoylCoAMAT]" value="6227331506619.4541" type="Species" simulationType="reactions"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C8HydroxyacylCoAMAT]" value="20158476766857.398" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C8KetoacylCoAMAT]" value="61391384206.879845" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C8KetoacylCoAMAT]" value="61391384206.879814" type="Species" simulationType="reactions"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C6AcylCarMAT]" value="10613260963115.695" type="Species" simulationType="reactions"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C6AcylCoAMAT]" value="1430523993264.9556" type="Species" simulationType="reactions"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C6EnoylCoAMAT]" value="1083985354260" type="Species" simulationType="reactions"/>
@@ -25810,7 +25810,7 @@ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C4EnoylCoAMAT]" value="6801611917052.6787" type="Species" simulationType="reactions"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C4HydroxyacylCoAMAT]" value="46829072235687.578" type="Species" simulationType="reactions"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[C4AcetoacylCoAMAT]" value="3233665783544.8506" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[AcetylCoAMAT]" value="60251540126549.891" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[AcetylCoAMAT]" value="60251540126549.844" type="Species" simulationType="reactions"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[FADHMAT]" value="466328331607.50739" type="Species" simulationType="reactions"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[NADHMAT]" value="16637224014428.896" type="Species" simulationType="reactions"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT],Vector=Metabolites[CoAMAT]" value="5218871326372147" type="Species" simulationType="assignment"/>
@@ -25858,7 +25858,7 @@ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C6AcylCoAMAT]" value="2008873648710.9111" type="Species" simulationType="reactions"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C6EnoylCoAMAT]" value="2288856912504.1909" type="Species" simulationType="reactions"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C6HydroxyacylCoAMAT]" value="6274127152208.501" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C6KetoacylCoAMAT]" value="1013025379707.7902" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C6KetoacylCoAMAT]" value="1013025379707.7897" type="Species" simulationType="reactions"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C4AcylCarMAT]" value="318592848085.59155" type="Species" simulationType="reactions"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C4AcylCoAMAT]" value="4766042188946.8252" type="Species" simulationType="reactions"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Compartments[VMAT\[merge\]],Vector=Metabolites[C4EnoylCoAMAT]" value="9919738113732.8574" type="Species" simulationType="reactions"/>
@@ -26146,7 +26146,7 @@ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmmcadC14AcylCoAMAT\[merge\]]" value="5" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmmcadC16EnoylCoAMAT\[merge\]]" value="1.0800000000000001" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[KmmcadC14EnoylCoAMAT\[merge\]]" value="1.0800000000000001" type="ModelValue" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[C10AcylCoA_ratio]" value="0.42078855787440961" type="ModelValue" simulationType="assignment"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[C10AcylCoA_ratio]" value="0.42078855787440955" type="ModelValue" simulationType="assignment"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[C10EnoylCoA_ratio]" value="0.44528274454517447" type="ModelValue" simulationType="assignment"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[C10HydroxyacylCoA_ratio]" value="0.51608436797784174" type="ModelValue" simulationType="assignment"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[C12AcylCoA_ratio]" value="0.39860283571003641" type="ModelValue" simulationType="assignment"/>
@@ -26156,7 +26156,7 @@ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[C14EnoylCoA_ratio]" value="0.43798752208985592" type="ModelValue" simulationType="assignment"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[C14HydroxyacylCoA_ratio]" value="0.51028134332391073" type="ModelValue" simulationType="assignment"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[C16AcylCoA_ratio]" value="0.37045279255999042" type="ModelValue" simulationType="assignment"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[C16EnoylCoA_ratio]" value="0.46487073360366876" type="ModelValue" simulationType="assignment"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[C16EnoylCoA_ratio]" value="0.46487073360366893" type="ModelValue" simulationType="assignment"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[C16HydroxyacylCoA_ratio]" value="0.49763694113175705" type="ModelValue" simulationType="assignment"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[C4AcylCoA_ratio]" value="0.65230326016489149" type="ModelValue" simulationType="assignment"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[C4EnoylCoA_ratio]" value="0.59323787226926727" type="ModelValue" simulationType="assignment"/>
@@ -26166,9 +26166,9 @@ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[C6HydroxyacylCoA_ratio]" value="0.49863849025729945" type="ModelValue" simulationType="assignment"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[C8AcylCoA_ratio]" value="0.50157512314056452" type="ModelValue" simulationType="assignment"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[C8EnoylCoA_ratio]" value="0.48970515469834647" type="ModelValue" simulationType="assignment"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[C8HydroxyacylCoA_ratio]" value="0.44628582102042919" type="ModelValue" simulationType="assignment"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[C8HydroxyacylCoA_ratio]" value="0.44628582102042924" type="ModelValue" simulationType="assignment"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[Car_ratio]" value="0.65023116821570548" type="ModelValue" simulationType="assignment"/>
-          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[AcetylCoA_ratio]" value="0.41769556482082032" type="ModelValue" simulationType="assignment"/>
+          <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[AcetylCoA_ratio]" value="0.41769556482082054" type="ModelValue" simulationType="assignment"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[Ksacesink]" value="6000000" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[Ksfadhsink]" value="6000000" type="ModelValue" simulationType="fixed"/>
           <ModelParameter cn="CN=Root,Model=vaneunen,Vector=Values[Ksacesink\[merge\]]" value="6000000" type="ModelValue" simulationType="fixed"/>
@@ -35673,7 +35673,7 @@ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
       <StateTemplateVariable objectReference="ModelValue_298"/>
     </StateTemplate>
     <InitialState type="initialState">
-      0 60251540126549.891 466328331607.50739 43219318906165.562 466328331585.51093 16637224014428.896 16637224014406.9 1430523993264.9556 2008873648710.9111 1211409279804.1108 1320927837441.6599 2633110581528.0146 1745211661871.2917 3750672784616.4653 2724808381384.4077 4338185073519.3364 4365604153162.4209 129245407088.1019 148778993558.06061 4766042188946.8252 2540440056354.3076 5976067300864.5908 6227331506619.4541 46106188332.568993 38209090567.062256 3222819765178.6953 3010740796327.9414 44623144939.469063 34775705963.986351 1083985354260 2288856912504.1909 5266247065814.6309 4874797367599.0225 46829072235687.578 44698714343968.273 9063307918102.4902 5333242191233.2666 647859706625.453 135413593955.56456 195547787063.27457 18415975192556.188 784739688853.59961 8894568638367.498 318592848085.59155 243752237265.05869 17520426138841.611 216884345439.63174 10613260963115.695 9180974799223.4785 32498757535.634396 31726904743.888412 325195606.27799982 492920083.23465902 326747651.76825672 3201332194.929853 20158476766857.398 16247448044400.041 6503912125560 6241825516334.3818 1035633236554.2947 1013025379707.7902 6801611917052.6787 9919738113732.8574 21507305516243.848 20550571996696.656 4448587418064.9121 90979540059.176529 895569026.54003131 61391384206.879845 21679707085.200001 21199275128.032604 9122169494401.1133 9728574087247.4648 6274127152208.501 6308389590474.2119 760339502997.2699 767560538482.88684 3632075017717.3218 3233665783544.8506 4641302367231.4688 3449694301150.7979 1515841080903.2466 62335955087.835564 61300452310.990105 4254494494418.2778 60782931232.131203 3625635638325.9502 31762465301.244595 30602441056.616009 50296054910.407928 2412621434565.4902 5218871326372147 5218871326372147 2.1000000000000001 0.100637854138809 0.100637854138809 2.1000000000000001 0.100637854138809 0.100637854138809 0.42078855787440961 0.44528274454517447 0.51608436797784174 0.39860283571003641 0.45316923653358587 0.020041457896409688 0.5216240082909388 0.43798752208985592 0.51028134332391073 0.37045279255999042 0.46487073360366876 0.49763694113175705 0.65230326016489149 0.59323787226926727 0.48836223418412256 0.58407717217508248 0.61538653084816775 0.49863849025729945 0.50157512314056452 0.48970515469834647 0.44628582102042919 0.65023116821570548 0.41769556482082032 3313256602647.5801 264974197708000 185481938395600 10672307137765.893 651673544032485.38 834668722780.19922 270996338565000 5419926771300000 3446928614639.9429 264974197708000 185481938395600 11156154107606.963 270996338565000 1211481445244484.2 834668722780.19922 5419926771300000 2.2000000000000001e-06 1.7999999999999999e-06 2.2000000000000001e-06 1.7999999999999999e-06 2.1000000000000001 130 130 200 1 0.48087323799999998 51 51 51 51 51 51 51 30 38 38 38 38 38 1000 1000000 350 2.2200000000000002 0.02488987448874027 18.600000000000001 16.709200466412302 15.764386056472199 10.800000000000001 142.80000000000001 1.0800000000000001 1.0800000000000001 1.0800000000000001 1.0800000000000001 1.0800000000000001 24.199999999999999 6 0.0046897510900643299 16.949999999999999 18.146026595526401 1.0800000000000001 1.0800000000000001 24.199999999999999 6 0.1710573373 150 100 25 25 25 25 40 45 45 45 45 45 45 45 1.6000000000000001 3.1299999999999999 3 1.5 1.8 3.7000000000000002 8.8000000000000007 16.300000000000001 28.600000000000001 69.900000000000006 58.5 1.3999999999999999 1.3999999999999999 1.6000000000000001 2.2999999999999998 4.0999999999999996 5.7999999999999998 16.899999999999999 5.4000000000000004 0.00021699999999999999 3.85123572 1.1000000000000001 1.2 1.3 2.1000000000000001 3.2000000000000002 6.7000000000000002 12.4 26.600000000000001 16.9184996128579 16.413657374084 29.878256363689498 25.370239233996401 23.4696174554207 15.476458927076999 16.113640503993899 68.110329096596402 1051 0.10000000000000001 25 25 25 25 25 60 30 13.83 13.83 13.83 13.83 13.83 13.83 50 30 0.70999999999999996 0.10588250671279424 8.7160272693415806 5 14 18.7503821636639 12.118878873384 14.5 0.100637854138809 1.0800000000000001 1.0800000000000001 1.0800000000000001 1.0800000000000001 1.0800000000000001 1.0800000000000001 24.199999999999999 6 24.392998868414701 5 1.0800000000000001 1.0800000000000001 1 200 130 130 2.1000000000000001 2.2200000000000002 51 38 51 38 51 38 51 38 51 1000000 51 1000 51 38 350 30 0.38799764122498953 6 18.146026595526401 1.0800000000000001 16.949999999999999 1.0800000000000001 24.199999999999999 0.0022341256750550965 3.1299999999999999 1.6000000000000001 25 45 25 45 100 45 150 45 40 45 25 45 25 45 0.12216564573340097 0.00021699999999999999 8.8000000000000007 2.2999999999999998 3.7000000000000002 1.6000000000000001 1.8 1.3999999999999999 1.5 1.3999999999999999 16.899999999999999 69.900000000000006 28.600000000000001 5.7999999999999998 16.300000000000001 4.0999999999999996 5.4000000000000004 58.5 0.17402087272194355 1051 68.110329096596402 25.370239233996401 2.1000000000000001 29.878256363689498 1.3 16.9184996128579 1.2 16.413657374084 1.1000000000000001 12.4 16.113640503993899 15.476458927076999 6.7000000000000002 23.4696174554207 3.2000000000000002 26.600000000000001 4 0.70999999999999996 30 13.83 25 13.83 25 13.83 25 13.83 25 13.83 13.83 25 30 50 60 0.10000000000000001 0.18391196921653236 1.0800000000000001 1.0800000000000001 1.0800000000000001 1.0800000000000001 1.0800000000000001 24.199999999999999 6 8.7160272693415806 5 14 18.7503821636639 12.118878873384 14.5 0.100637854138809 1.0800000000000001 6 16.709200466412302 1.0800000000000001 18.600000000000001 1.0800000000000001 142.80000000000001 1.0800000000000001 10.800000000000001 1.0800000000000001 15.764386056472199 1.0800000000000001 24.199999999999999 0.001 24.392998868414701 5 1.0800000000000001 1.0800000000000001 6000000 6000000 6000000 6000000 
+      0 60251540126549.844 466328331607.50739 43219318906165.562 466328331585.51093 16637224014428.896 16637224014406.9 1430523993264.9556 2008873648710.9111 1211409279804.1108 1320927837441.6599 2633110581528.0146 1745211661871.2917 3750672784616.4653 2724808381384.4077 4338185073519.3364 4365604153162.4209 129245407088.1019 148778993558.06052 4766042188946.8252 2540440056354.3076 5976067300864.5908 6227331506619.4541 46106188332.568993 38209090567.062256 3222819765178.6953 3010740796327.9414 44623144939.469063 34775705963.986351 1083985354260 2288856912504.1909 5266247065814.6309 4874797367599.0225 46829072235687.578 44698714343968.273 9063307918102.4902 5333242191233.2666 647859706625.453 135413593955.56456 195547787063.27457 18415975192556.188 784739688853.59961 8894568638367.498 318592848085.59155 243752237265.05869 17520426138841.611 216884345439.63159 10613260963115.695 9180974799223.4785 32498757535.634396 31726904743.88839 325195606.27799982 492920083.23465902 326747651.76825672 3201332194.929853 20158476766857.398 16247448044400.041 6503912125560 6241825516334.3818 1035633236554.2947 1013025379707.7897 6801611917052.6787 9919738113732.8574 21507305516243.848 20550571996696.656 4448587418064.9121 90979540059.176529 895569026.54003131 61391384206.879814 21679707085.200001 21199275128.032604 9122169494401.1133 9728574087247.4648 6274127152208.501 6308389590474.2119 760339502997.2699 767560538482.88684 3632075017717.3218 3233665783544.8506 4641302367231.4688 3449694301150.7979 1515841080903.2466 62335955087.835564 61300452310.990105 4254494494418.2778 60782931232.131203 3625635638325.9502 31762465301.244595 30602441056.616009 50296054910.407928 2412621434565.4902 5218871326372147 5218871326372147 2.1000000000000001 0.100637854138809 0.100637854138809 2.1000000000000001 0.100637854138809 0.100637854138809 0.42078855787440955 0.44528274454517447 0.51608436797784174 0.39860283571003641 0.45316923653358587 0.020041457896409688 0.5216240082909388 0.43798752208985592 0.51028134332391073 0.37045279255999042 0.46487073360366893 0.49763694113175705 0.65230326016489149 0.59323787226926727 0.48836223418412256 0.58407717217508248 0.61538653084816775 0.49863849025729945 0.50157512314056452 0.48970515469834647 0.44628582102042924 0.65023116821570548 0.41769556482082054 3313256602647.5801 264974197708000 185481938395600 10672307137765.893 651673544032485.38 834668722780.19922 270996338565000 5419926771300000 3446928614639.9429 264974197708000 185481938395600 11156154107606.963 270996338565000 1211481445244484.2 834668722780.19922 5419926771300000 2.2000000000000001e-06 1.7999999999999999e-06 2.2000000000000001e-06 1.7999999999999999e-06 2.1000000000000001 130 130 200 1 0.48087323799999998 51 51 51 51 51 51 51 30 38 38 38 38 38 1000 1000000 350 2.2200000000000002 0.02488987448874027 18.600000000000001 16.709200466412302 15.764386056472199 10.800000000000001 142.80000000000001 1.0800000000000001 1.0800000000000001 1.0800000000000001 1.0800000000000001 1.0800000000000001 24.199999999999999 6 0.0046897510900643299 16.949999999999999 18.146026595526401 1.0800000000000001 1.0800000000000001 24.199999999999999 6 0.1710573373 150 100 25 25 25 25 40 45 45 45 45 45 45 45 1.6000000000000001 3.1299999999999999 3 1.5 1.8 3.7000000000000002 8.8000000000000007 16.300000000000001 28.600000000000001 69.900000000000006 58.5 1.3999999999999999 1.3999999999999999 1.6000000000000001 2.2999999999999998 4.0999999999999996 5.7999999999999998 16.899999999999999 5.4000000000000004 0.00021699999999999999 3.85123572 1.1000000000000001 1.2 1.3 2.1000000000000001 3.2000000000000002 6.7000000000000002 12.4 26.600000000000001 16.9184996128579 16.413657374084 29.878256363689498 25.370239233996401 23.4696174554207 15.476458927076999 16.113640503993899 68.110329096596402 1051 0.10000000000000001 25 25 25 25 25 60 30 13.83 13.83 13.83 13.83 13.83 13.83 50 30 0.70999999999999996 0.10588250671279424 8.7160272693415806 5 14 18.7503821636639 12.118878873384 14.5 0.100637854138809 1.0800000000000001 1.0800000000000001 1.0800000000000001 1.0800000000000001 1.0800000000000001 1.0800000000000001 24.199999999999999 6 24.392998868414701 5 1.0800000000000001 1.0800000000000001 1 200 130 130 2.1000000000000001 2.2200000000000002 51 38 51 38 51 38 51 38 51 1000000 51 1000 51 38 350 30 0.38799764122498953 6 18.146026595526401 1.0800000000000001 16.949999999999999 1.0800000000000001 24.199999999999999 0.0022341256750550965 3.1299999999999999 1.6000000000000001 25 45 25 45 100 45 150 45 40 45 25 45 25 45 0.12216564573340097 0.00021699999999999999 8.8000000000000007 2.2999999999999998 3.7000000000000002 1.6000000000000001 1.8 1.3999999999999999 1.5 1.3999999999999999 16.899999999999999 69.900000000000006 28.600000000000001 5.7999999999999998 16.300000000000001 4.0999999999999996 5.4000000000000004 58.5 0.17402087272194355 1051 68.110329096596402 25.370239233996401 2.1000000000000001 29.878256363689498 1.3 16.9184996128579 1.2 16.413657374084 1.1000000000000001 12.4 16.113640503993899 15.476458927076999 6.7000000000000002 23.4696174554207 3.2000000000000002 26.600000000000001 4 0.70999999999999996 30 13.83 25 13.83 25 13.83 25 13.83 25 13.83 13.83 25 30 50 60 0.10000000000000001 0.18391196921653236 1.0800000000000001 1.0800000000000001 1.0800000000000001 1.0800000000000001 1.0800000000000001 24.199999999999999 6 8.7160272693415806 5 14 18.7503821636639 12.118878873384 14.5 0.100637854138809 1.0800000000000001 6 16.709200466412302 1.0800000000000001 18.600000000000001 1.0800000000000001 142.80000000000001 1.0800000000000001 10.800000000000001 1.0800000000000001 15.764386056472199 1.0800000000000001 24.199999999999999 0.001 24.392998868414701 5 1.0800000000000001 1.0800000000000001 6000000 6000000 6000000 6000000 
     </InitialState>
   </Model>
   <ListOfTasks>
@@ -36848,9 +36848,9 @@ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
         <Parameter name="Time-Course" type="cn" value="CN=Root,Vector=TaskList[Time-Course]"/>
         <Parameter name="Create Parameter Sets" type="bool" value="0"/>
         <ParameterGroup name="Experiment Set">
-          <ParameterGroup name="Experiment">
+          <ParameterGroup name="Experiment_1">
             <Parameter name="Key" type="key" value="Experiment_0"/>
-            <Parameter name="File Name" type="file" value="../measurements/human_van_Eunen_ac_ratios_daystep_day_2_time_in_minutes.csv"/>
+            <Parameter name="File Name" type="file" value="../measurements/human_van_Eunen_ac_ratios_daystep_day_0_time_in_minutes.csv"/>
             <Parameter name="First Row" type="unsignedInteger" value="1"/>
             <Parameter name="Last Row" type="unsignedInteger" value="3"/>
             <Parameter name="Experiment Type" type="unsignedInteger" value="1"/>
@@ -36889,10 +36889,11 @@ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
               </ParameterGroup>
               <ParameterGroup name="7">
                 <Parameter name="Role" type="unsignedInteger" value="2"/>
-                <Parameter name="Object CN" type="cn" value="CN=Root,Model=vaneunen,Vector=Values[C14EnoylCoA_ratio],Reference=Value"/>
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=vaneunen,Vector=Values[C14AcylCoA_ratio],Reference=Value"/>
               </ParameterGroup>
               <ParameterGroup name="8">
-                <Parameter name="Role" type="unsignedInteger" value="0"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=vaneunen,Vector=Values[C14EnoylCoA_ratio],Reference=Value"/>
               </ParameterGroup>
               <ParameterGroup name="9">
                 <Parameter name="Role" type="unsignedInteger" value="0"/>
@@ -37883,8 +37884,8 @@ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
           <Parameter name="Color" type="string" value="#00BEF0"/>
           <Parameter name="Recording Activity" type="string" value="after"/>
           <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[9],Reference=Fitted Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[9],Reference=Fitted Value"/>
           </ListOfChannels>
         </PlotItem>
         <PlotItem name="Experiment,Values[AcetylCoA_ratio](Measured Value)" type="Curve2D">
@@ -37895,8 +37896,8 @@ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
           <Parameter name="Color" type="string" value="#00BEF0"/>
           <Parameter name="Recording Activity" type="string" value="after"/>
           <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[9],Reference=Measured Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[9],Reference=Measured Value"/>
           </ListOfChannels>
         </PlotItem>
         <PlotItem name="Experiment,Values[C10AcylCoA_ratio](Fitted Value)" type="Curve2D">
@@ -37907,8 +37908,8 @@ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
           <Parameter name="Color" type="string" value="#0000FF"/>
           <Parameter name="Recording Activity" type="string" value="after"/>
           <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[1],Reference=Fitted Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[1],Reference=Fitted Value"/>
           </ListOfChannels>
         </PlotItem>
         <PlotItem name="Experiment,Values[C10AcylCoA_ratio](Measured Value)" type="Curve2D">
@@ -37919,8 +37920,8 @@ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
           <Parameter name="Color" type="string" value="#0000FF"/>
           <Parameter name="Recording Activity" type="string" value="after"/>
           <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[1],Reference=Measured Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[1],Reference=Measured Value"/>
           </ListOfChannels>
         </PlotItem>
         <PlotItem name="Experiment,Values[C10EnoylCoA_ratio](Fitted Value)" type="Curve2D">
@@ -37931,8 +37932,8 @@ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
           <Parameter name="Color" type="string" value="#00E600"/>
           <Parameter name="Recording Activity" type="string" value="after"/>
           <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[2],Reference=Fitted Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[2],Reference=Fitted Value"/>
           </ListOfChannels>
         </PlotItem>
         <PlotItem name="Experiment,Values[C10EnoylCoA_ratio](Measured Value)" type="Curve2D">
@@ -37943,8 +37944,8 @@ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
           <Parameter name="Color" type="string" value="#00E600"/>
           <Parameter name="Recording Activity" type="string" value="after"/>
           <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[2],Reference=Measured Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[2],Reference=Measured Value"/>
           </ListOfChannels>
         </PlotItem>
         <PlotItem name="Experiment,Values[C12AcylCoA_ratio](Fitted Value)" type="Curve2D">
@@ -37955,8 +37956,8 @@ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
           <Parameter name="Color" type="string" value="#00BEF0"/>
           <Parameter name="Recording Activity" type="string" value="after"/>
           <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[3],Reference=Fitted Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[3],Reference=Fitted Value"/>
           </ListOfChannels>
         </PlotItem>
         <PlotItem name="Experiment,Values[C12AcylCoA_ratio](Measured Value)" type="Curve2D">
@@ -37967,8 +37968,8 @@ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
           <Parameter name="Color" type="string" value="#00BEF0"/>
           <Parameter name="Recording Activity" type="string" value="after"/>
           <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[3],Reference=Measured Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[3],Reference=Measured Value"/>
           </ListOfChannels>
         </PlotItem>
         <PlotItem name="Experiment,Values[C12EnoylCoA_ratio](Fitted Value)" type="Curve2D">
@@ -37979,8 +37980,8 @@ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
           <Parameter name="Color" type="string" value="#F000FF"/>
           <Parameter name="Recording Activity" type="string" value="after"/>
           <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[4],Reference=Fitted Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[4],Reference=Fitted Value"/>
           </ListOfChannels>
         </PlotItem>
         <PlotItem name="Experiment,Values[C12EnoylCoA_ratio](Measured Value)" type="Curve2D">
@@ -37991,8 +37992,8 @@ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
           <Parameter name="Color" type="string" value="#F000FF"/>
           <Parameter name="Recording Activity" type="string" value="after"/>
           <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[4],Reference=Measured Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[4],Reference=Measured Value"/>
           </ListOfChannels>
         </PlotItem>
         <PlotItem name="Experiment,Values[C14EnoylCoA_ratio](Fitted Value)" type="Curve2D">
@@ -38003,8 +38004,8 @@ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
           <Parameter name="Color" type="string" value="#F0C800"/>
           <Parameter name="Recording Activity" type="string" value="after"/>
           <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[5],Reference=Fitted Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[5],Reference=Fitted Value"/>
           </ListOfChannels>
         </PlotItem>
         <PlotItem name="Experiment,Values[C14EnoylCoA_ratio](Measured Value)" type="Curve2D">
@@ -38015,8 +38016,8 @@ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
           <Parameter name="Color" type="string" value="#F0C800"/>
           <Parameter name="Recording Activity" type="string" value="after"/>
           <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[5],Reference=Measured Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[5],Reference=Measured Value"/>
           </ListOfChannels>
         </PlotItem>
         <PlotItem name="Experiment,Values[C16AcylCoA_ratio](Fitted Value)" type="Curve2D">
@@ -38027,8 +38028,8 @@ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
           <Parameter name="Color" type="string" value="#FF0000"/>
           <Parameter name="Recording Activity" type="string" value="after"/>
           <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[6],Reference=Fitted Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[6],Reference=Fitted Value"/>
           </ListOfChannels>
         </PlotItem>
         <PlotItem name="Experiment,Values[C16AcylCoA_ratio](Measured Value)" type="Curve2D">
@@ -38039,8 +38040,8 @@ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
           <Parameter name="Color" type="string" value="#FF0000"/>
           <Parameter name="Recording Activity" type="string" value="after"/>
           <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[6],Reference=Measured Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[6],Reference=Measured Value"/>
           </ListOfChannels>
         </PlotItem>
         <PlotItem name="Experiment,Values[C16EnoylCoA_ratio](Fitted Value)" type="Curve2D">
@@ -38051,8 +38052,8 @@ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
           <Parameter name="Color" type="string" value="#00E600"/>
           <Parameter name="Recording Activity" type="string" value="after"/>
           <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[8],Reference=Fitted Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[8],Reference=Fitted Value"/>
           </ListOfChannels>
         </PlotItem>
         <PlotItem name="Experiment,Values[C16EnoylCoA_ratio](Measured Value)" type="Curve2D">
@@ -38063,8 +38064,8 @@ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
           <Parameter name="Color" type="string" value="#00E600"/>
           <Parameter name="Recording Activity" type="string" value="after"/>
           <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[8],Reference=Measured Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[8],Reference=Measured Value"/>
           </ListOfChannels>
         </PlotItem>
         <PlotItem name="Experiment,Values[C16HydroxyacylCoA_ratio](Fitted Value)" type="Curve2D">
@@ -38075,8 +38076,8 @@ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
           <Parameter name="Color" type="string" value="#0000FF"/>
           <Parameter name="Recording Activity" type="string" value="after"/>
           <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[7],Reference=Fitted Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[7],Reference=Fitted Value"/>
           </ListOfChannels>
         </PlotItem>
         <PlotItem name="Experiment,Values[C16HydroxyacylCoA_ratio](Measured Value)" type="Curve2D">
@@ -38087,8 +38088,8 @@ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
           <Parameter name="Color" type="string" value="#0000FF"/>
           <Parameter name="Recording Activity" type="string" value="after"/>
           <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[7],Reference=Measured Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[7],Reference=Measured Value"/>
           </ListOfChannels>
         </PlotItem>
         <PlotItem name="Experiment,Values[C4AcylCoA_ratio](Fitted Value)" type="Curve2D">
@@ -38099,8 +38100,8 @@ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
           <Parameter name="Color" type="string" value="#F0C800"/>
           <Parameter name="Recording Activity" type="string" value="after"/>
           <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[11],Reference=Fitted Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[11],Reference=Fitted Value"/>
           </ListOfChannels>
         </PlotItem>
         <PlotItem name="Experiment,Values[C4AcylCoA_ratio](Measured Value)" type="Curve2D">
@@ -38111,8 +38112,8 @@ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
           <Parameter name="Color" type="string" value="#F0C800"/>
           <Parameter name="Recording Activity" type="string" value="after"/>
           <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[11],Reference=Measured Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[11],Reference=Measured Value"/>
           </ListOfChannels>
         </PlotItem>
         <PlotItem name="Experiment,Values[C4EnoylCoA_ratio](Fitted Value)" type="Curve2D">
@@ -38123,8 +38124,8 @@ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
           <Parameter name="Color" type="string" value="#FF0000"/>
           <Parameter name="Recording Activity" type="string" value="after"/>
           <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[12],Reference=Fitted Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[12],Reference=Fitted Value"/>
           </ListOfChannels>
         </PlotItem>
         <PlotItem name="Experiment,Values[C4EnoylCoA_ratio](Measured Value)" type="Curve2D">
@@ -38135,8 +38136,8 @@ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
           <Parameter name="Color" type="string" value="#FF0000"/>
           <Parameter name="Recording Activity" type="string" value="after"/>
           <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[12],Reference=Measured Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[12],Reference=Measured Value"/>
           </ListOfChannels>
         </PlotItem>
         <PlotItem name="Experiment,Values[C4HodryxyacylCoA_ratio](Fitted Value)" type="Curve2D">
@@ -38147,8 +38148,8 @@ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
           <Parameter name="Color" type="string" value="#F000FF"/>
           <Parameter name="Recording Activity" type="string" value="after"/>
           <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[10],Reference=Fitted Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[10],Reference=Fitted Value"/>
           </ListOfChannels>
         </PlotItem>
         <PlotItem name="Experiment,Values[C4HodryxyacylCoA_ratio](Measured Value)" type="Curve2D">
@@ -38159,8 +38160,8 @@ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
           <Parameter name="Color" type="string" value="#F000FF"/>
           <Parameter name="Recording Activity" type="string" value="after"/>
           <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[10],Reference=Measured Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[10],Reference=Measured Value"/>
           </ListOfChannels>
         </PlotItem>
         <PlotItem name="Experiment,Values[C6AcylCoA_ratio](Fitted Value)" type="Curve2D">
@@ -38171,8 +38172,8 @@ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
           <Parameter name="Color" type="string" value="#0000FF"/>
           <Parameter name="Recording Activity" type="string" value="after"/>
           <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[13],Reference=Fitted Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[13],Reference=Fitted Value"/>
           </ListOfChannels>
         </PlotItem>
         <PlotItem name="Experiment,Values[C6AcylCoA_ratio](Measured Value)" type="Curve2D">
@@ -38183,8 +38184,8 @@ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
           <Parameter name="Color" type="string" value="#0000FF"/>
           <Parameter name="Recording Activity" type="string" value="after"/>
           <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[13],Reference=Measured Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[13],Reference=Measured Value"/>
           </ListOfChannels>
         </PlotItem>
         <PlotItem name="Experiment,Values[C6EnoylCoA_ratio](Fitted Value)" type="Curve2D">
@@ -38195,8 +38196,8 @@ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
           <Parameter name="Color" type="string" value="#00BEF0"/>
           <Parameter name="Recording Activity" type="string" value="after"/>
           <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[15],Reference=Fitted Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[15],Reference=Fitted Value"/>
           </ListOfChannels>
         </PlotItem>
         <PlotItem name="Experiment,Values[C6EnoylCoA_ratio](Measured Value)" type="Curve2D">
@@ -38207,8 +38208,8 @@ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
           <Parameter name="Color" type="string" value="#00BEF0"/>
           <Parameter name="Recording Activity" type="string" value="after"/>
           <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[15],Reference=Measured Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[15],Reference=Measured Value"/>
           </ListOfChannels>
         </PlotItem>
         <PlotItem name="Experiment,Values[C6HydroxyacylCoA_ratio](Fitted Value)" type="Curve2D">
@@ -38219,8 +38220,8 @@ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
           <Parameter name="Color" type="string" value="#00E600"/>
           <Parameter name="Recording Activity" type="string" value="after"/>
           <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[14],Reference=Fitted Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[14],Reference=Fitted Value"/>
           </ListOfChannels>
         </PlotItem>
         <PlotItem name="Experiment,Values[C6HydroxyacylCoA_ratio](Measured Value)" type="Curve2D">
@@ -38231,8 +38232,8 @@ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
           <Parameter name="Color" type="string" value="#00E600"/>
           <Parameter name="Recording Activity" type="string" value="after"/>
           <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[14],Reference=Measured Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[14],Reference=Measured Value"/>
           </ListOfChannels>
         </PlotItem>
         <PlotItem name="Experiment,Values[C8AcylCoA_ratio](Fitted Value)" type="Curve2D">
@@ -38243,8 +38244,8 @@ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
           <Parameter name="Color" type="string" value="#F000FF"/>
           <Parameter name="Recording Activity" type="string" value="after"/>
           <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[16],Reference=Fitted Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[16],Reference=Fitted Value"/>
           </ListOfChannels>
         </PlotItem>
         <PlotItem name="Experiment,Values[C8AcylCoA_ratio](Measured Value)" type="Curve2D">
@@ -38255,8 +38256,8 @@ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
           <Parameter name="Color" type="string" value="#F000FF"/>
           <Parameter name="Recording Activity" type="string" value="after"/>
           <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[16],Reference=Measured Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[16],Reference=Measured Value"/>
           </ListOfChannels>
         </PlotItem>
         <PlotItem name="Experiment,Values[Car_ratio](Fitted Value)" type="Curve2D">
@@ -38267,8 +38268,8 @@ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
           <Parameter name="Color" type="string" value="#FF0000"/>
           <Parameter name="Recording Activity" type="string" value="after"/>
           <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Fitted Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[0],Reference=Fitted Value"/>
           </ListOfChannels>
         </PlotItem>
         <PlotItem name="Experiment,Values[Car_ratio](Measured Value)" type="Curve2D">
@@ -38279,8 +38280,8 @@ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
           <Parameter name="Color" type="string" value="#FF0000"/>
           <Parameter name="Recording Activity" type="string" value="after"/>
           <ListOfChannels>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Independent Value"/>
-            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment,Vector=Fitted Points[0],Reference=Measured Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[0],Reference=Independent Value"/>
+            <ChannelSpec cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,ParameterGroup=Experiment Set,ParameterGroup=Experiment_1,Vector=Fitted Points[0],Reference=Measured Value"/>
           </ListOfChannels>
         </PlotItem>
       </ListOfPlotItems>
@@ -38606,7 +38607,7 @@ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
 <rdf:Description rdf:about="#Unit_0">
 <dcterms:created>
 <rdf:Description>
-<dcterms:W3CDTF>2019-04-16T07:09:54Z</dcterms:W3CDTF>
+<dcterms:W3CDTF>2019-06-06T12:59:57Z</dcterms:W3CDTF>
 </rdf:Description>
 </dcterms:created>
 </rdf:Description>
@@ -38624,7 +38625,7 @@ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
 <rdf:Description rdf:about="#Unit_4">
 <dcterms:created>
 <rdf:Description>
-<dcterms:W3CDTF>2019-04-16T07:09:54Z</dcterms:W3CDTF>
+<dcterms:W3CDTF>2019-06-06T12:59:57Z</dcterms:W3CDTF>
 </rdf:Description>
 </dcterms:created>
 </rdf:Description>
@@ -38642,7 +38643,7 @@ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
 <rdf:Description rdf:about="#Unit_12">
 <dcterms:created>
 <rdf:Description>
-<dcterms:W3CDTF>2019-04-16T07:09:54Z</dcterms:W3CDTF>
+<dcterms:W3CDTF>2019-06-06T12:59:57Z</dcterms:W3CDTF>
 </rdf:Description>
 </dcterms:created>
 </rdf:Description>
@@ -38660,7 +38661,7 @@ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
 <rdf:Description rdf:about="#Unit_16">
 <dcterms:created>
 <rdf:Description>
-<dcterms:W3CDTF>2019-04-16T07:09:54Z</dcterms:W3CDTF>
+<dcterms:W3CDTF>2019-06-06T12:59:57Z</dcterms:W3CDTF>
 </rdf:Description>
 </dcterms:created>
 </rdf:Description>
@@ -38678,7 +38679,7 @@ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
 <rdf:Description rdf:about="#Unit_34">
 <dcterms:created>
 <rdf:Description>
-<dcterms:W3CDTF>2019-04-16T07:09:54Z</dcterms:W3CDTF>
+<dcterms:W3CDTF>2019-06-06T12:59:57Z</dcterms:W3CDTF>
 </rdf:Description>
 </dcterms:created>
 </rdf:Description>
@@ -38696,7 +38697,7 @@ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
 <rdf:Description rdf:about="#Unit_40">
 <dcterms:created>
 <rdf:Description>
-<dcterms:W3CDTF>2019-04-16T07:09:54Z</dcterms:W3CDTF>
+<dcterms:W3CDTF>2019-06-06T12:59:57Z</dcterms:W3CDTF>
 </rdf:Description>
 </dcterms:created>
 </rdf:Description>
@@ -38714,7 +38715,7 @@ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
 <rdf:Description rdf:about="#Unit_64">
 <dcterms:created>
 <rdf:Description>
-<dcterms:W3CDTF>2019-04-16T07:09:54Z</dcterms:W3CDTF>
+<dcterms:W3CDTF>2019-06-06T12:59:57Z</dcterms:W3CDTF>
 </rdf:Description>
 </dcterms:created>
 </rdf:Description>
