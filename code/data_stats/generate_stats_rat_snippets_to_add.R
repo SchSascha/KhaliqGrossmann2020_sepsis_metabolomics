@@ -6,6 +6,7 @@ library(tictoc)
 library(parallel)
 library(vegan)
 library(ggrepel)
+library(ggfortify)
 
 source("../function_definitions.R")
 
@@ -14,7 +15,7 @@ out_dir_ns <- "../../results/data_stats_rat_surv_vs_nonsurv/"
 
 out_dir <- "../../results/data_stats_rat/"
 
-num_cores <- 2
+num_cores <- 1
 
 #Make sure paths exist
 if (!dir.exists(out_dir))
@@ -53,7 +54,7 @@ metab_sel <- 5:which(colnames(rat_sepsis_data) == "H1")
 
 #Process data
 ##PCA on biochemical parameters
-rat_sepsis_data_pheno_dist <- cbind(subset(rat_sepsis_data, material == "plasma" & `time point` == "24h", select = 1:4), as.matrix(dist(x = subset(rat_sepsis_data, material == "plasma" & `time point` == "24h", select = pheno_sel), method = "canberra"))) # distance() works on a per row basis
+rat_sepsis_data_pheno_dist <- cbind(subset(rat_sepsis_data, material == "plasma" & `time point` != "72h", select = 1:4), as.matrix(dist(x = subset(rat_sepsis_data, material == "plasma" & `time point` != "72h", select = pheno_sel), method = "canberra"))) # distance() works on a per row basis
 p <- prcomp(rat_sepsis_data_pheno_dist[, -1:-4])
 
 ###PERMANOVA with bootstrapping
@@ -75,7 +76,7 @@ toc()
 ad_r_p <- sapply(lapply(lapply(lapply(ad_res_mc, `[[`, "ad_res"), `[[`, "aov.tab"), `[[`, "Pr(>F)"), `[`, 1)
 
 ###Actual plot of sepsis samples, clinical params
-rsd <- subset(rat_sepsis_data, material == "plasma" & group != "control" & `time point` == "24h")
+rsd <- subset(rat_sepsis_data, material == "plasma" & group != "control" & `time point` != "72h")
 rat_sepsis_data_pheno_dist <- cbind(subset(rsd, select = 1:4), as.matrix(dist(x = subset(rsd, select = pheno_sel), method = "canberra"))) # distance() works on a per row basis
 rat_sepsis_data_pheno_dist$`Sample Identification` <- factor(rat_sepsis_data_pheno_dist$`Sample Identification`, levels = unique(rat_sepsis_data_pheno_dist$`Sample Identification`))
 p <- prcomp(rat_sepsis_data_pheno_dist[, -1:-4])
@@ -108,10 +109,10 @@ mtab_list <- list()
 bdiv_list <- list()
 rat_dev_list <- list()
 for (mat in unique(rat_sepsis_data$material)){
-  rds <- subset(rat_sepsis_data, material == mat & `time point` == "24h", metab_sel)
+  rds <- subset(rat_sepsis_data, material == mat & `time point` != "72h", metab_sel)
   w <- which.xy(is.na(rds))
   rds <- rds[, setdiff(1:ncol(rds), unique(w[, 2]))]
-  rat_data_dist <- cbind(subset(rat_sepsis_data, material == mat & `time point` == "24h", 1:4), as.matrix(dist(x = rds, method = "canberra"))) # distance() works on a per row basis
+  rat_data_dist <- cbind(subset(rat_sepsis_data, material == mat & `time point` != "72h", 1:4), as.matrix(dist(x = rds, method = "canberra"))) # distance() works on a per row basis
   p <- prcomp(rat_data_dist[, -1:-4])
   #ad_rv <- ad_mg_r_df[["all"]]
   #ad_rv[ad_rv > 0.05] <- 0.05
@@ -245,10 +246,10 @@ tic()
 for (mat in unique(rat_sepsis_data$material)){
   for (met_group in setdiff(unique(rat_sepsis_legend$group[match(colnames(rat_sepsis_data)[metab_sel], rat_sepsis_legend[, 1])]), "sugar")){
     met_group_idx <- which(rat_sepsis_legend$group == met_group) + 4
-    rds <- subset(rat_sepsis_data, material == mat & `time point` == "24h", met_group_idx)
+    rds <- subset(rat_sepsis_data, material == mat & `time point` != "72h", met_group_idx)
     w <- which.xy(is.na(rds))
     rds <- rds[, setdiff(1:ncol(rds), unique(w[, 2]))]
-    rat_data_dist <- cbind(subset(rat_sepsis_data, material == mat & `time point` == "24h", 1:4), as.matrix(dist(x = rds, method = "canberra"))) # distance() works on a per row basis
+    rat_data_dist <- cbind(subset(rat_sepsis_data, material == mat & `time point` != "72h", 1:4), as.matrix(dist(x = rds, method = "canberra"))) # distance() works on a per row basis
     p <- prcomp(rat_data_dist[, -1:-4])
     # ad_rv <- ad_mg_r_df[[met_group]]
     # ad_rv[ad_rv > 0.05] <- 0.05
