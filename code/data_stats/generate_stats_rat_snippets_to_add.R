@@ -256,6 +256,8 @@ for (name in names(mtab_list)){
   rat_dev_comp[[paste0("RatCount_", name)]][rat_dev_comp$Name %in% setdiff(colnames(rat_sepsis_data), names(mtab_list[[name]]))] <- "0"
 }
 sum(!(rat_dev_comp$RatCount_plasma %in% c("0", "-")))
+d <- rat_dev_comp[!(rat_dev_comp$RatCount_plasma %in% c("0", "-")), ]
+fwrite(x = d, file = paste0(out_dir, "rat_dev_comp_human_RatPlasmaGeq1.csv"))
 fwrite(x = rat_dev_comp, file = paste0(out_dir, "rat_dev_comp_human.csv"))
 
 tic()
