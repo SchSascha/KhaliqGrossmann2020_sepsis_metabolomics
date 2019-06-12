@@ -32,7 +32,7 @@ out_dir <- "../../results/data_stats/"
 
 #Make sure paths exist
 if (!dir.exists(out_dir))
-  dir.create(out_dir)
+  dir.create(out_dir, recursive = TRUE)
 
 ###########################
 #Import data
@@ -1471,6 +1471,7 @@ hhr$variable <- hhr$ID
 hhr$Group <- "Healthy_Fr"
 hhr$value <- hhr$Median
 hhr <- hhr[order(match(hhr$ID, hd$variable)), ]
+hhr <- subset(hhr, variable %in% hd$variable)
 hhr$variable <- factor(hhr$variable)
 n_mets <- length(unique(hd$variable))
 ncols <- 8
@@ -1485,7 +1486,7 @@ p <- ggplot(data = hd, mapping = aes(x = Day, y = value, group = Group, colour =
   xlab("Day") +
   human_col_scale(black_color = "grey40") +
   theme_bw()
-ggsave(plot = p, filename = paste0("human_metab_control_time_course_all_w_normal_ranges.png"), path = out_dir, width = 12/4*ncols, height = 0.3 + 1.5 * ceiling(n_mets/ncols), units = "in")
+ggsave(plot = p, filename = "human_metab_control_time_course_all_w_normal_ranges.png", path = out_dir, width = 12/4*ncols, height = 0.3 + 1.5 * ceiling(n_mets/ncols), units = "in")
 
 ##Human, metabolite concentration time course, all metabolites, Survival
 hsd <- human_sepsis_data[, -pheno_sel]

@@ -30,6 +30,10 @@ rat_sepsis_data <- get_rat_sepsis_data()
 
 rat_sepsis_data <- rat_sepsis_data[!rat_sepsis_data$`Sample Identification` %in% c("060H", "039L"), ]
 
+load("../../results/data_stats_rat_surv_vs_nonsurv/ANOVA_complete_res.RData")
+
+human_dev_metabs <- read.csv(file = "../../results/data_stats/generalized_safe_corridor_minmax_dev_mets.csv", stringsAsFactors = FALSE)
+
 ##Import corresponding group assignment
 rat_sepsis_legend <- get_rat_sepsis_legend()
 rat_sepsis_legend$group[rat_sepsis_legend$group == ""] <- rat_sepsis_legend[rat_sepsis_legend$group == "", 1]
@@ -190,7 +194,7 @@ for (mat in unique(rat_sepsis_data$material)){
     theme(panel.grid = element_blank(), axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
   ggsave(filename = paste0("PCA_metab_betadiv_comparison_", mat, ".png"), path = out_dir, width = 2.5, height = 4, units = "in")
   
-  rat_dev_score <- cbind(rat_data_dist[, 1:4],  rds)
+  rat_dev_score <- cbind(rat_data_dist[, 1:4],  rds[, setdiff(colnames(rds), rat.sig.anova.car.s.class[[mat]])])
   rat_dev_max <- colMaxs(as.matrix(rat_dev_score[rat_dev_score$group != "septic non-survivor", -1:-4]))
   rat_dev_min <- colMins(as.matrix(rat_dev_score[rat_dev_score$group != "septic non-survivor", -1:-4]))
   udev <- rat_dev_score[, -1:-4] > matrix(rat_dev_max, ncol = ncol(rat_dev_score) - 4, nrow = nrow(rat_dev_score), byrow = TRUE)
@@ -229,8 +233,9 @@ p <- ggplot(data = rat_pgd, mapping = aes(x = Group, y = distance, color = Group
   theme(panel.grid = element_blank(), axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
 ggsave(filename = paste0("PCA_metab_betadiv_comparison_crossmat.png"), path = out_dir, width = 5, height = 4, units = "in")
 
-for (name in names(rat_dev_list))
+for (name in names(rat_dev_list)){
   rat_dev_list[[name]]$material <- name
+}
 dev_score <- Reduce("rbind", rat_dev_list)
 p <- ggplot(data = dev_score, mapping = aes(fill = Group, x = score)) +
   facet_wrap(~ material, ncol = 1, nrow = 3) +
@@ -241,6 +246,19 @@ p <- ggplot(data = dev_score, mapping = aes(fill = Group, x = score)) +
   theme_bw() +
   theme(panel.grid = element_blank(), legend.direction = "horizontal", legend.position = "bottom")
 ggsave(plot = p, filename = paste0("generalized_safe_corridor_minmax_crossmat.png"), path = out_dir, width = 5, height = 5, units = "in")
+
+rat_dev_comp <- human_dev_metabs
+for (name in names(mtab_list)){
+  an <- mtab_list[[name]]
+  an <- an[names(an) %in% rat_dev_comp$Name]
+  rat_dev_comp[[paste0("RatCount_", name)]] <- "-"
+  rat_dev_comp[[paste0("RatCount_", name)]][match(names(an), rat_dev_comp$Name)] <- an
+  rat_dev_comp[[paste0("RatCount_", name)]][rat_dev_comp$Name %in% setdiff(colnames(rat_sepsis_data), names(mtab_list[[name]]))] <- "0"
+}
+sum(!(rat_dev_comp$RatCount_plasma %in% c("0", "-")))
+d <- rat_dev_comp[!(rat_dev_comp$RatCount_plasma %in% c("0", "-")), ]
+fwrite(x = d, file = paste0(out_dir, "rat_dev_comp_human_RatPlasmaGeq1.csv"))
+fwrite(x = rat_dev_comp, file = paste0(out_dir, "rat_dev_comp_human.csv"))
 
 tic()
 for (mat in unique(rat_sepsis_data$material)){
@@ -277,6 +295,8 @@ for (mat in unique(rat_sepsis_data$material)){
   }
 }
 toc()
+
+
 
 #Plot
 plot_rat_group_pca <- function(group_name = "plasma"){
