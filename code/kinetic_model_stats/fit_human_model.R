@@ -167,12 +167,17 @@ model_fit_function_with_prepared_models <- function(number = 1, base_model_dir, 
   #clearParameterEstimationParameters(model = new_model_day0)
   ##Set concentrations to levels of day 0 model at t=1440 but keep boundaries as in day 0
   tc_d0 <- runTimeCourse(model = new_model_day0, duration = 100, dt = 0.1, save_result_in_memory = TRUE, update_model = TRUE)
-  tc_d0 <- tc_d0[nrow(tc_d0), ]
-  tc_d0 <- melt(tc_d0$result, id.vars = "Time")
-  setSpecies(key = tc_d0$variable, initial_concentration == tc_d0$value, model = new_model_day1)
+  tc_d0 <- tc_d0$result[nrow(tc_d0$result), ]
+  tc_d0 <- melt(tc_d0, id.vars = "Time")
+  tc_d0$variable <- as.character(tc_d0$variable)
+  tc_d0 <- subset(tc_d0, variable %in% sprefs$key)
+  setSpecies(key = tc_d0$variable, initial_concentration = tc_d0$value, model = new_model_day1)
   sprefs <- getSpeciesReferences(model = new_model_day1)
+  sprefs <- subset(sprefs, !(substring(name, first = 1, last = 3) %in% c("NAD", "FAD", "CoA", "Mal"))) # to exclude MalCoA influence, bc. init = 0
   spvals <- getSpecies(model = new_model_day1)
-  species_params <- lapply(1:nrow(sprefs), function(n) defineParameterEstimationParameter(ref = sprefs$initial_concentration[n], lower_bound = sp_lb[n], upper_bound = sp_ub[n], start_value = spvals$initial_concentration[n]))
+  spvals <- spvals[spvals$key %in% sprefs$key, ]
+  spvals <- spvals[match(sprefs$key, spvals$key), ]
+  species_params <- lapply(1:nrow(sprefs), function(n) defineParameterEstimationParameter(ref = sprefs$initial_concentration[n], lower_bound = sp_lb[n], upper_bound = sp_ub[n], start_value = min(max(spvals$initial_concentration[n], sp_lb[n]), sp_ub[n])))
   dummy <- lapply(species_params, addParameterEstimationParameter, model = new_model_day1)
   ##Set kinetic parameter names to estimate
   gcrefs <- getGlobalQuantityReferences(model = new_model_day1)
@@ -185,13 +190,13 @@ model_fit_function_with_prepared_models <- function(number = 1, base_model_dir, 
   gcrefs <- gcrefs[match(react_pars, gcrefs$name), ]
   gcvals <- gcvals[match(gcrefs$key, gcvals$key), ]
   react_Vms <- paste0("{Values[", react_pars, "].InitialValue}")
-  react_params <- lapply(1:nrow(gcrefs), function(n) defineParameterEstimationParameter(ref = react_Vms[n], lower_bound = re_lb[n], upper_bound = re_ub[n], start_value = gcvals$initial_value[n]))
+  react_params <- lapply(1:nrow(gcrefs), function(n) defineParameterEstimationParameter(ref = react_Vms[n], lower_bound = re_lb[n], upper_bound = re_ub[n], start_value = min(max(gcvals$initial_value[n], re_lb[n]), re_ub[n])))
   dummy <- lapply(react_params, addParameterEstimationParameter, model = new_model_day1)
   ##Estimate parameters
   setParameterEstimationSettings(model = new_model_day1, method = "SRES", update_model = TRUE, randomize_start_values = FALSE) #parameters are already stored in model
-  pe_res_sres_day0 <- runParameterEstimation(model = new_model_day1)
+  pe_res_sres_day1 <- runParameterEstimation(model = new_model_day1)
   setParameterEstimationSettings(model = new_model_day1, method = "HookeJeeves", update_model = TRUE, randomize_start_values = FALSE)
-  pe_res_hj_day0 <- runParameterEstimation(model = new_model_day1)
+  pe_res_hj_day1 <- runParameterEstimation(model = new_model_day1)
   
   saveModel(model = new_model_day1, filename = paste0(out_dir, "fitted_model_pilot_number_", number, "_day1.cps"), overwrite = TRUE)
   
@@ -199,13 +204,18 @@ model_fit_function_with_prepared_models <- function(number = 1, base_model_dir, 
   new_model_day2 <- loadModel(path = paste0(base_model_dir, "human_beta_oxidation_twin_model_day2.cps"))
   #clearParameterEstimationParameters(model = new_model_day0)
   ##Set concentrations to levels of day 0 model at t=1440 but keep boundaries as in day 0
-  tc_d1 <- runTimeCourse(model = new_model_day1, duration = 100, dt = 0.1, save_result_in_memory = TRUE, update_model = FALSE)
-  tc_d1 <- tc_d1[nrow(tc_d1), ]
-  tc_d1 <- melt(tc_d1$result, id.vars = "Time")
-  setSpecies(key = tc_d1$variable, initial_concentration == tc_d1$value, model = new_model_day2)
+  tc_d1 <- runTimeCourse(model = new_model_day1, duration = 100, dt = 0.1, save_result_in_memory = TRUE, update_model = TRUE)
+  tc_d1 <- tc_d1$result[nrow(tc_d1$result), ]
+  tc_d1 <- melt(tc_d1, id.vars = "Time")
+  tc_d1$variable <- as.character(tc_d1$variable)
+  tc_d1 <- subset(tc_d1, variable %in% sprefs$key)
+  setSpecies(key = tc_d1$variable, initial_concentration = tc_d1$value, model = new_model_day2)
   sprefs <- getSpeciesReferences(model = new_model_day2)
-  spvals <- getSpecies(model = new_model_day2)
-  species_params <- lapply(1:nrow(sprefs), function(n) defineParameterEstimationParameter(ref = sprefs$initial_concentration[n], lower_bound = sp_lb[n], upper_bound = sp_ub[n], start_value = spvals$initial_concentration[n]))
+  sprefs <- subset(sprefs, !(substring(name, first = 1, last = 3) %in% c("NAD", "FAD", "CoA", "Mal"))) # to exclude MalCoA influence, bc. init = 0
+  spvals <- getSpecies(model = new_model_day1)
+  spvals <- spvals[spvals$key %in% sprefs$key, ]
+  spvals <- spvals[match(sprefs$key, spvals$key), ]
+  species_params <- lapply(1:nrow(sprefs), function(n) defineParameterEstimationParameter(ref = sprefs$initial_concentration[n], lower_bound = sp_lb[n], upper_bound = sp_ub[n], start_value = min(max(spvals$initial_concentration[n], sp_lb[n]), sp_ub[n])))
   dummy <- lapply(species_params, addParameterEstimationParameter, model = new_model_day2)
   ##Set kinetic parameter names to estimate
   gcrefs <- getGlobalQuantityReferences(model = new_model_day2)
@@ -218,16 +228,17 @@ model_fit_function_with_prepared_models <- function(number = 1, base_model_dir, 
   gcrefs <- gcrefs[match(react_pars, gcrefs$name), ]
   gcvals <- gcvals[match(gcrefs$key, gcvals$key), ]
   react_Vms <- paste0("{Values[", react_pars, "].InitialValue}")
-  react_params <- lapply(1:nrow(gcrefs), function(n) defineParameterEstimationParameter(ref = react_Vms[n], lower_bound = re_lb[n], upper_bound = re_ub[n], start_value = gcvals$initial_value[n]))
+  react_params <- lapply(1:nrow(gcrefs), function(n) defineParameterEstimationParameter(ref = react_Vms[n], lower_bound = re_lb[n], upper_bound = re_ub[n], start_value = min(max(gcvals$initial_value[n], re_lb[n]), re_ub[n])))
   dummy <- lapply(react_params, addParameterEstimationParameter, model = new_model_day2)
   ##Estimate parameters
   setParameterEstimationSettings(model = new_model_day2, method = "SRES", update_model = TRUE, randomize_start_values = FALSE) #parameters are already stored in model
-  pe_res_sres_day0 <- runParameterEstimation(model = new_model_day2)
+  pe_res_sres_day2 <- runParameterEstimation(model = new_model_day2)
   setParameterEstimationSettings(model = new_model_day2, method = "HookeJeeves", update_model = TRUE, randomize_start_values = FALSE)
-  pe_res_hj_day0 <- runParameterEstimation(model = new_model_day2)
+  pe_res_hj_day2 <- runParameterEstimation(model = new_model_day2)
   
   saveModel(model = new_model_day2, filename = paste0(out_dir, "fitted_model_pilot_number_", number, "_day1.cps"), overwrite = TRUE)
   
+  #Clean up
   unloadModel(model = new_model_day0)
   unloadModel(model = new_model_day1)
   unloadModel(model = new_model_day2)
