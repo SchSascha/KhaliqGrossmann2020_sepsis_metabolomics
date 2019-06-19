@@ -260,6 +260,98 @@ d <- rat_dev_comp[!(rat_dev_comp$RatCount_plasma %in% c("0", "-")), ]
 fwrite(x = d, file = paste0(out_dir, "rat_dev_comp_human_RatPlasmaGeq1.csv"))
 fwrite(x = rat_dev_comp, file = paste0(out_dir, "rat_dev_comp_human.csv"))
 
+#Calculate beta diversity within metabolite groups
+for (mat in unique(rat_sepsis_data$material)){
+  for (met_group in unique(rat_sepsis_legend$group[metab_sel - 5])){
+    rds <- subset(rat_sepsis_data, material == mat & `time point` == "24h", metab_sel)
+    rds <- subset(rds, select = rat_sepsis_legend[rat_sepsis_legend$group == met_group, 1])
+    w <- which.xy(is.na(rds))
+    rds <- rds[, setdiff(1:ncol(rds), unique(w[, 2]))]
+    rat_data_dist <- cbind(subset(rat_sepsis_data, material == mat & `time point` == "24h", 1:4), as.matrix(dist(x = rds, method = "canberra"))) # distance() works on a per row basis
+    p <- prcomp(rat_data_dist[, -1:-4])
+    #ad_rv <- ad_mg_r_df[["all"]]
+    #ad_rv[ad_rv > 0.05] <- 0.05
+    #text_v <- paste0(c("Nonsep", "Nonsep", "Septic-S", "Nonsep-NS"), " vs ", c("Septic-S", "Septic-NS", "Septic-NS", "Septic-NS"), ", q ", c("> ", "< ")[1 + (ad_rv < 0.05)], sapply(ad_rv, format, digits = 2))
+    lam <- p$sdev[1:2] * sqrt(nrow(p$x))
+    ap <- autoplot(object = p, data = rat_data_dist, colour = "group", frame = FALSE, frame.type = "norm", size = 0.5)
+    ap <- ap + 
+      human_col_scale(name = "Group", levels = c("septic non-survivor", "control", "septic survivor", "", ""), aesthetics = c("color", "fill")) +
+      guides(colour = guide_legend(title = "Group"), fill = "none", group = "none") +
+      ggtitle("PCA biplot, Canberra distance, metabolites,\nall samples") +
+      theme_bw() + 
+      theme(panel.grid = element_blank())
+    gobj <- ggplot_build(ap)
+    xmax <- gobj$layout$panel_params[[1]]$x.range[2]
+    xmin <- gobj$layout$panel_params[[1]]$x.range[1]
+    ymax <- gobj$layout$panel_params[[1]]$y.range[2]
+    ymin <- gobj$layout$panel_params[[1]]$y.range[1]
+    arws <- make_ordination_arrows(x = p$x[, 1:2], w = rds, xmax = xmax, xmin = xmin, ymin = ymin, ymax = ymax, shorten_arw_by = 1, scale_by = 1.1)
+    ap <- ap +
+      geom_path(data = arws$ph_ars_s, mapping = aes(x = PC1, y = PC2, group = Group), inherit.aes = FALSE, arrow = arrow(length = unit(0.06, "inches")), size = 0.2, color = "grey50") + 
+      geom_text(data = arws$ph_ars_names_s, mapping = aes(label = label, x = PC1, y = PC2), inherit.aes = FALSE, size = 1.5, color = "grey50") #+
+    #  scale_x_continuous(limits = c(xmin * 1.1, xmax)) +
+    #  geom_text(x = 0.9 * xmin, y = 0.85 * ymin, label = paste0(text_v, collapse = "\n"), size = 2, hjust = "left")
+    ggsave(filename = paste0("PCA_biplot_metab_all_samples_", mat, "_", met_group, "_gg.png"), path = out_dir, plot = ap, width = 5, height = 4, units = "in")
+    
+    ###Compare beta diversity
+    ####Get pairwise sample distances (here centroids == samples)
+    rat_pw_dist <- as.matrix(dist(p$x[, 1:2], method = "euclidean"))
+    ####Get within-group distances
+    p_s_sel <- which(rat_data_dist$group == "septic survivor")
+    rat_S_pw_dist <- rat_pw_dist[p_s_sel, p_s_sel]
+    rat_S_pw_dist <- rat_S_pw_dist[lower.tri(x = rat_S_pw_dist)]
+    p_ns_sel <- which(rat_data_dist$group == "septic non-survivor")
+    rat_NS_pw_dist <- rat_pw_dist[p_ns_sel, p_ns_sel]
+    rat_NS_pw_dist <- rat_NS_pw_dist[lower.tri(x = rat_NS_pw_dist)]
+    p_c_sel <- which(rat_data_dist$group == "control")
+    rat_C_pw_dist <- rat_pw_dist[p_c_sel, p_c_sel]
+    rat_C_pw_dist <- rat_C_pw_dist[lower.tri(x = rat_C_pw_dist)]
+    ####Compare distance distributions
+    betadiv_S_NS <- t.test(x = rat_S_pw_dist, y = rat_NS_pw_dist, var.equal = FALSE) #var.equal set explicitly FALSE to make it visible to you, the reader
+    betadiv_S_C <- t.test(x = rat_S_pw_dist, y = rat_C_pw_dist, var.equal = FALSE)
+    betadiv_NS_C <- t.test(x = rat_NS_pw_dist, y = rat_C_pw_dist, var.equal = FALSE)
+    
+    bdiv_p <- c(betadiv_S_C$p.value, betadiv_NS_C$p.value, betadiv_S_NS$p.value)
+    g1 <- list(c("S", "C"), c("NS", "C"), c("S", "NS"))
+    bdiv_fdr <- p.adjust(bdiv_p, method = "fdr") #this returns one duplicate q value everytime, why??
+    
+    # env <- environment()
+    # env_names <- names(env)
+    # bdiv_names <- env_names[grep(pattern = "betadiv", x = env_names)]
+    # bdiv_elements <- lapply(bdiv_names, function(e) eval(as.symbol(e)))
+    # bdiv_names <- bdiv_names[sapply(bdiv_elements, class) == "htest"]
+    # bdiv_elements <- bdiv_elements[sapply(bdiv_elements, class) == "htest"]
+    # bdiv_p <- sapply(bdiv_elements, function(e) e$p.value)
+    # bdiv_fdr <- p.adjust(bdiv_p, method = "fdr")
+    # names(bdiv_p) <- bdiv_names
+    # names(bdiv_fdr) <- bdiv_names
+    # g1 <- sub("betadiv", "", bdiv_names)
+    # g1 <- sub("_C", "_control", g1)
+    # g1 <- sub("_S", "_septic survivor", g1)
+    # g1 <- sub("_NS", "_septic non-survivor", g1)
+    # g1 <- substring(g1, 2)
+    # g1 <- strsplit(g1, "_", fixed = TRUE)
+    bdiv_df <- data.frame(Group1 = sapply(g1, `[`, 1), Group2 = sapply(g1, `[`, 2), p = bdiv_p, FDR = bdiv_fdr)
+    bdiv_df <- bdiv_df[order(rownames(bdiv_df)), ]
+    write.csv(x = bdiv_df, file = paste0(out_dir, "betadiversity_comparison_pvals_", mat, "_", met_group, ".csv"), row.names = FALSE)
+    ####Plot
+    rat_pw_group_dat <- data.frame(distance = c(rat_C_pw_dist, rat_S_pw_dist, rat_NS_pw_dist), 
+                                   Group = c(rep("control", length(rat_C_pw_dist)),
+                                             rep("septic survivor", length(rat_S_pw_dist)), 
+                                             rep("septic non-survivor", length(rat_NS_pw_dist))))
+    bdiv_list[[mat]] <- rat_pw_group_dat
+    p <- ggplot(data = rat_pw_group_dat, mapping = aes(x = Group, y = distance, color = Group)) +
+      geom_boxplot() +
+      human_col_scale(name = "Group", levels = c("septic non-survivor", "control", "septic survivor", "", ""), aesthetics = c("color", "fill")) +
+      scale_x_discrete(limits = as.character(unique(rat_pw_group_dat$Group))) +
+      guides(color = "none") +
+      #ylim(0, 100) +
+      theme_bw() + 
+      theme(panel.grid = element_blank(), axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+    ggsave(filename = paste0("PCA_metab_betadiv_comparison_", mat, "_", met_group, ".png"), path = out_dir, width = 2.5, height = 4, units = "in")
+  }
+}
+
 tic()
 for (mat in unique(rat_sepsis_data$material)){
   for (met_group in setdiff(unique(rat_sepsis_legend$group[match(colnames(rat_sepsis_data)[metab_sel], rat_sepsis_legend[, 1])]), "sugar")){
@@ -295,8 +387,6 @@ for (mat in unique(rat_sepsis_data$material)){
   }
 }
 toc()
-
-
 
 #Plot
 plot_rat_group_pca <- function(group_name = "plasma"){
