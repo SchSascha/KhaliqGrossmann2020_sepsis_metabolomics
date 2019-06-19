@@ -236,7 +236,7 @@ model_fit_function_with_prepared_models <- function(number = 1, base_model_dir, 
   setParameterEstimationSettings(model = new_model_day2, method = "HookeJeeves", update_model = TRUE, randomize_start_values = FALSE)
   pe_res_hj_day2 <- runParameterEstimation(model = new_model_day2)
   
-  saveModel(model = new_model_day2, filename = paste0(out_dir, "fitted_model_pilot_number_", number, "_day1.cps"), overwrite = TRUE)
+  saveModel(model = new_model_day2, filename = paste0(out_dir, "fitted_model_pilot_number_", number, "_day2.cps"), overwrite = TRUE)
   
   #Clean up
   unloadModel(model = new_model_day0)
