@@ -236,7 +236,7 @@ model_fit_function_with_prepared_models <- function(number = 1, base_model_dir, 
   setParameterEstimationSettings(model = new_model_day2, method = "HookeJeeves", update_model = TRUE, randomize_start_values = FALSE)
   pe_res_hj_day2 <- runParameterEstimation(model = new_model_day2)
   
-  saveModel(model = new_model_day2, filename = paste0(out_dir, "fitted_model_pilot_number_", number, "_day1.cps"), overwrite = TRUE)
+  saveModel(model = new_model_day2, filename = paste0(out_dir, "fitted_model_pilot_number_", number, "_day2.cps"), overwrite = TRUE)
   
   #Clean up
   unloadModel(model = new_model_day0)
@@ -249,10 +249,11 @@ model_fit_function_with_prepared_models <- function(number = 1, base_model_dir, 
 
 #Actual fitting
 tic()
-cl <- makeCluster(detectCores() - 1)
+cl <- makeCluster(min(detectCores() - 1, 100))
 prep_res <- clusterCall(cl = cl, fun = eval, quote({library(CoRC); library(data.table)}), env = .GlobalEnv)
 #par_est_res <- parLapplyLB(cl = cl, X = 1:1000, fun = model_fit_function, base_model_dir = base_model_dir, out_dir = out_dir, ss_conc = ss_conc, merge_gcvals = merge_gcvals, react_pars = react_pars, col_keep = col_keep, ratio_quant_map = ratio_quant_map)
-par_est_res <- parLapplyLB(cl = cl, X = 1:7, fun = model_fit_function_with_prepared_models, base_model_dir = base_model_dir, out_dir = out_dir, ss_conc = ss_conc, merge_gcvals = merge_gcvals, react_pars = react_pars)
+par_est_res <- parLapplyLB(cl = cl, X = 1:100, fun = model_fit_function_with_prepared_models, base_model_dir = base_model_dir, out_dir = out_dir, ss_conc = ss_conc, merge_gcvals = merge_gcvals, 
+react_pars = react_pars)
 stopCluster(cl)
 toc()
 
