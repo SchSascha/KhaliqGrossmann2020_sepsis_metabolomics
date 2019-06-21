@@ -481,7 +481,6 @@ for (met_group in setdiff(unique(human_data_legend$group[metab_sel]), "sugar")){
 }
 toc()
 
-#JUMP
 ###Actual plot of sepsis samples, clinical params
 human_sepsis_data_pheno_dist <- cbind(subset(human_sepsis_data, Day < 4, 1:6), as.matrix(dist(x = subset(human_sepsis_data, Day < 4, pheno_sel), method = "canberra"))) # distance() works on a per row basis
 human_sepsis_data_pheno_dist$Patient <- factor(human_sepsis_data_pheno_dist$Patient, levels = unique(human_sepsis_data_pheno_dist$Patient))
@@ -489,12 +488,11 @@ p <- prcomp(human_sepsis_data_pheno_dist[, -1:-6])
 hsdpd <- human_sepsis_data_pheno_dist
 hsdpd$label <- paste0("P", hsdpd$Patient, "-D", hsdpd$Day)
 lam <- p$sdev[1:2] * sqrt(nrow(p$x))
-ap <- autoplot(object = p, data = hsdpd, colour = "Group", frame = FALSE, frame.type = "norm", size = 0.8)
+ap <- autoplot(object = p, data = hsdpd, colour = "Group", shape = FALSE, label = FALSE, frame = TRUE, frame.type = "norm", size = 0.8)
 ap <- ap + 
-  geom_point(size = 3, color = "white") +
   geom_text_repel(parse = TRUE, label = sapply(hsdpd$label, function(lab) sprintf("bold(\"%s\")", lab)), x = p$x[, 1] / lam[1], y = p$x[, 2] / lam[2], size = 1.3, mapping = aes(color = Group), segment.size = 0.3, force = 0.005, box.padding = 0.0) +
   human_col_scale() +
-  ggtitle("PCA biplot, Canberra distance, clinical params,\nseptic patients") +
+  ggtitle("PCA biplot, Canberra distance, biochemical params,\nseptic patients") +
   guides(shape = "none") +
   theme_bw() + 
   theme(panel.grid = element_blank())
