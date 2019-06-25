@@ -157,7 +157,7 @@ model_fit_function_with_prepared_models <- function(number = 1, base_model_dir, 
   ##Estimate parameters
   setParameterEstimationSettings(model = new_model_day0, method = "SRES", update_model = TRUE, randomize_start_values = FALSE) #parameters are already stored in model
   pe_res_sres_day0 <- runParameterEstimation(model = new_model_day0)
-  setParameterEstimationSettings(model = new_model_day0, method = "HookeJeeves", update_model = TRUE, randomize_start_values = FALSE)
+  setParameterEstimationSettings(model = new_model_day0, method = list(method = "HookeJeeves", tolerance = 1e-4), update_model = TRUE, randomize_start_values = FALSE)
   pe_res_hj_day0 <- runParameterEstimation(model = new_model_day0)
   
   saveModel(model = new_model_day0, filename = paste0(out_dir, "fitted_model_pilot_number_", number, "_day0.cps"), overwrite = TRUE)
@@ -195,7 +195,7 @@ model_fit_function_with_prepared_models <- function(number = 1, base_model_dir, 
   ##Estimate parameters
   setParameterEstimationSettings(model = new_model_day1, method = "SRES", update_model = TRUE, randomize_start_values = FALSE) #parameters are already stored in model
   pe_res_sres_day1 <- runParameterEstimation(model = new_model_day1)
-  setParameterEstimationSettings(model = new_model_day1, method = "HookeJeeves", update_model = TRUE, randomize_start_values = FALSE)
+  setParameterEstimationSettings(model = new_model_day1, method = list(method = "HookeJeeves", tolerance = 1e-4), update_model = TRUE, randomize_start_values = FALSE)
   pe_res_hj_day1 <- runParameterEstimation(model = new_model_day1)
   
   saveModel(model = new_model_day1, filename = paste0(out_dir, "fitted_model_pilot_number_", number, "_day1.cps"), overwrite = TRUE)
@@ -233,7 +233,7 @@ model_fit_function_with_prepared_models <- function(number = 1, base_model_dir, 
   ##Estimate parameters
   setParameterEstimationSettings(model = new_model_day2, method = "SRES", update_model = TRUE, randomize_start_values = FALSE) #parameters are already stored in model
   pe_res_sres_day2 <- runParameterEstimation(model = new_model_day2)
-  setParameterEstimationSettings(model = new_model_day2, method = "HookeJeeves", update_model = TRUE, randomize_start_values = FALSE)
+  setParameterEstimationSettings(model = new_model_day2, method = list(method = "HookeJeeves", tolerance = 1e-4), update_model = TRUE, randomize_start_values = FALSE)
   pe_res_hj_day2 <- runParameterEstimation(model = new_model_day2)
   
   saveModel(model = new_model_day2, filename = paste0(out_dir, "fitted_model_pilot_number_", number, "_day2.cps"), overwrite = TRUE)
@@ -257,7 +257,7 @@ react_pars = react_pars)
 stopCluster(cl)
 toc()
 
-#save.image()
+save.image()
 
 #Extract optimization results
 par_d0 <- lapply(lapply(lapply(par_est_res, `[[`, "hj_res_d0"), `[[`, "parameters"), subset, subset = stri_startswith_fixed(str = parameter, pattern = "Values["), select = c("parameter", "value", "lower_bound", "upper_bound"))
@@ -287,7 +287,7 @@ pd_mn <- Reduce("rbind", pd_mn)
 p <- ggplot(data = pd, mapping = aes(x = Day, y = value, color = Group)) + 
   facet_wrap(facets = ~ parameter, ncol = 4, nrow = 2) +
   stat_summary(geom = "line", fun.data = mean_se) +
-  #stat_summary(geom = "errorbar", fun.data = mean_se, position = position_dodge(width = 0.2)) +
+  stat_summary(geom = "errorbar", fun.data = mean_se, position = position_dodge(width = 0.2)) +
   geom_hline(mapping = aes(yintercept = lower_bound)) +
   geom_hline(mapping = aes(yintercept = upper_bound)) +
   scale_y_log10() +
@@ -310,6 +310,7 @@ l <- ggplot(data = mpd, mapping = aes(x = Nonsurvivor, y = Survivor)) +
 plot(l)
 ggsave(plot = l, file = "kin_mitomod_rel_Vm.png", path = out_dir, width = 10, height = 4, units = "in")
 
+#TODO: fix
 c1pd <- dcast(pd, Day + Run + Group ~ parameter)
 c2pd <- dcast(pd, Day + Run ~ parameter + Group)
 pc1 <- prcomp(as.matrix(c1pd[c1pd$Day == 0, -1:-3]), scale. = TRUE)
