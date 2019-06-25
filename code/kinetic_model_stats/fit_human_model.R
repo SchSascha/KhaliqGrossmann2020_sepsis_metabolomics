@@ -155,7 +155,7 @@ model_fit_function_with_prepared_models <- function(number = 1, base_model_dir, 
   react_params <- lapply(1:nrow(gcrefs), function(n) defineParameterEstimationParameter(ref = react_Vms[n], lower_bound = re_lb[n], upper_bound = re_ub[n], start_value = gcvals$initial_value[n]))
   dummy <- lapply(react_params, addParameterEstimationParameter, model = new_model_day0)
   ##Estimate parameters
-  setParameterEstimationSettings(model = new_model_day0, method = "SRES", update_model = TRUE, randomize_start_values = FALSE) #parameters are already stored in model
+  setParameterEstimationSettings(model = new_model_day0, method = "SRES", update_model = TRUE, randomize_start_values = TRUE) #parameters are already stored in model
   pe_res_sres_day0 <- runParameterEstimation(model = new_model_day0)
   setParameterEstimationSettings(model = new_model_day0, method = list(method = "HookeJeeves", tolerance = 1e-4), update_model = TRUE, randomize_start_values = FALSE)
   pe_res_hj_day0 <- runParameterEstimation(model = new_model_day0)
