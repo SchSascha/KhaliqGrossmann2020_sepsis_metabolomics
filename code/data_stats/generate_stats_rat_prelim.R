@@ -581,6 +581,78 @@ h$width <- 1000
 h$height <- lower_margin + round(sum(sel) * 1100/76) #1200 is a good height for 76 rows of metabolites
 export(p = h, file = paste0(out_dir, "rat_heatmap_pheno.png"))
 
+#Heatmap of significant metabolites for all materials, groups and time points; analogue to human heatmap, Fig2A
+x <- rat_sepsis_data
+# x[, -1:-6] <- (tanh(scale(x[, -1:-6])) + 1) / 2 #tanh(z-score)
+for (mat in unique(x$material)){
+  x[x$material == mat, -1:-6] <- scale(x[x$material == mat, -1:-6])
+}
+# x[, -1:-6] <- apply(scale(x[, -1:-6]), 2, 
+#                     function(col){ 
+#                       q <- quantile(x = col, probs = c(0.05, 0.95), na.rm = TRUE) #cut at 5th and 95th percentile
+#                       col[col > q[2]] <- q[2]
+#                       col[col < q[1]] <- q[1]
+#                       return(col)
+#                     })
+x$`time point` <- as.character(x$`time point`)
+x$group <- as.character(x$group)
+x$material <- as.character(x$material)
+x$group <- reorder(x$group, (1 * (x$group == "control")) + (2 * (x$group == "septic non-survivor")) + (3 * (x$group == "septic survivor")))
+x$`time point` <- reorder(x$`time point`, as.numeric(sub(pattern = "h", replacement = "", x = x$`time point`)))
+x <- x[order(x$group),]
+x <- x[order(x$`time point`),]
+#xm <- x[, c(1:6, metab_sel)]
+xm <- x
+xmt <- data.frame(t(xm[, -1:-4]))
+rownames(xmt) <- colnames(xm[,-1:-4])
+colnames(xmt) <- xm$`Sample Identification`
+
+xmts_l <- lapply(names(rat.sig.anova.car.s.class), function(nam) xmt[match(rat.sig.anova.car.s.class[[nam]], rownames(xmt)), which(xm$material == nam)])
+xmts_l[[length(xmts_l) + 1]] <- xmt[match(rat.sig.anova.car.s.pheno.class, rownames(xmt)), which(xm$material == "plasma")]
+xmts_l <- lapply(xmts_l, function(tab) {colnames(tab) <- substring(colnames(tab), 1, 3); return(tab)})
+xmts_l <- lapply(xmts_l, function(tab) {tab[setdiff(unique(unlist(lapply(xmts_l, colnames))), colnames(tab))] <- NA; return(tab)})
+xmts_l <- lapply(xmts_l, function(tab) tab[, order(colnames(tab))])
+xmts <- Reduce("rbind", xmts_l)
+xmtc_l <- lapply(names(rat.sig.anova.car.c.class), function(nam) xmt[match(rat.sig.anova.car.c.class[[nam]], rownames(xmt)), which(xm$material == nam)])
+xmtc_l <- lapply(xmtc_l, function(tab) {colnames(tab) <- substring(colnames(tab), 1, 3); return(tab)})
+xmtc_l <- lapply(xmtc_l, function(tab) {tab[setdiff(unique(unlist(lapply(xmtc_l, colnames))), colnames(tab))] <- NA; return(tab)})
+xmtc_l <- lapply(xmtc_l, function(tab) tab[, order(colnames(tab))])
+xmtc <- Reduce("rbind", xmtc_l)
+rownames(xmts) <- 1:nrow(xmts)
+
+anno_col <- xm[!duplicated(substring(xm$`Sample Identification`, 1, 3)), ][c("time point", "group")]
+rownames(anno_col) <- substring(xm[!duplicated(substring(xm$`Sample Identification`, 1, 3)), ][["Sample Identification"]], 1, 3)
+anno_row <- data.frame(metab_group = rat_sepsis_legend$group[match(c(unlist(rat.sig.anova.car.s.class), rat.sig.anova.car.s.pheno.class), rat_sepsis_legend[, 1])],
+                       material = rep(c(names(rat.sig.anova.car.s.class), "biochemical parameter"), 
+                                      times = c(sapply(rat.sig.anova.car.s.class, length), length(rat.sig.anova.car.s.pheno.class))),
+                       stringsAsFactors = FALSE)
+anno_row$metab_group[anno_row$material == "biochemical parameter"] <- "biochemical parameter"
+anno_row$metab_group <- factor(anno_row$metab_group)
+colnames(anno_row) <- c("Metab. group", "Material")
+anno_row <- anno_row[, 2:1]
+rownames(anno_row) <- 1:nrow(anno_row)
+rat_order <- order(xm$group[!duplicated(substring(xm$`Sample Identification`, 1, 3))], xm$`time point`[!duplicated(substring(xm$`Sample Identification`, 1, 3))])
+y_labels <- c(unlist(rat.sig.anova.car.s.class), rat.sig.anova.car.s.pheno.class)
+y_overlap <- which(c(unlist(lapply(1:3, function(n) rat.sig.anova.car.s.class[[n]] %in% rat.sig.anova.car.c.class[[n]])), rat.sig.anova.car.s.pheno.class %in% rat.sig.anova.car.c.pheno.class))
+y_expr <- sapply(y_labels, function(x) eval(bquote(expression(.(x)))))
+y_expr[y_overlap] <- sapply(y_labels[y_overlap], function(x) eval(bquote(expression(bold(.(x))))))
+#JUMP
+phm <- pheatmap(mat = xmts[, rat_order], #TODO: fix column annotation order
+                border_color = NA,
+                cluster_rows = FALSE, 
+                cluster_cols = FALSE, 
+                annotation_col = anno_col[rat_order, ],
+                annotation_row = anno_row,
+                annotation_colors = list(group = c(`septic survivor` = hue_pal()(3)[3], `septic non-survivor` = hue_pal()(3)[1], `control` = hue_pal()(3)[2]),
+                                         `Metab. group` = setNames(hue_pal()(length(unique(anno_row$`Metab. group`))), unique(anno_row$`Metab. group`))),
+                gaps_col = which(diff(as.numeric(anno_col$group[rat_order])) != 0),
+                gaps_row = which(diff(as.numeric(factor(anno_row$Material))) != 0),
+                labels_row = y_expr,
+                filename = paste0(out_dir, "rat_heatmap_metab_sig_s_pheat_thresh005.png"),
+                silent = TRUE,
+                width = 10,
+                height = 14)
+
 ##Rat, cluster-heatmap, metabolites
 x <- rat_sepsis_data_normal[,c(1:4, metab_sel)]
 x <- x[, apply(x, 2, function(x){ sum(is.na(x)) == 0 })]
