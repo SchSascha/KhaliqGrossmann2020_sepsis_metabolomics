@@ -340,8 +340,7 @@ ml.acc <- function(pred, ref){
 
 #' Calculate the points of the Receiver Operatoring Curve
 #'
-#' @param pred predicted class, coded in [-1, 1], but really any [<=0, >0] counts
-#' @param ref true class, see pred for info
+#' @param ref predicted class, coded in [-1, 1], but really any [<=0, >0] counts
 #' @param conf classification confidence
 #'
 #' @return a matrix of column vectors for x and y coordinates
@@ -364,8 +363,7 @@ ml.roc <- function(ref, conf){
 
 #' Calculate the Area Under the receiver-operator-Curve
 #'
-#' @param pred predicted class, coded in [-1, 1], but really any [<=0, >0] counts
-#' @param ref true class, see pred for info
+#' @param ref predicted class, coded in [-1, 1], but really any [<=0, >0] counts
 #' @param conf classification confidence
 #'
 #' @return the AUC value
