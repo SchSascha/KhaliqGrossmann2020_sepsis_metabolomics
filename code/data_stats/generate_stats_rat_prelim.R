@@ -14,6 +14,8 @@ library(forcats)
 library(car)
 library(nlme)
 library(multcomp)
+library(pheatmap)
+library(scales)
 
 #Import central functions
 source("../function_definitions.R")
@@ -582,6 +584,11 @@ h$height <- lower_margin + round(sum(sel) * 1100/76) #1200 is a good height for 
 export(p = h, file = paste0(out_dir, "rat_heatmap_pheno.png"))
 
 #Heatmap of significant metabolites for all materials, groups and time points; analogue to human heatmap, Fig2A
+num <- substring(rat_sepsis_data$`Sample Identification`, 1, 3)
+mat <- substring(rat_sepsis_data$`Sample Identification`, 4, 4)
+tab <- data.frame(num, mat)
+dcast(data = tab, formula = num ~ mat)
+
 x <- rat_sepsis_data
 # x[, -1:-6] <- (tanh(scale(x[, -1:-6])) + 1) / 2 #tanh(z-score)
 for (mat in unique(x$material)){
@@ -631,20 +638,20 @@ anno_row$metab_group <- factor(anno_row$metab_group)
 colnames(anno_row) <- c("Metab. group", "Material")
 anno_row <- anno_row[, 2:1]
 rownames(anno_row) <- 1:nrow(anno_row)
-rat_order <- order(xm$group[!duplicated(substring(xm$`Sample Identification`, 1, 3))], xm$`time point`[!duplicated(substring(xm$`Sample Identification`, 1, 3))])
+rat_order <- order(as.character(xm$group[!duplicated(substring(xm$`Sample Identification`, 1, 3))]), as.numeric(sub("h", "", xm$`time point`[!duplicated(substring(xm$`Sample Identification`, 1, 3))])))
 y_labels <- c(unlist(rat.sig.anova.car.s.class), rat.sig.anova.car.s.pheno.class)
 y_overlap <- which(c(unlist(lapply(1:3, function(n) rat.sig.anova.car.s.class[[n]] %in% rat.sig.anova.car.c.class[[n]])), rat.sig.anova.car.s.pheno.class %in% rat.sig.anova.car.c.pheno.class))
 y_expr <- sapply(y_labels, function(x) eval(bquote(expression(.(x)))))
 y_expr[y_overlap] <- sapply(y_labels[y_overlap], function(x) eval(bquote(expression(bold(.(x))))))
-#JUMP
-phm <- pheatmap(mat = xmts[, rat_order], #TODO: fix column annotation order
+phm <- pheatmap(mat = xmts[, match(rownames(anno_col[rat_order, ]), colnames(xmts))],
                 border_color = NA,
                 cluster_rows = FALSE, 
                 cluster_cols = FALSE, 
                 annotation_col = anno_col[rat_order, ],
                 annotation_row = anno_row,
                 annotation_colors = list(group = c(`septic survivor` = hue_pal()(3)[3], `septic non-survivor` = hue_pal()(3)[1], `control` = hue_pal()(3)[2]),
-                                         `Metab. group` = setNames(hue_pal()(length(unique(anno_row$`Metab. group`))), unique(anno_row$`Metab. group`))),
+                                         `Metab. group` = setNames(hue_pal()(length(unique(anno_row$`Metab. group`))), unique(anno_row$`Metab. group`)),
+                                         `time point` = c("6h" = hue_pal()(18)[3], "24h" = hue_pal()(15)[4], "72h" = hue_pal()(15)[5])),
                 gaps_col = which(diff(as.numeric(anno_col$group[rat_order])) != 0),
                 gaps_row = which(diff(as.numeric(factor(anno_row$Material))) != 0),
                 labels_row = y_expr,
