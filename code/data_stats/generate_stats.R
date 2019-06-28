@@ -78,7 +78,7 @@ human_healthy_ranges$ID <- human_sepsis_legend[met_mat_name, 1]
 colns <- colnames(human_data)
 colnames(human_data) <- make.names(colnames(human_data))
 imputables <- 7:which(colnames(human_data) == "H1")
-human_data[, imputables] <- missRanger(data = human_data[, imputables])
+human_data[, imputables] <- missRanger(data = human_data[, imputables], seed = 105431)
 colnames(human_data) <- colns
 
 colns <- colnames(human_sepsis_val_data)
@@ -587,6 +587,14 @@ NS <- subset(human_data, Day == 0 & Group == "Septic-NS", sig.anova.car.s.class)
 fold_change <- log2(colMeans(SS) / colMeans(NS))
 sink(file = paste0(out_dir, "fold_change_geq_1_day0_sS_vs_sNS.txt"))
 print(fold_change[which(abs(fold_change) > 1)])
+sink()
+
+#also for all metabolites, day 0, Septic-NS vs Septic-S
+SS <- subset(human_data, Day == 0 & Group == "Septic-S", metab_sel)
+NS <- subset(human_data, Day == 0 & Group == "Septic-NS", metab_sel)
+fold_change <- log2(colMeans(SS) / colMeans(NS))
+sink(file = paste0(out_dir, "fold_change_day0_sS_vs_sNS.txt"))
+print(fold_change)
 sink()
 
 #human fold changes at day 0, septic-NS vs nonseptic-NS
