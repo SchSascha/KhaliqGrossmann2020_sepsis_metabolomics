@@ -126,6 +126,7 @@ model_fit_function <- function(number = 1, base_model_dir, out_dir, ss_conc, mer
 }
 
 model_fit_function_with_prepared_models <- function(number = 1, base_model_dir, out_dir, ss_conc, merge_gcvals = merge_gcvals, react_pars = react_pars){
+  set.seed(number)
   ##Load and clean model for day 0
   new_model_day0 <- loadModel(path = paste0(base_model_dir, "human_beta_oxidation_twin_model_day0.cps"))
   #clearParameterEstimationParameters(model = new_model_day0)
@@ -252,8 +253,7 @@ tic()
 cl <- makeCluster(min(detectCores() - 1, 100))
 prep_res <- clusterCall(cl = cl, fun = eval, quote({library(CoRC); library(data.table)}), env = .GlobalEnv)
 #par_est_res <- parLapplyLB(cl = cl, X = 1:1000, fun = model_fit_function, base_model_dir = base_model_dir, out_dir = out_dir, ss_conc = ss_conc, merge_gcvals = merge_gcvals, react_pars = react_pars, col_keep = col_keep, ratio_quant_map = ratio_quant_map)
-par_est_res <- parLapplyLB(cl = cl, X = 1:100, fun = model_fit_function_with_prepared_models, base_model_dir = base_model_dir, out_dir = out_dir, ss_conc = ss_conc, merge_gcvals = merge_gcvals, 
-react_pars = react_pars)
+par_est_res <- parLapplyLB(cl = cl, X = 1:100, fun = model_fit_function_with_prepared_models, base_model_dir = base_model_dir, out_dir = out_dir, ss_conc = ss_conc, merge_gcvals = merge_gcvals, react_pars = react_pars)
 stopCluster(cl)
 toc()
 
@@ -284,7 +284,7 @@ pd$parameter <- stri_extract(str = pd$parameter, regex = "\\[.+\\]")
 n_par <- length(unique(pd$parameter))
 pd_mn <- lapply(unique(pd$parameter), function(par){ ss <- subset(x = pd, parameter == par); ss$value <- ss$value / mean(ss$value); return(ss) })
 pd_mn <- Reduce("rbind", pd_mn)
-p <- ggplot(data = pd, mapping = aes(x = Day, y = value, color = Group)) + 
+p <- ggplot(data = subset(pd, Run %in% seq(2, 100, by = 2)), mapping = aes(x = Day, y = value, color = Group)) + 
   facet_wrap(facets = ~ parameter, ncol = 4, nrow = 2) +
   stat_summary(geom = "line", fun.data = mean_se) +
   stat_summary(geom = "errorbar", fun.data = mean_se, position = position_dodge(width = 0.2)) +
@@ -297,7 +297,8 @@ p <- ggplot(data = pd, mapping = aes(x = Day, y = value, color = Group)) +
   theme(panel.grid = element_blank())
 ggsave(filename = "kin_mitomod_Vmax_S_vs_NS_repeated.png", plot = p, path = out_dir, width = 8, height = 4, units = "in")
 
-mpd <- dcast(pd, Day + Run + parameter ~ Group)
+#TODO: fix
+mpd <- dcast(pd, Day + Run + parameter ~ Group, value.var = "value")
 l <- ggplot(data = mpd, mapping = aes(x = Nonsurvivor, y = Survivor)) + 
   facet_grid(Day ~ parameter) + 
   #geom_point(size = 0.7, alpha = 0.1) +
@@ -307,10 +308,9 @@ l <- ggplot(data = mpd, mapping = aes(x = Nonsurvivor, y = Survivor)) +
   scale_y_log10() +
   theme_bw() + 
   theme(panel.grid = element_blank(), axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
-plot(l)
+#plot(l)
 ggsave(plot = l, file = "kin_mitomod_rel_Vm.png", path = out_dir, width = 10, height = 4, units = "in")
 
-#TODO: fix
 c1pd <- dcast(pd, Day + Run + Group ~ parameter)
 c2pd <- dcast(pd, Day + Run ~ parameter + Group)
 pc1 <- prcomp(as.matrix(c1pd[c1pd$Day == 0, -1:-3]), scale. = TRUE)
