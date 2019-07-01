@@ -7,6 +7,7 @@ library(parallel)
 library(vegan)
 library(ggrepel)
 library(ggfortify)
+library(scales)
 
 source("../function_definitions.R")
 
@@ -58,29 +59,92 @@ metab_sel <- 5:which(colnames(rat_sepsis_data) == "H1")
 
 #Process data
 ##PCA on biochemical parameters
-rat_sepsis_data_pheno_dist <- cbind(subset(rat_sepsis_data, material == "plasma" & `time point` != "72h", select = 1:4), as.matrix(dist(x = subset(rat_sepsis_data, material == "plasma" & `time point` != "72h", select = pheno_sel), method = "canberra"))) # distance() works on a per row basis
+rat_sepsis_data_pheno_dist <- cbind(subset(rat_sepsis_data, material == "plasma" & `time point` == "24h", select = 1:4), as.matrix(dist(x = subset(rat_sepsis_data, material == "plasma" & `time point` == "24h", select = pheno_sel), method = "canberra"))) # distance() works on a per row basis
 p <- prcomp(rat_sepsis_data_pheno_dist[, -1:-4])
 
 ###PERMANOVA with bootstrapping
 ad_data <- rat_sepsis_data_pheno_dist
 pat_list <- rat_sepsis_data_pheno_dist[, 1:4]
 PCs <- p$x[, 1:2]
-tic()
-ad_res_mc <- mclapply(unique(pat_list$group), 
-                      function(dx, PCs, ad_data){
-                        take_smpls <- ad_data$group != dx
-                        Y <- PCs[take_smpls, ]
-                        ad_data_t <- ad_data[take_smpls, ]
-                        ad_res <- adonis(formula = Y ~ group, data = ad_data_t, permutations = 10000, parallel = 1, method = "euclidean")
-                        list(ad_res = ad_res)
-                      }, 
-                      PCs = PCs, ad_data = ad_data,
-                      mc.cores = num_cores)
-toc()
-ad_r_p <- sapply(lapply(lapply(lapply(ad_res_mc, `[[`, "ad_res"), `[[`, "aov.tab"), `[[`, "Pr(>F)"), `[`, 1)
+ad_res_mc <- list()
+for (mat in unique(rat_sepsis_data$material)){
+  ad_res_mc[[mat]] <- mclapply(unique(pat_list$group), 
+                        function(dx, PCs, ad_data){
+                          take_smpls <- ad_data$group != dx
+                          Y <- PCs[take_smpls, ]
+                          ad_data_t <- ad_data[take_smpls, ]
+                          ad_res <- adonis(formula = Y ~ group, data = ad_data_t, permutations = 10000, parallel = 1, method = "euclidean")
+                          list(ad_res = ad_res)
+                        }, 
+                        PCs = PCs, ad_data = ad_data,
+                        mc.cores = num_cores)
+}
+ad_r_p <- sapply(lapply(lapply(lapply(ad_res_mc, lapply, `[[`, "ad_res"), `[[`, "aov.tab"), `[[`, "Pr(>F)"), `[`, 1)
+ad_r_p <- lapply(ad_res_mc, lapply, function(e) e$ad_res$aov.tab$`Pr(>F)`[1])
+ad_r_p_tab <- melt(ad_r_p)
+ad_r_p_tab$L2 <- c("S vs NS", "C vs NS", "C vs S")[ad_r_p_tab$L2]
+
+##PCA on all metabolites
+###PERMANOVA with bootstrapping
+ad_res_mc <- list()
+for (mat in unique(rat_sepsis_data$material)){
+  rat_sepsis_data_dist <- cbind(subset(rat_sepsis_data, material == mat & `time point` == "24h", select = 1:4), as.matrix(dist(x = subset(rat_sepsis_data, material == mat & `time point` == "24h", select = metab_sel), method = "canberra"))) # distance() works on a per row basis
+  p <- prcomp(rat_sepsis_data_dist[, -1:-4])
+  ad_data <- rat_sepsis_data_dist
+  pat_list <- rat_sepsis_data_dist[, 1:4]
+  PCs <- p$x[, 1:2]
+  ad_res_mc[[mat]] <- mclapply(unique(pat_list$group), 
+                               function(dx, PCs, ad_data){
+                                 take_smpls <- ad_data$group != dx
+                                 Y <- PCs[take_smpls, ]
+                                 ad_data_t <- ad_data[take_smpls, ]
+                                 ad_res <- adonis(formula = Y ~ group, data = ad_data_t, permutations = 10000, parallel = 1, method = "euclidean")
+                                 list(ad_res = ad_res)
+                               }, 
+                               PCs = PCs, ad_data = ad_data,
+                               mc.cores = num_cores)
+}
+ad_r_m <- sapply(lapply(lapply(lapply(ad_res_mc, lapply, `[[`, "ad_res"), `[[`, "aov.tab"), `[[`, "Pr(>F)"), `[`, 1)
+ad_r_m <- lapply(ad_res_mc, lapply, function(e) e$ad_res$aov.tab$`Pr(>F)`[1])
+ad_r_m_tab <- melt(ad_r_m)
+ad_r_m_tab$L2 <- c("S vs NS", "C vs NS", "C vs S")[ad_r_m_tab$L2]
+
+###PERMANOVA with bootstrapping
+mat_res <- list()
+for (mat in unique(rat_sepsis_data$material)){
+  mat_res[[mat]] <- list()
+  for (met_group in unique(rat_sepsis_legend$group[metab_sel - 5])){
+    rds <- subset(rat_sepsis_data, material == mat & `time point` == "24h", metab_sel)
+    rds <- subset(rds, select = rat_sepsis_legend[rat_sepsis_legend$group == met_group, 1])
+    w <- which.xy(is.na(rds))
+    rds <- rds[, setdiff(1:ncol(rds), unique(w[, 2]))]
+    rat_data_dist <- cbind(subset(rat_sepsis_data, material == mat & `time point` == "24h", 1:4), as.matrix(dist(x = rds, method = "canberra"))) # distance() works on a per row basis
+    p <- prcomp(rat_data_dist[, -1:-4])
+    ad_data <- rat_data_dist
+    pat_list <- rat_data_dist[, 1:4]
+    PCs <- p$x[, 1:2]
+    mat_res[[mat]][[met_group]] <- mclapply(unique(pat_list$group), 
+                                   function(dx, PCs, ad_data){
+                                     take_smpls <- ad_data$group != dx
+                                     Y <- PCs[take_smpls, ]
+                                     ad_data_t <- ad_data[take_smpls, ]
+                                     ad_res <- adonis(formula = Y ~ group, data = ad_data_t, permutations = 1000, parallel = 1, method = "euclidean")
+                                     list(ad_res = ad_res)
+                                   }, 
+                                   PCs = PCs, ad_data = ad_data,
+                                   mc.cores = num_cores)
+  }
+}
+ad_mg_p <- lapply(mat_res, lapply, lapply, function(e) e$ad_res$aov.tab$`Pr(>F)`[1])
+ad_mg_p_tab <- melt(ad_mg_p)
+ad_mg_p_tab$L3 <- c("S vs NS", "C vs NS", "C vs S")[ad_mg_p_tab$L3]
+ad_mg_p_tab <- dcast(ad_mg_p_tab, L3 + L1 ~ L2)
+ad_ps_tab <- cbind(ad_mg_p_tab, data.frame(all_metab = ad_r_m_tab$value), data.frame(pheno = ad_r_p_tab$value))
+ad_fdr_tab <- ad_ps_tab
+ad_fdr_tab[, -1:-2] <- t(apply(ad_ps_tab[, -1:-2], 1, p.adjust)) #None of those is significant ...
 
 ###Actual plot of sepsis samples, clinical params
-rsd <- subset(rat_sepsis_data, material == "plasma" & group != "control" & `time point` != "72h")
+rsd <- subset(rat_sepsis_data, material == "plasma" & group != "control" & `time point` == "24h")
 rat_sepsis_data_pheno_dist <- cbind(subset(rsd, select = 1:4), as.matrix(dist(x = subset(rsd, select = pheno_sel), method = "canberra"))) # distance() works on a per row basis
 rat_sepsis_data_pheno_dist$`Sample Identification` <- factor(rat_sepsis_data_pheno_dist$`Sample Identification`, levels = unique(rat_sepsis_data_pheno_dist$`Sample Identification`))
 p <- prcomp(rat_sepsis_data_pheno_dist[, -1:-4])
@@ -91,7 +155,7 @@ ap <- autoplot(object = p, data = rsdpd, colour = "group", frame = FALSE, frame.
 ap <- ap + 
   geom_point(size = 3, color = "white") +
   geom_text_repel(parse = TRUE, label = sapply(rsdpd$label, function(lab) sprintf("bold(\"%s\")", lab)), x = p$x[, 1] / lam[1], y = p$x[, 2] / lam[2], size = 1.3, mapping = aes(color = group), segment.size = 0.3, force = 0.005, box.padding = 0.0) +
-  ggtitle("PCA biplot, Canberra distance,\nbiochemical parameters") +
+  ggtitle("PCA biplot, Canberra distance,\nbiochemical parameters, 24h samples") +
   guides(shape = "none") +
   human_col_scale(name = "Group", levels = c("septic non-survivor", "control", "septic survivor", "", "")) +
   theme_bw() + 
@@ -113,10 +177,10 @@ mtab_list <- list()
 bdiv_list <- list()
 rat_dev_list <- list()
 for (mat in unique(rat_sepsis_data$material)){
-  rds <- subset(rat_sepsis_data, material == mat & `time point` != "72h", metab_sel)
+  rds <- subset(rat_sepsis_data, material == mat & `time point` == "24h", metab_sel)
   w <- which.xy(is.na(rds))
   rds <- rds[, setdiff(1:ncol(rds), unique(w[, 2]))]
-  rat_data_dist <- cbind(subset(rat_sepsis_data, material == mat & `time point` != "72h", 1:4), as.matrix(dist(x = rds, method = "canberra"))) # distance() works on a per row basis
+  rat_data_dist <- cbind(subset(rat_sepsis_data, material == mat & `time point` == "24h", 1:4), as.matrix(dist(x = rds, method = "canberra"))) # distance() works on a per row basis
   p <- prcomp(rat_data_dist[, -1:-4])
   #ad_rv <- ad_mg_r_df[["all"]]
   #ad_rv[ad_rv > 0.05] <- 0.05
@@ -126,7 +190,7 @@ for (mat in unique(rat_sepsis_data$material)){
   ap <- ap + 
     human_col_scale(name = "Group", levels = c("septic non-survivor", "control", "septic survivor", "", ""), aesthetics = c("color", "fill")) +
     guides(colour = guide_legend(title = "Group"), fill = "none", group = "none") +
-    ggtitle("PCA biplot, Canberra distance, metabolites,\nall samples") +
+    ggtitle("PCA biplot, Canberra distance, metabolites,\n24h samples") +
     theme_bw() + 
     theme(panel.grid = element_blank())
   gobj <- ggplot_build(ap)
@@ -207,7 +271,7 @@ for (mat in unique(rat_sepsis_data$material)){
     geom_histogram(position = position_stack(), bins = max(dev_score$score) + 1) +
     human_col_scale(name = "Group", levels = c("septic non-survivor", "control", "septic survivor", "", ""), aesthetics = "fill") +
     ylab("Number of Patients") +
-    xlab("Number of metabolites outside of the safe corridor at Days 0-3") +
+    xlab("Number of metabolites outside of the safe corridor at any time") +
     theme_bw() +
     theme(panel.grid = element_blank())
   ggsave(plot = p, filename = paste0("generalized_safe_corridor_minmax_", mat, ".png"), path = out_dir, width = 6, height = 3, units = "in")
@@ -277,7 +341,7 @@ for (mat in unique(rat_sepsis_data$material)){
     ap <- ap + 
       human_col_scale(name = "Group", levels = c("septic non-survivor", "control", "septic survivor", "", ""), aesthetics = c("color", "fill")) +
       guides(colour = guide_legend(title = "Group"), fill = "none", group = "none") +
-      ggtitle("PCA biplot, Canberra distance, metabolites,\nall samples") +
+      ggtitle("PCA biplot, Canberra distance, metabolites,\n24h samples") +
       theme_bw() + 
       theme(panel.grid = element_blank())
     gobj <- ggplot_build(ap)
@@ -356,10 +420,10 @@ tic()
 for (mat in unique(rat_sepsis_data$material)){
   for (met_group in setdiff(unique(rat_sepsis_legend$group[match(colnames(rat_sepsis_data)[metab_sel], rat_sepsis_legend[, 1])]), "sugar")){
     met_group_idx <- which(rat_sepsis_legend$group == met_group) + 4
-    rds <- subset(rat_sepsis_data, material == mat & `time point` != "72h", met_group_idx)
+    rds <- subset(rat_sepsis_data, material == mat & `time point` == "24h", met_group_idx)
     w <- which.xy(is.na(rds))
     rds <- rds[, setdiff(1:ncol(rds), unique(w[, 2]))]
-    rat_data_dist <- cbind(subset(rat_sepsis_data, material == mat & `time point` != "72h", 1:4), as.matrix(dist(x = rds, method = "canberra"))) # distance() works on a per row basis
+    rat_data_dist <- cbind(subset(rat_sepsis_data, material == mat & `time point` == "24h", 1:4), as.matrix(dist(x = rds, method = "canberra"))) # distance() works on a per row basis
     p <- prcomp(rat_data_dist[, -1:-4])
     # ad_rv <- ad_mg_r_df[[met_group]]
     # ad_rv[ad_rv > 0.05] <- 0.05
@@ -370,7 +434,7 @@ for (mat in unique(rat_sepsis_data$material)){
     ap <- ap +
       human_col_scale(name = "Group", levels = c("septic non-survivor", "control", "septic survivor", "", ""), aesthetics = c("color", "fill")) +
       guides(colour = guide_legend(title = "Group"), fill = "none", group = "none") +
-      ggtitle(paste0("PCA biplot, Canberra distance, ", met_group, "\nall samples")) +
+      ggtitle(paste0("PCA biplot, Canberra distance, ", met_group, "\n24h samples")) +
       theme_bw() + 
       theme(panel.grid = element_blank())
     gobj <- ggplot_build(ap)
