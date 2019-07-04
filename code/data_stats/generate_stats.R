@@ -2003,6 +2003,16 @@ sdev <- aggregate(udev | ldev, by = list(Patient = pat_dev_score$Patient), FUN =
 dev_score <- data.frame(Patient = sdev$Patient, score = rowSums(sdev[, -1]))
 dev_score$Survival <- pat_dev_score$Survival[match(dev_score$Patient, pat_dev_score$Patient)]
 dev_score$Group <- pat_dev_score$Group[match(dev_score$Patient, pat_dev_score$Patient)]
+{
+  m <- subset(human_data, Day %in% tanova_day_set)
+  m <- m[, -pheno_sel]
+  m <- m[, !(colnames(m) %in% sig.anova.car.s.class)]
+  di <- which(m$Survival == "NS")
+  dev_rep_res <- sapply(X = 1:1000, FUN = sim_dev, n = nrow(m), d = ncol(m) - 6, dev_idx = di, sample_groups = m$Patient)
+}
+p_thresh <- apply(dev_rep_res, 1, quantile, p = 0.95, names = FALSE)
+#TODO: add significance mark to blocks in deviation plot
+#TODO: add significance test to other deviation measures
 p <- ggplot(data = dev_score, mapping = aes(fill = Group, x = score)) +
   geom_histogram(position = position_stack(), bins = max(dev_score$score) + 1) +
   human_col_scale(aesthetics = "fill") +
