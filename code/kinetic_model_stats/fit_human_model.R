@@ -261,12 +261,15 @@ save.image()
 
 #Extract optimization results
 par_d0 <- lapply(lapply(lapply(par_est_res, `[[`, "hj_res_d0"), `[[`, "parameters"), subset, subset = stri_startswith_fixed(str = parameter, pattern = "Values["), select = c("parameter", "value", "lower_bound", "upper_bound"))
+par_d0 <- lapply(par_d0, subset, subset = duplicated(parameter)) #parameter table contains both the original bounds (first occurence) and reset bounds, we filter out the original bounds
 pd0 <- Reduce("rbind", par_d0)
 pd0$Day <- 0
 par_d1 <- lapply(lapply(lapply(par_est_res, `[[`, "hj_res_d1"), `[[`, "parameters"), subset, subset = stri_startswith_fixed(str = parameter, pattern = "Values["), select = c("parameter", "value", "lower_bound", "upper_bound"))
+par_d1 <- lapply(par_d1, subset, subset = duplicated(parameter)) #parameter table contains both the original bounds (first occurence) and reset bounds, we filter out the original bounds
 pd1 <- Reduce("rbind", par_d1)
 pd1$Day <- 1
 par_d2 <- lapply(lapply(lapply(par_est_res, `[[`, "hj_res_d2"), `[[`, "parameters"), subset, subset = stri_startswith_fixed(str = parameter, pattern = "Values["), select = c("parameter", "value", "lower_bound", "upper_bound"))
+par_d2 <- lapply(par_d2, subset, subset = duplicated(parameter)) #parameter table contains both the original bounds (first occurence) and reset bounds, we filter out the original bounds
 pd2 <- Reduce("rbind", par_d2)
 pd2$Day <- 2
 
@@ -285,11 +288,11 @@ n_par <- length(unique(pd$parameter))
 pd_mn <- lapply(unique(pd$parameter), function(par){ ss <- subset(x = pd, parameter == par); ss$value <- ss$value / mean(ss$value); return(ss) })
 pd_mn <- Reduce("rbind", pd_mn)
 p <- ggplot(data = subset(pd, Run %in% seq(2, 100, by = 2)), mapping = aes(x = Day, y = value, color = Group)) + 
-  facet_wrap(facets = ~ parameter, ncol = 4, nrow = 2) +
-  stat_summary(geom = "line", fun.data = mean_se) +
-  stat_summary(geom = "errorbar", fun.data = mean_se, position = position_dodge(width = 0.2)) +
+  facet_wrap(facets = ~ parameter, ncol = 6, nrow = 2, scale = "free_y") +
   geom_hline(mapping = aes(yintercept = lower_bound)) +
   geom_hline(mapping = aes(yintercept = upper_bound)) +
+  stat_summary(geom = "line", fun.data = mean_se) +
+  stat_summary(geom = "errorbar", fun.data = mean_se, position = position_dodge(width = 0.2)) +
   scale_y_log10() +
   scale_x_continuous(breaks = 0:2) +
   ylab("value +/- 1 SEM") +
@@ -308,7 +311,6 @@ l <- ggplot(data = mpd, mapping = aes(x = Nonsurvivor, y = Survivor)) +
   scale_y_log10() +
   theme_bw() + 
   theme(panel.grid = element_blank(), axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
-#plot(l)
 ggsave(plot = l, file = "kin_mitomod_rel_Vm.png", path = out_dir, width = 10, height = 4, units = "in")
 
 c1pd <- dcast(pd, Day + Run + Group ~ parameter)
@@ -317,8 +319,7 @@ pc1 <- prcomp(as.matrix(c1pd[c1pd$Day == 0, -1:-3]), scale. = TRUE)
 pc2 <- prcomp(as.matrix(c2pd[c2pd$Day == 0, -1:-2]), scale. = TRUE)
 
 h <- ggplot(data = obj, mapping = aes(x = Value)) +
-  facet_wrap(Day ~ .) +
-  scale_x_log10() +
+  facet_wrap(Day ~ ., scale = "free_x") +
   geom_histogram(bins = 10) +
   theme_bw() + 
   theme(panel.grid = element_blank())
