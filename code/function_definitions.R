@@ -285,6 +285,31 @@ get_sig_var_pos <- function(diff_data, alpha = 0.05, time_var = "Time"){
   return(sig_diff_pos_long)
 }
 
+#' Simulate measurements and count deviations for group of interest. Deviation means a value outside of the range defined by another group of samples.
+#'
+#' @param number dummy variable for lapply
+#' @param n number of samples
+#' @param d number of features per sample
+#' @param dev_idx index to samples to count deviations for
+#' @param sample_groups which samples belong together, e.g. to the same patient
+#'
+#' @return numeric vector of deviation counts per sample of interest
+#' @export
+#'
+#' @examples
+sim_dev <- function(number = 1, n, d, dev_idx, sample_groups){
+  mat <- matrix(rlnorm(n = n * d), nrow = n, ncol = d)
+  dev_max <- colMaxs(mat[-dev_idx, ])
+  dev_min <- colMins(mat[-dev_idx, ])
+  udev <- mat > matrix(dev_max, ncol = d, nrow = n, byrow = TRUE)
+  ldev <- mat < matrix(dev_min, ncol = d, nrow = n, byrow = TRUE)
+  sdev <- aggregate(udev | ldev, by = list(Sample = sample_groups), FUN = max) #count same metabolite at different time points as one deviation
+  dev_score <- data.frame(Sample = sdev$Sample, score = rowSums(sdev[, -1]))
+  res <- dev_score$score[match(unique(sample_groups[dev_idx]), dev_score$Sample)]
+  names(res) <- unique(sample_groups[dev_idx])
+  return(res)
+}
+
 #' Scale values in a matrix or data.frame by dividing through their column-wise maximum. No min-max scaling, unless the minimum value in each column is 0!
 #'
 #' @param x matrix or data.frame

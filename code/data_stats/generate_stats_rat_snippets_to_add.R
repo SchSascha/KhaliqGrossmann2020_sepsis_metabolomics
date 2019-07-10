@@ -8,6 +8,7 @@ library(vegan)
 library(ggrepel)
 library(ggfortify)
 library(scales)
+library(matrixStats)
 
 source("../function_definitions.R")
 
@@ -301,10 +302,21 @@ for (name in names(rat_dev_list)){
   rat_dev_list[[name]]$material <- name
 }
 dev_score <- Reduce("rbind", rat_dev_list)
+dev_rep_res <- list()
+for (mat in unique(rat_sepsis_data$material)){
+  m <- subset(rat_sepsis_data, material == mat & `time point` == "24h")
+  m <- m[, -pheno_sel]
+  m <- m[, !(colnames(m) %in% rat.sig.anova.car.s.class[[mat]])]
+  di <- which(m$group == "septic non-survivor")
+  dev_rep_res[[mat]] <- unlist(lapply(X = 1:1000, FUN = sim_dev, n = nrow(m), d = ncol(m) - 4, dev_idx = di, sample_groups = 1:nrow(m)))
+}
+p_thresh <- sapply(dev_rep_res, quantile, p = 0.95, names = FALSE)
+p_thresh <- data.frame(score = p_thresh, material = names(p_thresh), stringsAsFactors = FALSE)
 p <- ggplot(data = dev_score, mapping = aes(fill = Group, x = score)) +
   facet_wrap(~ material, ncol = 1, nrow = 3) +
   geom_histogram(position = position_stack(), bins = max(dev_score$score) + 1) +
   human_col_scale(name = "Group", levels = c("septic non-survivor", "control", "septic survivor", "", ""), aesthetics = "fill") +
+  geom_vline(data = p_thresh, mapping = aes(xintercept = score), linetype = 2) +
   ylab("Number of Rat samples") +
   xlab("Number of metabolites outside of the safe corridor at 24h") +
   theme_bw() +
@@ -416,6 +428,7 @@ for (mat in unique(rat_sepsis_data$material)){
   }
 }
 
+##Make PCA biplots for each material and metabolite group
 tic()
 for (mat in unique(rat_sepsis_data$material)){
   for (met_group in setdiff(unique(rat_sepsis_legend$group[match(colnames(rat_sepsis_data)[metab_sel], rat_sepsis_legend[, 1])]), "sugar")){
@@ -452,7 +465,9 @@ for (mat in unique(rat_sepsis_data$material)){
 }
 toc()
 
-#Plot
+
+
+#Plot PCA biplots of all samples
 plot_rat_group_pca <- function(group_name = "plasma"){
   
   rat_sepsis_data_normal <- subset(rat_sepsis_data, material == group_name)
