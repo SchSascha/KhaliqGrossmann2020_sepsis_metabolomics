@@ -2011,16 +2011,23 @@ dev_score$Group <- pat_dev_score$Group[match(dev_score$Patient, pat_dev_score$Pa
   dev_rep_res <- sapply(X = 1:1000, FUN = sim_dev, n = nrow(m), d = ncol(m) - 6, dev_idx = di, sample_groups = m$Patient)
 }
 p_thresh <- apply(dev_rep_res, 1, quantile, p = 0.95, names = FALSE)
+p_thresh_sig <- rbind(dev_score$score[match(as.numeric(names(p_thresh)), dev_score$Patient)], 
+                      dev_score$score[match(as.numeric(names(p_thresh)), dev_score$Patient)] > p_thresh)
+p_thresh_nonu <- table(p_thresh_sig[1, ])
+p_thresh_sig <- p_thresh_sig[, order(p_thresh_sig[1, ])]
+p_thresh_sig <- rbind(p_thresh_sig, unlist(lapply(names(p_thresh_nonu), function(nonu) 1:p_thresh_nonu[nonu] - 0.5)))
+p_thresh_sig <- data.frame(t(p_thresh_sig))
+colnames(p_thresh_sig) <- c("score", "include", "y")
 #TODO: add significance mark to blocks in deviation plot
-#TODO: add significance test to other deviation measures
 p <- ggplot(data = dev_score, mapping = aes(fill = Group, x = score)) +
   geom_histogram(position = position_stack(), bins = max(dev_score$score) + 1) +
+  geom_point(data = subset(p_thresh_sig, include == 1), mapping = aes(x = score, y = y), shape = 8, size = 1.2, inherit.aes = FALSE) +
   human_col_scale(aesthetics = "fill") +
   ylab("Number of Patients") +
   xlab("Number of metabolites outside of the safe corridor at Days 0-3") +
   theme_bw() +
-  theme(panel.grid = element_blank())
-ggsave(plot = p, filename = "generalized_safe_corridor_minmax.png", path = out_dir, width = 6, height = 3, units = "in")
+  theme(panel.grid = element_blank(), legend.direction = "horizontal", legend.position = "bottom")
+ggsave(plot = p, filename = "generalized_safe_corridor_minmax.png", path = out_dir, width = 8, height = 4, units = "in")
 print(paste0("Contribution of high deviation and low deviation to score is ", sum(udev), " and ", sum(ldev), " respectively."))
 w <- which.xy(udev | ldev) # tell me which variables make a difference
 mtab <- sort(table(w[, 2]), decreasing = TRUE)
