@@ -250,7 +250,7 @@ model_fit_function_with_prepared_models <- function(number = 1, base_model_dir, 
 
 #Actual fitting
 tic()
-cl <- makeCluster(min(detectCores() - 1, 100))
+cl <- makeCluster(min(detectCores() - 1, 100), outfile = "")
 prep_res <- clusterCall(cl = cl, fun = eval, quote({library(CoRC); library(data.table)}), env = .GlobalEnv)
 #par_est_res <- parLapplyLB(cl = cl, X = 1:1000, fun = model_fit_function, base_model_dir = base_model_dir, out_dir = out_dir, ss_conc = ss_conc, merge_gcvals = merge_gcvals, react_pars = react_pars, col_keep = col_keep, ratio_quant_map = ratio_quant_map)
 par_est_res <- parLapplyLB(cl = cl, X = 1:100, fun = model_fit_function_with_prepared_models, base_model_dir = base_model_dir, out_dir = out_dir, ss_conc = ss_conc, merge_gcvals = merge_gcvals, react_pars = react_pars)
