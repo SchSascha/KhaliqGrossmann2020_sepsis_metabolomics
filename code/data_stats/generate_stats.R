@@ -1921,26 +1921,27 @@ pat_path <- subset(pat_path, interaction(variable, Patient) %in% interaction(sde
 pat_path$x <- match(pat_path$variable, unique(hsd$variable))
 pat_path$x <- pat_path$x + (scale(seq_along(unique(pat_path$Day)))/4)[unlist(lapply(rle(pat_path$Patient)[["lengths"]], function(to) 1:to))]
 pat_path$metabolite_group <- human_sepsis_legend$group[match(pat_path$variable, human_sepsis_legend[, 1])]
+rsize <- rel(4.5)
 p <- ggplot(data = subset(hsd, Survival == "S"), mapping = aes(y = value, x = variable, color = Group)) +
-  stat_summary(fun.y = "mean", fun.ymin = "min", fun.ymax = "max", position = position_dodge(width = 0.7), geom = "errorbar") +
-  stat_summary(fun.y = "mean", fun.ymin = "mean", fun.ymax = "mean", position = position_dodge(width = 0.7), geom = "errorbar") +
-  geom_line(data = pat_path, mapping = aes(y = value, x = x, color = Group, group = interaction(variable, Patient), linetype = factor(Patient)), inherit.aes = FALSE) +
-  geom_tile(mapping = aes(x = variable, y = 1e-4, fill = metabolite_group), width = 1, height = 0.5, data = pat_path, inherit.aes = FALSE) +
-  geom_point(mapping = aes(x = Metabolite, y = 3.5e-5, shape = factor(score)), data = minmax_corridor_met_sel, inherit.aes = FALSE) +
-  geom_tile(mapping = aes(x = Metabolite, y = 3.5e-5), width = 1, height = 0.5, fill = minmax_corridor_met_sel$color, data = minmax_corridor_met_sel, inherit.aes = FALSE) +
-  guides(color = guide_legend(order = 1),
+  stat_summary(fun.y = "mean", fun.ymin = "min", fun.ymax = "max", position = position_dodge(width = 0.7), geom = "errorbar", size = rel(0.8)) +
+  #stat_summary(fun.y = "mean", fun.ymin = "mean", fun.ymax = "mean", position = position_dodge(width = 0.7), geom = "errorbar") +
+  geom_line(data = pat_path, mapping = aes(y = value, x = x, color = Group, group = interaction(variable, Patient), linetype = factor(Patient)), size = rel(0.8), inherit.aes = FALSE) +
+  geom_tile(mapping = aes(x = variable, y = 1e-3, fill = metabolite_group), width = 1, height = 0.25, data = pat_path, inherit.aes = FALSE) +
+  geom_point(mapping = aes(x = Metabolite, y = 5.9e-4, shape = factor(score)), data = minmax_corridor_met_sel, inherit.aes = FALSE) +
+  geom_tile(mapping = aes(x = Metabolite, y = 5.9e-4), width = 1, height = 0.25, fill = minmax_corridor_met_sel$color, data = minmax_corridor_met_sel, inherit.aes = FALSE) +
+  guides(color = guide_legend(title = "Patient Group", order = 1),
         fill = guide_legend(title = "Metabolite Group", order = 2),
-        shape = guide_legend(title = "#NS pats with deviation", override.aes = list(shape = 15, size = 6, colour = sort(unique(minmax_corridor_met_sel$color))), order = 3),
+        shape = guide_legend(title = "Number of patients\nwith deviation", override.aes = list(shape = 15, size = 6, colour = sort(unique(minmax_corridor_met_sel$color))), order = 3),
         linetype = guide_legend(title = "NS Patient", override.aes = list(color = hue_pal()(4)[c(4, 1)[1 + (subset(hsd, !duplicated(Patient) & Survival == "NS", "Group")[[1]] == "Septic-NS")]]), order = 4)) +
   scale_color_discrete(drop = FALSE) +
   scale_y_log10(expand = c(0,0)) +
   #scale_y_continuous(trans = pseudo_log_trans(sigma = 0.25, base = 2), expand = c(0, 0), limits = c(-10, 1000)) +
   ylab("Concentration, µM") +
-  xlab("Metabolite") +
+  xlab("") +
   human_col_scale() +
   theme_bw() + 
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 6), panel.grid = element_line(colour = 0))
-ggsave(filename = paste0("human_metab_nonsig_single_plot_minmax_all_pats.png"), path = out_dir, plot = p, width = 16, height = 9.5, units = "in")
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = rsize), panel.grid = element_line(colour = 0), text = element_text(size = rsize), axis.text.y = element_text(size = rsize), legend.text = element_text(size = rsize), legend.box = "vertical", legend.position = "bottom")
+ggsave(filename = paste0("human_metab_nonsig_single_plot_minmax_all_pats.png"), path = out_dir, plot = p, width = 16, height = 16, units = "in")
 
 hsd_lpc24 <- subset(human_data, Day %in% tanova_day_set)
 hsd_lpc24 <- melt(hsd_lpc24, id.vars = 1:6)
@@ -2136,7 +2137,7 @@ pbox <- ggplot(data = subset(dev_score_cb_minmax, Survival == "NS"), mapping = a
   ylab("Number of metabolites outside of the safe corridor per patient") +
   xlab("") +
   theme_bw() +
-  theme(panel.grid = element_blank(), legend.direction = "horizontal", legend.position = "bottom")
+  theme(panel.grid = element_blank(), legend.direction = "horizontal", legend.position = "bottom", legend.title = element_blank())
 ggsave(plot = pbox, filename = "generalized_safe_corridor_minmax_box_UK_Ferrario.png", path = out_dir, width = 7, height = 2.5, units = "in")
 print(paste0("Contribution of high deviation and low deviation to score is ", sum(udev), " and ", sum(ldev), " respectively."))
 w <- which.xy(udev | ldev) # tell me which variables make a difference
