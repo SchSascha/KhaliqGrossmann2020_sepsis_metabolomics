@@ -128,9 +128,9 @@ for (met_group in unique(human_data_legend$group[metab_sel])){
   ###PERMANOVA with bootstrapping
   ad_data <- human_data_dist
   PCs <- p$x[, 1:2]
-  c_idx <- which(ad_data$Group %in% c("n.Septic-NS", "n.Septic-S"))
-  cns_idx <- which(ad_data$Group == "n.Septic-NS")
-  cs_idx <- which(ad_data$Group == "n.Septic-S")
+  c_idx <- which(ad_data$Group %in% c("non-Septic-NS", "non-Septic-S"))
+  cns_idx <- which(ad_data$Group == "non-Septic-NS")
+  cs_idx <- which(ad_data$Group == "non-Septic-S")
   s_idx <- which(ad_data$Group == "Septic-S")
   ns_idx <- which(ad_data$Group == "Septic-NS")
   ad_res_mc <- mclapply(1:100, 
@@ -216,10 +216,10 @@ p <- prcomp(human_data_dist[, -1:-6])
 ad_data <- human_data_dist
 pat_list <- human_data_dist[, 1:6]
 PCs <- p$x[, 1:2]
-c_idx <- which(ad_data$Group %in% c("n.Septic-NS", "n.Septic-S"))
+c_idx <- which(ad_data$Group %in% c("non-Septic-NS", "non-Septic-S"))
 s_idx <- which(ad_data$Group == "Septic-S")
 ns_idx <- which(ad_data$Group == "Septic-NS")
-cns_idx <- which(ad_data$Group == "n.Septic-NS")
+cns_idx <- which(ad_data$Group == "non-Septic-NS")
 ad_res1 <- list()
 ad_res2 <- list()
 ad_res3 <- list()
@@ -329,13 +329,13 @@ pat_S_pw_dist <- pat_S_pw_dist[lower.tri(x = pat_S_pw_dist)]
 p_ns_sel <- which(pat_list_centroids$Group == "Septic-NS")
 pat_NS_pw_dist <- pat_pw_dist[p_ns_sel, p_ns_sel]
 pat_NS_pw_dist <- pat_NS_pw_dist[lower.tri(x = pat_NS_pw_dist)]
-p_c_sel <- which(grepl(x = pat_list_centroids$Group, pattern = "n.Septic"))
+p_c_sel <- which(grepl(x = pat_list_centroids$Group, pattern = "non-Septic"))
 pat_C_pw_dist <- pat_pw_dist[p_c_sel, p_c_sel]
 pat_C_pw_dist <- pat_C_pw_dist[lower.tri(x = pat_C_pw_dist)]
-p_cs_sel <- which(pat_list_centroids$Group == "n.Septic-S")
+p_cs_sel <- which(pat_list_centroids$Group == "non-Septic-S")
 pat_CS_pw_dist <- pat_pw_dist[p_cs_sel, p_cs_sel]
 pat_CS_pw_dist <- pat_CS_pw_dist[lower.tri(x = pat_CS_pw_dist)]
-p_cns_sel <- which(pat_list_centroids$Group == "n.Septic-NS")
+p_cns_sel <- which(pat_list_centroids$Group == "non-Septic-NS")
 pat_CNS_pw_dist <- pat_pw_dist[p_cns_sel, p_cns_sel]
 pat_CNS_pw_dist <- pat_CNS_pw_dist[lower.tri(x = pat_CNS_pw_dist)]
 ####Compare distance distributions
@@ -358,9 +358,9 @@ bdiv_fdr <- p.adjust(bdiv_p, method = "fdr")
 names(bdiv_p) <- bdiv_names
 names(bdiv_fdr) <- bdiv_names
 g1 <- sub("betadiv", "", bdiv_names)
-g1 <- sub("_CS", "_n.Septic-S", g1)
-g1 <- sub("_CNS", "_n.Septic-NS", g1)
-g1 <- sub("_C", "_n.Septic", g1)
+g1 <- sub("_CS", "_non-Septic-S", g1)
+g1 <- sub("_CNS", "_non-Septic-NS", g1)
+g1 <- sub("_C", "_non-Septic", g1)
 g1 <- sub("_S", "_Septic-S", g1)
 g1 <- sub("_NS", "_Septic-NS", g1)
 g1 <- substring(g1, 2)
@@ -370,9 +370,9 @@ bdiv_df <- bdiv_df[order(rownames(bdiv_df)), ]
 write.csv(x = bdiv_df, file = paste0(out_dir, "betadiversity_comparison_pvals.csv"), row.names = FALSE)
 ####Plot
 pat_pw_group_dat <- data.frame(distance = c(pat_CS_pw_dist, pat_CNS_pw_dist, pat_C_pw_dist, pat_S_pw_dist, pat_NS_pw_dist), 
-                               Group = c(rep("n.Septic-S", length(pat_CS_pw_dist)), 
-                                         rep("n.Septic-NS", length(pat_CNS_pw_dist)), 
-                                         rep("n.Septic", length(pat_C_pw_dist)),
+                               Group = c(rep("non-Septic-S", length(pat_CS_pw_dist)), 
+                                         rep("non-Septic-NS", length(pat_CNS_pw_dist)), 
+                                         rep("non-Septic", length(pat_C_pw_dist)),
                                          rep("Septic-S", length(pat_S_pw_dist)), 
                                          rep("Septic-NS", length(pat_NS_pw_dist))))
 p <- ggplot(data = pat_pw_group_dat, mapping = aes(x = Group, y = distance, color = Group)) +
@@ -456,7 +456,7 @@ for (met_group in setdiff(unique(human_data_legend$group[metab_sel]), "sugar")){
   
   ad_rv <- ad_mg_r_df[[met_group]]
   ad_rv[ad_rv > 0.05] <- 0.05
-  text_v <- paste0(c("n.Septic", "n.Septic", "Septic-S", "n.Septic-NS"), " vs ", c("Septic-S", "Septic-NS", "Septic-NS", "Septic-NS"), ", q ", c("> ", "< ")[1 + (ad_rv < 0.05)], sapply(ad_rv, format, digits = 2))
+  text_v <- paste0(c("non-Septic", "non-Septic", "Septic-S", "non-Septic-NS"), " vs ", c("Septic-S", "Septic-NS", "Septic-NS", "Septic-NS"), ", q ", c("> ", "< ")[1 + (ad_rv < 0.05)], sapply(ad_rv, format, digits = 2))
 
   lam <- p$sdev[1:2] * sqrt(nrow(p$x))
   hdd <- human_data_dist
@@ -515,7 +515,7 @@ human_data_dist <- cbind(human_data[,1:6], as.matrix(dist(x = human_data[, metab
 p <- prcomp(human_data_dist[, -1:-6])
 ad_rv <- ad_mg_r_df[["all"]]
 ad_rv[ad_rv > 0.05] <- 0.05
-text_v <- paste0(c("n.Septic", "n.Septic", "Septic-S", "n.Septic-NS"), " vs ", c("Septic-S", "Septic-NS", "Septic-NS", "Septic-NS"), ", q ", c("> ", "< ")[1 + (ad_rv < 0.05)], sapply(ad_rv, format, digits = 2))
+text_v <- paste0(c("non-Septic", "non-Septic", "Septic-S", "non-Septic-NS"), " vs ", c("Septic-S", "Septic-NS", "Septic-NS", "Septic-NS"), ", q ", c("> ", "< ")[1 + (ad_rv < 0.05)], sapply(ad_rv, format, digits = 2))
 lam <- p$sdev[1:2] * sqrt(nrow(p$x))
 hdd <- human_data_dist
 ap <- autoplot(object = p, data = hdd, colour = "Group", frame = TRUE, frame.type = "norm", size = 0.5)

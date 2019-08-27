@@ -9,7 +9,7 @@ get_human_sepsis_data <- function(){
   data <- read.csv(file = "../../data/measurements/Summary human sample data.csv", header = TRUE, sep = "\t", stringsAsFactors = FALSE, dec = ",", check.names = FALSE)
   data <- data[, -(which(colSds(as.matrix(data[, -1:-5])) == 0) + 5)] #remove columns with fixed values
   group <- data[["CAP / FP"]] #add group column with combinations of Survival and Sepsis/Nonsepsis
-  group[group == "-"] <- "n.Septic"
+  group[group == "-"] <- "non-Septic"
   group[group %in% c("CAP", "FP")] <- "Septic"
   group <- paste0(group, "-", data$Survival)
   data <- cbind(data[, 1:5], data.frame(Group = group, stringsAsFactors = FALSE), data[, -1:-5])
@@ -1110,7 +1110,7 @@ col.na.omit <- function(data){
 #' @export
 #'
 #' @examples
-human_col_scale <- function(name = "Group", levels = c("Septic-NS", "n.Septic-S", "Septic-S", "n.Septic-NS", "Healthy_Fr"), black_pos = 5, black_color = "grey50", ...){
+human_col_scale <- function(name = "Group", levels = c("Septic-NS", "non-Septic-S", "Septic-S", "non-Septic-NS", "Healthy_Fr"), black_pos = 5, black_color = "grey50", ...){
   library(scales)
   color_set <- hue_pal()(length(levels) - 1)
   color_set <- c(color_set, black_color) #last is black (or grey)
