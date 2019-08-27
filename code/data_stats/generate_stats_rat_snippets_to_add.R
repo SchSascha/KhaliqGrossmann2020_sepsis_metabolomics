@@ -17,7 +17,11 @@ out_dir_ns <- "../../results/data_stats_rat_surv_vs_nonsurv/"
 
 out_dir <- "../../results/data_stats_rat/"
 
-num_cores <- 1
+if (stri_detect(str = R.version$os, fixed = "linux")){
+  num_cores <- min(detectCores() - 1, 100)
+}else{
+  num_cores <- 1
+}
 
 #Make sure paths exist
 if (!dir.exists(out_dir))
@@ -322,6 +326,21 @@ p <- ggplot(data = dev_score, mapping = aes(fill = Group, x = score)) +
   theme_bw() +
   theme(panel.grid = element_blank(), legend.direction = "horizontal", legend.position = "bottom")
 ggsave(plot = p, filename = paste0("generalized_safe_corridor_minmax_crossmat.png"), path = out_dir, width = 5, height = 5, units = "in")
+p_thresh_box <- p_thresh
+p_thresh_box$x <- as.numeric(factor(p_thresh_box$material)) - 0.4
+p_thresh_box$xend <- p_thresh_box$x + 0.8
+dev_score_box <- subset(dev_score, grepl("non-survivor", Group))
+dev_score_box$material <- factor(dev_score_box$material)
+pbox <- ggplot(data = dev_score_box, mapping = aes(fill = Group, x = material, y = score, colour = Group)) +
+  geom_dotplot(stackdir = "center", binaxis = "y", dotsize = 0.7) + 
+  #human_col_scale(aesthetics = c("fill", "colour")) +
+  geom_segment(data = p_thresh_box, mapping = aes(x = x, xend = xend, y = score, yend = score), linetype = 2, inherit.aes = FALSE) +
+  coord_flip() +
+  ylab("Number of metabolites outside of the safe corridor") +
+  xlab("") +
+  theme_bw() +
+  theme(panel.grid = element_blank(), legend.direction = "horizontal", legend.position = "bottom")
+ggsave(plot = pbox, filename = "generalized_safe_corridor_minmax_crossmat_box.png", path = out_dir, width = 6, height = 2.5, units = "in")
 
 rat_dev_comp <- human_dev_metabs
 for (name in names(mtab_list)){

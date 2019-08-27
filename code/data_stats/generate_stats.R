@@ -2018,7 +2018,8 @@ p_thresh_sig <- p_thresh_sig[, order(p_thresh_sig[1, ])]
 p_thresh_sig <- rbind(p_thresh_sig, unlist(lapply(names(p_thresh_nonu), function(nonu) 1:p_thresh_nonu[nonu] - 0.5)))
 p_thresh_sig <- data.frame(t(p_thresh_sig))
 colnames(p_thresh_sig) <- c("score", "include", "y")
-#TODO: add significance mark to blocks in deviation plot
+p_thresh_sig_UK_minmax <- p_thresh_sig
+p_thresh_UK_minmax <- p_thresh
 p <- ggplot(data = dev_score, mapping = aes(fill = Group, x = score)) +
   geom_histogram(position = position_stack(), bins = max(dev_score$score) + 1) +
   geom_point(data = subset(p_thresh_sig, include == 1), mapping = aes(x = score, y = y), shape = 8, size = 1.2, inherit.aes = FALSE) +
@@ -2028,6 +2029,15 @@ p <- ggplot(data = dev_score, mapping = aes(fill = Group, x = score)) +
   theme_bw() +
   theme(panel.grid = element_blank(), legend.direction = "horizontal", legend.position = "bottom")
 ggsave(plot = p, filename = "generalized_safe_corridor_minmax.png", path = out_dir, width = 8, height = 4, units = "in")
+dev_score$x <- factor("This study")
+pbox <- ggplot(data = subset(dev_score, Group %in% c("Septic-NS", "n.Septic-NS")), mapping = aes(fill = Group, x = score, y = x, colour = Group)) +
+  geom_dotplot(stackdir = "center", binaxis = "x") + 
+  human_col_scale(aesthetics = c("fill", "colour")) +
+  xlab("Number of metabolites outside of the safe corridor at Days 0-3") +
+  theme_bw() +
+  theme(panel.grid = element_blank(), legend.direction = "horizontal", legend.position = "bottom")
+ggsave(plot = pbox, filename = "generalized_safe_corridor_minmax_box.png", path = out_dir, width = 8, height = 4, units = "in")
+dev_score_UK_minmax <- dev_score
 print(paste0("Contribution of high deviation and low deviation to score is ", sum(udev), " and ", sum(ldev), " respectively."))
 w <- which.xy(udev | ldev) # tell me which variables make a difference
 mtab <- sort(table(w[, 2]), decreasing = TRUE)
@@ -2095,6 +2105,13 @@ ldev <- vd[, -1:-2] < matrix(vd_min, ncol = ncol(vd) - 2, nrow = nrow(vd), byrow
 sdev <- aggregate(udev | ldev, by = list(Patient = vd$Patient), FUN = max) #count same metabolite at two time points as one deviation
 dev_score <- data.frame(Patient = sdev$Patient, score = rowSums(sdev[, -1]))
 dev_score$Survival <- vd$Survival28[match(dev_score$Patient, vd$Patient)]
+{
+  m <- vd
+  m <- m[, !(colnames(m) %in% sig.anova.car.val.s.class)]
+  di <- which(m$Survival == "NS")
+  dev_rep_res <- sapply(X = 1:1000, FUN = sim_dev, n = nrow(m), d = ncol(m) - 1, dev_idx = di, sample_groups = m$Patient)
+}
+p_thresh <- apply(dev_rep_res, 1, quantile, p = 0.95, names = FALSE)
 p <- ggplot(data = dev_score, mapping = aes(fill = Survival, x = score)) +
   geom_histogram(position = position_stack(), bins = max(dev_score$score) + 1) +
   ylab("Number of Patients") +
@@ -2102,6 +2119,23 @@ p <- ggplot(data = dev_score, mapping = aes(fill = Survival, x = score)) +
   theme_bw() +
   theme(panel.grid = element_blank())
 ggsave(plot = p, filename = "generalized_safe_corridor_Ferrario_minmax.png", path = out_dir, width = 6, height = 3, units = "in")
+dev_score_vd_minmax <- dev_score
+dev_score_vd_minmax$x <- factor("Ferrario et al.")
+dev_score_vd_minmax$Group <- paste0("Septic-", dev_score_vd_minmax$Survival)
+dev_score_cb_minmax <- rbind(dev_score_UK_minmax, dev_score_vd_minmax)
+dev_score_cb_minmax$x <- factor(dev_score_cb_minmax$x)
+pbox <- ggplot(data = subset(dev_score_cb_minmax, Survival == "NS"), mapping = aes(fill = Group, x = x, y = score, colour = Group)) +
+  geom_dotplot(stackdir = "center", binaxis = "y", dotsize = 0.7) + 
+  human_col_scale(aesthetics = c("fill", "colour")) +
+  scale_x_discrete(limits = levels(dev_score_cb_minmax$x)[2:1]) +
+  geom_path(inherit.aes = FALSE, data = data.frame(y = min(subset(p_thresh_sig_UK_minmax, include == 1)$score) - 1, x = 1 + c(0.6, 1.4)), mapping = aes(x, y), linetype = 2) +
+  geom_path(inherit.aes = FALSE, data = data.frame(y = mean(p_thresh), x = c(0.6, 1.4)), mapping = aes(x, y), linetype = 2) +
+  coord_flip() +
+  ylab("Number of metabolites outside of the safe corridor per patient") +
+  xlab("") +
+  theme_bw() +
+  theme(panel.grid = element_blank(), legend.direction = "horizontal", legend.position = "bottom")
+ggsave(plot = pbox, filename = "generalized_safe_corridor_minmax_box_UK_Ferrario.png", path = out_dir, width = 7, height = 2.5, units = "in")
 print(paste0("Contribution of high deviation and low deviation to score is ", sum(udev), " and ", sum(ldev), " respectively."))
 w <- which.xy(udev | ldev) # tell me which variables make a difference
 mtab <- sort(table(w[, 2]), decreasing = TRUE)
