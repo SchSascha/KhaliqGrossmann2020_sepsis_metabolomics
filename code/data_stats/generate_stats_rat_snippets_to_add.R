@@ -441,6 +441,7 @@ for (mat in unique(rat_sepsis_data$material)){
       scale_x_discrete(limits = as.character(unique(rat_pw_group_dat$Group))) +
       guides(color = "none") +
       #ylim(0, 100) +
+      ylab("between-sample dissimilarity") +
       theme_bw() + 
       theme(panel.grid = element_blank(), axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
     ggsave(filename = paste0("PCA_metab_betadiv_comparison_", mat, "_", met_group, ".png"), path = out_dir, width = 2.5, height = 4, units = "in")

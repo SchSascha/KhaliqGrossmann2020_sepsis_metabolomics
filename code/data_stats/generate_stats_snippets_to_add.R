@@ -19,7 +19,11 @@ out_dir <- "../../results/data_stats_NS_high_var/"
 if (!dir.exists(out_dir))
   dir.create(out_dir)
 
-num_cores <- 7
+if (stri_detect(str = R.version$os, fixed = "linux")){
+  num_cores <- min(detectCores() - 1, 100)
+}else{
+  num_cores <- 1
+}
 
 #Read data
 human_data <- get_human_sepsis_data()
@@ -396,6 +400,7 @@ p <- ggplot(data = pat_pw_group_dat, mapping = aes(x = Group, y = distance, colo
   #geom_segment(x = 2.5, y = 0, xend = 2.5, yend = max(pat_pw_group_dat$distance), size = 0.25, inherit.aes = FALSE) +
   guides(color = "none") +
   ylim(0, 670) +
+  ylab("between-patient dissimilarity") +
   theme_bw() + 
   theme(panel.grid = element_blank(), axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
 ggsave(filename = "PCA_metab_betadiv_comparison.png", path = out_dir, width = 2.5, height = 4, units = "in")
