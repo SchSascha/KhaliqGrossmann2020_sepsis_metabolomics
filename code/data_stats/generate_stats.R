@@ -1031,7 +1031,7 @@ xmtc <- xmt[rownames(xmt) %in% sig.anova.car.c.class, ]
 
 anno_col <- xm[c("Day", "CAP / FP", "Group")]
 rownames(anno_col) <- xm$`Sample ID`
-anno_col$Day <- as.numeric(as.character(anno_col$Day))
+anno_col$Day <- (anno_col$Day)
 anno_row <- data.frame(metab_group = human_sepsis_legend$group[match(rownames(xmts), human_sepsis_legend[, 1])])
 anno_row$metab_group <- c(as.character(anno_row$metab_group[1:(which(rownames(xmts) == "Albumin") - 1)]), rep("clinical parameter", nrow(anno_row) - which(rownames(xmts) == "Albumin") + 1))
 anno_row$metab_group <- factor(anno_row$metab_group)
@@ -1050,14 +1050,16 @@ phm <- pheatmap(mat = xmts[, pat_order],
          annotation_row = anno_row,
          annotation_colors = list(Group = c(`Septic-S` = hue_pal()(4)[3], `Septic-NS` = hue_pal()(4)[1], `n.Septic-S` = hue_pal()(4)[2], `n.Septic-NS` = hue_pal()(4)[4]),
                                   `CAP / FP` = c(`-` = "Grey70", `CAP` = brewer_pal()(2)[1], `FP` = brewer_pal()(2)[2]), 
+                                  Day = setNames(seq_gradient_pal(low = "grey97", high = colors()[472])(seq(0, 1, length.out = length(unique(anno_col$Day)))), unique(anno_col$Day)),
                                   `Metab. group` = setNames(hue_pal()(length(unique(anno_row$`Metab. group`))), unique(anno_row$`Metab. group`))),
          gaps_col = which(diff(as.numeric(anno_col$Group[pat_order])) != 0),
          gaps_row = which(diff(as.numeric(anno_row$`Metab. group`)) != 0),
          labels_row = y_expr,
+         labels_col = rep("", ncol(xmts)),
          filename = paste0(out_dir, "human_heatmap_metab_sig_s_pheat_thresh005.png"),
          silent = TRUE,
-         width = 21,
-         height = 9)
+         width = 9,
+         height = 10)
 
 #Also for pheno vars
 xm <- x[, c(1:6, pheno_sel)]
