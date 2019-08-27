@@ -1955,16 +1955,20 @@ p <- ggplot(data = pp_lpc24, mapping = aes(y = value, x = Day, color = Group, gr
   scale_y_continuous(limits = c(0, 1), expand = c(0, 0)) +
   geom_hline(data = hsd_lpc24_min, mapping = aes(color = Group, yintercept = x)) +
   geom_hline(data = hsd_lpc24_max, mapping = aes(color = Group, yintercept = x)) +
-  guides(color = guide_legend(order = 1),
-         linetype = guide_legend(title = "NS Patient", override.aes = list(color = hue_pal()(4)[c(4, 1)[1 + (subset(hsd, !duplicated(Patient) & Survival == "NS", "Group")[[1]] == "Septic-NS")]]), order = 4)) +
+  # guides(color = guide_legend(order = 1),
+  #        linetype = guide_legend(title = "NS Patient", override.aes = list(color = hue_pal()(4)[c(4, 1)[1 + (subset(hsd, !duplicated(Patient) & Survival == "NS", "Group")[[1]] == "Septic-NS")]]), order = 4)) +
+  guides(color = "none", linetype = "none", group = "none") +
   scale_color_discrete(drop = FALSE) +
   #scale_y_continuous(trans = pseudo_log_trans(sigma = 0.25, base = 2), expand = c(0, 0), limits = c(-10, 1000)) +
-  ylab("Concentration, µM") +
+  #ylab("Concentration, µM") +
+  ylab("") +
   xlab("Day") +
   human_col_scale() +
   theme_bw() + 
   theme(axis.text.x = element_text(angle = 0, vjust = 0.5, size = 10), panel.grid = element_line(colour = 0))
 ggsave(filename = paste0("human_metab_nonsig_single_plot_minmax_all_pats_lysoPCaC24.png"), path = out_dir, plot = p, width = 5, height = 5, units = "in")
+
+#TODO: use cowplot to build lpc24:0 plot into overview plot
 
 ###Generalize the corridor principle to a classification scheme, use corridor 
 corridor <- as.data.frame(t(sapply(unique(cntrl_and_s$variable), 
