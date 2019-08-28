@@ -5,6 +5,7 @@ library(stringi)
 library(scales)
 library(ggplot2)
 library(gridExtra)
+library(cowplot)
 library(pheatmap)
 library(matrixStats)
 library(heatmaply)
@@ -1863,6 +1864,7 @@ for (pat in unique(subset(human_data_patient_group_mean_all_days, Survival == "N
     human_col_scale() +
     theme_bw() + 
     theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 6), panel.grid = element_line(colour = 0))
+  #TODO: fix
   ggsave(filename = paste0("human_metab_nonsig_single_plot_SD_pat_", pat, ".png"), path = out_dir, plot = p, width = 16, height = 7, units = "in")
 }
 cntrl_and_s <- human_data_patient_group_mean_all_days
@@ -1896,6 +1898,7 @@ p <- ggplot(data = subset(cntrl_and_s, Survival != "NS"), mapping = aes(y = valu
   human_col_scale() +
   theme_bw() + 
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 6), panel.grid = element_line(colour = 0))
+#TODO: fix
 ggsave(filename = paste0("human_metab_nonsig_single_plot_SD_all_pats.png"), path = out_dir, plot = p, width = 16, height = 9.5, units = "in")
 ##Same as above, but with Survivor min-max as corridor
 pat_dev_score <- subset(human_data, Day %in% tanova_day_set, select = setdiff(which(!(colnames(human_data) %in% sig.anova.car.s.class)), pheno_sel)) # select already includes cols 1:6
@@ -1926,9 +1929,9 @@ p <- ggplot(data = subset(hsd, Survival == "S"), mapping = aes(y = value, x = va
   stat_summary(fun.y = "mean", fun.ymin = "min", fun.ymax = "max", position = position_dodge(width = 0.7), geom = "errorbar", size = rel(0.8)) +
   #stat_summary(fun.y = "mean", fun.ymin = "mean", fun.ymax = "mean", position = position_dodge(width = 0.7), geom = "errorbar") +
   geom_line(data = pat_path, mapping = aes(y = value, x = x, color = Group, group = interaction(variable, Patient), linetype = factor(Patient)), size = rel(0.8), inherit.aes = FALSE) +
-  geom_tile(mapping = aes(x = variable, y = 1e-3, fill = metabolite_group), width = 1, height = 0.25, data = pat_path, inherit.aes = FALSE) +
-  geom_point(mapping = aes(x = Metabolite, y = 5.9e-4, shape = factor(score)), data = minmax_corridor_met_sel, inherit.aes = FALSE) +
-  geom_tile(mapping = aes(x = Metabolite, y = 5.9e-4), width = 1, height = 0.25, fill = minmax_corridor_met_sel$color, data = minmax_corridor_met_sel, inherit.aes = FALSE) +
+  geom_tile(mapping = aes(x = variable, y = 2e-3, fill = metabolite_group), width = 1, height = 0.15, data = pat_path, inherit.aes = FALSE) +
+  geom_point(mapping = aes(x = Metabolite, y = 1.45e-3, shape = factor(score)), data = minmax_corridor_met_sel, inherit.aes = FALSE) +
+  geom_tile(mapping = aes(x = Metabolite, y = 1.45e-3), width = 1, height = 0.15, fill = minmax_corridor_met_sel$color, data = minmax_corridor_met_sel, inherit.aes = FALSE) +
   guides(color = guide_legend(title = "Patient Group", order = 1),
         fill = guide_legend(title = "Metabolite Group", order = 2),
         shape = guide_legend(title = "Number of patients\nwith deviation", override.aes = list(shape = 15, size = 6, colour = sort(unique(minmax_corridor_met_sel$color))), order = 3),
@@ -1942,6 +1945,7 @@ p <- ggplot(data = subset(hsd, Survival == "S"), mapping = aes(y = value, x = va
   theme_bw() + 
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = rsize), panel.grid = element_line(colour = 0), text = element_text(size = rsize), axis.text.y = element_text(size = rsize), legend.text = element_text(size = rsize), legend.box = "vertical", legend.position = "bottom")
 ggsave(filename = paste0("human_metab_nonsig_single_plot_minmax_all_pats.png"), path = out_dir, plot = p, width = 16, height = 16, units = "in")
+p_main <- p
 
 hsd_lpc24 <- subset(human_data, Day %in% tanova_day_set)
 hsd_lpc24 <- melt(hsd_lpc24, id.vars = 1:6)
@@ -1949,12 +1953,13 @@ hsd_lpc24 <- subset(hsd_lpc24, as.character(variable) == "lysoPC a C24:0" & Surv
 hsd_lpc24_max <- aggregate(x = hsd_lpc24$value, by = list(Group = hsd_lpc24$Group), FUN = max)
 hsd_lpc24_min <- aggregate(x = hsd_lpc24$value, by = list(Group = hsd_lpc24$Group), FUN = min)
 pp_lpc24 <- subset(melt(subset(human_data, Survival == "NS" & Day %in% tanova_day_set), id.vars = 1:6), as.character(variable) == "lysoPC a C24:0")
+rsize <- rel(4.5)
 p <- ggplot(data = pp_lpc24, mapping = aes(y = value, x = Day, color = Group, group = Patient, linetype = factor(Patient))) +
   facet_wrap(~ variable, ncol = 1, nrow = 1) +
-  geom_line() +
+  geom_line(size = rel(0.8)) +
   scale_y_continuous(limits = c(0, 1), expand = c(0, 0)) +
-  geom_hline(data = hsd_lpc24_min, mapping = aes(color = Group, yintercept = x)) +
-  geom_hline(data = hsd_lpc24_max, mapping = aes(color = Group, yintercept = x)) +
+  geom_hline(data = hsd_lpc24_min, mapping = aes(color = Group, yintercept = x), size = rel(0.8)) +
+  geom_hline(data = hsd_lpc24_max, mapping = aes(color = Group, yintercept = x), size = rel(0.8)) +
   # guides(color = guide_legend(order = 1),
   #        linetype = guide_legend(title = "NS Patient", override.aes = list(color = hue_pal()(4)[c(4, 1)[1 + (subset(hsd, !duplicated(Patient) & Survival == "NS", "Group")[[1]] == "Septic-NS")]]), order = 4)) +
   guides(color = "none", linetype = "none", group = "none") +
@@ -1965,10 +1970,14 @@ p <- ggplot(data = pp_lpc24, mapping = aes(y = value, x = Day, color = Group, gr
   xlab("Day") +
   human_col_scale() +
   theme_bw() + 
-  theme(axis.text.x = element_text(angle = 0, vjust = 0.5, size = 10), panel.grid = element_line(colour = 0))
+  theme(axis.text.x = element_text(angle = 0, vjust = 0.5, size = 10), panel.grid = element_line(colour = 0), text = element_text(size = rsize), strip.text = element_text(size = rsize), strip.background = element_blank())
 ggsave(filename = paste0("human_metab_nonsig_single_plot_minmax_all_pats_lysoPCaC24.png"), path = out_dir, plot = p, width = 5, height = 5, units = "in")
+p_insert <- p
 
-#TODO: use cowplot to build lpc24:0 plot into overview plot
+p_combined <- ggdraw(p_main) + 
+  draw_plot(p_insert, 0.71, 0.715, 0.28, 0.28) +
+  draw_plot_label(label = c("A", "B"), x = c(0, 0.71), y = c(1, 0.995), size = 20)
+ggsave(filename = "human_metab_nonsig_single_plot_minmax_all_pats_panel.png", path = out_dir, plot = p_combined, width = 16, height = 16, units = "in")
 
 ###Generalize the corridor principle to a classification scheme, use corridor 
 corridor <- as.data.frame(t(sapply(unique(cntrl_and_s$variable), 
