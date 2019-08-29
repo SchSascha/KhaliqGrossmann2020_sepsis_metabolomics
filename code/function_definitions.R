@@ -135,6 +135,11 @@ get_rat_sepsis_data <- function(){
   colns[colns == "Tot Cholesterol"] <- "Total Cholesterol"
   colns[colns == "LDL/VLDL"] <- "LDL"
   colnames(data) <- colns
+  grp <- data$group
+  grp[grp == "control"] <- "Sham"
+  grp[grp == "septic survivor"] <- "Septic-S"
+  grp[grp == "septic non-survivor"] <- "Septic-NS"
+  data$group <- grp
   return(data)
 }
 
