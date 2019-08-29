@@ -12,6 +12,8 @@ library(e1071)
 #library(mixOmics)
 library(corpcor)
 library(tictoc)
+library(pheatmap)
+library(cowplot)
 #library(ropls)
 #library(pROC)
 #library(caTools)
@@ -173,11 +175,11 @@ sv_cf_roc <- lapply(sv_cf_pred, lapply, function(p) ml.roc(ref = 1 - human_nonse
 rg_AUC_data <- data.frame(Reduce("rbind", rg_tlpocv_res$inner_AUC))
 rg_AUC_data <- rbind(rg_AUC_data, data.frame(t(rg_tlpocv_res$outer_AUC)))
 colnames(rg_AUC_data) <- sapply(rg_tlpocv_res$best_features, length)
-rg_AUC_data$stage <- c(rep("Test data", length(rg_tlpocv_res$inner_AUC)), "Validation data")
-rg_AUC_data_long <- melt(rg_AUC_data, id.vars = c("stage"))
+rg_AUC_data$Stage <- c(rep("Test data", length(rg_tlpocv_res$inner_AUC)), "Validation data")
+rg_AUC_data_long <- melt(rg_AUC_data, id.vars = c("Stage"))
 rg_AUC_data_long$variable <- as.numeric(as.character(rg_AUC_data_long$variable))
 rg_AUC_data_long$value <- 1 - rg_AUC_data_long$value
-p <- ggplot(data = rg_AUC_data_long, mapping = aes(x = variable, y = value, color = stage, fill = stage)) + 
+p <- ggplot(data = rg_AUC_data_long, mapping = aes(x = variable, y = value, color = Stage, fill = Stage)) + 
   stat_summary(fun.y = median, fun.ymax = function(x) quantile(x, p = 0.75), fun.ymin = function(x) quantile(x, p = 0.25), geom = "ribbon", alpha = 0.5, colour = NA) + 
   stat_summary(fun.y = median, geom = "line") + 
   ylim(0, 1) + 
@@ -197,7 +199,7 @@ if (min(rg_int_ROC_data[, 1]) != 0)
 if (max(rg_int_ROC_data[, 1]) != 1)
   rg_int_ROC_data <- rbind(rg_int_ROC_data, c(1, 1))
 colnames(rg_int_ROC_data) <- c("FPR", "TPR")
-rg_int_ROC_data$stage <- "Test data"
+rg_int_ROC_data$Stage <- "Test data"
 ranks_2feat <- rg_tlpocv_res$ext_sample_ranking[[f2_pos]]
 rg_ext_ROC_data <- data.frame(ml.roc(ref = 1 - ranks_2feat[, 1], conf = ranks_2feat[, 2]))
 if (min(rg_ext_ROC_data[, 2]) != 0)
@@ -205,26 +207,28 @@ if (min(rg_ext_ROC_data[, 2]) != 0)
 if (max(rg_ext_ROC_data[, 1]) != 1)
   rg_ext_ROC_data <- rbind(rg_ext_ROC_data, c(1, 1))
 colnames(rg_ext_ROC_data) <- c("FPR", "TPR")
-rg_ext_ROC_data$stage <- "Validation data"
+rg_ext_ROC_data$Stage <- "Validation data"
 rg_ROC_data <- rbind(rg_int_ROC_data, rg_ext_ROC_data)
-p <- ggplot(data = rg_ROC_data, mapping = aes(x = FPR, y = TPR, color = stage, fill = stage)) + 
+rsize <- rel(3.5)
+p_roc_rg_2feat <- ggplot(data = rg_ROC_data, mapping = aes(x = FPR, y = TPR, color = Stage, fill = Stage)) + 
   stat_summary(data = rg_int_ROC_data, 
                fun.y = mean, fun.ymax = function(x) quantile(x, p = 0.75), fun.ymin = function(x) quantile(x, p = 0.25), 
                geom = "ribbon", alpha = 0.5, colour = NA) + 
   stat_summary(data = rg_int_ROC_data, 
-               fun.y = median, geom = "line") +
-  geom_line(data = rg_ext_ROC_data) +
-  geom_segment(x = 0, y = 0, xend = 1, yend = 1, size = 0.25, inherit.aes = FALSE) +
-  geom_text(x = 0.95, y = 0.15, hjust = "right", color = scales::hue_pal()(2)[1],
-            label = paste0("Training AUC = ", format(mean(subset(rg_AUC_data_long, variable == 2 & stage == "Test data", "value")[[1]]), digits = 3))) +
-  geom_text(x = 0.95, y = 0.10, hjust = "right", color = scales::hue_pal()(2)[2],
-            label = paste0("Validation AUC = ", format(subset(rg_AUC_data_long, variable == 2 & stage == "Validation data", "value"), digits = 3))) +
+               fun.y = median, geom = "line", size = rel(1.5)) +
+  geom_line(data = rg_ext_ROC_data, size = rel(1.5)) +
+  geom_segment(x = 0, y = 0, xend = 1, yend = 1, size = 0.5, inherit.aes = FALSE) +
+  geom_text(x = 0.95, y = 0.15, hjust = "right", color = scales::hue_pal()(2)[1], size = rel(4.5),
+            label = paste0("Training AUC = ", format(mean(subset(rg_AUC_data_long, variable == 2 & Stage == "Test data", "value")[[1]]), digits = 3))) +
+  geom_text(x = 0.95, y = 0.10, hjust = "right", color = scales::hue_pal()(2)[2], size = rel(4.5),
+            label = paste0("Validation AUC = ", format(subset(rg_AUC_data_long, variable == 2 & Stage == "Validation data", "value"), digits = 3))) +
   scale_x_continuous(limits = c(-0.01, 1.01), expand = c(0, 0)) +
   scale_y_continuous(limits = c(-0.01, 1.01), expand = c(0, 0)) +
-  ggtitle("RF: Test and Validation ROC of nested TLPOCV RFE\nbest 2 feature set") +
+  #ggtitle("RF: Test and Validation ROC of nested TLPOCV RFE\nbest 2 feature set") +
+  geom_text(label = "ROC curves\nRandom Forest\n2 features", x = 0.5, y = 0.85, size = rel(4.5), inherit.aes = FALSE) +
   theme_bw() + 
-  theme(panel.grid = element_blank())
-ggsave(filename = "RF_TLPOCV_RFE_ROC_2feat.png", path = out_dir_pred, plot = p, width = 6, height = 5, units = "in")
+  theme(panel.grid = element_blank(), legend.position = "none", text = element_text(size = rsize), plot.margin = margin(r = 10, l = 10))
+ggsave(filename = "RF_TLPOCV_RFE_ROC_2feat.png", path = out_dir_pred, plot = p_roc_rg_2feat, width = 6, height = 5, units = "in")
 
 f2 <- rg_tlpocv_res$best_features[[which(sapply(rg_tlpocv_res$best_features, length) == 2)]]
 p <- ggplot(data = subset(human_sepsis_data_ml, Day == 0, c("Survival", f2)), mapping = aes_string(x = f2[1], y = f2[2], color = quote(factor(Survival)))) + 
@@ -235,11 +239,11 @@ ggsave(plot = p, filename = "RF_class_separation_2feat.png", width = 5, height =
 sv_AUC_data <- data.frame(Reduce("rbind", sv_tlpocv_res$inner_AUC))
 sv_AUC_data <- rbind(sv_AUC_data, data.frame(t(sv_tlpocv_res$outer_AUC)))
 colnames(sv_AUC_data) <- sapply(sv_tlpocv_res$best_features, length)
-sv_AUC_data$stage <- c(rep("Test data", length(sv_tlpocv_res$inner_AUC)), "Validation data")
-sv_AUC_data_long <- melt(sv_AUC_data, id.vars = c("stage"))
+sv_AUC_data$Stage <- c(rep("Test data", length(sv_tlpocv_res$inner_AUC)), "Validation data")
+sv_AUC_data_long <- melt(sv_AUC_data, id.vars = c("Stage"))
 sv_AUC_data_long$variable <- as.numeric(as.character(sv_AUC_data_long$variable))
 sv_AUC_data_long$value <- 1 - sv_AUC_data_long$value
-p <- ggplot(data = sv_AUC_data_long, mapping = aes(x = variable, y = value, color = stage, fill = stage)) +
+p <- ggplot(data = sv_AUC_data_long, mapping = aes(x = variable, y = value, color = Stage, fill = Stage)) +
   stat_summary(fun.y = median, fun.ymax = function(x) quantile(x, p = 0.75), fun.ymin = function(x) quantile(x, p = 0.25), geom = "ribbon", alpha = 0.5, colour = NA) +
   stat_summary(fun.y = median, geom = "line") +
   ylim(0, 1) +
@@ -259,7 +263,7 @@ if (min(sv_int_ROC_data[, 1]) != 0)
 if (max(sv_int_ROC_data[, 1]) != 1)
   sv_int_ROC_data <- rbind(sv_int_ROC_data, c(1, 1))
 colnames(sv_int_ROC_data) <- c("FPR", "TPR")
-sv_int_ROC_data$stage <- "Test data"
+sv_int_ROC_data$Stage <- "Test data"
 ranks_2feat <- sv_tlpocv_res$ext_sample_ranking[[f2_pos]]
 sv_ext_ROC_data <- data.frame(ml.roc(ref = 1 - ranks_2feat[, 1], conf = ranks_2feat[, 2]))
 if (min(sv_ext_ROC_data[, 2]) != 0)
@@ -267,26 +271,28 @@ if (min(sv_ext_ROC_data[, 2]) != 0)
 if (max(sv_ext_ROC_data[, 1]) != 1)
   sv_ext_ROC_data <- rbind(sv_ext_ROC_data, c(1, 1))
 colnames(sv_ext_ROC_data) <- c("FPR", "TPR")
-sv_ext_ROC_data$stage <- "Validation data"
+sv_ext_ROC_data$Stage <- "Validation data"
 sv_ROC_data <- rbind(sv_int_ROC_data, sv_ext_ROC_data)
-p <- ggplot(data = sv_ROC_data, mapping = aes(x = FPR, y = TPR, color = stage, fill = stage)) +
+rsize <- rel(3.5)
+p_roc_svm_2feat <- ggplot(data = sv_ROC_data, mapping = aes(x = FPR, y = TPR, color = Stage, fill = Stage)) +
   stat_summary(data = sv_int_ROC_data,
                fun.y = mean, fun.ymax = function(x) quantile(x, p = 0.75), fun.ymin = function(x) quantile(x, p = 0.25),
                geom = "ribbon", alpha = 0.5, colour = NA) +
   stat_summary(data = sv_int_ROC_data,
-               fun.y = median, geom = "line") +
-  geom_line(data = sv_ext_ROC_data) +
-  geom_segment(x = 0, y = 0, xend = 1, yend = 1, size = 0.25, inherit.aes = FALSE) +
-  geom_text(x = 0.95, y = 0.15, hjust = "right", color = scales::hue_pal()(2)[1],
-            label = paste0("Training AUC = ", format(mean(subset(sv_AUC_data_long, variable == 2 & stage == "Test data", "value")[[1]]), digits = 3))) +
-  geom_text(x = 0.95, y = 0.10, hjust = "right", color = scales::hue_pal()(2)[2],
-            label = paste0("Validation AUC = ", format(subset(sv_AUC_data_long, variable == 2 & stage == "Validation data", "value"), digits = 3))) +
+               fun.y = median, geom = "line", size = rel(1.5)) +
+  geom_line(data = sv_ext_ROC_data, size = rel(1.5)) +
+  geom_segment(x = 0, y = 0, xend = 1, yend = 1, size = 0.5, inherit.aes = FALSE) +
+  geom_text(x = 0.95, y = 0.15, hjust = "right", color = scales::hue_pal()(2)[1], size = rel(4.5),
+            label = paste0("Training AUC = ", format(mean(subset(sv_AUC_data_long, variable == 2 & Stage == "Test data", "value")[[1]]), digits = 3))) +
+  geom_text(x = 0.95, y = 0.10, hjust = "right", color = scales::hue_pal()(2)[2], size = rel(4.5),
+            label = paste0("Validation AUC = ", format(subset(sv_AUC_data_long, variable == 2 & Stage == "Validation data", "value"), digits = 3))) +
   scale_x_continuous(limits = c(-0.01, 1.01), expand = c(0, 0)) +
   scale_y_continuous(limits = c(-0.01, 1.01), expand = c(0, 0)) +
-  ggtitle("SVM: Test and Validation ROC of nested TLPOCV RFE\nbest 2 feature set") +
+  #ggtitle("SVM: Test and Validation ROC of nested TLPOCV RFE\nbest 2 feature set") +
+  geom_text(label = "ROC curve\nSupport Vector Machine\n2 features", x = 0.5, y = 0.85, size = rel(4.5), inherit.aes = FALSE) +
   theme_bw() +
-  theme(panel.grid = element_blank())
-ggsave(filename = "SVM_TLPOCV_RFE_ROC_2feat.png", path = out_dir_pred, plot = p, width = 6, height = 5, units = "in")
+  theme(panel.grid = element_blank(), legend.position = "bottom", legend.direction = "horizontal", legend.text = element_text(size = rsize), text = element_text(size = rsize), plot.margin = margin(r = 20, l = 10))
+ggsave(filename = "SVM_TLPOCV_RFE_ROC_2feat.png", path = out_dir_pred, plot = p_roc_svm_2feat, width = 6, height = 5, units = "in")
 
 f2 <- sv_tlpocv_res$best_features[[which(sapply(sv_tlpocv_res$best_features, length) == 2)]]
 p <- ggplot(data = subset(human_sepsis_data_ml, Day == 0, c("Survival", f2)), mapping = aes_string(x = f2[1], y = f2[2], color = quote(factor(Survival)))) + 
@@ -336,3 +342,14 @@ sv_nonsep_roc <- ggplot(data = sv_nonsep_melt_roc, mapping = aes(x = FPR, y = TP
   theme_bw() +
   theme(panel.grid = element_blank())
 ggsave(plot = sv_nonsep_roc, filename = "SVM_train_sep_test_nonsep_roc.png", width = 5, height = 4, units = "in", path = out_dir_pred)
+
+#TODO: make figure panel including heatmap of significant differences in metabolites & biochemical parameters (Fig 2A)
+phm <- readRDS(file = "../data_stats/sig_feat_all_pats_heatmap.RData")
+phm$gtable$grobs[[7]]$label <- "Metab.\ngroup"
+phm$gtable$grobs[[7]]$gp$lineheight <- 0.7
+panel2 <- plot_grid(phm$gtable, 
+                    plot_grid(p_roc_rg_2feat, p_roc_svm_2feat, ncol = 2, nrow = 1, align = "h", axis = "tb", labels = c("", "C")), 
+                    ncol = 1, nrow = 2, rel_heights = c(1, 0.4), labels = c("A", "B"))
+ggsave(file = "all_features_sig_heatmap_ROC.png", path = out_dir_pred, plot = panel2, width = 9, height = 10 + 3.5, units = "in")
+ggsave(file = "all_features_sig_heatmap_ROC.svg", path = out_dir_pred, plot = panel2, width = 9, height = 10 + 3.5, units = "in")
+  

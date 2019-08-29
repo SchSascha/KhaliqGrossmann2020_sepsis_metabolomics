@@ -1061,6 +1061,8 @@ phm <- pheatmap(mat = xmts[, pat_order],
          silent = TRUE,
          width = 9,
          height = 10)
+##Save for combination with ROC plots in different skript
+saveRDS(object = phm, file = "sig_feat_all_pats_heatmap.RData")
 
 #Also for pheno vars
 xm <- x[, c(1:6, pheno_sel)]
