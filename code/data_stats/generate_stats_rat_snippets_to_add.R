@@ -17,7 +17,11 @@ out_dir_ns <- "../../results/data_stats_rat_surv_vs_nonsurv/"
 
 out_dir <- "../../results/data_stats_rat/"
 
-num_cores <- 1
+if (stri_detect(str = R.version$os, fixed = "linux")){
+  num_cores <- min(detectCores() - 1, 100)
+}else{
+  num_cores <- 1
+}
 
 #Make sure paths exist
 if (!dir.exists(out_dir))
@@ -145,38 +149,45 @@ ad_fdr_tab <- ad_ps_tab
 ad_fdr_tab[, -1:-2] <- t(apply(ad_ps_tab[, -1:-2], 1, p.adjust)) #None of those is significant ...
 
 ###Actual plot of sepsis samples, clinical params
-rsd <- subset(rat_sepsis_data, material == "plasma" & group != "control" & `time point` == "24h")
-rat_sepsis_data_pheno_dist <- cbind(subset(rsd, select = 1:4), as.matrix(dist(x = subset(rsd, select = pheno_sel), method = "canberra"))) # distance() works on a per row basis
+rsd <- subset(rat_sepsis_data, material == "plasma" & group != "Sham" & `time point` == "24h")
+rsd <- rsd[, -metab_sel]
+rat_sepsis_data_pheno_dist <- cbind(subset(rsd, select = 1:4), as.matrix(dist(x = rsd[, -1:-4], method = "canberra"))) # distance() works on a per row basis
 rat_sepsis_data_pheno_dist$`Sample Identification` <- factor(rat_sepsis_data_pheno_dist$`Sample Identification`, levels = unique(rat_sepsis_data_pheno_dist$`Sample Identification`))
 p <- prcomp(rat_sepsis_data_pheno_dist[, -1:-4])
 rsdpd <- rat_sepsis_data_pheno_dist
 rsdpd$label <- paste0("S", rsdpd$`Sample Identification`, "-", rsdpd$`time point`)
 lam <- p$sdev[1:2] * sqrt(nrow(p$x))
-ap <- autoplot(object = p, data = rsdpd, colour = "group", frame = FALSE, frame.type = "norm", size = 0.8)
-ap <- ap + 
+pxy <- p$x[, 1:2]
+pxy[, 1] <- pxy[, 1] / lam[1]
+pxy[, 2] <- pxy[, 2] / lam[2]
+rsize <- rel(3.5)
+p_biochem_ap <- autoplot(object = p, data = rsdpd, colour = "group", frame = FALSE, frame.type = "norm", size = 0.8)
+p_biochem_ap <- p_biochem_ap + 
   geom_point(size = 3, color = "white") +
-  geom_text_repel(parse = TRUE, label = sapply(rsdpd$label, function(lab) sprintf("bold(\"%s\")", lab)), x = p$x[, 1] / lam[1], y = p$x[, 2] / lam[2], size = 1.3, mapping = aes(color = group), segment.size = 0.3, force = 0.005, box.padding = 0.0) +
-  ggtitle("PCA biplot, Canberra distance,\nbiochemical parameters, 24h samples") +
+  geom_text_repel(parse = TRUE, label = sapply(rsdpd$label, function(lab) sprintf("bold(\"%s\")", lab)), x = pxy[, 1], y = pxy[, 2], size = 2, mapping = aes(color = group), segment.size = 0.3, force = 0.005, box.padding = 0.0) +
+  #ggtitle("PCA biplot, Canberra distance,\nbiochemical parameters, 24h samples") +
   guides(shape = "none") +
-  human_col_scale(name = "Group", levels = c("septic non-survivor", "control", "septic survivor", "", "")) +
+  human_col_scale(name = "Group", levels = c("Septic-NS", "Sham", "Septic-S", "", "")) +
   theme_bw() + 
-  theme(panel.grid = element_blank())
-gobj <- ggplot_build(ap)
+  theme(panel.grid = element_blank(), legend.position = "none", text = element_text(size = rsize))
+gobj <- ggplot_build(p_biochem_ap)
 xmax <- gobj$layout$panel_params[[1]]$x.range[2]
 xmin <- gobj$layout$panel_params[[1]]$x.range[1]
 ymax <- gobj$layout$panel_params[[1]]$y.range[2]
 ymin <- gobj$layout$panel_params[[1]]$y.range[1]
-arws <- make_ordination_arrows(x = p$x[, 1:2], w = subset(rsd, select = -1:-4), xmax = xmax, xmin = xmin, ymin = ymin, ymax = ymax, shorten_arw_by = 2, scale_by = 1.2)
-ap <- ap +
-  geom_path(data = arws$ph_ars_s, mapping = aes(x = PC1, y = PC2, group = Group), inherit.aes = FALSE, arrow = arrow(length = unit(0.06, "inches")), size = 0.2, color = "grey50") + 
-  geom_text(data = arws$ph_ars_names_s, mapping = aes(label = label, x = PC1, y = PC2), inherit.aes = FALSE, size = 1.5, color = "grey50") #+
+arws <- make_ordination_arrows(x = p$x[, 1:2], w = subset(rsd, select = -1:-4), xmax = xmax, xmin = xmin, ymin = ymin, ymax = ymax, shorten_arw_by = 1.5, scale_by = 1.2, num = 6)
+p_biochem_ap <- p_biochem_ap +
+  geom_path(data = arws$ph_ars_s, mapping = aes(x = PC1, y = PC2, group = Group), inherit.aes = FALSE, arrow = arrow(length = unit(0.06, "inches")), size = 0.3, color = "grey50") + 
+  geom_text(data = arws$ph_ars_names_s, mapping = aes(label = label, x = PC1, y = PC2), inherit.aes = FALSE, size = 3, color = "grey20") #+
 #   geom_text(x = 0.9 * xmin, y = 0.95 * ymin, label = paste0("S vs NS, q < ", format(ad_mg_r_df$pheno[3], digits = 3)), size = 2, hjust = "left")
-ggsave(filename = paste0("PCA_biplot_sepsis_pheno_gg.png"), path = out_dir, plot = ap, width = 5, height = 4, units = "in")
+ggsave(filename = paste0("PCA_biplot_sepsis_pheno_gg.png"), path = out_dir, plot = p_biochem_ap, width = 5, height = 4, units = "in")
 
 ##Actual plot of all samples, metabolites
 mtab_list <- list()
 bdiv_list <- list()
 rat_dev_list <- list()
+p_metab_list <- list()
+rsize <- rel(3.5)
 for (mat in unique(rat_sepsis_data$material)){
   rds <- subset(rat_sepsis_data, material == mat & `time point` == "24h", metab_sel)
   w <- which.xy(is.na(rds))
@@ -187,37 +198,38 @@ for (mat in unique(rat_sepsis_data$material)){
   #ad_rv[ad_rv > 0.05] <- 0.05
   #text_v <- paste0(c("Nonsep", "Nonsep", "Septic-S", "Nonsep-NS"), " vs ", c("Septic-S", "Septic-NS", "Septic-NS", "Septic-NS"), ", q ", c("> ", "< ")[1 + (ad_rv < 0.05)], sapply(ad_rv, format, digits = 2))
   lam <- p$sdev[1:2] * sqrt(nrow(p$x))
-  ap <- autoplot(object = p, data = rat_data_dist, colour = "group", frame = FALSE, frame.type = "norm", size = 0.5)
-  ap <- ap + 
-    human_col_scale(name = "Group", levels = c("septic non-survivor", "control", "septic survivor", "", ""), aesthetics = c("color", "fill")) +
+  p_metab_list[[mat]] <- autoplot(object = p, data = rat_data_dist, colour = "group", frame = FALSE, frame.type = "norm", size = 1.3)
+  p_metab_list[[mat]] <- p_metab_list[[mat]] + 
+    human_col_scale(name = "Group", levels = c("Septic-NS", "Sham", "Septic-S", "", ""), aesthetics = c("color", "fill")) +
     guides(colour = guide_legend(title = "Group"), fill = "none", group = "none") +
-    ggtitle("PCA biplot, Canberra distance, metabolites,\n24h samples") +
+    #ggtitle("PCA biplot, Canberra distance, metabolites,\n24h samples") +
     theme_bw() + 
-    theme(panel.grid = element_blank())
-  gobj <- ggplot_build(ap)
+    theme(panel.grid = element_blank(), legend.position = "bottom", legend.direction = "horizontal", text = element_text(size = rsize), legend.text = element_text(size = rsize), legend.title = element_blank(), plot.margin = margin(r = 10))
+  gobj <- ggplot_build(p_metab_list[[mat]])
   xmax <- gobj$layout$panel_params[[1]]$x.range[2]
   xmin <- gobj$layout$panel_params[[1]]$x.range[1]
   ymax <- gobj$layout$panel_params[[1]]$y.range[2]
   ymin <- gobj$layout$panel_params[[1]]$y.range[1]
-  arws <- make_ordination_arrows(x = p$x[, 1:2], w = rds, xmax = xmax, xmin = xmin, ymin = ymin, ymax = ymax, shorten_arw_by = 1, scale_by = 1.1)
-  ap <- ap +
-    geom_path(data = arws$ph_ars_s, mapping = aes(x = PC1, y = PC2, group = Group), inherit.aes = FALSE, arrow = arrow(length = unit(0.06, "inches")), size = 0.2, color = "grey50") + 
-    geom_text(data = arws$ph_ars_names_s, mapping = aes(label = label, x = PC1, y = PC2), inherit.aes = FALSE, size = 1.5, color = "grey50") #+
-  #  scale_x_continuous(limits = c(xmin * 1.1, xmax)) +
+  arws <- make_ordination_arrows(x = p$x[, 1:2], w = rds, xmax = xmax, xmin = xmin, ymin = ymin, ymax = ymax, shorten_arw_by = 15, scale_by = 1, num = 5)
+  p_metab_list[[mat]] <- p_metab_list[[mat]] +
+    geom_path(data = arws$ph_ars_s, mapping = aes(x = PC1, y = PC2, group = Group), inherit.aes = FALSE, arrow = arrow(length = unit(0.06, "inches")), size = 0.3, color = "grey50") + 
+    scale_x_continuous(limits = c(xmin * 1.1, xmax * 1.1)) +
+    scale_y_continuous(limits = c(ymin * 1, ymax * 1.1)) +
+    geom_text_repel(data = arws$ph_ars_names_s, mapping = aes(label = label, x = PC1, y = PC2), inherit.aes = FALSE, size = 3, color = "grey20", force = 0.15, box.padding = 0, segment.size = 0.3)
   #  geom_text(x = 0.9 * xmin, y = 0.85 * ymin, label = paste0(text_v, collapse = "\n"), size = 2, hjust = "left")
-  ggsave(filename = paste0("PCA_biplot_metab_all_samples_", mat, "_gg.png"), path = out_dir, plot = ap, width = 5, height = 4, units = "in")
+  ggsave(filename = paste0("PCA_biplot_metab_all_samples_", mat, "_gg.png"), path = out_dir, plot = p_metab_list[[mat]], width = 5, height = 4, units = "in")
   
   ###Compare beta diversity
   ####Get pairwise sample distances (here centroids == samples)
   rat_pw_dist <- as.matrix(dist(p$x[, 1:2], method = "euclidean"))
   ####Get within-group distances
-  p_s_sel <- which(rat_data_dist$group == "septic survivor")
+  p_s_sel <- which(rat_data_dist$group == "Septic-S")
   rat_S_pw_dist <- rat_pw_dist[p_s_sel, p_s_sel]
   rat_S_pw_dist <- rat_S_pw_dist[lower.tri(x = rat_S_pw_dist)]
-  p_ns_sel <- which(rat_data_dist$group == "septic non-survivor")
+  p_ns_sel <- which(rat_data_dist$group == "Septic-NS")
   rat_NS_pw_dist <- rat_pw_dist[p_ns_sel, p_ns_sel]
   rat_NS_pw_dist <- rat_NS_pw_dist[lower.tri(x = rat_NS_pw_dist)]
-  p_c_sel <- which(rat_data_dist$group == "control")
+  p_c_sel <- which(rat_data_dist$group == "Sham")
   rat_C_pw_dist <- rat_pw_dist[p_c_sel, p_c_sel]
   rat_C_pw_dist <- rat_C_pw_dist[lower.tri(x = rat_C_pw_dist)]
   ####Compare distance distributions
@@ -235,9 +247,9 @@ for (mat in unique(rat_sepsis_data$material)){
   names(bdiv_p) <- bdiv_names
   names(bdiv_fdr) <- bdiv_names
   g1 <- sub("betadiv", "", bdiv_names)
-  g1 <- sub("_C", "_control", g1)
-  g1 <- sub("_S", "_septic survivor", g1)
-  g1 <- sub("_NS", "_septic non-survivor", g1)
+  g1 <- sub("_C", "_Sham", g1)
+  g1 <- sub("_S", "_Septic-S", g1)
+  g1 <- sub("_NS", "_Septic-NS", g1)
   g1 <- substring(g1, 2)
   g1 <- strsplit(g1, "_", fixed = TRUE)
   bdiv_df <- data.frame(Group1 = sapply(g1, `[`, 1), Group2 = sapply(g1, `[`, 2), p = bdiv_p, FDR = bdiv_fdr)
@@ -245,23 +257,24 @@ for (mat in unique(rat_sepsis_data$material)){
   write.csv(x = bdiv_df, file = paste0(out_dir, "betadiversity_comparison_pvals_", mat, ".csv"), row.names = FALSE)
   ####Plot
   rat_pw_group_dat <- data.frame(distance = c(rat_C_pw_dist, rat_S_pw_dist, rat_NS_pw_dist), 
-                                 Group = c(rep("control", length(rat_C_pw_dist)),
-                                           rep("septic survivor", length(rat_S_pw_dist)), 
-                                           rep("septic non-survivor", length(rat_NS_pw_dist))))
+                                 Group = c(rep("Sham", length(rat_C_pw_dist)),
+                                           rep("Septic-S", length(rat_S_pw_dist)), 
+                                           rep("Septic-NS", length(rat_NS_pw_dist))))
   bdiv_list[[mat]] <- rat_pw_group_dat
   p <- ggplot(data = rat_pw_group_dat, mapping = aes(x = Group, y = distance, color = Group)) +
     geom_boxplot() +
-    human_col_scale(name = "Group", levels = c("septic non-survivor", "control", "septic survivor", "", ""), aesthetics = c("color", "fill")) +
+    human_col_scale(name = "Group", levels = c("Septic-NS", "Sham", "Septic-S", "", ""), aesthetics = c("color", "fill")) +
     scale_x_discrete(limits = as.character(unique(rat_pw_group_dat$Group))) +
     guides(color = "none") +
     #ylim(0, 100) +
+    ylab("between-sample dissimilarity") +
     theme_bw() + 
     theme(panel.grid = element_blank(), axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
   ggsave(filename = paste0("PCA_metab_betadiv_comparison_", mat, ".png"), path = out_dir, width = 2.5, height = 4, units = "in")
   
   rat_dev_score <- cbind(rat_data_dist[, 1:4],  rds[, setdiff(colnames(rds), rat.sig.anova.car.s.class[[mat]])])
-  rat_dev_max <- colMaxs(as.matrix(rat_dev_score[rat_dev_score$group != "septic non-survivor", -1:-4]))
-  rat_dev_min <- colMins(as.matrix(rat_dev_score[rat_dev_score$group != "septic non-survivor", -1:-4]))
+  rat_dev_max <- colMaxs(as.matrix(rat_dev_score[rat_dev_score$group != "Septic-NS", -1:-4]))
+  rat_dev_min <- colMins(as.matrix(rat_dev_score[rat_dev_score$group != "Septic-NS", -1:-4]))
   udev <- rat_dev_score[, -1:-4] > matrix(rat_dev_max, ncol = ncol(rat_dev_score) - 4, nrow = nrow(rat_dev_score), byrow = TRUE)
   ldev <- rat_dev_score[, -1:-4] < matrix(rat_dev_min, ncol = ncol(rat_dev_score) - 4, nrow = nrow(rat_dev_score), byrow = TRUE)
   sdev <- aggregate(udev | ldev, by = list(Sample = rat_dev_score$`Sample Identification`), FUN = max) #count same metabolite at different time points as one deviation
@@ -270,7 +283,7 @@ for (mat in unique(rat_sepsis_data$material)){
   rat_dev_list[[mat]] <- dev_score
   p <- ggplot(data = dev_score, mapping = aes(fill = Group, x = score)) +
     geom_histogram(position = position_stack(), bins = max(dev_score$score) + 1) +
-    human_col_scale(name = "Group", levels = c("septic non-survivor", "control", "septic survivor", "", ""), aesthetics = "fill") +
+    human_col_scale(name = "Group", levels = c("Septic-NS", "Sham", "Septic-S", "", ""), aesthetics = "fill") +
     ylab("Number of Patients") +
     xlab("Number of metabolites outside of the safe corridor at any time") +
     theme_bw() +
@@ -290,13 +303,20 @@ rat_pgd <- Reduce("rbind", bdiv_list)
 p <- ggplot(data = rat_pgd, mapping = aes(x = Group, y = distance, color = Group)) +
   facet_wrap(~ material, ncol = 3, nrow = 1) +
   geom_boxplot() +
-  human_col_scale(name = "Group", levels = c("septic non-survivor", "control", "septic survivor", "", ""), aesthetics = c("color", "fill")) +
+  human_col_scale(name = "Group", levels = c("Septic-NS", "Sham", "Septic-S", "", ""), aesthetics = c("color", "fill")) +
   scale_x_discrete(limits = as.character(unique(rat_pw_group_dat$Group))) +
   guides(color = "none") +
   #ylim(0, 100) +
+  ylab("between-sample dissimilarity") +
+  xlab("") +
   theme_bw() + 
   theme(panel.grid = element_blank(), axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
 ggsave(filename = paste0("PCA_metab_betadiv_comparison_crossmat.png"), path = out_dir, width = 5, height = 4, units = "in")
+
+#build figure panel (Fig 4)
+panel4 <- plot_grid(p_biochem_ap, p_metab_list[["plasma"]], 
+                    align = "h", axis = "tb", labels = c("A", "B"))
+ggsave(filename = "PCA_biplot_main_panel.png", path = out_dir, plot = panel4, height = 4, width = 2/2.6*9, units = "in")
 
 for (name in names(rat_dev_list)){
   rat_dev_list[[name]]$material <- name
@@ -307,7 +327,7 @@ for (mat in unique(rat_sepsis_data$material)){
   m <- subset(rat_sepsis_data, material == mat & `time point` == "24h")
   m <- m[, -pheno_sel]
   m <- m[, !(colnames(m) %in% rat.sig.anova.car.s.class[[mat]])]
-  di <- which(m$group == "septic non-survivor")
+  di <- which(m$group == "Septic-NS")
   dev_rep_res[[mat]] <- unlist(lapply(X = 1:1000, FUN = sim_dev, n = nrow(m), d = ncol(m) - 4, dev_idx = di, sample_groups = 1:nrow(m)))
 }
 p_thresh <- sapply(dev_rep_res, quantile, p = 0.95, names = FALSE)
@@ -315,13 +335,28 @@ p_thresh <- data.frame(score = p_thresh, material = names(p_thresh), stringsAsFa
 p <- ggplot(data = dev_score, mapping = aes(fill = Group, x = score)) +
   facet_wrap(~ material, ncol = 1, nrow = 3) +
   geom_histogram(position = position_stack(), bins = max(dev_score$score) + 1) +
-  human_col_scale(name = "Group", levels = c("septic non-survivor", "control", "septic survivor", "", ""), aesthetics = "fill") +
+  human_col_scale(name = "Group", levels = c("Septic-NS", "Sham", "Septic-S", "", ""), aesthetics = "fill") +
   geom_vline(data = p_thresh, mapping = aes(xintercept = score), linetype = 2) +
   ylab("Number of Rat samples") +
   xlab("Number of metabolites outside of the safe corridor at 24h") +
   theme_bw() +
   theme(panel.grid = element_blank(), legend.direction = "horizontal", legend.position = "bottom")
 ggsave(plot = p, filename = paste0("generalized_safe_corridor_minmax_crossmat.png"), path = out_dir, width = 5, height = 5, units = "in")
+p_thresh_box <- p_thresh
+p_thresh_box$x <- as.numeric(factor(p_thresh_box$material)) - 0.4
+p_thresh_box$xend <- p_thresh_box$x + 0.8
+dev_score_box <- subset(dev_score, grepl("non-survivor", Group))
+dev_score_box$material <- factor(dev_score_box$material)
+pbox <- ggplot(data = dev_score_box, mapping = aes(fill = Group, x = material, y = score, colour = Group)) +
+  geom_dotplot(stackdir = "center", binaxis = "y", dotsize = 0.7) + 
+  #human_col_scale(aesthetics = c("fill", "colour")) +
+  geom_segment(data = p_thresh_box, mapping = aes(x = x, xend = xend, y = score, yend = score), linetype = 2, inherit.aes = FALSE) +
+  coord_flip() +
+  ylab("Number of metabolites outside of the safe corridor") +
+  xlab("") +
+  theme_bw() +
+  theme(panel.grid = element_blank(), legend.direction = "horizontal", legend.position = "bottom")
+ggsave(plot = pbox, filename = "generalized_safe_corridor_minmax_crossmat_box.png", path = out_dir, width = 6, height = 2.5, units = "in")
 
 rat_dev_comp <- human_dev_metabs
 for (name in names(mtab_list)){
@@ -351,7 +386,7 @@ for (mat in unique(rat_sepsis_data$material)){
     lam <- p$sdev[1:2] * sqrt(nrow(p$x))
     ap <- autoplot(object = p, data = rat_data_dist, colour = "group", frame = FALSE, frame.type = "norm", size = 0.5)
     ap <- ap + 
-      human_col_scale(name = "Group", levels = c("septic non-survivor", "control", "septic survivor", "", ""), aesthetics = c("color", "fill")) +
+      human_col_scale(name = "Group", levels = c("Septic-NS", "Sham", "Septic-S", "", ""), aesthetics = c("color", "fill")) +
       guides(colour = guide_legend(title = "Group"), fill = "none", group = "none") +
       ggtitle("PCA biplot, Canberra distance, metabolites,\n24h samples") +
       theme_bw() + 
@@ -373,13 +408,13 @@ for (mat in unique(rat_sepsis_data$material)){
     ####Get pairwise sample distances (here centroids == samples)
     rat_pw_dist <- as.matrix(dist(p$x[, 1:2], method = "euclidean"))
     ####Get within-group distances
-    p_s_sel <- which(rat_data_dist$group == "septic survivor")
+    p_s_sel <- which(rat_data_dist$group == "Septic-S")
     rat_S_pw_dist <- rat_pw_dist[p_s_sel, p_s_sel]
     rat_S_pw_dist <- rat_S_pw_dist[lower.tri(x = rat_S_pw_dist)]
-    p_ns_sel <- which(rat_data_dist$group == "septic non-survivor")
+    p_ns_sel <- which(rat_data_dist$group == "Septic-NS")
     rat_NS_pw_dist <- rat_pw_dist[p_ns_sel, p_ns_sel]
     rat_NS_pw_dist <- rat_NS_pw_dist[lower.tri(x = rat_NS_pw_dist)]
-    p_c_sel <- which(rat_data_dist$group == "control")
+    p_c_sel <- which(rat_data_dist$group == "Sham")
     rat_C_pw_dist <- rat_pw_dist[p_c_sel, p_c_sel]
     rat_C_pw_dist <- rat_C_pw_dist[lower.tri(x = rat_C_pw_dist)]
     ####Compare distance distributions
@@ -402,9 +437,9 @@ for (mat in unique(rat_sepsis_data$material)){
     # names(bdiv_p) <- bdiv_names
     # names(bdiv_fdr) <- bdiv_names
     # g1 <- sub("betadiv", "", bdiv_names)
-    # g1 <- sub("_C", "_control", g1)
-    # g1 <- sub("_S", "_septic survivor", g1)
-    # g1 <- sub("_NS", "_septic non-survivor", g1)
+    # g1 <- sub("_C", "_Sham", g1)
+    # g1 <- sub("_S", "_Septic-S", g1)
+    # g1 <- sub("_NS", "_Septic-NS", g1)
     # g1 <- substring(g1, 2)
     # g1 <- strsplit(g1, "_", fixed = TRUE)
     bdiv_df <- data.frame(Group1 = sapply(g1, `[`, 1), Group2 = sapply(g1, `[`, 2), p = bdiv_p, FDR = bdiv_fdr)
@@ -412,16 +447,17 @@ for (mat in unique(rat_sepsis_data$material)){
     write.csv(x = bdiv_df, file = paste0(out_dir, "betadiversity_comparison_pvals_", mat, "_", met_group, ".csv"), row.names = FALSE)
     ####Plot
     rat_pw_group_dat <- data.frame(distance = c(rat_C_pw_dist, rat_S_pw_dist, rat_NS_pw_dist), 
-                                   Group = c(rep("control", length(rat_C_pw_dist)),
-                                             rep("septic survivor", length(rat_S_pw_dist)), 
-                                             rep("septic non-survivor", length(rat_NS_pw_dist))))
+                                   Group = c(rep("Sham", length(rat_C_pw_dist)),
+                                             rep("Septic-S", length(rat_S_pw_dist)), 
+                                             rep("Septic-NS", length(rat_NS_pw_dist))))
     bdiv_list[[mat]] <- rat_pw_group_dat
     p <- ggplot(data = rat_pw_group_dat, mapping = aes(x = Group, y = distance, color = Group)) +
       geom_boxplot() +
-      human_col_scale(name = "Group", levels = c("septic non-survivor", "control", "septic survivor", "", ""), aesthetics = c("color", "fill")) +
+      human_col_scale(name = "Group", levels = c("Septic-NS", "Sham", "Septic-S", "", ""), aesthetics = c("color", "fill")) +
       scale_x_discrete(limits = as.character(unique(rat_pw_group_dat$Group))) +
       guides(color = "none") +
       #ylim(0, 100) +
+      ylab("between-sample dissimilarity") +
       theme_bw() + 
       theme(panel.grid = element_blank(), axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
     ggsave(filename = paste0("PCA_metab_betadiv_comparison_", mat, "_", met_group, ".png"), path = out_dir, width = 2.5, height = 4, units = "in")
@@ -445,7 +481,7 @@ for (mat in unique(rat_sepsis_data$material)){
     rdd <- rat_data_dist
     ap <- autoplot(object = p, data = rdd, colour = "group", frame = FALSE, frame.type = "norm", size = 0.5)
     ap <- ap +
-      human_col_scale(name = "Group", levels = c("septic non-survivor", "control", "septic survivor", "", ""), aesthetics = c("color", "fill")) +
+      human_col_scale(name = "Group", levels = c("Septic-NS", "Sham", "Septic-S", "", ""), aesthetics = c("color", "fill")) +
       guides(colour = guide_legend(title = "Group"), fill = "none", group = "none") +
       ggtitle(paste0("PCA biplot, Canberra distance, ", met_group, "\n24h samples")) +
       theme_bw() + 

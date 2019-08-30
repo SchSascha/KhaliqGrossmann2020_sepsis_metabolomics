@@ -74,7 +74,7 @@ rat_sepsis_data <- rat_sepsis_data[, -which(colnames(rat_sepsis_data) %in% c("HR
 pheno_sel <- (which(colnames(rat_sepsis_data) == "H1")+1):ncol(rat_sepsis_data)
 
 #Calculate concentration ratios for survivors/non-survivors
-rat_only_sepsis_data <- subset(rat_sepsis_data, group != "control" & `time point` != "72h", c(1:9, 11:30, 32:44))
+rat_only_sepsis_data <- subset(rat_sepsis_data, group != "Sham" & `time point` != "72h", c(1:9, 11:30, 32:44))
 rosdm <- na.omit(melt(rat_only_sepsis_data, id.vars = 1:4))
 #rosdm$variable <- as.character(rosdm$variable)
 rat_ratio_ci <- pairwiseCI(formula = value ~ group, by = c("material", "time point", "variable"), data = rosdm, method = "Param.ratio")
@@ -87,15 +87,15 @@ rat_ratio_ci <- rrci
 
 #Get data overview
 ##Get overview of sample distribution along days
-rat_plasma_sig_diff_res <- rat_sig_diffs_along_time(subset(rat_sepsis_data, material == "plasma" & group %in% c("septic survivor", "septic non-survivor")), corr_fdr = T)
+rat_plasma_sig_diff_res <- rat_sig_diffs_along_time(subset(rat_sepsis_data, material == "plasma" & group %in% c("Septic-S", "Septic-NS")), corr_fdr = T)
 rat_plasma_time_sig_u_diff <- rat_plasma_sig_diff_res$time_sig_u_diff
 rat_plasma_time_sig_t_diff <- rat_plasma_sig_diff_res$time_sig_t_diff
 
-rat_heart_sig_diff_res <- rat_sig_diffs_along_time(subset(rat_sepsis_data, material == "heart" & group %in% c("septic survivor", "septic non-survivor")), corr_fdr = T)
+rat_heart_sig_diff_res <- rat_sig_diffs_along_time(subset(rat_sepsis_data, material == "heart" & group %in% c("Septic-S", "Septic-NS")), corr_fdr = T)
 rat_heart_time_sig_u_diff <- rat_heart_sig_diff_res$time_sig_u_diff
 rat_heart_time_sig_t_diff <- rat_heart_sig_diff_res$time_sig_t_diff
 
-rat_liver_sig_diff_res <- rat_sig_diffs_along_time(subset(rat_sepsis_data, material == "liver" & group %in% c("septic survivor", "septic non-survivor")), corr_fdr = T)
+rat_liver_sig_diff_res <- rat_sig_diffs_along_time(subset(rat_sepsis_data, material == "liver" & group %in% c("Septic-S", "Septic-NS")), corr_fdr = T)
 rat_liver_time_sig_u_diff <- rat_liver_sig_diff_res$time_sig_u_diff
 rat_liver_time_sig_t_diff <- rat_liver_sig_diff_res$time_sig_t_diff
 
@@ -115,9 +115,9 @@ rat_liver_time_sig_t_diff_pos_long <- get_sig_var_pos(rat_liver_time_sig_t_diff)
 #Get fold change with respect to control rats
 rat_sepsis_data_fc <- rat_sepsis_data
 for (mat in unique(rat_sepsis_data$material)){
-  ctrl_subset <- rat_sepsis_data$group == "control" & rat_sepsis_data$material == mat
-  surv_subset <- rat_sepsis_data$group == "septic survivor" & rat_sepsis_data$material == mat
-  nonsurv_subset <- rat_sepsis_data$group == "septic non-survivor" & rat_sepsis_data$material == mat
+  ctrl_subset <- rat_sepsis_data$group == "Sham" & rat_sepsis_data$material == mat
+  surv_subset <- rat_sepsis_data$group == "Septic-S" & rat_sepsis_data$material == mat
+  nonsurv_subset <- rat_sepsis_data$group == "Septic-NS" & rat_sepsis_data$material == mat
   for (time in unique(rat_sepsis_data[surv_subset, ]$`time point`)){
     ctrl_col_mean <- colMeans(as.matrix(subset(rat_sepsis_data, ctrl_subset & `time point` == time, select = -1:-4)))
     rat_sepsis_data_fc[surv_subset & rat_sepsis_data$`time point` == time, -1:-4] <- t(log(t(subset(rat_sepsis_data, surv_subset & `time point` == time, select = -1:-4)) / ctrl_col_mean))
@@ -127,21 +127,21 @@ for (mat in unique(rat_sepsis_data$material)){
     rat_sepsis_data_fc[nonsurv_subset & rat_sepsis_data_fc$`time point` == time, -1:-4] <- t(log(t(subset(rat_sepsis_data, nonsurv_subset & `time point` == time, select = -1:-4)) / ctrl_col_mean))
   }
 }
-rat_sepsis_data_fc <- subset(rat_sepsis_data_fc, group != "control")
+rat_sepsis_data_fc <- subset(rat_sepsis_data_fc, group != "Sham")
 
-rat_plasma_sig_diff_ctrl_surv_res <- rat_sig_diffs_along_time(subset(rat_sepsis_data, material == "plasma" & group %in% c("septic survivor", "control")), corr_fdr = T)
+rat_plasma_sig_diff_ctrl_surv_res <- rat_sig_diffs_along_time(subset(rat_sepsis_data, material == "plasma" & group %in% c("Septic-S", "Sham")), corr_fdr = T)
 rat_plasma_time_fc_diff_ctrl_surv <- rat_plasma_sig_diff_ctrl_surv_res$time_fold_change
-rat_plasma_sig_diff_ctrl_nonsurv_res <- rat_sig_diffs_along_time(subset(rat_sepsis_data, material == "plasma" & group %in% c("septic non-survivor", "control")), corr_fdr = T)
+rat_plasma_sig_diff_ctrl_nonsurv_res <- rat_sig_diffs_along_time(subset(rat_sepsis_data, material == "plasma" & group %in% c("Septic-NS", "Sham")), corr_fdr = T)
 rat_plasma_time_fc_diff_ctrl_nonsurv <- rat_plasma_sig_diff_ctrl_nonsurv_res$time_fold_change
 
-rat_liver_sig_diff_ctrl_surv_res <- rat_sig_diffs_along_time(subset(rat_sepsis_data, material == "liver" & group %in% c("septic survivor", "control")), corr_fdr = T)
+rat_liver_sig_diff_ctrl_surv_res <- rat_sig_diffs_along_time(subset(rat_sepsis_data, material == "liver" & group %in% c("Septic-S", "Sham")), corr_fdr = T)
 rat_liver_time_fc_diff_ctrl_surv <- rat_liver_sig_diff_ctrl_surv_res$time_fold_change
-rat_liver_sig_diff_ctrl_nonsurv_res <- rat_sig_diffs_along_time(subset(rat_sepsis_data, material == "liver" & group %in% c("septic non-survivor", "control")), corr_fdr = T)
+rat_liver_sig_diff_ctrl_nonsurv_res <- rat_sig_diffs_along_time(subset(rat_sepsis_data, material == "liver" & group %in% c("Septic-NS", "Sham")), corr_fdr = T)
 rat_liver_time_fc_diff_ctrl_nonsurv <- rat_liver_sig_diff_ctrl_nonsurv_res$time_fold_change
 
-rat_heart_sig_diff_ctrl_surv_res <- rat_sig_diffs_along_time(subset(rat_sepsis_data, material == "heart" & group %in% c("septic survivor", "control")), corr_fdr = T)
+rat_heart_sig_diff_ctrl_surv_res <- rat_sig_diffs_along_time(subset(rat_sepsis_data, material == "heart" & group %in% c("Septic-S", "Sham")), corr_fdr = T)
 rat_heart_time_fc_diff_ctrl_surv <- rat_heart_sig_diff_ctrl_surv_res$time_fold_change
-rat_heart_sig_diff_ctrl_nonsurv_res <- rat_sig_diffs_along_time(subset(rat_sepsis_data, material == "heart" & group %in% c("septic non-survivor", "control")), corr_fdr = T)
+rat_heart_sig_diff_ctrl_nonsurv_res <- rat_sig_diffs_along_time(subset(rat_sepsis_data, material == "heart" & group %in% c("Septic-NS", "Sham")), corr_fdr = T)
 rat_heart_time_fc_diff_ctrl_nonsurv <- rat_heart_sig_diff_ctrl_nonsurv_res$time_fold_change
 
 #Find differences with ANOVA
@@ -157,7 +157,7 @@ for (mat in unique(rat_sepsis_data$material)){
   ftd_c <- subset(rat_sepsis_data, material == mat)
   ftd_c$group <- sub(pattern = "septic.+", x = as.character(ftd_c$group), replacement = "septic")
   ftd_c$time <- ftd_c$`time point`
-  ftd_s <- subset(rat_sepsis_data, group != "control" & material == mat)
+  ftd_s <- subset(rat_sepsis_data, group != "Sham" & material == mat)
   ftd_s$time <- ftd_s$`time point`
   ftd_s <- subset(ftd_s, time != "72h")
   anova.car.c[[mat]] <- t3ANOVA(col.set = met_set, data = ftd_c, formula = fml, id.vars = c("group", "time"), random = ~1|group, use.corAR = FALSE)
@@ -231,7 +231,7 @@ mat <- "plasma"
 ftd_c <- subset(rat_sepsis_data, material == mat)
 ftd_c$group <- sub(pattern = "septic.+", x = as.character(ftd_c$group), replacement = "septic")
 ftd_c$time <- ftd_c$`time point`
-ftd_s <- subset(rat_sepsis_data, group != "control" & material == mat)
+ftd_s <- subset(rat_sepsis_data, group != "Sham" & material == mat)
 ftd_s$time <- ftd_s$`time point`
 ftd_s <- subset(ftd_s, time != "72h")
 anova.car.c.pheno <- t3ANOVA(col.set = met_set, data = ftd_c, formula = fml, id.vars = c("group", "time"), random = ~1|group, use.corAR = FALSE)
@@ -406,16 +406,16 @@ rat_sepsis_data_normal_pheno_cor <- rat_sepsis_data_normal_pheno_cor[, !apply(ra
 rat_sepsis_data_normal_conc_metab_cov <- cov(rat_sepsis_data_normal[, metab_sel], use = "pairwise.complete.obs")
 rat_sepsis_data_normal_conc_pheno_cov <- cov(rat_sepsis_data_normal[, pheno_sel], use = "pairwise.complete.obs")
 ###Survival-regardent
-rat_sepsis_data_normal_NS_conc_metab_cov <- cov(subset(rat_sepsis_data_normal, group == "septic non-survivor", metab_sel), use = "pairwise.complete.obs")
-rat_sepsis_data_normal_S_conc_metab_cov <- cov(subset(rat_sepsis_data_normal, group == "septic survivor", metab_sel), use = "pairwise.complete.obs")
-rat_sepsis_data_normal_NS_conc_pheno_cov <- cov(subset(rat_sepsis_data_normal, group == "septic non-survivor", pheno_sel), use = "pairwise.complete.obs")
-rat_sepsis_data_normal_S_conc_pheno_cov <- cov(subset(rat_sepsis_data_normal, group == "septic survivor", pheno_sel), use = "pairwise.complete.obs")
+rat_sepsis_data_normal_NS_conc_metab_cov <- cov(subset(rat_sepsis_data_normal, group == "Septic-NS", metab_sel), use = "pairwise.complete.obs")
+rat_sepsis_data_normal_S_conc_metab_cov <- cov(subset(rat_sepsis_data_normal, group == "Septic-S", metab_sel), use = "pairwise.complete.obs")
+rat_sepsis_data_normal_NS_conc_pheno_cov <- cov(subset(rat_sepsis_data_normal, group == "Septic-NS", pheno_sel), use = "pairwise.complete.obs")
+rat_sepsis_data_normal_S_conc_pheno_cov <- cov(subset(rat_sepsis_data_normal, group == "Septic-S", pheno_sel), use = "pairwise.complete.obs")
 ##Build covariance matrix of metabolites with metabolites groups
 ###Survival-ignorant
 rat_sepsis_data_normal_grouped_conc_metab_cov <- cov(rat_sepsis_data_normal_grouped[, group_metab_sel], use = "pairwise.complete.obs")
 ###Survival-regardent
-rat_sepsis_data_normal_NS_grouped_conc_metab_cov <- cov(subset(rat_sepsis_data_normal_grouped, group == "septic non-survivor", group_metab_sel), use = "pairwise.complete.obs")
-rat_sepsis_data_normal_S_grouped_conc_metab_cov <- cov(subset(rat_sepsis_data_normal_grouped, group == "septic survivor", group_metab_sel), use = "pairwise.complete.obs")
+rat_sepsis_data_normal_NS_grouped_conc_metab_cov <- cov(subset(rat_sepsis_data_normal_grouped, group == "Septic-NS", group_metab_sel), use = "pairwise.complete.obs")
+rat_sepsis_data_normal_S_grouped_conc_metab_cov <- cov(subset(rat_sepsis_data_normal_grouped, group == "Septic-S", group_metab_sel), use = "pairwise.complete.obs")
 
 ##Generalized corridor defined by min and max of survivor rats (septic and nonseptic)
 dev_score <- list()
@@ -458,7 +458,7 @@ ggsave(plot = p, filename = paste0("generalized_safe_corridor_minmax.png"), path
 
 ##Rat, cluster-heatmap, metabolites, and phenomenological vars, fold change with respect to control
 x <- rat_sepsis_data_fc
-x$group <- reorder(x$group, (x$group == "septic survivor") + (2 * (x$group == "septic non-survivor")))
+x$group <- reorder(x$group, (x$group == "Septic-S") + (2 * (x$group == "Septic-NS")))
 x$`time point` <- reorder(x$`time point`, (x$`time point` == "6h") + (2 * (x$`time point` == "24h")) + (3 * (x$`time point` == "72h")))
 x <- x[order(x$group),]
 x <- x[order(x$`time point`),]
@@ -477,7 +477,7 @@ mat_sigs[["heart"]] <- as.matrix(colAnys(rat_heart_sig_diff_ctrl_surv_res$time_s
 mat_sigs <- lapply(mat_sigs, function(x){ c(NA, "Sig diff Surv", "Sig diff Nonsurv")[x + 1] })
 
 for (mat in unique(xm$material)){
-  h <- heatmaply(x = xmt[, xm$material == mat], dendrogram = "none", plot_method = "plotly", col_side_colors = subset(xm, material == mat, c("time point", "group")), row_side_colors = data.frame(sig_reg = mat_sigs[[mat]]), key.title = "fold change with\nrespect to control", margins = c(50,100,0,50), subplot_heights = c(0.03, 0.97))
+  h <- heatmaply(x = xmt[, xm$material == mat], dendrogram = "none", plot_method = "plotly", col_side_colors = subset(xm, material == mat, c("time point", "group")), row_side_colors = data.frame(sig_reg = mat_sigs[[mat]]), key.title = "fold change with\nrespect to Sham", margins = c(50,100,0,50), subplot_heights = c(0.03, 0.97))
   #png(filename = paste0(out_dir, "rat_fold_change_", mat, "_pheno.png"), width = 800, height = 1600)
   h$width <- 800
   h$height <- 1600
@@ -496,13 +496,13 @@ mat <- "plasma"
 mat_sig_subset <- colnames(rat_plasma_sig_diff_ctrl_surv_res$time_sig_t_diff) %in% rownames(xpt)
 mat_sig_pl <- as.matrix(colAnys(rat_plasma_sig_diff_ctrl_surv_res$time_sig_t_diff[,-1] <= 0.05) + 2*colAnys(rat_plasma_sig_diff_ctrl_nonsurv_res$time_sig_t_diff[,-1] <= 0.05))[mat_sig_subset]
 mat_sig_pheno <- c(NA, "Sig diff Surv", "Sig diff Nonsurv")[mat_sig_pl + 1]
-h <- heatmaply(file = paste0(out_dir, "rat_fold_change_", mat, "_pheno.png"), x = xpt[, xp$material == mat], dendrogram = "row", plot_method = "plotly", col_side_colors = subset(xp, material == mat, c("time point", "group")), row_side_colors = data.frame(sig_reg = mat_sig_pheno), key.title = "fold change with\nrespect to control", margins = c(100,80,0,250), subplot_heights = c(0.05, 0.95))
+h <- heatmaply(file = paste0(out_dir, "rat_fold_change_", mat, "_pheno.png"), x = xpt[, xp$material == mat], dendrogram = "row", plot_method = "plotly", col_side_colors = subset(xp, material == mat, c("time point", "group")), row_side_colors = data.frame(sig_reg = mat_sig_pheno), key.title = "fold change with\nrespect to Sham", margins = c(100,80,0,250), subplot_heights = c(0.05, 0.95))
 
 rm(x, xm, xp, xpt, xmt, mat_sigs)
 
 #The same plots broken down by metabolite group, and accompanied by ANOVA significance
 x <- rat_sepsis_data
-x$group <- reorder(x$group, (x$group == "control") + (2 * (x$group == "septic survivor")) + (3 * (x$group == "septic non-survivor")))
+x$group <- reorder(x$group, (x$group == "Sham") + (2 * (x$group == "Septic-S")) + (3 * (x$group == "Septic-NS")))
 x$`time point` <- reorder(x$`time point`, (x$`time point` == "6h") + (2 * (x$`time point` == "24h")) + (3 * (x$`time point` == "72h")))
 x <- x[order(x$group),]
 x <- x[order(x$`time point`),]
@@ -604,7 +604,7 @@ for (mat in unique(x$material)){
 x$`time point` <- as.character(x$`time point`)
 x$group <- as.character(x$group)
 x$material <- as.character(x$material)
-x$group <- reorder(x$group, (1 * (x$group == "control")) + (2 * (x$group == "septic non-survivor")) + (3 * (x$group == "septic survivor")))
+x$group <- reorder(x$group, (1 * (x$group == "Sham")) + (2 * (x$group == "Septic-NS")) + (3 * (x$group == "Septic-S")))
 x$`time point` <- reorder(x$`time point`, as.numeric(sub(pattern = "h", replacement = "", x = x$`time point`)))
 x <- x[order(x$group),]
 x <- x[order(x$`time point`),]
@@ -649,7 +649,7 @@ phm <- pheatmap(mat = xmts[, match(rownames(anno_col[rat_order, ]), colnames(xmt
                 cluster_cols = FALSE, 
                 annotation_col = anno_col[rat_order, ],
                 annotation_row = anno_row,
-                annotation_colors = list(group = c(`septic survivor` = hue_pal()(3)[3], `septic non-survivor` = hue_pal()(3)[1], `control` = hue_pal()(3)[2]),
+                annotation_colors = list(group = c(`Septic-S` = hue_pal()(3)[3], `Septic-NS` = hue_pal()(3)[1], `Sham` = hue_pal()(3)[2]),
                                          `Metab. group` = setNames(hue_pal()(length(unique(anno_row$`Metab. group`))), unique(anno_row$`Metab. group`)),
                                          `time point` = c("6h" = hue_pal()(18)[3], "24h" = hue_pal()(15)[4], "72h" = hue_pal()(15)[5])),
                 gaps_col = which(diff(as.numeric(anno_col$group[rat_order])) != 0),
@@ -762,7 +762,7 @@ r_time_sig_t_diff_plot <- ggplot(melt(rat_time_sig_t_diff, id.vars = c("Time", "
 ggsave(plot = r_time_sig_t_diff_plot, filename = "rat_all_days_survival_sig_diff.png", path = out_dir, width = 4, height = 4, units = "in")
 
 ##Rat, annas significantly different metabolites
-x <- subset(na.omit(rat_sepsis_data_long_form), variable %in% annas_mets & material %in% c("liver") & group %in% c("septic survivor", "septic non-survivor"))
+x <- subset(na.omit(rat_sepsis_data_long_form), variable %in% annas_mets & material %in% c("liver") & group %in% c("Septic-S", "Septic-NS"))
 colnames(x)[colnames(x) == "time point"] <- "time_point"
 x <- subset(x, time_point %in% c("6h", "24h"))
 ggplot(x, aes(x = group, y = value, group = time_point, color = time_point)) +
@@ -778,7 +778,7 @@ for (mat in names(rat.sig.anova.car.c.class)){
   r_time_course_sig_diff_dat$time <- r_time_course_sig_diff_dat$`time point`
   r_time_course_sig_diff_dat <- na.omit(subset(r_time_course_sig_diff_dat, variable %in% rat.sig.anova.car.c.class[[mat]]))
   r_time_course_sig_diff_dat$variable <- factor(r_time_course_sig_diff_dat$variable, levels = unique(r_time_course_sig_diff_dat$variable))
-  r_time_course_sig_diff_dat$group[r_time_course_sig_diff_dat$group != "control"] <- "septic"
+  r_time_course_sig_diff_dat$group[r_time_course_sig_diff_dat$group != "Sham"] <- "septic"
   n_mets <- length(unique(r_time_course_sig_diff_dat$variable))
   r_time_course_group <- unique(data.frame(variable = r_time_course_sig_diff_dat$variable, value = 1.4, Time = 2, text = coarse_group_list[match(r_time_course_sig_diff_dat$variable, colnames(rat_sepsis_data)[-1:-4])]))
   lv <- sapply(anova.car.ph.sig.contr[[mat]], length)
@@ -808,7 +808,7 @@ for (mat in names(rat.sig.anova.car.s.class)){
   r_time_course_sig_diff_dat <- subset(rat_sepsis_data, material == mat)
   r_time_course_sig_diff_dat <- max_norm(r_time_course_sig_diff_dat, -1:-4)
   r_time_course_sig_diff_dat <- melt(r_time_course_sig_diff_dat, id.vars = c("Sample Identification", "material", "group", "time point"))
-  r_time_course_sig_diff_dat <- subset(r_time_course_sig_diff_dat, variable %in% rat.sig.anova.car.s.class[[mat]] & group != "control")
+  r_time_course_sig_diff_dat <- subset(r_time_course_sig_diff_dat, variable %in% rat.sig.anova.car.s.class[[mat]] & group != "Sham")
   n_mets <- length(unique(r_time_course_sig_diff_dat$variable))
   r_time_course_group <- unique(data.frame(variable = r_time_course_sig_diff_dat$variable, value = 1.4, Time = 1.5, text = coarse_group_list[match(r_time_course_sig_diff_dat$variable, colnames(rat_sepsis_data)[-1:-4])]))
   lv <- sapply(anova.car.ph.sig.contr[[mat]], length)
@@ -840,7 +840,7 @@ r_time_course_sig_diff_dat <- melt(r_time_course_sig_diff_dat, id.vars = c("Samp
 r_time_course_sig_diff_dat$time <- r_time_course_sig_diff_dat$`time point`
 r_time_course_sig_diff_dat <- na.omit(subset(r_time_course_sig_diff_dat, variable %in% rat.sig.anova.car.c.pheno.class))
 r_time_course_sig_diff_dat$variable <- factor(r_time_course_sig_diff_dat$variable, levels = unique(r_time_course_sig_diff_dat$variable))
-r_time_course_sig_diff_dat$group[r_time_course_sig_diff_dat$group != "control"] <- "septic"
+r_time_course_sig_diff_dat$group[r_time_course_sig_diff_dat$group != "Sham"] <- "septic"
 n_mets <- length(unique(r_time_course_sig_diff_dat$variable))
 r_time_course_group <- unique(data.frame(variable = r_time_course_sig_diff_dat$variable, value = 1.4, Time = 2, text = coarse_group_list[match(r_time_course_sig_diff_dat$variable, colnames(rat_sepsis_data)[-1:-4])]))
 lv <- sapply(anova.car.pheno.ph.sig.contr, length)
@@ -868,7 +868,7 @@ ggsave(plot = r_time_course_sig_diff_plot, filename = paste0("rat_pheno_time_cou
 r_time_course_sig_diff_dat <- subset(rat_sepsis_data, material == "plasma")
 r_time_course_sig_diff_dat <- max_norm(r_time_course_sig_diff_dat, -1:-4)
 r_time_course_sig_diff_dat <- melt(r_time_course_sig_diff_dat, id.vars = c("Sample Identification", "material", "group", "time point"))
-r_time_course_sig_diff_dat <- subset(r_time_course_sig_diff_dat, variable %in% rat.sig.anova.car.s.pheno.class & group != "control")
+r_time_course_sig_diff_dat <- subset(r_time_course_sig_diff_dat, variable %in% rat.sig.anova.car.s.pheno.class & group != "Sham")
 n_mets <- length(unique(r_time_course_sig_diff_dat$variable))
 r_time_course_group <- unique(data.frame(variable = r_time_course_sig_diff_dat$variable, value = 1.4, Time = 1.5, text = coarse_group_list[match(r_time_course_sig_diff_dat$variable, colnames(rat_sepsis_data)[-1:-4])]))
 lv <- sapply(anova.car.pheno.ph.sig.contr, length)
@@ -893,7 +893,7 @@ r_time_course_sig_diff_plot <- ggplot(na.omit(r_time_course_sig_diff_dat), aes_s
 ggsave(plot = r_time_course_sig_diff_plot, filename = paste0("rat_pheno_time_course_sig_s_anova_diff.png"), path = out_dir, width = 12, height = 0.3 + 1.5 * ceiling(n_mets/6), units = "in")
 
 ##rat, plasma, metabolite concentration time course, only metabolites with p-val < 0.05 at any time point
-r_time_course_sig_diff_dat <- subset(rat_sepsis_data_long_form_sig, group %in% c("septic survivor", "septic non-survivor") & material == "plasma" & variable %in% rat_plasma_sig_t_class)
+r_time_course_sig_diff_dat <- subset(rat_sepsis_data_long_form_sig, group %in% c("Septic-S", "Septic-NS") & material == "plasma" & variable %in% rat_plasma_sig_t_class)
 r_time_course_sigs <- subset(rat_plasma_time_sig_t_diff_pos_long, variable %in% r_time_course_sig_diff_dat$variable)
 r_time_course_sigs$value <- 1.2
 r_time_course_group <- data.frame(variable = sort(unique(r_time_course_sig_diff_dat$variable)), value = 1.5, Time = 2.4, text = coarse_group_list[match(sort(unique(r_time_course_sig_diff_dat$variable)), colnames(rat_sepsis_data)[-1:-4])])
@@ -911,7 +911,7 @@ r_time_course_sig_diff_plot <- ggplot(na.omit(r_time_course_sig_diff_dat), aes_s
 ggsave(plot = r_time_course_sig_diff_plot, filename = "rat_metab_plasma_time_course_sig_diff.png", path = out_dir, width = 10, height = 4, units = "in")
 
 ##rat, liver, metabolite concentration time course, only metabolites with p-val < 0.05 at any time point
-r_time_course_sig_diff_dat <- subset(rat_sepsis_data_long_form_sig, group %in% c("septic survivor", "septic non-survivor") & material == "liver" & variable %in% rat_liver_sig_t_class)
+r_time_course_sig_diff_dat <- subset(rat_sepsis_data_long_form_sig, group %in% c("Septic-S", "Septic-NS") & material == "liver" & variable %in% rat_liver_sig_t_class)
 r_time_course_sigs <- subset(rat_liver_time_sig_t_diff_pos_long, variable %in% r_time_course_sig_diff_dat$variable)
 m_val <- max(r_time_course_sig_diff_dat$value)
 r_time_course_sigs$value <- m_val + 0.1
@@ -934,7 +934,7 @@ ggsave(plot = r_time_course_sig_diff_plot, filename = "rat_metab_liver_time_cour
 for (mat in unique(rat_sepsis_data$material)){
   rsg <- rat_sepsis_data_grouped[, -group_pheno_sel]
   n_mets <- ncol(rsg) - 4
-  rsg$group <- factor(rsg$group, levels = c("septic non-survivor", "control", "septic survivor"))
+  rsg$group <- factor(rsg$group, levels = c("Septic-NS", "Sham", "Septic-S"))
   p <- ggplot(data = subset(melt(rsg[, -group_pheno_sel], id.vars = 1:4), material %in% mat), mapping = aes_string(x = "`time point`", y = "value", group = "group", colour = "group")) + 
     facet_wrap(facets = ~ variable, ncol = 4, nrow = ceiling(n_mets/4), scales = "free_y") +
     geom_point(position = position_dodge(width = 0.2)) +
@@ -955,7 +955,7 @@ ac_transferase_grouped <- transform(ac_transferase_grouped,
                                     MediumChainAC = C5 + `C6 (C4:1-DC)` + C8 + C9 + C10 + C12, 
                                     LongChainAC = C14 + C16 + C18)
 colnames(ac_transferase_grouped)[1:length(actg)] <- actg
-ac_transferase_grouped$group <- factor(ac_transferase_grouped$group, levels = c("septic non-survivor", "control", "septic survivor"))
+ac_transferase_grouped$group <- factor(ac_transferase_grouped$group, levels = c("Septic-NS", "Sham", "Septic-S"))
 n_mets <- ncol(ac_transferase_grouped) - 1
 p_ncol <- 4
 for (mat in unique(rat_sepsis_data$material)){
@@ -983,7 +983,7 @@ fa_type_grouped$lysoPCToPCaa <- fa_type_grouped$TotalLysoPC / fa_type_grouped$To
 fa_type_grouped$lysoPCToPCae <- fa_type_grouped$TotalLysoPC / fa_type_grouped$TotalPCae
 fa_type_grouped$lysoPCToSM <- fa_type_grouped$TotalLysoPC / fa_type_grouped$TotalSM
 fa_type_grouped <- fa_type_grouped[, c(1:5, which(colnames(fa_type_grouped) == "PCaaToSM"):ncol(fa_type_grouped))]
-fa_type_grouped$group <- factor(fa_type_grouped$group, levels = c("septic non-survivor", "control", "septic survivor"))
+fa_type_grouped$group <- factor(fa_type_grouped$group, levels = c("Septic-NS", "Sham", "Septic-S"))
 n_mets <- ncol(fa_type_grouped)
 p_ncol <- 4
 for (mat in unique(rat_sepsis_data$material)){
@@ -1004,7 +1004,7 @@ ufas <- unique(sub(pattern = "C[0-9]{2}", replacement = "C..", x = colnames(ufa_
 ufa_sum <- as.data.frame(sapply(lapply(ufas, grep, x = colnames(ufa_grouped)), function(cols) rowSums(ufa_grouped[, cols])))
 colnames(ufa_sum) <- sub(pattern = "C..:", replacement = "CXX:", x = ufas, fixed = TRUE)
 ufa_sum <- cbind(ufa_grouped[, 1:4], ufa_sum)
-ufa_sum$group <- factor(ufa_sum$group, levels = c("septic non-survivor", "control", "septic survivor"))
+ufa_sum$group <- factor(ufa_sum$group, levels = c("Septic-NS", "Sham", "Septic-S"))
 n_mets <- ncol(ufa_sum) - 4
 n_col <- 7
 for (mat in unique(ufa_sum$material)){
@@ -1026,7 +1026,7 @@ ufa_sum <- as.data.frame(sapply(lapply(ufas, grep, x = colnames(ufa_grouped)), f
 ufa_ratio <- as.data.frame(sapply(1:7, function(col) ufa_sum[, col] / ufa_sum[, col + 7]))
 colnames(ufa_ratio) <- sub(pattern = "PC aa C..:", replacement = "CXX:", x = ufas[1:7], fixed = TRUE)
 ufa_ratio <- cbind(ufa_grouped[, 1:4], ufa_ratio)
-ufa_ratio$group <- factor(ufa_ratio$group, levels = c("septic non-survivor", "control", "septic survivor"))
+ufa_ratio$group <- factor(ufa_ratio$group, levels = c("Septic-NS", "Sham", "Septic-S"))
 n_mets <- ncol(ufa_ratio) - 4
 n_col <- 7
 for (mat in unique(ufa_ratio$material)){
@@ -1174,7 +1174,7 @@ ggsave(plot = p, filename = "rat_S_vs_NS_ac_ratios_heart_vs_liver_24h.png", path
 #TODO: add comparisons of sham rat vs septic S rat ratios, maybe also sham vs septic NS
 
 ml_human_best_feat_set <- c("C4", "lysoPC a C28:0", "lysoPC a C28:1", "SM C22:3")
-data_feat_set <- subset(rat_sepsis_data, material %in% c("liver", "plasma") & `time point` %in% c("6h", "24h") & group != "control" )
+data_feat_set <- subset(rat_sepsis_data, material %in% c("liver", "plasma") & `time point` %in% c("6h", "24h") & group != "Sham" )
 data_feat_set <- cbind(data_feat_set[, 1:4], data_feat_set[ml_human_best_feat_set])
 data_feat_set <- melt(data_feat_set, id.vars = 1:4)
 human_best_feat_plot <- ggplot(data = data_feat_set, mapping = aes(y = value, x = material, color = group)) +
@@ -1198,7 +1198,7 @@ ggsave(filename = "human_survival_best_feats_plasma_liver.png", plot = human_bes
 # ggsave(plot = rp1, filename = "rat_meas0_metab_conc_vs_survival.png", path = out_dir, width = 17, height = 17)
 # 
 # ##Rat, metabolites vs tissue type, first measurement only, no control samples
-# rp2 <- ggplot(data = subset(x = rat_sepsis_data_long_form, subset = `time point` == "6h" & group != "control"), mapping = aes(x = material, y = value)) +
+# rp2 <- ggplot(data = subset(x = rat_sepsis_data_long_form, subset = `time point` == "6h" & group != "Sham"), mapping = aes(x = material, y = value)) +
 #   facet_wrap(facets = ~ variable, nrow = 17, ncol = 16) +
 #   geom_boxplot(outlier.size = 0.5) + 
 #   ylab("scaled concentration") +
