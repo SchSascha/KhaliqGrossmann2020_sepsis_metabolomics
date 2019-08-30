@@ -278,7 +278,7 @@ obj <- data.frame(Value = c(obj_d0, obj_d1, obj_d2), Day = rep(0:2, each = lengt
 #Plot enzyme
 pd <- rbind(pd0, pd1, pd2)
 pd$Run <- rep(rep(1:length(par_est_res), each = length(unique(pd0$parameter))), times = 3)
-pd$Group <- c("Survivor", "Nonsurvivor")[1 + (grepl(pattern = "merge", x = pd$parameter))] #Values with [merge] belong to Nonsurvivors
+pd$Group <- c("Septic-S", "Septic-NS")[1 + (grepl(pattern = "merge", x = pd$parameter))] #Values with [merge] belong to Nonsurvivors
 pd$parameter <- stri_replace(str = pd$parameter, replacement = "", fixed = "[merge]")
 pd$parameter <- stri_extract(str = pd$parameter, regex = "\\[.+\\]")
 n_par <- length(unique(pd$parameter))

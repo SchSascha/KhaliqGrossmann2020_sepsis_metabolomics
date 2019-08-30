@@ -95,8 +95,8 @@ colnames(concs) <- stst_est_res[[1]]$species$key
 concs$Day <- day_list
 concs$Run <- run_list
 mconcs <- melt(concs, id.vars = c("Day", "Run"))
-mconcs$Group <- "Survivor"
-mconcs$Group[grepl(pattern = "[merge]", x = mconcs$variable, fixed = TRUE)] <- "Nonsurvivor"
+mconcs$Group <- "Septic-S"
+mconcs$Group[grepl(pattern = "[merge]", x = mconcs$variable, fixed = TRUE)] <- "Septic-NS"
 mconcs$variable <- sub(pattern = "[merge]", replacement = "", x = mconcs$variable, fixed = TRUE)
 
 gpars <- as.data.frame(sapply(mpar_res, function(e) subset(e, stri_detect(str = e$name, fixed = "MalCoA"))))
@@ -133,8 +133,8 @@ colnames(fluxes) <- stst_est_res[[1]]$reactions$name
 fluxes$Day <- day_list
 fluxes$Run <- run_list
 mfluxes <- melt(fluxes, id.vars = c("Day", "Run"))
-mfluxes$Group <- "Survivor"
-mfluxes$Group[grepl(pattern = "[merge]", x = mfluxes$variable, fixed = TRUE)] <- "Nonsurvivor"
+mfluxes$Group <- "Septic-S"
+mfluxes$Group[grepl(pattern = "[merge]", x = mfluxes$variable, fixed = TRUE)] <- "Septic-NS"
 mfluxes$variable <- sub(pattern = "[merge]", replacement = "", x = mfluxes$variable, fixed = TRUE)
 
 p <- ggplot(data = mfluxes, mapping = aes(x = Day, y = value, color = Group)) + 

@@ -5,6 +5,7 @@ library(stringi)
 library(scales)
 library(ggplot2)
 library(gridExtra)
+library(cowplot)
 library(pheatmap)
 library(matrixStats)
 library(heatmaply)
@@ -86,7 +87,7 @@ colnames(human_sepsis_val_data) <- make.names(colnames(human_sepsis_val_data))
 human_sepsis_val_data[, -1:-4] <- missRanger(data = human_sepsis_val_data[, -1:-4])
 colnames(human_sepsis_val_data) <- colns
 
-#Seperate septic and nonseptic patients
+#Seperate septic and non-Septic patients
 human_nonsepsis_data <- human_data[human_data$`CAP / FP` == "-", ]
 human_sepsis_data <- human_data[human_data$`CAP / FP` != "-", ]
 
@@ -149,7 +150,7 @@ day_sig_u_diff_pos_long <- get_sig_var_pos(day_sig_u_diff, time_var = "Day")
 tanova_day_set <- c(0,1,2,3)
 names(tanova_day_set) <- tanova_day_set
 full_tanova_data <- subset(human_data, Day %in% tanova_day_set)
-full_tanova_data$Survival[full_tanova_data$`CAP / FP` == "-"] <- "n.Septic"
+full_tanova_data$Survival[full_tanova_data$`CAP / FP` == "-"] <- "non-Septic"
 
 ##Run repeated measures ANOVA as depicted in the R Companion at http://rcompanion.org/handbook/I_09.html
 fml <- concentration ~ Day*Survival
@@ -158,7 +159,7 @@ names(met_set) <- met_set
 ftd_c <- full_tanova_data
 ftd_c$Survival <- sub(pattern = "NS|S", x = as.character(ftd_c$Survival), replacement = "Seps")
 ftd_c <- ftd_c[, -pheno_sel]
-ftd_s <- subset(full_tanova_data, Survival != "n.Septic")
+ftd_s <- subset(full_tanova_data, Survival != "non-Septic")
 anova.car.c <- t3ANOVA(data = ftd_c, random = ~1|Patient, formula = fml, use.corAR = TRUE, col.set = met_set, id.vars = c("Survival", "Day", "Patient"), control = lmeControl(msMaxIter = 100))
 anova.car.s <- t3ANOVA(data = ftd_s, random = ~1|Patient, formula = fml, use.corAR = TRUE, col.set = met_set, id.vars = c("Survival", "Day", "Patient"), control = lmeControl(msMaxIter = 100))
 anova.car.c.pre.ps <- anova.car.c$ps
@@ -202,7 +203,7 @@ names(anova.car.ph.sig.contr) <- names(anova.car.ph.models)
 fml <- concentration ~ Day*Survival
 met_set <- colnames(full_tanova_data)[pheno_sel]
 names(met_set) <- met_set
-ftd_s <- subset(full_tanova_data, Survival != "n.Septic" & Day %in% tanova_day_set)
+ftd_s <- subset(full_tanova_data, Survival != "non-Septic" & Day %in% tanova_day_set)
 anova.car.s.pheno <- t3ANOVA(data = ftd_s, random = ~1|Patient, formula = fml, use.corAR = TRUE, col.set = met_set, id.vars = c("Survival", "Day", "Patient"))
 anova.car.s.pheno.pre.ps <- anova.car.s.pheno$ps
 sig.anova.car.s.pheno.pre.class <- colnames(anova.car.s.pheno.pre.ps)[colAnys(anova.car.s.pheno.pre.ps[c("Survival", "Day:Survival"), ] <= 0.05)]
@@ -221,7 +222,7 @@ ftd_ph$DaySurv <- interaction(ftd_ph$Day, ftd_ph$Survival, drop = TRUE)
 anova.car.ph.pheno.models <- mclapply(met_set, fit_lin_mod_lme, data = ftd_ph, formula = fml, id.vars = c("Day", "Patient", "DaySurv"), random = ~1|Patient, use.corAR = TRUE, control = lmeControl(msMaxIter = 100))
 anova.car.ph.pheno.models <- mclapply(anova.car.ph.pheno.models, function(e) try(eval(e)))
 ####Construct constrast matrix
-contr.m <- get_S_NS_C_contrmat(tanova_day_set)[-1:-length(tanova_day_set), 5:8] #pheno vars only for septic patients, so skip nonseptic comparisons
+contr.m <- get_S_NS_C_contrmat(tanova_day_set)[-1:-length(tanova_day_set), 5:8] #pheno vars only for septic patients, so skip non-Septic comparisons
 daySurv <- interaction(factor(full_tanova_data$Day), factor(full_tanova_data$Survival), drop = TRUE)
 rownames(contr.m) <- levels(daySurv)[-1:-4]
 ####Actual post hoc test
@@ -240,9 +241,9 @@ ftd_cvns <- full_tanova_data
 ftd_csvns <- full_tanova_data
 ftd_cnsvs <- full_tanova_data
 ftd_cvs <- ftd_cvs[ftd_cvs$`CAP / FP` == "-" | ftd_cvs$Survival == "S", ]
-ftd_cvs$Survival[ftd_cvs$`CAP / FP` == "-"] <- "n.Septic"
+ftd_cvs$Survival[ftd_cvs$`CAP / FP` == "-"] <- "non-Septic"
 ftd_cvns <- ftd_cvns[ftd_cvns$`CAP / FP` == "-" | ftd_cvns$Survival == "NS", ]
-ftd_cvns$Survival[ftd_cvns$`CAP / FP` == "-"] <- "n.Septic"
+ftd_cvns$Survival[ftd_cvns$`CAP / FP` == "-"] <- "non-Septic"
 ftd_csvns$Survival[ftd_csvns$Survival == "S" | ftd_csvns$`CAP / FP` == "-"] <- "C_or_S"
 ftd_cnsvs$Survival[ftd_cnsvs$Survival == "NS" | ftd_csvns$`CAP / FP` == "-"] <- "C_or_NS"
 anova.car.cvs <- t3ANOVA(data = ftd_cvs, random = ~1|Patient, formula = fml, use.corAR = TRUE, col.set = met_set, id.vars = c("Survival", "Day", "Patient"), control = lmeControl(msMaxIter = 100))
@@ -277,7 +278,7 @@ c_is_ns_sig <- intersect(sig.anova.car.cvns.class, sig.anova.car.csvns.class)
 fml <- concentration ~ Day*Survival
 met_set <- colnames(full_tanova_data)[metab_sel]
 names(met_set) <- met_set
-ftd_s <- subset(full_tanova_data, Group %in% c("Septic-NS", "n.Septic-NS"))
+ftd_s <- subset(full_tanova_data, Group %in% c("Septic-NS", "non-Septic-NS"))
 ftd_s <- ftd_s[, -pheno_sel]
 anova.car.nssepnon <- t3ANOVA(data = ftd_s, random = ~1|Patient, formula = fml, use.corAR = TRUE, col.set = met_set, id.vars = c("Survival", "Day", "Patient"), control = lmeControl(msMaxIter = 100))
 anova.car.nssepnon.pre.ps <- anova.car.nssepnon$ps
@@ -290,7 +291,7 @@ sig.anova.car.nssepnon.class <- intersect(sig.anova.car.nssepnon.class, sig.anov
 fml <- concentration ~ Day*Group
 met_set <- colnames(full_tanova_data)[metab_sel]
 names(met_set) <- met_set
-ftd_s <- subset(full_tanova_data, Group %in% c("n.Septic-S", "n.Septic-NS"))
+ftd_s <- subset(full_tanova_data, Group %in% c("non-Septic-S", "non-Septic-NS"))
 ftd_s <- ftd_s[, -pheno_sel]
 anova.car.cnscs <- t3ANOVA(data = ftd_s, random = ~1|Patient, formula = fml, use.corAR = TRUE, col.set = met_set, id.vars = c("Group", "Day", "Patient"), control = lmeControl(msMaxIter = 100))
 anova.car.cnscs.pre.ps <- anova.car.cnscs$ps
@@ -597,9 +598,9 @@ sink(file = paste0(out_dir, "fold_change_day0_sS_vs_sNS.txt"))
 print(fold_change)
 sink()
 
-#human fold changes at day 0, septic-NS vs nonseptic-NS
+#human fold changes at day 0, septic-NS vs non-Septic-NS
 sNS <- subset(human_data, Day == 0 & Group == "Septic-NS", sig.anova.car.nssepnon.class)
-nNS <- subset(human_data, Day == 0 & Group == "n.Septic-NS", sig.anova.car.nssepnon.class)
+nNS <- subset(human_data, Day == 0 & Group == "non-Septic-NS", sig.anova.car.nssepnon.class)
 fold_change <- log2(colMeans(sNS) / colMeans(nNS))
 sink(file = paste0(out_dir, "fold_change_day0_sNS_vs_nNS.txt"))
 print(fold_change)#[which(abs(fold_change) > 1)])
@@ -937,7 +938,7 @@ survival.sig <- rownames(xmt[, -1:-6]) %in% sig.anova.car.s.class
 mat_sigs <- data.frame(control.sig = control.sig, survival.sig = survival.sig, stringsAsFactors = FALSE)
 mat_sigs <- lapply(mat_sigs, function(x){ c("nonsignif.", "p < 0.05")[x + 1] })
 mat_sigs <- data.frame(mat_sigs)
-colnames(mat_sigs) <- c("n.Septic vs Sepsis", "S vs NS")
+colnames(mat_sigs) <- c("non-Septic vs Sepsis", "S vs NS")
 
 lower_margin <- 85
 for (met_group in unique(coarse_group_list[metab_sel - 6])){
@@ -1014,7 +1015,7 @@ x[, -1:-6] <- apply(scale(x[, -1:-6]), 2,
                     })
 x$Day <- as.numeric(as.character(x$Day))
 x$Group <- as.character(x$Group)
-x$Group <- reorder(x$Group, (1 * (x$Group == "n.Septic-S")) + (2 * (x$Group == "n.Septic-NS")) + (3 * (x$Group == "Septic-S")) + (4 * (x$Group == "Septic-NS")))
+x$Group <- reorder(x$Group, (1 * (x$Group == "non-Septic-S")) + (2 * (x$Group == "non-Septic-NS")) + (3 * (x$Group == "Septic-S")) + (4 * (x$Group == "Septic-NS")))
 x$Day <- reorder(x$Day, x$Day)
 x$`CAP / FP` <- reorder(x$`CAP / FP`, (x$`CAP / FP` == "-") + (2 * (x$`CAP / FP` == "FP")) + (3 * (x$`CAP / FP` == "CAP")))
 x <- x[order(x$`CAP / FP`),]
@@ -1031,7 +1032,7 @@ xmtc <- xmt[rownames(xmt) %in% sig.anova.car.c.class, ]
 
 anno_col <- xm[c("Day", "CAP / FP", "Group")]
 rownames(anno_col) <- xm$`Sample ID`
-anno_col$Day <- as.numeric(as.character(anno_col$Day))
+anno_col$Day <- (anno_col$Day)
 anno_row <- data.frame(metab_group = human_sepsis_legend$group[match(rownames(xmts), human_sepsis_legend[, 1])])
 anno_row$metab_group <- c(as.character(anno_row$metab_group[1:(which(rownames(xmts) == "Albumin") - 1)]), rep("clinical parameter", nrow(anno_row) - which(rownames(xmts) == "Albumin") + 1))
 anno_row$metab_group <- factor(anno_row$metab_group)
@@ -1048,16 +1049,20 @@ phm <- pheatmap(mat = xmts[, pat_order],
          cluster_cols = FALSE, 
          annotation_col = anno_col[pat_order, ],
          annotation_row = anno_row,
-         annotation_colors = list(Group = c(`Septic-S` = hue_pal()(4)[3], `Septic-NS` = hue_pal()(4)[1], `n.Septic-S` = hue_pal()(4)[2], `n.Septic-NS` = hue_pal()(4)[4]),
+         annotation_colors = list(Group = c(`Septic-S` = hue_pal()(4)[3], `Septic-NS` = hue_pal()(4)[1], `non-Septic-S` = hue_pal()(4)[2], `non-Septic-NS` = hue_pal()(4)[4]),
                                   `CAP / FP` = c(`-` = "Grey70", `CAP` = brewer_pal()(2)[1], `FP` = brewer_pal()(2)[2]), 
+                                  Day = setNames(seq_gradient_pal(low = "grey97", high = colors()[472])(seq(0, 1, length.out = length(unique(anno_col$Day)))), unique(anno_col$Day)),
                                   `Metab. group` = setNames(hue_pal()(length(unique(anno_row$`Metab. group`))), unique(anno_row$`Metab. group`))),
          gaps_col = which(diff(as.numeric(anno_col$Group[pat_order])) != 0),
          gaps_row = which(diff(as.numeric(anno_row$`Metab. group`)) != 0),
          labels_row = y_expr,
+         labels_col = rep("", ncol(xmts)),
          filename = paste0(out_dir, "human_heatmap_metab_sig_s_pheat_thresh005.png"),
          silent = TRUE,
-         width = 21,
-         height = 9)
+         width = 9,
+         height = 10)
+##Save for combination with ROC plots in different skript
+saveRDS(object = phm, file = "sig_feat_all_pats_heatmap.RData")
 
 #Also for pheno vars
 xm <- x[, c(1:6, pheno_sel)]
@@ -1559,10 +1564,10 @@ for (n in seq_along(ss)[sapply(ss, length) > 0]){
   #h_time_course_sig_diff_dat <- melt(max_norm(full_tanova_data, subset = -1:-6), id.vars = c("Patient", "Survival", "Day", "Sample ID", "CAP / FP"))
   h_time_course_sig_diff_dat <- melt(full_tanova_data, id.vars = c("Patient", "Survival", "Day", "Sample ID", "CAP / FP", "Group"))
   if (n == 1){
-    h_time_course_sig_diff_dat <- subset(h_time_course_sig_diff_dat, subset = Survival != "n.Septic")
-    cms <- colMaxs(as.matrix(subset(full_tanova_data, !grepl(pattern = "n.Septic", x = Survival), -1:-6)))
+    h_time_course_sig_diff_dat <- subset(h_time_course_sig_diff_dat, subset = Survival != "non-Septic")
+    cms <- colMaxs(as.matrix(subset(full_tanova_data, !grepl(pattern = "non-Septic", x = Survival), -1:-6)))
   }else{
-    h_time_course_sig_diff_dat$Group <- factor(c("Septic", "Nonseptic")[1 + (h_time_course_sig_diff_dat$Survival == "n.Septic")])
+    h_time_course_sig_diff_dat$Group <- factor(c("Septic", "non-Septic")[1 + (h_time_course_sig_diff_dat$Survival == "non-Septic")])
     cms <- colMaxs(as.matrix(full_tanova_data[, -1:-6]))
   }
   h_time_course_sig_diff_dat <- subset(h_time_course_sig_diff_dat, subset = as.character(variable) %in% ss[[n]])
@@ -1603,7 +1608,7 @@ for (n in seq_along(ss)[sapply(ss, length) > 0]){
       human_col_scale(black_color = "grey40", levels = c("Septic-NS", "", "Septic-S", "", "Healthy_Fr"))
   }else{
     h_time_course_sig_diff_plot <- h_time_course_sig_diff_plot + 
-      human_col_scale(black_color = "grey40", levels = c("Septic", "n.Septic", "", "", "Healthy_Fr"))
+      human_col_scale(black_color = "grey40", levels = c("Septic", "non-Septic", "", "", "Healthy_Fr"))
   }
   h_time_course_sig_diff_plot <- h_time_course_sig_diff_plot +
     ylab("Concentration, µM") + 
@@ -1622,10 +1627,10 @@ for (n in seq_along(ss)[sapply(ss, length) > 0]){ #only runs for sepsis
   #h_time_course_sig_diff_dat <- melt(max_norm(full_tanova_data, subset = -1:-6), id.vars = c("Patient", "Survival", "Day", "Sample ID", "CAP / FP"))
   h_time_course_sig_diff_dat <- melt(full_tanova_data, id.vars = c("Patient", "Survival", "Day", "Sample ID", "CAP / FP", "Group"))
   if (n == 1){
-    h_time_course_sig_diff_dat <- subset(h_time_course_sig_diff_dat, subset = Survival != "n.Septic" & Day %in% tanova_day_set)
-    cms <- colMaxs(as.matrix(subset(full_tanova_data, !grepl(pattern = "n.Septic", x = Survival), -1:-6)))
+    h_time_course_sig_diff_dat <- subset(h_time_course_sig_diff_dat, subset = Survival != "non-Septic" & Day %in% tanova_day_set)
+    cms <- colMaxs(as.matrix(subset(full_tanova_data, !grepl(pattern = "non-Septic", x = Survival), -1:-6)))
   }else{
-    h_time_course_sig_diff_dat$Group <- factor(c("Septic", "Nonseptic")[1 + (h_time_course_sig_diff_dat$Survival == "n.Septic")])
+    h_time_course_sig_diff_dat$Group <- factor(c("Septic", "non-Septic")[1 + (h_time_course_sig_diff_dat$Survival == "non-Septic")])
     cms <- colMaxs(as.matrix(full_tanova_data[, -1:-6]))
   }
   h_time_course_sig_diff_dat <- subset(h_time_course_sig_diff_dat, subset = as.character(variable) %in% ss[[n]])
@@ -1660,9 +1665,9 @@ for (n in seq_along(ss)[sapply(ss, length) > 0]){ #only runs for sepsis
   ggsave(plot = h_time_course_sig_diff_plot, filename = paste0("human_pheno_time_course_car_rm_anova_", fs[[n]], "_sig_diff.png"), path = out_dir, width = 12, height = 0.3 + 1.5 * ceiling(n_mets/5), units = "in")
 }
 
-##Human, metabolite concentrations signif. diff. between Septic-NS and n.Septic-NS in type 3 ANOVA
+##Human, metabolite concentrations signif. diff. between Septic-NS and non-Septic-NS in type 3 ANOVA
 h_time_course_sig_diff_dat <- melt(full_tanova_data, id.vars = c("Patient", "Survival", "Day", "Sample ID", "CAP / FP", "Group"))
-h_time_course_sig_diff_dat <- subset(h_time_course_sig_diff_dat, variable %in% sig.anova.car.nssepnon.class & Group %in% c("n.Septic-NS", "Septic-NS"))
+h_time_course_sig_diff_dat <- subset(h_time_course_sig_diff_dat, variable %in% sig.anova.car.nssepnon.class & Group %in% c("non-Septic-NS", "Septic-NS"))
 h_time_course_sig_diff_dat$Group <- factor(h_time_course_sig_diff_dat$Group)
 cms <- colMaxs(as.matrix(subset(full_tanova_data, grepl(pattern = "-NS", x = Group), -1:-6)))
 h_time_course_group <- data.frame(variable = sort(unique(h_time_course_sig_diff_dat$variable)), value = 1, Day = 3, text = coarse_group_list[match(sort(unique(h_time_course_sig_diff_dat$variable)), colnames(human_sepsis_data)[-1:-6])])
@@ -1687,16 +1692,16 @@ h_time_course_sig_diff_plot <- ggplot(h_time_course_sig_diff_dat, aes(x = factor
   geom_rect(data = hhr, mapping = aes(xmin = -Inf, xmax = Inf, ymin = LQ, ymax = UQ, colour = Group), fill = "grey70", linetype = 0, alpha = 0.2, inherit.aes = FALSE) +
   geom_hline(data = hhr, mapping = aes(yintercept = Median), colour = "grey40") +
   geom_point(position = position_dodge(width = 0.2)) +
-  human_col_scale(black_color = "grey40", levels = c("Septic-NS", "", "", "n.Septic-NS", "Healthy_Fr")) +
+  human_col_scale(black_color = "grey40", levels = c("Septic-NS", "", "", "non-Septic-NS", "Healthy_Fr")) +
   ylab("Concentration, µM") + 
   xlab("Day") + 
-  ggtitle(paste0("Metabolites significantly differing between Septic-NS and n.Septic-NS by repeated measures ANOVA")) + 
+  ggtitle(paste0("Metabolites significantly differing between Septic-NS and non-Septic-NS by repeated measures ANOVA")) + 
   theme_bw()
 ggsave(plot = h_time_course_sig_diff_plot, filename = paste0("human_metab_time_course_car_rm_anova_septicns_nonsepns_sig_diff.png"), path = out_dir, width = 12, height = 0.3 + 1.5 * ceiling(n_mets/5), units = "in")
 
-##Human, metabolite concentrations signif. diff. between n.Septic-S and n.Septic-NS in type 3 ANOVA
+##Human, metabolite concentrations signif. diff. between non-Septic-S and non-Septic-NS in type 3 ANOVA
 h_time_course_sig_diff_dat <- melt(full_tanova_data, id.vars = c("Patient", "Survival", "Day", "Sample ID", "CAP / FP", "Group"))
-h_time_course_sig_diff_dat <- subset(h_time_course_sig_diff_dat, variable %in% sig.anova.car.cnscs.class & Group %in% c("n.Septic-NS", "n.Septic-S"))
+h_time_course_sig_diff_dat <- subset(h_time_course_sig_diff_dat, variable %in% sig.anova.car.cnscs.class & Group %in% c("non-Septic-NS", "non-Septic-S"))
 h_time_course_sig_diff_dat$Group <- factor(h_time_course_sig_diff_dat$Group)
 cms <- colMaxs(as.matrix(subset(full_tanova_data, grepl(pattern = "-NS", x = Group), -1:-6)))
 h_time_course_group <- data.frame(variable = sort(unique(h_time_course_sig_diff_dat$variable)), value = 1, Day = 3, text = coarse_group_list[match(sort(unique(h_time_course_sig_diff_dat$variable)), colnames(human_sepsis_data)[-1:-6])])
@@ -1721,10 +1726,10 @@ h_time_course_sig_diff_plot <- ggplot(h_time_course_sig_diff_dat, aes(x = factor
   geom_rect(data = hhr, mapping = aes(xmin = -Inf, xmax = Inf, ymin = LQ, ymax = UQ, colour = Group), fill = "grey70", linetype = 0, alpha = 0.2, inherit.aes = FALSE) +
   geom_hline(data = hhr, mapping = aes(yintercept = Median), colour = "grey40") +
   geom_point(position = position_dodge(width = 0.2)) +
-  human_col_scale(black_color = "grey40", levels = c("", "n.Septic-S", "", "n.Septic-NS", "Healthy_Fr")) +
+  human_col_scale(black_color = "grey40", levels = c("", "non-Septic-S", "", "non-Septic-NS", "Healthy_Fr")) +
   ylab("Concentration, µM") + 
   xlab("Day") + 
-  ggtitle(paste0("Metabolites significantly differing between n.Septic-S and n.Septic-NS by repeated measures ANOVA")) + 
+  ggtitle(paste0("Metabolites significantly differing between non-Septic-S and non-Septic-NS by repeated measures ANOVA")) + 
   theme_bw()
 ggsave(plot = h_time_course_sig_diff_plot, filename = paste0("human_metab_time_course_car_rm_anova_cns_cs_sig_diff.png"), path = out_dir, width = 12, height = 0.3 + 1.5 * ceiling(n_mets/5), units = "in")
 
@@ -1861,6 +1866,7 @@ for (pat in unique(subset(human_data_patient_group_mean_all_days, Survival == "N
     human_col_scale() +
     theme_bw() + 
     theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 6), panel.grid = element_line(colour = 0))
+  #TODO: fix
   ggsave(filename = paste0("human_metab_nonsig_single_plot_SD_pat_", pat, ".png"), path = out_dir, plot = p, width = 16, height = 7, units = "in")
 }
 cntrl_and_s <- human_data_patient_group_mean_all_days
@@ -1894,6 +1900,7 @@ p <- ggplot(data = subset(cntrl_and_s, Survival != "NS"), mapping = aes(y = valu
   human_col_scale() +
   theme_bw() + 
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 6), panel.grid = element_line(colour = 0))
+#TODO: fix
 ggsave(filename = paste0("human_metab_nonsig_single_plot_SD_all_pats.png"), path = out_dir, plot = p, width = 16, height = 9.5, units = "in")
 ##Same as above, but with Survivor min-max as corridor
 pat_dev_score <- subset(human_data, Day %in% tanova_day_set, select = setdiff(which(!(colnames(human_data) %in% sig.anova.car.s.class)), pheno_sel)) # select already includes cols 1:6
@@ -1919,26 +1926,28 @@ pat_path <- subset(pat_path, interaction(variable, Patient) %in% interaction(sde
 pat_path$x <- match(pat_path$variable, unique(hsd$variable))
 pat_path$x <- pat_path$x + (scale(seq_along(unique(pat_path$Day)))/4)[unlist(lapply(rle(pat_path$Patient)[["lengths"]], function(to) 1:to))]
 pat_path$metabolite_group <- human_sepsis_legend$group[match(pat_path$variable, human_sepsis_legend[, 1])]
+rsize <- rel(4.5)
 p <- ggplot(data = subset(hsd, Survival == "S"), mapping = aes(y = value, x = variable, color = Group)) +
-  stat_summary(fun.y = "mean", fun.ymin = "min", fun.ymax = "max", position = position_dodge(width = 0.7), geom = "errorbar") +
-  stat_summary(fun.y = "mean", fun.ymin = "mean", fun.ymax = "mean", position = position_dodge(width = 0.7), geom = "errorbar") +
-  geom_line(data = pat_path, mapping = aes(y = value, x = x, color = Group, group = interaction(variable, Patient), linetype = factor(Patient)), inherit.aes = FALSE) +
-  geom_tile(mapping = aes(x = variable, y = 1e-4, fill = metabolite_group), width = 1, height = 0.5, data = pat_path, inherit.aes = FALSE) +
-  geom_point(mapping = aes(x = Metabolite, y = 3.5e-5, shape = factor(score)), data = minmax_corridor_met_sel, inherit.aes = FALSE) +
-  geom_tile(mapping = aes(x = Metabolite, y = 3.5e-5), width = 1, height = 0.5, fill = minmax_corridor_met_sel$color, data = minmax_corridor_met_sel, inherit.aes = FALSE) +
-  guides(color = guide_legend(order = 1),
+  stat_summary(fun.y = "mean", fun.ymin = "min", fun.ymax = "max", position = position_dodge(width = 0.7), geom = "errorbar", size = rel(0.8)) +
+  #stat_summary(fun.y = "mean", fun.ymin = "mean", fun.ymax = "mean", position = position_dodge(width = 0.7), geom = "errorbar") +
+  geom_line(data = pat_path, mapping = aes(y = value, x = x, color = Group, group = interaction(variable, Patient), linetype = factor(Patient)), size = rel(0.8), inherit.aes = FALSE) +
+  geom_tile(mapping = aes(x = variable, y = 2e-3, fill = metabolite_group), width = 1, height = 0.15, data = pat_path, inherit.aes = FALSE) +
+  geom_point(mapping = aes(x = Metabolite, y = 1.45e-3, shape = factor(score)), data = minmax_corridor_met_sel, inherit.aes = FALSE) +
+  geom_tile(mapping = aes(x = Metabolite, y = 1.45e-3), width = 1, height = 0.15, fill = minmax_corridor_met_sel$color, data = minmax_corridor_met_sel, inherit.aes = FALSE) +
+  guides(color = guide_legend(title = "Patient Group", order = 1),
         fill = guide_legend(title = "Metabolite Group", order = 2),
-        shape = guide_legend(title = "#NS pats with deviation", override.aes = list(shape = 15, size = 6, colour = sort(unique(minmax_corridor_met_sel$color))), order = 3),
+        shape = guide_legend(title = "Number of patients\nwith deviation", override.aes = list(shape = 15, size = 6, colour = sort(unique(minmax_corridor_met_sel$color))), order = 3),
         linetype = guide_legend(title = "NS Patient", override.aes = list(color = hue_pal()(4)[c(4, 1)[1 + (subset(hsd, !duplicated(Patient) & Survival == "NS", "Group")[[1]] == "Septic-NS")]]), order = 4)) +
   scale_color_discrete(drop = FALSE) +
   scale_y_log10(expand = c(0,0)) +
   #scale_y_continuous(trans = pseudo_log_trans(sigma = 0.25, base = 2), expand = c(0, 0), limits = c(-10, 1000)) +
   ylab("Concentration, µM") +
-  xlab("Metabolite") +
+  xlab("") +
   human_col_scale() +
   theme_bw() + 
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 6), panel.grid = element_line(colour = 0))
-ggsave(filename = paste0("human_metab_nonsig_single_plot_minmax_all_pats.png"), path = out_dir, plot = p, width = 16, height = 9.5, units = "in")
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = rsize), panel.grid = element_line(colour = 0), text = element_text(size = rsize), axis.text.y = element_text(size = rsize), legend.text = element_text(size = rsize), legend.box = "vertical", legend.position = "bottom")
+ggsave(filename = paste0("human_metab_nonsig_single_plot_minmax_all_pats.png"), path = out_dir, plot = p, width = 16, height = 16, units = "in")
+p_main <- p
 
 hsd_lpc24 <- subset(human_data, Day %in% tanova_day_set)
 hsd_lpc24 <- melt(hsd_lpc24, id.vars = 1:6)
@@ -1946,22 +1955,31 @@ hsd_lpc24 <- subset(hsd_lpc24, as.character(variable) == "lysoPC a C24:0" & Surv
 hsd_lpc24_max <- aggregate(x = hsd_lpc24$value, by = list(Group = hsd_lpc24$Group), FUN = max)
 hsd_lpc24_min <- aggregate(x = hsd_lpc24$value, by = list(Group = hsd_lpc24$Group), FUN = min)
 pp_lpc24 <- subset(melt(subset(human_data, Survival == "NS" & Day %in% tanova_day_set), id.vars = 1:6), as.character(variable) == "lysoPC a C24:0")
+rsize <- rel(4.5)
 p <- ggplot(data = pp_lpc24, mapping = aes(y = value, x = Day, color = Group, group = Patient, linetype = factor(Patient))) +
   facet_wrap(~ variable, ncol = 1, nrow = 1) +
-  geom_line() +
+  geom_line(size = rel(0.8)) +
   scale_y_continuous(limits = c(0, 1), expand = c(0, 0)) +
-  geom_hline(data = hsd_lpc24_min, mapping = aes(color = Group, yintercept = x)) +
-  geom_hline(data = hsd_lpc24_max, mapping = aes(color = Group, yintercept = x)) +
-  guides(color = guide_legend(order = 1),
-         linetype = guide_legend(title = "NS Patient", override.aes = list(color = hue_pal()(4)[c(4, 1)[1 + (subset(hsd, !duplicated(Patient) & Survival == "NS", "Group")[[1]] == "Septic-NS")]]), order = 4)) +
+  geom_hline(data = hsd_lpc24_min, mapping = aes(color = Group, yintercept = x), size = rel(0.8)) +
+  geom_hline(data = hsd_lpc24_max, mapping = aes(color = Group, yintercept = x), size = rel(0.8)) +
+  # guides(color = guide_legend(order = 1),
+  #        linetype = guide_legend(title = "NS Patient", override.aes = list(color = hue_pal()(4)[c(4, 1)[1 + (subset(hsd, !duplicated(Patient) & Survival == "NS", "Group")[[1]] == "Septic-NS")]]), order = 4)) +
+  guides(color = "none", linetype = "none", group = "none") +
   scale_color_discrete(drop = FALSE) +
   #scale_y_continuous(trans = pseudo_log_trans(sigma = 0.25, base = 2), expand = c(0, 0), limits = c(-10, 1000)) +
-  ylab("Concentration, µM") +
+  #ylab("Concentration, µM") +
+  ylab("") +
   xlab("Day") +
   human_col_scale() +
   theme_bw() + 
-  theme(axis.text.x = element_text(angle = 0, vjust = 0.5, size = 10), panel.grid = element_line(colour = 0))
+  theme(axis.text.x = element_text(angle = 0, vjust = 0.5, size = 10), panel.grid = element_line(colour = 0), text = element_text(size = rsize), strip.text = element_text(size = rsize), strip.background = element_blank())
 ggsave(filename = paste0("human_metab_nonsig_single_plot_minmax_all_pats_lysoPCaC24.png"), path = out_dir, plot = p, width = 5, height = 5, units = "in")
+p_insert <- p
+
+p_combined <- ggdraw(p_main) + 
+  draw_plot(p_insert, 0.71, 0.715, 0.28, 0.28) +
+  draw_plot_label(label = c("A", "B"), x = c(0, 0.71), y = c(1, 0.995), size = 20)
+ggsave(filename = "human_metab_nonsig_single_plot_minmax_all_pats_panel.png", path = out_dir, plot = p_combined, width = 16, height = 16, units = "in")
 
 ###Generalize the corridor principle to a classification scheme, use corridor 
 corridor <- as.data.frame(t(sapply(unique(cntrl_and_s$variable), 
@@ -1993,7 +2011,7 @@ w <- which.xy(udev) # tell me which variables make a difference
 mtab <- sort(table(w[, 2]), decreasing = TRUE)
 names(mtab) <- colnames(pat_dev_score)[-1:-6][as.numeric(names(mtab))]
 mtab
-##Generalized corridor defined by min and max of survivor (septic and nonseptic)
+##Generalized corridor defined by min and max of survivor (septic and non-Septic)
 pat_dev_score <- subset(human_data, Day %in% 0:3, select = setdiff(which(!(colnames(human_data) %in% sig.anova.car.s.class)), pheno_sel)) # select already includes cols 1:6
 pat_dev_max <- colMaxs(as.matrix(pat_dev_score[pat_dev_score$Survival == "S", -1:-6]))
 pat_dev_min <- colMins(as.matrix(pat_dev_score[pat_dev_score$Survival == "S", -1:-6]))
@@ -2018,7 +2036,8 @@ p_thresh_sig <- p_thresh_sig[, order(p_thresh_sig[1, ])]
 p_thresh_sig <- rbind(p_thresh_sig, unlist(lapply(names(p_thresh_nonu), function(nonu) 1:p_thresh_nonu[nonu] - 0.5)))
 p_thresh_sig <- data.frame(t(p_thresh_sig))
 colnames(p_thresh_sig) <- c("score", "include", "y")
-#TODO: add significance mark to blocks in deviation plot
+p_thresh_sig_UK_minmax <- p_thresh_sig
+p_thresh_UK_minmax <- p_thresh
 p <- ggplot(data = dev_score, mapping = aes(fill = Group, x = score)) +
   geom_histogram(position = position_stack(), bins = max(dev_score$score) + 1) +
   geom_point(data = subset(p_thresh_sig, include == 1), mapping = aes(x = score, y = y), shape = 8, size = 1.2, inherit.aes = FALSE) +
@@ -2028,6 +2047,15 @@ p <- ggplot(data = dev_score, mapping = aes(fill = Group, x = score)) +
   theme_bw() +
   theme(panel.grid = element_blank(), legend.direction = "horizontal", legend.position = "bottom")
 ggsave(plot = p, filename = "generalized_safe_corridor_minmax.png", path = out_dir, width = 8, height = 4, units = "in")
+dev_score$x <- factor("This study")
+pbox <- ggplot(data = subset(dev_score, Group %in% c("Septic-NS", "non-Septic-NS")), mapping = aes(fill = Group, x = score, y = x, colour = Group)) +
+  geom_dotplot(stackdir = "center", binaxis = "x") + 
+  human_col_scale(aesthetics = c("fill", "colour")) +
+  xlab("Number of metabolites outside of the safe corridor at Days 0-3") +
+  theme_bw() +
+  theme(panel.grid = element_blank(), legend.direction = "horizontal", legend.position = "bottom")
+ggsave(plot = pbox, filename = "generalized_safe_corridor_minmax_box.png", path = out_dir, width = 8, height = 4, units = "in")
+dev_score_UK_minmax <- dev_score
 print(paste0("Contribution of high deviation and low deviation to score is ", sum(udev), " and ", sum(ldev), " respectively."))
 w <- which.xy(udev | ldev) # tell me which variables make a difference
 mtab <- sort(table(w[, 2]), decreasing = TRUE)
@@ -2061,7 +2089,7 @@ colSums(min_met_set_for_dev[, 1 + grep(pattern = "SM", x = colnames(min_met_set_
 rowSums(min_met_set_for_dev[, 1 + grep(pattern = "SM", x = colnames(min_met_set_for_dev)[-1])])
 sink()
 
-nNS_min_met_set <- subset(sdev, Patient %in% human_data$Patient[human_data$Group == "n.Septic-NS"])
+nNS_min_met_set <- subset(sdev, Patient %in% human_data$Patient[human_data$Group == "non-Septic-NS"])
 rowSums(nNS_min_met_set[c("lysoPC a C24:0", "PC aa C36:0", "lysoPC a C18:2")])
 
 ##Generalized corridor validation on Ferrario data
@@ -2095,6 +2123,13 @@ ldev <- vd[, -1:-2] < matrix(vd_min, ncol = ncol(vd) - 2, nrow = nrow(vd), byrow
 sdev <- aggregate(udev | ldev, by = list(Patient = vd$Patient), FUN = max) #count same metabolite at two time points as one deviation
 dev_score <- data.frame(Patient = sdev$Patient, score = rowSums(sdev[, -1]))
 dev_score$Survival <- vd$Survival28[match(dev_score$Patient, vd$Patient)]
+{
+  m <- vd
+  m <- m[, !(colnames(m) %in% sig.anova.car.val.s.class)]
+  di <- which(m$Survival == "NS")
+  dev_rep_res <- sapply(X = 1:1000, FUN = sim_dev, n = nrow(m), d = ncol(m) - 1, dev_idx = di, sample_groups = m$Patient)
+}
+p_thresh <- apply(dev_rep_res, 1, quantile, p = 0.95, names = FALSE)
 p <- ggplot(data = dev_score, mapping = aes(fill = Survival, x = score)) +
   geom_histogram(position = position_stack(), bins = max(dev_score$score) + 1) +
   ylab("Number of Patients") +
@@ -2102,6 +2137,23 @@ p <- ggplot(data = dev_score, mapping = aes(fill = Survival, x = score)) +
   theme_bw() +
   theme(panel.grid = element_blank())
 ggsave(plot = p, filename = "generalized_safe_corridor_Ferrario_minmax.png", path = out_dir, width = 6, height = 3, units = "in")
+dev_score_vd_minmax <- dev_score
+dev_score_vd_minmax$x <- factor("Ferrario et al.")
+dev_score_vd_minmax$Group <- paste0("Septic-", dev_score_vd_minmax$Survival)
+dev_score_cb_minmax <- rbind(dev_score_UK_minmax, dev_score_vd_minmax)
+dev_score_cb_minmax$x <- factor(dev_score_cb_minmax$x)
+pbox <- ggplot(data = subset(dev_score_cb_minmax, Survival == "NS"), mapping = aes(fill = Group, x = x, y = score, colour = Group)) +
+  geom_dotplot(stackdir = "center", binaxis = "y", dotsize = 0.7) + 
+  human_col_scale(aesthetics = c("fill", "colour")) +
+  scale_x_discrete(limits = levels(dev_score_cb_minmax$x)[2:1]) +
+  geom_path(inherit.aes = FALSE, data = data.frame(y = min(subset(p_thresh_sig_UK_minmax, include == 1)$score) - 1, x = 1 + c(0.6, 1.4)), mapping = aes(x, y), linetype = 2) +
+  geom_path(inherit.aes = FALSE, data = data.frame(y = mean(p_thresh), x = c(0.6, 1.4)), mapping = aes(x, y), linetype = 2) +
+  coord_flip() +
+  ylab("Number of metabolites outside of the safe corridor per patient") +
+  xlab("") +
+  theme_bw() +
+  theme(panel.grid = element_blank(), legend.direction = "horizontal", legend.position = "bottom", legend.title = element_blank())
+ggsave(plot = pbox, filename = "generalized_safe_corridor_minmax_box_UK_Ferrario.png", path = out_dir, width = 7, height = 2.5, units = "in")
 print(paste0("Contribution of high deviation and low deviation to score is ", sum(udev), " and ", sum(ldev), " respectively."))
 w <- which.xy(udev | ldev) # tell me which variables make a difference
 mtab <- sort(table(w[, 2]), decreasing = TRUE)

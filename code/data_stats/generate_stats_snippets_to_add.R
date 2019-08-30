@@ -11,7 +11,9 @@ library(ggplot2)
 library(ggfortify)
 library(ggrepel)
 library(parallel)
+library(stringi)
 library(tictoc)
+library(cowplot)
 
 source("../function_definitions.R")
 
@@ -19,7 +21,11 @@ out_dir <- "../../results/data_stats_NS_high_var/"
 if (!dir.exists(out_dir))
   dir.create(out_dir)
 
-num_cores <- 7
+if (stri_detect(str = R.version$os, fixed = "linux")){
+  num_cores <- min(detectCores() - 4, 100)
+}else{
+  num_cores <- 1
+}
 
 #Read data
 human_data <- get_human_sepsis_data()
@@ -117,25 +123,125 @@ ggplot(data = pts, mapping = aes(x = MDS1, y = MDS2, color = Group)) +
   theme_bw()
 
 ##Metabolites in metabolite groups, all patients
-met_group_res <- list()
-tic()
-for (met_group in unique(human_data_legend$group[metab_sel])){
-  met_group_idx <- which(human_data_legend$group == met_group)
-  human_data_dist <- cbind(human_data[,1:6], as.matrix(dist(x = human_data[, met_group_idx], method = "canberra"))) # distance() works on a per row basis
-  pat_list <- human_data[, 1:6]
-  p <- prcomp(human_data_dist[, -1:-6])
+if (file.exists("met_group_balanced_permanova_res.RData")){
+  met_group_res <- readRDS(file = "met_group_balanced_permanova_res.RData")
+}else{
+  met_group_res <- list()
+  tic()
+  for (met_group in unique(human_data_legend$group[metab_sel])){
+    met_group_idx <- which(human_data_legend$group == met_group)
+    human_data_dist <- cbind(human_data[,1:6], as.matrix(dist(x = human_data[, met_group_idx], method = "canberra"))) # distance() works on a per row basis
+    pat_list <- human_data[, 1:6]
+    p <- prcomp(human_data_dist[, -1:-6])
+    
+    ###PERMANOVA with bootstrapping
+    ad_data <- human_data_dist
+    PCs <- p$x[, 1:2]
+    c_idx <- which(ad_data$Group %in% c("non-Septic-NS", "non-Septic-S"))
+    cns_idx <- which(ad_data$Group == "non-Septic-NS")
+    cs_idx <- which(ad_data$Group == "non-Septic-S")
+    s_idx <- which(ad_data$Group == "Septic-S")
+    ns_idx <- which(ad_data$Group == "Septic-NS")
+    ad_res_mc <- mclapply(1:100, 
+                          function(dx, c_idx, s_idx, ns_idx, cns_idx, PCs, ad_data){
+                            set.seed(dx + 500)
+                            num_c <- length(c_idx)
+                            num_s <- length(s_idx)
+                            num_ns <- length(ns_idx)
+                            num_cns <- length(cns_idx)
+                            num_c_vs_s <- min(num_c, num_s)
+                            num_c_vs_ns <- min(num_c, num_ns)
+                            num_s_vs_ns <- min(num_s, num_ns)
+                            num_ns_vs_cns <- min(num_ns, num_cns)
+                            take_CvsS <- c(sample(x = c_idx, size = num_c_vs_s), sample(x = s_idx, size = num_c_vs_s))
+                            take_CvsNS <- c(sample(x = c_idx, size = num_c_vs_ns), sample(x = ns_idx, size = num_c_vs_ns))
+                            take_SvsNS <- c(sample(x = s_idx, size = num_s_vs_ns), sample(x = ns_idx, size = num_s_vs_ns))
+                            take_NSvsCNS <- c(sample(x = ns_idx, size = num_ns_vs_cns), sample(x = cns_idx, size = num_ns_vs_cns))
+                            Y1 <- PCs[take_CvsS,]
+                            Y2 <- PCs[take_CvsNS,]
+                            Y3 <- PCs[take_SvsNS,]
+                            Y4 <- PCs[take_NSvsCNS,]
+                            ad_data1 <- ad_data[take_CvsS, ]
+                            ad_data2 <- ad_data[take_CvsNS, ]
+                            ad_data3 <- ad_data[take_SvsNS, ]
+                            ad_data4 <- ad_data[take_NSvsCNS, ]
+                            ad_C_vs_S <- adonis(formula = Y1 ~ Group, data = ad_data1, permutations = 10000, parallel = 1, method = "euclidean")
+                            ad_C_vs_NS <- adonis(formula = Y2 ~ Group, data = ad_data2, permutations = 10000, parallel = 1, method = "euclidean")
+                            ad_S_vs_NS <- adonis(formula = Y3 ~ Group, data = ad_data3, permutations = 10000, parallel = 1, method = "euclidean")
+                            ad_NS_vs_CNS <- adonis(formula = Y4 ~ Group, data = ad_data4, permutations = 10000, parallel = 1, method = "euclidean")
+                            list(ad_C_vs_S = ad_C_vs_S, ad_C_vs_NS = ad_C_vs_NS, ad_S_vs_NS = ad_S_vs_NS, ad_NS_vs_CNS = ad_NS_vs_CNS)
+                          }, 
+                          c_idx = c_idx, s_idx = s_idx, ns_idx = ns_idx, cns_idx = cns_idx, PCs = PCs, ad_data = ad_data,
+                          mc.cores = num_cores)
   
-  ###PERMANOVA with bootstrapping
-  ad_data <- human_data_dist
-  PCs <- p$x[, 1:2]
-  c_idx <- which(ad_data$Group %in% c("n.Septic-NS", "n.Septic-S"))
-  cns_idx <- which(ad_data$Group == "n.Septic-NS")
-  cs_idx <- which(ad_data$Group == "n.Septic-S")
-  s_idx <- which(ad_data$Group == "Septic-S")
-  ns_idx <- which(ad_data$Group == "Septic-NS")
+    ###Compare step lengths of between patient groups, compare PCA-transformed points
+    pat_step_len <- list()
+    pat_x_len <- list()
+    pat_y_len <- list()
+    for (pat in pat_list$Patient){
+      ind <- which(human_data$Patient == pat)
+      x <- p$x[ind, 1]
+      y <- p$x[ind, 2]
+      pat_step_len[[pat]] <- sapply(diff(x) ^ 2 + diff(y) ^ 2, sqrt)
+      pat_x_len[[pat]] <- abs(diff(x))
+      pat_y_len[[pat]] <- abs(diff(y))
+    }
+    names(pat_step_len) <- as.character(1:length(pat_step_len))
+    names(pat_x_len) <- names(pat_step_len)
+    names(pat_y_len) <- names(pat_step_len)
+    pat_step_len_df <- data.frame(Patient = rep(names(pat_step_len), times = sapply(pat_step_len, length)), step_len = unlist(pat_step_len), x_len = unlist(pat_x_len), y_len = unlist(pat_y_len))
+    pat_step_len_df$Group <- pat_list$Group[match(pat_step_len_df$Patient, pat_list$Patient)]
+    pat_step_len_df$Group <- factor(pat_step_len_df$Group, levels = unique(pat_step_len_df$Group))
+    pat_step_len_long_df <- melt(pat_step_len_df, id.vars = c("Patient", "Group"))
+    pat_step_len_long_df$variable <- factor(pat_step_len_long_df$variable, labels = c("Euclidean step length", "X only", "Y only"))
+    
+    num_NS_vals <- sum(pat_step_len_df$Group == "Septic-NS")
+    num_S_vals <- sum(pat_step_len_df$Group == "Septic-S")
+    bt_step_res <- mclapply(1:100,
+                            function(dx, pat_step_len_df, num_S_vals, num_NS_vals){
+                              set.seed(dx + 1000)
+                              bootstr_dat <- rbind(subset(pat_step_len_df, Group == "Septic-NS"), subset(pat_step_len_df, Group == "Septic-S")[sample(num_S_vals, size = num_NS_vals), ])
+                              bootstr_dat$Group <- factor(bootstr_dat$Group)
+                              ad_step1 <- adonis(formula = step_len ~ Group, data = bootstr_dat, method = "euclidean", permutations = 10000, parallel = 1)
+                              ad_step2 <- adonis(formula = x_len ~ Group, data = bootstr_dat, method = "euclidean", permutations = 10000, parallel = 1)
+                              ad_step3 <- adonis(formula = y_len ~ Group, data = bootstr_dat, method = "euclidean", permutations = 10000, parallel = 1)
+                              t_r1 <- t.test(formula = step_len ~ Group, data = bootstr_dat, var.equal = FALSE)
+                              t_r2 <- t.test(formula = x_len ~ Group, data = bootstr_dat, var.equal = FALSE)
+                              t_r3 <- t.test(formula = y_len ~ Group, data = bootstr_dat, var.equal = FALSE)
+                              list(ad_step1 = ad_step1, ad_step2 = ad_step2, ad_step3 = ad_step3, t_r1 = t_r1, t_r2 = t_r2, t_r3 = t_r3)
+                            },
+                            pat_step_len_df = pat_step_len_df, num_S_vals = num_S_vals, num_NS_vals = num_NS_vals,
+                            mc.cores = num_cores)
+    met_group_res[[met_group]] <- list(ad = ad_res_mc, 
+                                       bt = bt_step_res)
+  }
+  toc()
+  saveRDS(object = met_group_res, file = "met_group_balanced_permanova_res.RData")
+}
+
+##Metabolites, all patients
+human_data_dist <- cbind(human_data[,1:6], as.matrix(dist(x = human_data[, metab_sel], method = "canberra"))) # distance() works on a per row basis
+p <- prcomp(human_data_dist[, -1:-6])
+
+###PERMANOVA with bootstrapping, only contrast 1-vs-1
+ad_data <- human_data_dist
+pat_list <- human_data_dist[, 1:6]
+PCs <- p$x[, 1:2]
+c_idx <- which(ad_data$Group %in% c("non-Septic-NS", "non-Septic-S"))
+s_idx <- which(ad_data$Group == "Septic-S")
+ns_idx <- which(ad_data$Group == "Septic-NS")
+cns_idx <- which(ad_data$Group == "non-Septic-NS")
+ad_res1 <- list()
+ad_res2 <- list()
+ad_res3 <- list()
+ad_res4 <- list()
+if (file.exists("all_metabs_balanced_permanova_res.RData")){
+  ad_res_mc <- readRDS(file = "all_metabs_balanced_permanova_res.RData")
+}else{
+  tic()
   ad_res_mc <- mclapply(1:100, 
                         function(dx, c_idx, s_idx, ns_idx, cns_idx, PCs, ad_data){
-                          set.seed(dx + 500)
+                          set.seed(dx + 1500)
                           num_c <- length(c_idx)
                           num_s <- length(s_idx)
                           num_ns <- length(ns_idx)
@@ -143,7 +249,7 @@ for (met_group in unique(human_data_legend$group[metab_sel])){
                           num_c_vs_s <- min(num_c, num_s)
                           num_c_vs_ns <- min(num_c, num_ns)
                           num_s_vs_ns <- min(num_s, num_ns)
-                          num_ns_vs_cns <- min(num_ns, num_cns)
+                          num_ns_vs_cns <- min(num_s, num_cns)
                           take_CvsS <- c(sample(x = c_idx, size = num_c_vs_s), sample(x = s_idx, size = num_c_vs_s))
                           take_CvsNS <- c(sample(x = c_idx, size = num_c_vs_ns), sample(x = ns_idx, size = num_c_vs_ns))
                           take_SvsNS <- c(sample(x = s_idx, size = num_s_vs_ns), sample(x = ns_idx, size = num_s_vs_ns))
@@ -156,107 +262,17 @@ for (met_group in unique(human_data_legend$group[metab_sel])){
                           ad_data2 <- ad_data[take_CvsNS, ]
                           ad_data3 <- ad_data[take_SvsNS, ]
                           ad_data4 <- ad_data[take_NSvsCNS, ]
-                          ad_C_vs_S <- adonis(formula = Y1 ~ Group, data = ad_data1, permutations = 10000, parallel = 1, method = "euclidean")
-                          ad_C_vs_NS <- adonis(formula = Y2 ~ Group, data = ad_data2, permutations = 10000, parallel = 1, method = "euclidean")
-                          ad_S_vs_NS <- adonis(formula = Y3 ~ Group, data = ad_data3, permutations = 10000, parallel = 1, method = "euclidean")
-                          ad_NS_vs_CNS <- adonis(formula = Y4 ~ Group, data = ad_data4, permutations = 10000, parallel = 1, method = "euclidean")
-                          list(ad_C_vs_S = ad_C_vs_S, ad_C_vs_NS = ad_C_vs_NS, ad_S_vs_NS = ad_S_vs_NS, ad_NS_vs_CNS = ad_NS_vs_CNS)
+                          ad_res1 <- adonis(formula = Y1 ~ Group, data = ad_data1, permutations = 10000, parallel = 1, method = "euclidean")
+                          ad_res2 <- adonis(formula = Y2 ~ Group, data = ad_data2, permutations = 10000, parallel = 1, method = "euclidean")
+                          ad_res3 <- adonis(formula = Y3 ~ Group, data = ad_data3, permutations = 10000, parallel = 1, method = "euclidean")
+                          ad_res4 <- adonis(formula = Y4 ~ Group, data = ad_data4, permutations = 10000, parallel = 1, method = "euclidean")
+                          list(ad_res1 = ad_res1, ad_res2 = ad_res2, ad_res3 = ad_res3, ad_res4 = ad_res4)
                         }, 
                         c_idx = c_idx, s_idx = s_idx, ns_idx = ns_idx, cns_idx = cns_idx, PCs = PCs, ad_data = ad_data,
                         mc.cores = num_cores)
-
-  ###Compare step lengths of between patient groups, compare PCA-transformed points
-  pat_step_len <- list()
-  pat_x_len <- list()
-  pat_y_len <- list()
-  for (pat in pat_list$Patient){
-    ind <- which(human_data$Patient == pat)
-    x <- p$x[ind, 1]
-    y <- p$x[ind, 2]
-    pat_step_len[[pat]] <- sapply(diff(x) ^ 2 + diff(y) ^ 2, sqrt)
-    pat_x_len[[pat]] <- abs(diff(x))
-    pat_y_len[[pat]] <- abs(diff(y))
-  }
-  names(pat_step_len) <- as.character(1:length(pat_step_len))
-  names(pat_x_len) <- names(pat_step_len)
-  names(pat_y_len) <- names(pat_step_len)
-  pat_step_len_df <- data.frame(Patient = rep(names(pat_step_len), times = sapply(pat_step_len, length)), step_len = unlist(pat_step_len), x_len = unlist(pat_x_len), y_len = unlist(pat_y_len))
-  pat_step_len_df$Group <- pat_list$Group[match(pat_step_len_df$Patient, pat_list$Patient)]
-  pat_step_len_df$Group <- factor(pat_step_len_df$Group, levels = unique(pat_step_len_df$Group))
-  pat_step_len_long_df <- melt(pat_step_len_df, id.vars = c("Patient", "Group"))
-  pat_step_len_long_df$variable <- factor(pat_step_len_long_df$variable, labels = c("Euclidean step length", "X only", "Y only"))
-  
-  num_NS_vals <- sum(pat_step_len_df$Group == "Septic-NS")
-  num_S_vals <- sum(pat_step_len_df$Group == "Septic-S")
-  bt_step_res <- mclapply(1:100,
-                          function(dx, pat_step_len_df, num_S_vals, num_NS_vals){
-                            set.seed(dx + 1000)
-                            bootstr_dat <- rbind(subset(pat_step_len_df, Group == "Septic-NS"), subset(pat_step_len_df, Group == "Septic-S")[sample(num_S_vals, size = num_NS_vals), ])
-                            bootstr_dat$Group <- factor(bootstr_dat$Group)
-                            ad_step1 <- adonis(formula = step_len ~ Group, data = bootstr_dat, method = "euclidean", permutations = 10000, parallel = 1)
-                            ad_step2 <- adonis(formula = x_len ~ Group, data = bootstr_dat, method = "euclidean", permutations = 10000, parallel = 1)
-                            ad_step3 <- adonis(formula = y_len ~ Group, data = bootstr_dat, method = "euclidean", permutations = 10000, parallel = 1)
-                            t_r1 <- t.test(formula = step_len ~ Group, data = bootstr_dat, var.equal = FALSE)
-                            t_r2 <- t.test(formula = x_len ~ Group, data = bootstr_dat, var.equal = FALSE)
-                            t_r3 <- t.test(formula = y_len ~ Group, data = bootstr_dat, var.equal = FALSE)
-                            list(ad_step1 = ad_step1, ad_step2 = ad_step2, ad_step3 = ad_step3, t_r1 = t_r1, t_r2 = t_r2, t_r3 = t_r3)
-                          },
-                          pat_step_len_df = pat_step_len_df, num_S_vals = num_S_vals, num_NS_vals = num_NS_vals,
-                          mc.cores = num_cores)
-  met_group_res[[met_group]] <- list(ad = ad_res_mc, 
-                                     bt = bt_step_res)
+  toc()
+  saveRDS(object = ad_res_mc, file = "all_metabs_balanced_permanova_res.RData")
 }
-toc()
-
-##Metabolites, all patients
-human_data_dist <- cbind(human_data[,1:6], as.matrix(dist(x = human_data[, metab_sel], method = "canberra"))) # distance() works on a per row basis
-p <- prcomp(human_data_dist[, -1:-6])
-
-###PERMANOVA with bootstrapping, only contrast 1-vs-1
-ad_data <- human_data_dist
-pat_list <- human_data_dist[, 1:6]
-PCs <- p$x[, 1:2]
-c_idx <- which(ad_data$Group %in% c("n.Septic-NS", "n.Septic-S"))
-s_idx <- which(ad_data$Group == "Septic-S")
-ns_idx <- which(ad_data$Group == "Septic-NS")
-cns_idx <- which(ad_data$Group == "n.Septic-NS")
-ad_res1 <- list()
-ad_res2 <- list()
-ad_res3 <- list()
-ad_res4 <- list()
-tic()
-ad_res_mc <- mclapply(1:100, 
-                      function(dx, c_idx, s_idx, ns_idx, cns_idx, PCs, ad_data){
-                        set.seed(dx + 1500)
-                        num_c <- length(c_idx)
-                        num_s <- length(s_idx)
-                        num_ns <- length(ns_idx)
-                        num_cns <- length(cns_idx)
-                        num_c_vs_s <- min(num_c, num_s)
-                        num_c_vs_ns <- min(num_c, num_ns)
-                        num_s_vs_ns <- min(num_s, num_ns)
-                        num_ns_vs_cns <- min(num_s, num_cns)
-                        take_CvsS <- c(sample(x = c_idx, size = num_c_vs_s), sample(x = s_idx, size = num_c_vs_s))
-                        take_CvsNS <- c(sample(x = c_idx, size = num_c_vs_ns), sample(x = ns_idx, size = num_c_vs_ns))
-                        take_SvsNS <- c(sample(x = s_idx, size = num_s_vs_ns), sample(x = ns_idx, size = num_s_vs_ns))
-                        take_NSvsCNS <- c(sample(x = ns_idx, size = num_ns_vs_cns), sample(x = cns_idx, size = num_ns_vs_cns))
-                        Y1 <- PCs[take_CvsS,]
-                        Y2 <- PCs[take_CvsNS,]
-                        Y3 <- PCs[take_SvsNS,]
-                        Y4 <- PCs[take_NSvsCNS,]
-                        ad_data1 <- ad_data[take_CvsS, ]
-                        ad_data2 <- ad_data[take_CvsNS, ]
-                        ad_data3 <- ad_data[take_SvsNS, ]
-                        ad_data4 <- ad_data[take_NSvsCNS, ]
-                        ad_res1 <- adonis(formula = Y1 ~ Group, data = ad_data1, permutations = 10000, parallel = 1, method = "euclidean")
-                        ad_res2 <- adonis(formula = Y2 ~ Group, data = ad_data2, permutations = 10000, parallel = 1, method = "euclidean")
-                        ad_res3 <- adonis(formula = Y3 ~ Group, data = ad_data3, permutations = 10000, parallel = 1, method = "euclidean")
-                        ad_res4 <- adonis(formula = Y4 ~ Group, data = ad_data4, permutations = 10000, parallel = 1, method = "euclidean")
-                        list(ad_res1 = ad_res1, ad_res2 = ad_res2, ad_res3 = ad_res3, ad_res4 = ad_res4)
-                      }, 
-                      c_idx = c_idx, s_idx = s_idx, ns_idx = ns_idx, cns_idx = cns_idx, PCs = PCs, ad_data = ad_data,
-                      mc.cores = num_cores)
-toc()
 ad_r1_p <- sapply(lapply(lapply(lapply(ad_res_mc, `[[`, "ad_res1"), `[[`, "aov.tab"), `[[`, "Pr(>F)"), `[`, 1)
 ad_r2_p <- sapply(lapply(lapply(lapply(ad_res_mc, `[[`, "ad_res2"), `[[`, "aov.tab"), `[[`, "Pr(>F)"), `[`, 1)
 ad_r3_p <- sapply(lapply(lapply(lapply(ad_res_mc, `[[`, "ad_res3"), `[[`, "aov.tab"), `[[`, "Pr(>F)"), `[`, 1)
@@ -329,13 +345,13 @@ pat_S_pw_dist <- pat_S_pw_dist[lower.tri(x = pat_S_pw_dist)]
 p_ns_sel <- which(pat_list_centroids$Group == "Septic-NS")
 pat_NS_pw_dist <- pat_pw_dist[p_ns_sel, p_ns_sel]
 pat_NS_pw_dist <- pat_NS_pw_dist[lower.tri(x = pat_NS_pw_dist)]
-p_c_sel <- which(grepl(x = pat_list_centroids$Group, pattern = "n.Septic"))
+p_c_sel <- which(grepl(x = pat_list_centroids$Group, pattern = "non-Septic"))
 pat_C_pw_dist <- pat_pw_dist[p_c_sel, p_c_sel]
 pat_C_pw_dist <- pat_C_pw_dist[lower.tri(x = pat_C_pw_dist)]
-p_cs_sel <- which(pat_list_centroids$Group == "n.Septic-S")
+p_cs_sel <- which(pat_list_centroids$Group == "non-Septic-S")
 pat_CS_pw_dist <- pat_pw_dist[p_cs_sel, p_cs_sel]
 pat_CS_pw_dist <- pat_CS_pw_dist[lower.tri(x = pat_CS_pw_dist)]
-p_cns_sel <- which(pat_list_centroids$Group == "n.Septic-NS")
+p_cns_sel <- which(pat_list_centroids$Group == "non-Septic-NS")
 pat_CNS_pw_dist <- pat_pw_dist[p_cns_sel, p_cns_sel]
 pat_CNS_pw_dist <- pat_CNS_pw_dist[lower.tri(x = pat_CNS_pw_dist)]
 ####Compare distance distributions
@@ -358,9 +374,9 @@ bdiv_fdr <- p.adjust(bdiv_p, method = "fdr")
 names(bdiv_p) <- bdiv_names
 names(bdiv_fdr) <- bdiv_names
 g1 <- sub("betadiv", "", bdiv_names)
-g1 <- sub("_CS", "_n.Septic-S", g1)
-g1 <- sub("_CNS", "_n.Septic-NS", g1)
-g1 <- sub("_C", "_n.Septic", g1)
+g1 <- sub("_CS", "_non-Septic-S", g1)
+g1 <- sub("_CNS", "_non-Septic-NS", g1)
+g1 <- sub("_C", "_non-Septic", g1)
 g1 <- sub("_S", "_Septic-S", g1)
 g1 <- sub("_NS", "_Septic-NS", g1)
 g1 <- substring(g1, 2)
@@ -370,35 +386,39 @@ bdiv_df <- bdiv_df[order(rownames(bdiv_df)), ]
 write.csv(x = bdiv_df, file = paste0(out_dir, "betadiversity_comparison_pvals.csv"), row.names = FALSE)
 ####Plot
 pat_pw_group_dat <- data.frame(distance = c(pat_CS_pw_dist, pat_CNS_pw_dist, pat_C_pw_dist, pat_S_pw_dist, pat_NS_pw_dist), 
-                               Group = c(rep("n.Septic-S", length(pat_CS_pw_dist)), 
-                                         rep("n.Septic-NS", length(pat_CNS_pw_dist)), 
-                                         rep("n.Septic", length(pat_C_pw_dist)),
+                               Group = c(rep("non-Septic-S", length(pat_CS_pw_dist)), 
+                                         rep("non-Septic-NS", length(pat_CNS_pw_dist)), 
+                                         rep("non-Septic", length(pat_C_pw_dist)),
                                          rep("Septic-S", length(pat_S_pw_dist)), 
                                          rep("Septic-NS", length(pat_NS_pw_dist))))
-p <- ggplot(data = pat_pw_group_dat, mapping = aes(x = Group, y = distance, color = Group)) +
+lsize <- 0.4
+tsize <- 2.5
+p_betadiv <- ggplot(data = pat_pw_group_dat, mapping = aes(x = Group, y = distance, color = Group)) +
   geom_boxplot() +
-  geom_path(data = data.frame(x = c(1, 1, 2, 2), y = c(380, 390, 390, 380)), mapping = aes(x = x, y = y), size = 0.25, inherit.aes = FALSE) +
-  geom_path(data = data.frame(x = 2 + c(1, 1, 1.95, 1.95), y = c(380, 390, 390, 380)), mapping = aes(x = x, y = y), size = 0.25, inherit.aes = FALSE) +
-  geom_path(data = data.frame(x = 2 + c(2.05, 2.05, 3, 3), y = c(380, 390, 390, 380)), mapping = aes(x = x, y = y), size = 0.25, inherit.aes = FALSE) +
-  geom_path(data = data.frame(x = 2 + c(1, 1, 3, 3), y = c(440, 450, 450, 440)), mapping = aes(x = x, y = y), size = 0.25, inherit.aes = FALSE) +
-  geom_path(data = data.frame(x = c(1, 1, 4, 4), y = c(500, 510, 510, 500)), mapping = aes(x = x, y = y), size = 0.25, inherit.aes = FALSE) +
-  geom_path(data = data.frame(x = c(2, 2, 5, 5), y = c(560, 570, 570, 560)), mapping = aes(x = x, y = y), size = 0.25, inherit.aes = FALSE) +
-  geom_path(data = data.frame(x = c(1, 1, 5, 5), y = 60 + c(560, 570, 570, 560)), mapping = aes(x = x, y = y), size = 0.25, inherit.aes = FALSE) +
-  geom_text(x = 1.5, y = 410, label = "q > 0.05", size = 1.5, inherit.aes = FALSE) + #CNS vs CS
-  geom_text(x = 2 + 1.5, y = 410, label = "q > 0.05", size = 1.5, inherit.aes = FALSE) + #C vs S
-  geom_text(x = 2 + 2.5, y = 410, label = paste0("q < ", format(bdiv_df$FDR[8], digits = 2)), size = 1.5, inherit.aes = FALSE) + #S vs NS
-  geom_text(x = 2 + 2, y = 470, label = paste0("q < ", format(bdiv_df$FDR[2], digits = 2)), size = 1.5, inherit.aes = FALSE) + #C vs NS
-  geom_text(x = 2.5, y = 530, label = paste0("q < ", format(bdiv_df$FDR[7], digits = 2)), size = 1.5, inherit.aes = FALSE) + #CS vs S
-  geom_text(x = 3.5, y = 590, label = "q > 0.05", size = 1.5, inherit.aes = FALSE) + #CNS vs NS
-  geom_text(x = 3, y = 60 + 590, label = paste0("q < ", format(bdiv_df$FDR[4], digits = 2)), size = 1.5, inherit.aes = FALSE) + #CS vs NS
-  human_col_scale(levels = as.character(unique(pat_pw_group_dat$Group))[c(5, 1, 4, 2, 3)], black_color = "green", black_pos = 5) +
+  #geom_path(data = data.frame(x = c(1, 1, 2, 2), y = c(380, 390, 390, 380)), mapping = aes(x = x, y = y), size = lsize, inherit.aes = FALSE) +
+  #geom_path(data = data.frame(x = 2 + c(1, 1, 1.95, 1.95), y = c(380, 390, 390, 380)), mapping = aes(x = x, y = y), size = lsize, inherit.aes = FALSE) +
+  geom_path(data = data.frame(x = 2 + c(2.05, 2.05, 3, 3), y = c(380, 390, 390, 380)), mapping = aes(x = x, y = y), size = lsize, inherit.aes = FALSE) +
+  geom_path(data = data.frame(x = 2 + c(1, 1, 3, 3), y = c(440, 450, 450, 440)), mapping = aes(x = x, y = y), size = lsize, inherit.aes = FALSE) +
+  geom_path(data = data.frame(x = c(1, 1, 4, 4), y = c(500, 510, 510, 500)), mapping = aes(x = x, y = y), size = lsize, inherit.aes = FALSE) +
+  geom_path(data = data.frame(x = c(1, 1, 5, 5), y = c(560, 570, 570, 560)), mapping = aes(x = x, y = y), size = lsize, inherit.aes = FALSE) +
+  #geom_path(data = data.frame(x = c(2, 2, 5, 5), y = c(560, 570, 570, 560)), mapping = aes(x = x, y = y), size = lsize, inherit.aes = FALSE) +
+  #geom_text(x = 1.5, y = 410, label = "q > 0.05", size = tsize, inherit.aes = FALSE) + #CNS vs CS
+  #geom_text(x = 2 + 1.5, y = 410, label = "q > 0.05", size = tsize, inherit.aes = FALSE) + #C vs S
+  geom_text(x = 2 + 2.5, y = 410, label = paste0("q < ", format(bdiv_df$FDR[8], digits = 1)), size = tsize, inherit.aes = FALSE) + #S vs NS
+  geom_text(x = 2 + 2, y = 470, label = paste0("q < ", format(bdiv_df$FDR[2], digits = 2)), size = tsize, inherit.aes = FALSE) + #C vs NS
+  geom_text(x = 2.5, y = 530, label = paste0("q < ", format(bdiv_df$FDR[7], digits = 2)), size = tsize, inherit.aes = FALSE) + #CS vs S
+  geom_text(x = 3, y = 590, label = paste0("q < ", format(bdiv_df$FDR[4], digits = 2)), size = tsize, inherit.aes = FALSE) + #CS vs NS
+  #geom_text(x = 3.5, y = 590, label = "q > 0.05", size = tsize, inherit.aes = FALSE) + #CNS vs NS
+  human_col_scale(levels = as.character(unique(pat_pw_group_dat$Group))[c(5, 1, 4, 2, 3)], black_color = "grey40", black_pos = 5) +
   scale_x_discrete(limits = as.character(unique(pat_pw_group_dat$Group))) +
   #geom_segment(x = 2.5, y = 0, xend = 2.5, yend = max(pat_pw_group_dat$distance), size = 0.25, inherit.aes = FALSE) +
   guides(color = "none") +
-  ylim(0, 670) +
+  ylim(0, 600) +
+  ylab("between-patient dissimilarity") +
+  xlab("") +
   theme_bw() + 
-  theme(panel.grid = element_blank(), axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
-ggsave(filename = "PCA_metab_betadiv_comparison.png", path = out_dir, width = 2.5, height = 4, units = "in")
+  theme(panel.grid = element_blank(), axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1), plot.background = element_blank())
+ggsave(filename = "PCA_metab_betadiv_comparison.png", path = out_dir, plot = p_betadiv, width = 2.5, height = 4, units = "in")
 
 ###Plot step lengths, metabolites, all patients
 pat_step_len_brkt <- data.frame(variable = "X only", x = c(1, 1, 2, 2), y = c(480, 490, 490, 480), stringsAsFactors = FALSE)
@@ -456,7 +476,7 @@ for (met_group in setdiff(unique(human_data_legend$group[metab_sel]), "sugar")){
   
   ad_rv <- ad_mg_r_df[[met_group]]
   ad_rv[ad_rv > 0.05] <- 0.05
-  text_v <- paste0(c("n.Septic", "n.Septic", "Septic-S", "n.Septic-NS"), " vs ", c("Septic-S", "Septic-NS", "Septic-NS", "Septic-NS"), ", q ", c("> ", "< ")[1 + (ad_rv < 0.05)], sapply(ad_rv, format, digits = 2))
+  text_v <- paste0(c("non-Septic", "non-Septic", "Septic-S", "non-Septic-NS"), " vs ", c("Septic-S", "Septic-NS", "Septic-NS", "Septic-NS"), ", q ", c("> ", "< ")[1 + (ad_rv < 0.05)], sapply(ad_rv, format, digits = 2))
 
   lam <- p$sdev[1:2] * sqrt(nrow(p$x))
   hdd <- human_data_dist
@@ -488,54 +508,96 @@ p <- prcomp(human_sepsis_data_pheno_dist[, -1:-6])
 hsdpd <- human_sepsis_data_pheno_dist
 hsdpd$label <- paste0("P", hsdpd$Patient, "-D", hsdpd$Day)
 lam <- p$sdev[1:2] * sqrt(nrow(p$x))
-ap <- autoplot(object = p, data = hsdpd, colour = "Group", shape = FALSE, label = FALSE, frame = TRUE, frame.type = "norm", size = 0.8)
-ap <- ap + 
-  geom_text_repel(parse = TRUE, label = sapply(hsdpd$label, function(lab) sprintf("bold(\"%s\")", lab)), x = p$x[, 1] / lam[1], y = p$x[, 2] / lam[2], size = 1.3, mapping = aes(color = Group), segment.size = 0.3, force = 0.005, box.padding = 0.0) +
+pxy <- as.data.frame(p$x)
+pxy[, 1] <- pxy[, 1] / lam[1]
+pxy[, 2] <- pxy[, 2] / lam[2]
+pxy$Group <- hsdpd$Group
+rsize <- rel(3.5)
+p_biochem_ap <- autoplot(object = p, data = hsdpd, colour = "Group", shape = FALSE, label = FALSE, frame = TRUE, frame.type = "norm", size = 0.8, frame.alpha = 0.1)
+p_biochem_ap <- p_biochem_ap + 
+  geom_text_repel(parse = TRUE, label = sapply(hsdpd$label, function(lab) sprintf("bold(\"%s\")", lab)), x = pxy[, 1], y = pxy[, 2], mapping = aes(color = Group), size = 2, segment.size = 0.3, force = 0.005, box.padding = 0.0) + #arguments before publication readyness: size = 1.3, segment.size = 0.3, force = 0.005, box.padding = 0.0
   human_col_scale() +
-  ggtitle("PCA biplot, Canberra distance, biochemical params,\nseptic patients") +
+  #ggtitle("PCA biplot, Canberra distance, biochemical params,\nseptic patients") +
   guides(shape = "none") +
   theme_bw() + 
-  theme(panel.grid = element_blank())
-gobj <- ggplot_build(ap)
+  theme(panel.grid = element_blank(), legend.position = "none", text = element_text(size = rsize))
+gobj <- ggplot_build(p_biochem_ap)
 xmax <- gobj$layout$panel_params[[1]]$x.range[2]
 xmin <- gobj$layout$panel_params[[1]]$x.range[1]
 ymax <- gobj$layout$panel_params[[1]]$y.range[2]
 ymin <- gobj$layout$panel_params[[1]]$y.range[1]
-arws <- make_ordination_arrows(x = p$x[, 1:2], w = subset(human_sepsis_data, Day < 4, pheno_sel), xmax = xmax, xmin = xmin, ymin = ymin, ymax = ymax, shorten_arw_by = 1.5)
+arws <- make_ordination_arrows(x = p$x[, 1:2], w = subset(human_sepsis_data, Day < 4, pheno_sel), xmax = xmax, xmin = xmin, ymin = ymin, ymax = ymax, shorten_arw_by = 3)
 arws$ph_ars_names_s$label[arws$ph_ars_names_s$label == "Troponin T"] <- "TnT"
-ap <- ap +
-  geom_path(data = arws$ph_ars_s, mapping = aes(x = PC1, y = PC2, group = Group), inherit.aes = FALSE, arrow = arrow(length = unit(0.06, "inches")), size = 0.2, color = "grey50") + 
-  geom_text(data = arws$ph_ars_names_s, mapping = aes(label = label, x = PC1, y = PC2), inherit.aes = FALSE, size = 1.5, color = "grey50") +
-  scale_x_continuous(limits = c(xmin, xmax) * 1) +
-  geom_text(x = 0.9 * xmin, y = 0.95 * ymin, label = paste0("S vs NS, q < ", format(ad_mg_r_df$pheno[3], digits = 3)), size = 2, hjust = "left")
-ggsave(filename = paste0("PCA_biplot_sepsis_pheno_gg.png"), path = out_dir, plot = ap, width = 5, height = 4, units = "in")
+p_biochem_ap <- p_biochem_ap +
+  geom_path(data = arws$ph_ars_s, mapping = aes(x = PC1, y = PC2, group = Group), inherit.aes = FALSE, arrow = arrow(length = unit(0.06, "inches")), size = 0.3, color = "grey50") + 
+  geom_text(data = arws$ph_ars_names_s, mapping = aes(label = label, x = PC1, y = PC2), inherit.aes = FALSE, size = 3, color = "grey20") +
+  scale_x_continuous(limits = c(xmin * 1.05, xmax)) +
+  scale_y_continuous(limits = c(ymin, ymax * 1)) +
+  geom_text(x = 0.95 * xmin, y = 0.98 * ymin, label = paste0("S vs NS, q < ", format(ad_mg_r_df$pheno[3], digits = 3)), size = 2.5, hjust = "left")
+ggsave(filename = paste0("PCA_biplot_sepsis_pheno_gg.png"), path = out_dir, plot = p_biochem_ap, width = 4.5, height = 4, units = "in")
 
 ##Actual plot of all samples, metabolites
 human_data_dist <- cbind(human_data[,1:6], as.matrix(dist(x = human_data[, metab_sel], method = "canberra"))) # distance() works on a per row basis
 p <- prcomp(human_data_dist[, -1:-6])
 ad_rv <- ad_mg_r_df[["all"]]
 ad_rv[ad_rv > 0.05] <- 0.05
-text_v <- paste0(c("n.Septic", "n.Septic", "Septic-S", "n.Septic-NS"), " vs ", c("Septic-S", "Septic-NS", "Septic-NS", "Septic-NS"), ", q ", c("> ", "< ")[1 + (ad_rv < 0.05)], sapply(ad_rv, format, digits = 2))
+text_v <- paste0(c("non-Septic", "non-Septic", "Septic-S", "non-Septic-NS"), " vs ", c("Septic-S", "Septic-NS", "Septic-NS", "Septic-NS"), ", q ", c("> ", "< ")[1 + (ad_rv < 0.05)], sapply(ad_rv, format, digits = 2))
 lam <- p$sdev[1:2] * sqrt(nrow(p$x))
+pxy <- as.data.frame(p$x)
+pxy[, 1] <- pxy[, 1] / lam[1]
+pxy[, 2] <- pxy[, 2] / lam[2]
 hdd <- human_data_dist
-ap <- autoplot(object = p, data = hdd, colour = "Group", frame = TRUE, frame.type = "norm", size = 0.5)
-ap <- ap + 
+pxy$Group <- hdd$Group
+centerxy <- aggregate(x = pxy[, 1:2], by = list(Group = pxy$Group), FUN = mean)
+alpha <- -0.55
+rotmat <- matrix(c(cos(alpha), sin(alpha), -sin(alpha), cos(alpha)), ncol = 2)
+invrotmat <- matrix(c(cos(-alpha), sin(-alpha), -sin(-alpha), cos(-alpha)), ncol = 2)
+newxy <- data.frame(as.matrix(pxy[, 1:2]) %*% rotmat)
+colnames(newxy) <- c("PC1", "PC2")
+#plot(newxy[, 1], newxy[,2])
+lmodel <- lm(PC2 ~ poly(PC1, 4), data = newxy)
+xs <- data.frame(PC1 = seq(min(newxy$PC1), max(newxy$PC2) * 1.2, length.out = 100))
+xs$PC2 <- predict(object = lmodel, newdata = xs)
+linexy <- data.frame(as.matrix(xs) %*% invrotmat)
+colnames(linexy) <- c("PC1", "PC2")
+# newcenterxy <- data.frame(as.matrix(centerxy[c("PC1", "PC2")]) %*% rotmat)
+# colnames(newcenterxy) <- c("PC1", "PC2")
+# newcenterxy$PC2 <- predict(object = lmodel, newdata = newcenterxy["PC1"])
+# newcenterxy[c("PC1", "PC2")] <- data.frame(as.matrix(newcenterxy) %*% invrotmat)
+proj_num <- apply(centerxy[, -1], 1, function(coord) which.min(rowSums((linexy - matrix(coord, ncol = length(coord), nrow = nrow(linexy), byrow = TRUE))^2)))
+proj_num[length(proj_num)] <- proj_num[length(proj_num)] + 1
+newcenterxy <- linexy[proj_num, ]
+colnames(newcenterxy) <- c("PC1", "PC2")
+newcenterxy$Group <- centerxy$Group
+p_metab_ap <- autoplot(object = p, data = hdd, colour = "Group", frame = TRUE, frame.type = "norm", size = 1.3, frame.alpha = 0.1)
+p_metab_ap <- p_metab_ap + 
   human_col_scale(aesthetics = c("colour", "fill")) +
   guides(colour = guide_legend(title = "Group"), fill = "none", group = "none") +
-  ggtitle("PCA biplot, Canberra distance, metabolites,\nall samples") +
+  #ggtitle("PCA biplot, Canberra distance, metabolites,\nall samples") +
   theme_bw() + 
-  theme(panel.grid = element_blank())
-gobj <- ggplot_build(ap)
+  theme(panel.grid = element_blank(), legend.direction = "horizontal", legend.box.just = "left", legend.position = "bottom", legend.title = element_blank(), text = element_text(size = rsize), legend.text = element_text(size = rsize), plot.background = element_blank())
+gobj <- ggplot_build(p_metab_ap)
 xmax <- gobj$layout$panel_params[[1]]$x.range[2]
 xmin <- gobj$layout$panel_params[[1]]$x.range[1]
 ymax <- gobj$layout$panel_params[[1]]$y.range[2]
 ymin <- gobj$layout$panel_params[[1]]$y.range[1]
-arws <- make_ordination_arrows(x = p$x[, 1:2], w = subset(human_data, select = metab_sel), xmax = xmax, xmin = xmin, ymin = ymin, ymax = ymax, shorten_arw_by = 200, scale_by = 1.1)
-ap <- ap +
-  geom_path(data = arws$ph_ars_s, mapping = aes(x = PC1, y = PC2, group = Group), inherit.aes = FALSE, arrow = arrow(length = unit(0.06, "inches")), size = 0.2, color = "grey50") + 
-  geom_text(data = arws$ph_ars_names_s, mapping = aes(label = label, x = PC1, y = PC2), inherit.aes = FALSE, size = 1.5, color = "grey50") +
-  geom_text(x = 0.9 * xmin, y = 0.85 * ymin, label = paste0(text_v, collapse = "\n"), size = 2, hjust = "left")
-ggsave(filename = paste0("PCA_biplot_metab_all_samples_gg.png"), path = out_dir, plot = ap, width = 5, height = 4, units = "in")
+arws <- make_ordination_arrows(x = p$x[, 1:2], w = subset(human_data, select = metab_sel), xmax = xmax, xmin = xmin, ymin = ymin, ymax = ymax, shorten_arw_by = 350, scale_by = 1.1, num = 4)
+p_metab_ap <- p_metab_ap +
+  geom_path(data = linexy, mapping = aes(x = PC1, y = PC2), colour = "grey50", inherit.aes = FALSE) + 
+  geom_path(data = arws$ph_ars_s, mapping = aes(x = PC1, y = PC2, group = Group), inherit.aes = FALSE, arrow = arrow(length = unit(0.06, "inches")), size = 0.3, color = "grey50") + 
+  geom_text(data = arws$ph_ars_names_s, mapping = aes(label = label, x = PC1, y = PC2), inherit.aes = FALSE, size = 3, color = "grey20") +
+  geom_text(x = xmin, y = 0.76 * ymax, label = paste0(text_v, collapse = "\n"), size = 2.5, hjust = "left") + 
+  geom_point(data = newcenterxy, mapping = aes(x = PC1, y = PC2), colour = "grey50", shape = 18, size = 3, inherit.aes = FALSE) +
+  geom_point(data = newcenterxy, mapping = aes(x = PC1, y = PC2, colour = Group), shape = 3, size = 5, inherit.aes = FALSE) +
+  scale_x_continuous(limits = c(xmin * 1.1, xmax * 0.95), expand = c(0, 0)) + 
+  scale_y_continuous(limits = c(ymin * 1, ymax * 0.95), expand = c(0, 0))
+ggsave(filename = "PCA_biplot_metab_all_samples_gg.png", path = out_dir, plot = p_metab_ap, width = 5, height = 4, units = "in")
+
+#Build PCA figure panel
+alp <- plot_grid(p_biochem_ap, p_metab_ap, p_betadiv, ncol = 3, align = "h", axis = "bt", rel_widths = c(1, 1, 0.6)) + 
+  draw_plot_label(label = c("A", "B", "C"), x = c(0, 1, 2) / 2.6)
+ggsave(filename = "PCA_and_betadiv_figure_panel.png", path = out_dir, plot = alp, width = 9, height = 4, units = "in")
+ggsave(filename = "PCA_and_betadiv_figure_panel.svg", path = out_dir, plot = alp, width = 9, height = 4, units = "in")
 
 #TODO: continue from here with switch from {S, NS, Control} to {Sepsis x Survival}
 
