@@ -2024,6 +2024,7 @@ dev_score <- data.frame(Patient = sdev$Patient, score = rowSums(sdev[, -1]))
 dev_score$Survival <- pat_dev_score$Survival[match(dev_score$Patient, pat_dev_score$Patient)]
 dev_score$Group <- pat_dev_score$Group[match(dev_score$Patient, pat_dev_score$Patient)]
 {
+  set.seed(2003)
   m <- subset(human_data, Day %in% tanova_day_set)
   m <- m[, -pheno_sel]
   m <- m[, !(colnames(m) %in% sig.anova.car.s.class)]
@@ -2126,6 +2127,7 @@ sdev <- aggregate(udev | ldev, by = list(Patient = vd$Patient), FUN = max) #coun
 dev_score <- data.frame(Patient = sdev$Patient, score = rowSums(sdev[, -1]))
 dev_score$Survival <- vd$Survival28[match(dev_score$Patient, vd$Patient)]
 {
+  set.seed(1003)
   m <- vd
   m <- m[, !(colnames(m) %in% sig.anova.car.val.s.class)]
   di <- which(m$Survival == "NS")
@@ -2150,12 +2152,15 @@ pbox <- ggplot(data = subset(dev_score_cb_minmax, Survival == "NS"), mapping = a
   scale_x_discrete(limits = levels(dev_score_cb_minmax$x)[2:1]) +
   geom_path(inherit.aes = FALSE, data = data.frame(y = min(subset(p_thresh_sig_UK_minmax, include == 1)$score) - 1, x = 1 + c(0.6, 1.4)), mapping = aes(x, y), linetype = 2) +
   geom_path(inherit.aes = FALSE, data = data.frame(y = mean(p_thresh), x = c(0.6, 1.4)), mapping = aes(x, y), linetype = 2) +
+  geom_rect(data = data.frame(xmin = 0.4, xmax = 1.3, ymin = 56, ymax = 70), mapping = aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax), fill = "white", colour = "black", inherit.aes = FALSE) +
   coord_flip() +
   ylab("Number of metabolites outside of the safe corridor per patient") +
   xlab("") +
+  scale_y_continuous(limits = c(0, 70), expand = c(0,0)) +
   theme_bw() +
-  theme(panel.grid = element_blank(), legend.direction = "horizontal", legend.position = "bottom", legend.title = element_blank())
-ggsave(plot = pbox, filename = "generalized_safe_corridor_minmax_box_UK_Ferrario.png", path = out_dir, width = 7, height = 2.5, units = "in")
+  theme(panel.grid = element_blank(), panel.grid.major.y = element_line(color = "grey80"), legend.direction = "vertical", legend.position = c(0.9, 0.2), legend.title = element_blank(), legend.background = element_blank())
+ggsave(plot = pbox, filename = "generalized_safe_corridor_minmax_box_UK_Ferrario.png", path = out_dir, width = 7, height = 2, units = "in")
+ggsave(plot = pbox, filename = "generalized_safe_corridor_minmax_box_UK_Ferrario.svg", path = out_dir, width = 7, height = 2, units = "in")
 print(paste0("Contribution of high deviation and low deviation to score is ", sum(udev), " and ", sum(ldev), " respectively."))
 w <- which.xy(udev | ldev) # tell me which variables make a difference
 mtab <- sort(table(w[, 2]), decreasing = TRUE)
