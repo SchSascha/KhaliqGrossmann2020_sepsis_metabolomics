@@ -9,6 +9,8 @@ library(ggrepel)
 library(ggfortify)
 library(scales)
 library(matrixStats)
+library(stringi)
+library(cowplot)
 
 source("../function_definitions.R")
 
@@ -193,6 +195,7 @@ for (mat in unique(rat_sepsis_data$material)){
   w <- which.xy(is.na(rds))
   rds <- rds[, setdiff(1:ncol(rds), unique(w[, 2]))]
   rat_data_dist <- cbind(subset(rat_sepsis_data, material == mat & `time point` == "24h", 1:4), as.matrix(dist(x = rds, method = "canberra"))) # distance() works on a per row basis
+  rat_data_dist$group <- factor(rat_data_dist$group, levels = c("Sham", "Septic-S", "Septic-NS"))
   p <- prcomp(rat_data_dist[, -1:-4])
   #ad_rv <- ad_mg_r_df[["all"]]
   #ad_rv[ad_rv > 0.05] <- 0.05
@@ -260,6 +263,7 @@ for (mat in unique(rat_sepsis_data$material)){
                                  Group = c(rep("Sham", length(rat_C_pw_dist)),
                                            rep("Septic-S", length(rat_S_pw_dist)), 
                                            rep("Septic-NS", length(rat_NS_pw_dist))))
+  rat_pw_group_dat$Group <- factor(rat_pw_group_dat$Group, levels = c("Sham", "Septic-S", "Septic-NS"))
   bdiv_list[[mat]] <- rat_pw_group_dat
   p <- ggplot(data = rat_pw_group_dat, mapping = aes(x = Group, y = distance, color = Group)) +
     geom_boxplot() +
@@ -300,7 +304,8 @@ for (mat in unique(rat_sepsis_data$material)){
 for (name in names(bdiv_list))
   bdiv_list[[name]]$material <- name
 rat_pgd <- Reduce("rbind", bdiv_list)
-p <- ggplot(data = rat_pgd, mapping = aes(x = Group, y = distance, color = Group)) +
+#rat_pgd$Group <- factor(rat_pgd$Group, levels = levels(rat_pgd$Group)[c(3, 2, 1)])
+p_betadiv <- ggplot(data = rat_pgd, mapping = aes(x = Group, y = distance, color = Group)) +
   facet_wrap(~ material, ncol = 3, nrow = 1) +
   geom_boxplot() +
   human_col_scale(name = "Group", levels = c("Septic-NS", "Sham", "Septic-S", "", ""), aesthetics = c("color", "fill")) +
@@ -311,18 +316,30 @@ p <- ggplot(data = rat_pgd, mapping = aes(x = Group, y = distance, color = Group
   xlab("") +
   theme_bw() + 
   theme(panel.grid = element_blank(), axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
-ggsave(filename = paste0("PCA_metab_betadiv_comparison_crossmat.png"), path = out_dir, width = 5, height = 4, units = "in")
+ggsave(filename = paste0("PCA_metab_betadiv_comparison_crossmat.png"), path = out_dir, plot = p_betadiv, width = 5, height = 4, units = "in")
+ggsave(filename = paste0("PCA_metab_betadiv_comparison_crossmat.svg"), path = out_dir, plot = p_betadiv, width = 5, height = 4, units = "in")
 
-#build figure panel (Fig 4)
-panel4 <- plot_grid(p_biochem_ap, p_metab_list[["plasma"]], 
-                    align = "h", axis = "tb", labels = c("A", "B"))
-ggsave(filename = "PCA_biplot_main_panel.png", path = out_dir, plot = panel4, height = 4, width = 2/2.6*9, units = "in")
+p_betadiv_s <- ggplot(data = rat_pgd, mapping = aes(x = material, y = distance, color = Group)) +
+  geom_boxplot(size = rel(0.75)) +
+  human_col_scale(name = "Group", levels = c("Septic-NS", "Sham", "Septic-S", "", ""), aesthetics = c("color", "fill")) +
+  guides(color = "none", fill = "none") +
+  ylab("between-sample dissimilarity") +
+  xlab("") +
+  theme_bw() + 
+  theme(panel.grid = element_blank(), axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+
+#build figure panel (Fig 5)
+panel5 <- plot_grid(p_biochem_ap, p_metab_list[["plasma"]], p_betadiv_s,
+                    align = "h", axis = "tb", labels = "AUTO", rel_widths = c(1, 1, 0.6), ncol = 3)
+ggsave(filename = "PCA_biplot_main_panel.png", path = out_dir, plot = panel4, height = 4, width = 9, units = "in")
+ggsave(filename = "PCA_biplot_main_panel.svg", path = out_dir, plot = panel4, height = 4, width = 9, units = "in")
 
 for (name in names(rat_dev_list)){
   rat_dev_list[[name]]$material <- name
 }
 dev_score <- Reduce("rbind", rat_dev_list)
 dev_rep_res <- list()
+set.seed(10023)
 for (mat in unique(rat_sepsis_data$material)){
   m <- subset(rat_sepsis_data, material == mat & `time point` == "24h")
   m <- m[, -pheno_sel]
@@ -345,18 +362,22 @@ ggsave(plot = p, filename = paste0("generalized_safe_corridor_minmax_crossmat.pn
 p_thresh_box <- p_thresh
 p_thresh_box$x <- as.numeric(factor(p_thresh_box$material)) - 0.4
 p_thresh_box$xend <- p_thresh_box$x + 0.8
-dev_score_box <- subset(dev_score, grepl("non-survivor", Group))
+dev_score_box <- subset(dev_score, grepl("Septic-NS", Group))
 dev_score_box$material <- factor(dev_score_box$material)
 pbox <- ggplot(data = dev_score_box, mapping = aes(fill = Group, x = material, y = score, colour = Group)) +
   geom_dotplot(stackdir = "center", binaxis = "y", dotsize = 0.7) + 
-  #human_col_scale(aesthetics = c("fill", "colour")) +
-  geom_segment(data = p_thresh_box, mapping = aes(x = x, xend = xend, y = score, yend = score), linetype = 2, inherit.aes = FALSE) +
+  human_col_scale(aesthetics = c("fill", "colour")) +
+  geom_segment(data = p_thresh_box, mapping = aes(x = x, xend = xend, y = score, yend = score), linetype = 3, inherit.aes = FALSE) +
   coord_flip() +
+  #guides(fill = guide_legend(title = NULL)) +
+  geom_rect(data = data.frame(ymin = 61, ymax = 75, xmin = 0.2, xmax = 1.8), inherit.aes = FALSE, mapping = aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax), fill = "white", colour = "black", size = rel(0.3)) + 
+  scale_y_continuous(limits = c(0, 75), expand = c(0, 0.1)) +
   ylab("Number of metabolites outside of the safe corridor") +
   xlab("") +
   theme_bw() +
-  theme(panel.grid = element_blank(), legend.direction = "horizontal", legend.position = "bottom")
-ggsave(plot = pbox, filename = "generalized_safe_corridor_minmax_crossmat_box.png", path = out_dir, width = 6, height = 2.5, units = "in")
+  theme(panel.grid = element_blank(), panel.grid.major.y = element_line(colour = "grey80"), legend.direction = "vertical", legend.position = c(0.9, 0.25), legend.title.align = 0.5, legend.background = element_blank())
+ggsave(plot = pbox, filename = "generalized_safe_corridor_minmax_crossmat_box.png", path = out_dir, width = 6, height = 2, units = "in")
+ggsave(plot = pbox, filename = "generalized_safe_corridor_minmax_crossmat_box.svg", path = out_dir, width = 6, height = 2, units = "in")
 
 rat_dev_comp <- human_dev_metabs
 for (name in names(mtab_list)){

@@ -1937,7 +1937,7 @@ p <- ggplot(data = subset(hsd, Survival == "S"), mapping = aes(y = value, x = va
   guides(color = guide_legend(title = "Patient Group", order = 1),
         fill = guide_legend(title = "Metabolite Group", order = 2),
         shape = guide_legend(title = "Number of patients\nwith deviation", override.aes = list(shape = 15, size = 6, colour = sort(unique(minmax_corridor_met_sel$color))), order = 3),
-        linetype = guide_legend(title = "NS Patient", override.aes = list(color = hue_pal()(4)[c(4, 1)[1 + (subset(hsd, !duplicated(Patient) & Survival == "NS", "Group")[[1]] == "Septic-NS")]]), order = 4)) +
+        linetype = guide_legend(title = "NS Patient", override.aes = list(color = hue_pal()(4)[c(4, 1)[1 + (subset(hsd, !duplicated(Patient) & Survival == "NS", "Group")[[1]] == "Septic-NS")]]), order = 4, keywidth = rel(3))) +
   scale_color_discrete(drop = FALSE) +
   scale_y_log10(expand = c(0,0)) +
   #scale_y_continuous(trans = pseudo_log_trans(sigma = 0.25, base = 2), expand = c(0, 0), limits = c(-10, 1000)) +
@@ -1980,6 +1980,7 @@ p_combined <- ggdraw(p_main) +
   draw_plot(p_insert, 0.71, 0.715, 0.28, 0.28) +
   draw_plot_label(label = c("A", "B"), x = c(0, 0.71), y = c(1, 0.995), size = 20)
 ggsave(filename = "human_metab_nonsig_single_plot_minmax_all_pats_panel.png", path = out_dir, plot = p_combined, width = 16, height = 16, units = "in")
+ggsave(filename = "human_metab_nonsig_single_plot_minmax_all_pats_panel.svg", path = out_dir, plot = p_combined, width = 16, height = 16, units = "in")
 
 ###Generalize the corridor principle to a classification scheme, use corridor 
 corridor <- as.data.frame(t(sapply(unique(cntrl_and_s$variable), 
