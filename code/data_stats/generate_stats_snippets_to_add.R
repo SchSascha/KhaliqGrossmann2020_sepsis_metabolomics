@@ -469,6 +469,8 @@ fwrite(x = ad_st_r_df, file = paste0(out_dir, "human_met_group_PCA_step_diff_FDR
 
 ##Actual plots for each metabolite group
 tic()
+ap_metab_group <- list()
+rsize <- rel(4)
 for (met_group in setdiff(unique(human_data_legend$group[metab_sel]), "sugar")){
   met_group_idx <- which(human_data_legend$group == met_group)
   human_data_dist <- cbind(human_data[,1:6], as.matrix(dist(x = human_data[, met_group_idx], method = "canberra"))) # distance() works on a per row basis
@@ -480,25 +482,33 @@ for (met_group in setdiff(unique(human_data_legend$group[metab_sel]), "sugar")){
 
   lam <- p$sdev[1:2] * sqrt(nrow(p$x))
   hdd <- human_data_dist
-  ap <- autoplot(object = p, data = hdd, colour = "Group", frame = TRUE, frame.type = "norm", size = 0.5)
-  ap <- ap +
+  ap_metab_group[[met_group]] <- autoplot(object = p, data = hdd, colour = "Group", frame = TRUE, frame.type = "norm", size = 0.9, frame.alpha = 0.1)
+  ap_metab_group[[met_group]] <- ap_metab_group[[met_group]] +
     human_col_scale(aesthetics = c("colour", "fill")) +
-    guides(colour = guide_legend(title = "Group"), fill = "none", group = "none") +
-    ggtitle(paste0("PCA biplot, Canberra distance, ", met_group, "\nall samples")) +
+    guides(colour = "none", fill = "none", group = "none") +
+    ggtitle(met_group) +
     theme_bw() + 
     theme(panel.grid = element_blank())
-  gobj <- ggplot_build(ap)
+  gobj <- ggplot_build(ap_metab_group[[met_group]])
   xmax <- gobj$layout$panel_params[[1]]$x.range[2]
   xmin <- gobj$layout$panel_params[[1]]$x.range[1]
   ymax <- gobj$layout$panel_params[[1]]$y.range[2]
   ymin <- gobj$layout$panel_params[[1]]$y.range[1]
   arws <- make_ordination_arrows(x = p$x[, 1:2], w = subset(human_data, select = met_group_idx), xmax = xmax, xmin = xmin, ymin = ymin, ymax = ymax, shorten_arw_by = 4, scale_by = 1.1)
-  ap <- ap +
-    geom_path(data = arws$ph_ars_s, mapping = aes(x = PC1, y = PC2, group = Group), inherit.aes = FALSE, arrow = arrow(length = unit(0.06, "inches")), size = 0.2, color = "grey50") + 
-    geom_text(data = arws$ph_ars_names_s, mapping = aes(label = label, x = PC1, y = PC2), inherit.aes = FALSE, size = 1.5, color = "grey50") +
-    geom_text(x = 0.9 * xmin, y = 0.83 * ymin, label = paste0(text_v, collapse = "\n"), size = 2, hjust = "left")
-  ggsave(filename = paste0("PCA_biplot_", met_group, "_all_samples.png"), path = out_dir, plot = ap, width = 6, height = 5, units = "in")
+  ap_metab_group[[met_group]] <- ap_metab_group[[met_group]] +
+    geom_path(data = arws$ph_ars_s, mapping = aes(x = PC1, y = PC2, group = Group), inherit.aes = FALSE, arrow = arrow(length = unit(0.06, "inches")), size = 0.3, color = "grey50") + 
+    geom_text(data = arws$ph_ars_names_s, mapping = aes(label = label, x = PC1, y = PC2), inherit.aes = FALSE, size = rsize, color = "grey20") +
+    scale_x_continuous(limits = c(xmin, xmax) * 1.1) + 
+    scale_y_continuous(limits = c(ymin, ymax * 1.4)) +
+    geom_text(x = 1.15 * xmin, y = 1.2 * ymax, label = paste0(text_v, collapse = "\n"), size = 3, hjust = "left")
+    
+  #ggsave(filename = paste0("PCA_biplot_", met_group, "_all_samples.png"), path = out_dir, plot = ap, width = 6, height = 5, units = "in")
 }
+ap_metab_group[[met_group]] <- ap_metab_group[[met_group]] + 
+  guides(colour = guide_legend(title = "Group"), fill = "none", group = "none") +
+  theme_update(legend.direction = "horizontal", legend.position = "bottom")
+ap_metab_group_supp_panel <- plot_grid(plotlist = ap_metab_group, ncol = 2, nrow = 3, labels = "AUTO", align = "hv", axis = "tblr")
+ggsave(plot = ap_metab_group_supp_panel, filename = "PCA_biplot_met_group_panel.png", path = out_dir, width = 9, height = 4.5 * 3, units = "in")
 toc()
 
 ###Actual plot of sepsis samples, clinical params
