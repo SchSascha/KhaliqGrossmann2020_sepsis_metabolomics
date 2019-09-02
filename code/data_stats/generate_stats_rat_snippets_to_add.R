@@ -331,8 +331,8 @@ p_betadiv_s <- ggplot(data = rat_pgd, mapping = aes(x = material, y = distance, 
 #build figure panel (Fig 5)
 panel5 <- plot_grid(p_biochem_ap, p_metab_list[["plasma"]], p_betadiv_s,
                     align = "h", axis = "tb", labels = "AUTO", rel_widths = c(1, 1, 0.6), ncol = 3)
-ggsave(filename = "PCA_biplot_main_panel.png", path = out_dir, plot = panel4, height = 4, width = 9, units = "in")
-ggsave(filename = "PCA_biplot_main_panel.svg", path = out_dir, plot = panel4, height = 4, width = 9, units = "in")
+ggsave(filename = "PCA_biplot_main_panel.png", path = out_dir, plot = panel5, height = 4, width = 9, units = "in")
+ggsave(filename = "PCA_biplot_main_panel.svg", path = out_dir, plot = panel5, height = 4, width = 9, units = "in")
 
 for (name in names(rat_dev_list)){
   rat_dev_list[[name]]$material <- name
@@ -369,13 +369,13 @@ pbox <- ggplot(data = dev_score_box, mapping = aes(fill = Group, x = material, y
   human_col_scale(aesthetics = c("fill", "colour")) +
   geom_segment(data = p_thresh_box, mapping = aes(x = x, xend = xend, y = score, yend = score), linetype = 3, inherit.aes = FALSE) +
   coord_flip() +
-  #guides(fill = guide_legend(title = NULL)) +
-  geom_rect(data = data.frame(ymin = 61, ymax = 75, xmin = 0.2, xmax = 1.8), inherit.aes = FALSE, mapping = aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax), fill = "white", colour = "black", size = rel(0.3)) + 
+  guides(fill = guide_legend(title = NULL), colour = guide_legend(title = NULL)) +
+  geom_rect(data = data.frame(ymin = 61, ymax = 75, xmin = 0.2, xmax = 1.2), inherit.aes = FALSE, mapping = aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax), fill = "white", colour = "black", size = rel(0.3)) + 
   scale_y_continuous(limits = c(0, 75), expand = c(0, 0.1)) +
   ylab("Number of metabolites outside of the safe corridor") +
   xlab("") +
   theme_bw() +
-  theme(panel.grid = element_blank(), panel.grid.major.y = element_line(colour = "grey80"), legend.direction = "vertical", legend.position = c(0.9, 0.25), legend.title.align = 0.5, legend.background = element_blank())
+  theme(panel.grid = element_blank(), panel.grid.major.y = element_line(colour = "grey80"), legend.direction = "vertical", legend.position = c(0.9, 0.18), legend.title.align = 0.5, legend.background = element_blank())
 ggsave(plot = pbox, filename = "generalized_safe_corridor_minmax_crossmat_box.png", path = out_dir, width = 6, height = 2, units = "in")
 ggsave(plot = pbox, filename = "generalized_safe_corridor_minmax_crossmat_box.svg", path = out_dir, width = 6, height = 2, units = "in")
 
