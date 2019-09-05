@@ -155,7 +155,7 @@ anova.car.c <- list()
 anova.car.s <- list()
 for (mat in unique(rat_sepsis_data$material)){
   ftd_c <- subset(rat_sepsis_data, material == mat)
-  ftd_c$group <- sub(pattern = "septic.+", x = as.character(ftd_c$group), replacement = "septic")
+  ftd_c$group <- sub(pattern = "Septic.+", x = as.character(ftd_c$group), replacement = "Septic")
   ftd_c$time <- ftd_c$`time point`
   ftd_s <- subset(rat_sepsis_data, group != "Sham" & material == mat)
   ftd_s$time <- ftd_s$`time point`
@@ -229,7 +229,7 @@ fml <- concentration ~ group*time
 ##Split analysis into one for control vs sepsis and one for survival vs nonsurvival
 mat <- "plasma"
 ftd_c <- subset(rat_sepsis_data, material == mat)
-ftd_c$group <- sub(pattern = "septic.+", x = as.character(ftd_c$group), replacement = "septic")
+ftd_c$group <- sub(pattern = "Septic.+", x = as.character(ftd_c$group), replacement = "Septic")
 ftd_c$time <- ftd_c$`time point`
 ftd_s <- subset(rat_sepsis_data, group != "Sham" & material == mat)
 ftd_s$time <- ftd_s$`time point`
@@ -778,7 +778,7 @@ for (mat in names(rat.sig.anova.car.c.class)){
   r_time_course_sig_diff_dat$time <- r_time_course_sig_diff_dat$`time point`
   r_time_course_sig_diff_dat <- na.omit(subset(r_time_course_sig_diff_dat, variable %in% rat.sig.anova.car.c.class[[mat]]))
   r_time_course_sig_diff_dat$variable <- factor(r_time_course_sig_diff_dat$variable, levels = unique(r_time_course_sig_diff_dat$variable))
-  r_time_course_sig_diff_dat$group[r_time_course_sig_diff_dat$group != "Sham"] <- "septic"
+  r_time_course_sig_diff_dat$group[r_time_course_sig_diff_dat$group != "Sham"] <- "Septic"
   n_mets <- length(unique(r_time_course_sig_diff_dat$variable))
   r_time_course_group <- unique(data.frame(variable = r_time_course_sig_diff_dat$variable, value = 1.4, Time = 2, text = coarse_group_list[match(r_time_course_sig_diff_dat$variable, colnames(rat_sepsis_data)[-1:-4])]))
   lv <- sapply(anova.car.ph.sig.contr[[mat]], length)
@@ -840,7 +840,7 @@ r_time_course_sig_diff_dat <- melt(r_time_course_sig_diff_dat, id.vars = c("Samp
 r_time_course_sig_diff_dat$time <- r_time_course_sig_diff_dat$`time point`
 r_time_course_sig_diff_dat <- na.omit(subset(r_time_course_sig_diff_dat, variable %in% rat.sig.anova.car.c.pheno.class))
 r_time_course_sig_diff_dat$variable <- factor(r_time_course_sig_diff_dat$variable, levels = unique(r_time_course_sig_diff_dat$variable))
-r_time_course_sig_diff_dat$group[r_time_course_sig_diff_dat$group != "Sham"] <- "septic"
+r_time_course_sig_diff_dat$group[r_time_course_sig_diff_dat$group != "Sham"] <- "Septic"
 n_mets <- length(unique(r_time_course_sig_diff_dat$variable))
 r_time_course_group <- unique(data.frame(variable = r_time_course_sig_diff_dat$variable, value = 1.4, Time = 2, text = coarse_group_list[match(r_time_course_sig_diff_dat$variable, colnames(rat_sepsis_data)[-1:-4])]))
 lv <- sapply(anova.car.pheno.ph.sig.contr, length)
@@ -1170,6 +1170,54 @@ p <- ggplot(data = subset(rat_ratio_ci, metabolite %in% c("C0", "C2", "C4", "C4:
   theme_bw() +
   theme(panel.grid = element_blank())
 ggsave(plot = p, filename = "rat_S_vs_NS_ac_ratios_heart_vs_liver_24h.png", path = out_dir)
+
+###Same figures as bar plots
+rat_ratio_ci_melt <- melt(rat_ratio_ci, id.vars = "metabolite")
+tissue_time_type <- lapply(as.character(rat_ratio_ci_melt$variable), strsplit, split = "_", fixed = TRUE)
+rat_ratio_ci_melt$tissue <- sapply(lapply(tissue_time_type, unlist), `[[`, 1)
+rat_ratio_ci_melt$time <- sapply(lapply(tissue_time_type, unlist), `[[`, 2)
+rat_ratio_ci_melt$type <- sapply(lapply(tissue_time_type, unlist), `[[`, 3)
+rat_ratio_ci_re <- dcast(rat_ratio_ci_melt, metabolite + time + tissue ~ type, value.var = "value")
+rat_ratio_ci_re$time <- factor(rat_ratio_ci_re$time, levels = unique(rat_ratio_ci_re$time)[2:1])
+rrcr_liver_plasma <- subset(rat_ratio_ci_re, metabolite %in% c("C0", "C2", "C4", "C4:1", "C3-DC (C4-OH)", "C6 (C4:1-DC)", "C5-DC (C6-OH)", "C6:1", "C8", "C10", "C10:1", "C12", "C12:1", "C12-OH", "C14", "C14:1", "C14-OH", "C16", "C16:1", "C16-OH") & tissue %in% c("liver", "plasma"))
+p <- ggplot(data = rrcr_liver_plasma, mapping = aes(y = estimate, ymin = lower, ymax = upper, x = metabolite, color = tissue, fill = tissue)) +
+  facet_wrap(. ~ time, ncol = 1) +
+  geom_col(position = "dodge") +
+  geom_errorbar(size = 0.3, position = "dodge", color = "black") +
+  xlab("Metabolite") +
+  ylab("Rat AC ratio + CI, Septic-S vs -NS") + 
+  scale_color_brewer(type = "qual", aesthetics = c("color", "fill")) +
+  theme_bw() +
+  theme(panel.grid = element_blank(), axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+ggsave(plot = p, filename = "rat_S_vs_NS_ac_ratios_liver_vs_plasma_bar.png", path = out_dir, width = 9, height = 4, units = "in")
+
+saveRDS(object = p, file = paste0(out_dir, "rat_ratio_ci_liver_plasma_plot_object.RData"))
+
+rrcr_heart_plasma <- subset(rat_ratio_ci_re, metabolite %in% c("C0", "C2", "C4", "C4:1", "C3-DC (C4-OH)", "C6 (C4:1-DC)", "C5-DC (C6-OH)", "C6:1", "C8", "C10", "C10:1", "C12", "C12:1", "C12-OH", "C14", "C14:1", "C14-OH", "C16", "C16:1", "C16-OH") & tissue %in% c("heart", "plasma"))
+p <- ggplot(data = rrcr_heart_plasma, mapping = aes(y = estimate, ymin = lower, ymax = upper, x = metabolite, color = tissue, fill = tissue)) +
+  facet_wrap(. ~ time, ncol = 1) +
+  geom_col(position = "dodge") +
+  geom_errorbar(size = 0.3, position = "dodge", color = "black") +
+  xlab("Metabolite") +
+  ylab("Rat AC ratio + CI, Septic-S vs -NS") + 
+  scale_color_brewer(type = "qual", aesthetics = c("color", "fill")) +
+  theme_bw() +
+  theme(panel.grid = element_blank(), axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+ggsave(plot = p, filename = "rat_S_vs_NS_ac_ratios_heart_vs_plasma_bar.png", path = out_dir, width = 9, height = 4, units = "in")
+ggsave(plot = p, filename = "rat_S_vs_NS_ac_ratios_heart_vs_plasma_bar.svg", path = out_dir, width = 9, height = 4, units = "in")
+
+rrcr_heart_liver <- subset(rat_ratio_ci_re, metabolite %in% c("C0", "C2", "C4", "C4:1", "C3-DC (C4-OH)", "C6 (C4:1-DC)", "C5-DC (C6-OH)", "C6:1", "C8", "C10", "C10:1", "C12", "C12:1", "C12-OH", "C14", "C14:1", "C14-OH", "C16", "C16:1", "C16-OH") & tissue %in% c("heart", "liver"))
+p <- ggplot(data = rrcr_heart_liver, mapping = aes(y = estimate, ymin = lower, ymax = upper, x = metabolite, color = tissue, fill = tissue)) +
+  facet_wrap(. ~ time, ncol = 1) +
+  geom_col(position = "dodge") +
+  geom_errorbar(size = 0.3, position = "dodge", color = "black") +
+  xlab("Metabolite") +
+  ylab("Rat AC ratio + CI, Septic-S vs -NS") + 
+  scale_color_brewer(type = "qual", aesthetics = c("color", "fill")) +
+  theme_bw() +
+  theme(panel.grid = element_blank(), axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+ggsave(plot = p, filename = "rat_S_vs_NS_ac_ratios_heart_vs_liver_bar.png", path = out_dir, width = 9, height = 4, units = "in")
+ggsave(plot = p, filename = "rat_S_vs_NS_ac_ratios_heart_vs_liver_bar.svg", path = out_dir, width = 9, height = 4, units = "in")
 
 #TODO: add comparisons of sham rat vs septic S rat ratios, maybe also sham vs septic NS
 
