@@ -37,11 +37,8 @@ col_keep <- c("C0", "C10", "C10:1", "C12", "C12:1", "C4:1", "C3-DC (C4-OH)", "C6
 ratio_quant_map <- c("Car_ratio", "C10AcylCoA_ratio", "C10EnoylCoA_ratio", "C12AcylCoA_ratio", "C12EnoylCoA_ratio", "C4EnoylCoA_ratio", "C4HydroxyacylCoA_ratio", "C6AcylCoA_ratio", "C6EnoylCoA_ratio", "C6HydroxyacylCoA_ratio", "C8AcylCoA_ratio", "Time")
 ratio_quant_map <- paste0("{Values[", ratio_quant_map, "]}")
 #Set kinetic parameter names to estimate - also the same for all optimization steps
-react_pars <- c("Vcpt2", "Vcrot", "Vmcad", "Vmckat", "Vmschad", "Vmtp", "Vscad", "Vvlcad", "Ksacesink", "Ksfadhsink", "Ksnadhsink") # do not vary sink parameters! # or try with new setup
+react_pars <- c("Vfcact", "Vcpt1", "Vcpt2", "Vcrot", "Vmcad", "Vmckat", "Vmschad", "Vmtp", "Vscad", "Vvlcad", "Ksacesink", "Ksfadhsink", "Ksnadhsink")
 react_pars <- c(react_pars, paste0(react_pars, "[merge]"))
-
-#TODO: find out how to add constraints to parameter estimation taks
-#TODO: add constraints on t=1440 concentrations to be similar to t=0 concentrations
 
 #Fitting function
 model_fit_function <- function(number = 1, base_model_dir, out_dir, ss_conc, merge_gcvals = merge_gcvals, react_pars = react_pars, col_keep = col_keep, ratio_quant_map = ratio_quant_map){
@@ -128,7 +125,7 @@ model_fit_function <- function(number = 1, base_model_dir, out_dir, ss_conc, mer
 model_fit_function_with_prepared_models <- function(number = 1, base_model_dir, out_dir, ss_conc, merge_gcvals = merge_gcvals, react_pars = react_pars){
   set.seed(number)
   ##Load and clean model for day 0
-  new_model_day0 <- loadModel(path = paste0(base_model_dir, "human_beta_oxidation_twin_model_day0_var_sink.cps"))
+  new_model_day0 <- loadModel(path = paste0(base_model_dir, "human_beta_oxidation_twin_model_day0_var_sink_var_vcpt1_var_cact.cps"))
   #clearParameterEstimationParameters(model = new_model_day0)
   ##Set concentrations to steady state of original model
   setSpecies(key = ss_conc$key, initial_concentration = ss_conc$concentration, model = new_model_day0)
@@ -164,7 +161,7 @@ model_fit_function_with_prepared_models <- function(number = 1, base_model_dir, 
   saveModel(model = new_model_day0, filename = paste0(out_dir, "fitted_model_pilot_number_", number, "_day0.cps"), overwrite = TRUE)
   
   ##Load and clean model for day 1
-  new_model_day1 <- loadModel(path = paste0(base_model_dir, "human_beta_oxidation_twin_model_day1_var_sink.cps"))
+  new_model_day1 <- loadModel(path = paste0(base_model_dir, "human_beta_oxidation_twin_model_day1_var_sink_var_vcpt1_var_cact.cps"))
   #clearParameterEstimationParameters(model = new_model_day0)
   ##Set concentrations to levels of day 0 model at t=1440 but keep boundaries as in day 0
   tc_d0 <- runTimeCourse(model = new_model_day0, duration = 100, dt = 0.1, save_result_in_memory = TRUE, update_model = TRUE)
@@ -202,7 +199,7 @@ model_fit_function_with_prepared_models <- function(number = 1, base_model_dir, 
   saveModel(model = new_model_day1, filename = paste0(out_dir, "fitted_model_pilot_number_", number, "_day1.cps"), overwrite = TRUE)
   
   ##Load and clean model for day 2
-  new_model_day2 <- loadModel(path = paste0(base_model_dir, "human_beta_oxidation_twin_model_day2_var_sink.cps"))
+  new_model_day2 <- loadModel(path = paste0(base_model_dir, "human_beta_oxidation_twin_model_day2_var_sink_var_vcpt1_var_cact.cps"))
   #clearParameterEstimationParameters(model = new_model_day0)
   ##Set concentrations to levels of day 0 model at t=1440 but keep boundaries as in day 0
   tc_d1 <- runTimeCourse(model = new_model_day1, duration = 100, dt = 0.1, save_result_in_memory = TRUE, update_model = TRUE)
@@ -250,14 +247,14 @@ model_fit_function_with_prepared_models <- function(number = 1, base_model_dir, 
 
 #Actual fitting
 tic()
-cl <- makeCluster(min(detectCores() - 1, 100), outfile = "")
+cl <- makeCluster(min(detectCores() - 1, 100))
 prep_res <- clusterCall(cl = cl, fun = eval, quote({library(CoRC); library(data.table)}), env = .GlobalEnv)
 #par_est_res <- parLapplyLB(cl = cl, X = 1:1000, fun = model_fit_function, base_model_dir = base_model_dir, out_dir = out_dir, ss_conc = ss_conc, merge_gcvals = merge_gcvals, react_pars = react_pars, col_keep = col_keep, ratio_quant_map = ratio_quant_map)
 par_est_res <- parLapplyLB(cl = cl, X = 1:100, fun = model_fit_function_with_prepared_models, base_model_dir = base_model_dir, out_dir = out_dir, ss_conc = ss_conc, merge_gcvals = merge_gcvals, react_pars = react_pars)
 stopCluster(cl)
 toc()
 
-save.image()
+saveRDS(file = paste0(out_dir, "par_est_image.RData"), object = par_est_res)
 
 #Extract optimization results
 par_d0 <- lapply(lapply(lapply(par_est_res, `[[`, "hj_res_d0"), `[[`, "parameters"), subset, subset = stri_startswith_fixed(str = parameter, pattern = "Values["), select = c("parameter", "value", "lower_bound", "upper_bound"))
@@ -270,6 +267,7 @@ pd1 <- Reduce("rbind", par_d1)
 pd1$Day <- 1
 par_d2 <- lapply(lapply(lapply(par_est_res, `[[`, "hj_res_d2"), `[[`, "parameters"), subset, subset = stri_startswith_fixed(str = parameter, pattern = "Values["), select = c("parameter", "value", "lower_bound", "upper_bound"))
 par_d2 <- lapply(par_d2, subset, subset = duplicated(parameter)) #parameter table contains both the original bounds (first occurence) and reset bounds, we filter out the original bounds
+par_d2 <- lapply(par_d2, subset, subset = !duplicated(parameter)) #parameter table contains both the original bounds (first occurence) and reset bounds, we filter out the original bounds
 pd2 <- Reduce("rbind", par_d2)
 pd2$Day <- 2
 
@@ -281,21 +279,21 @@ obj <- data.frame(Value = c(obj_d0, obj_d1, obj_d2), Day = rep(0:2, each = lengt
 #Plot enzyme
 pd <- rbind(pd0, pd1, pd2)
 pd$Run <- rep(rep(1:length(par_est_res), each = length(unique(pd0$parameter))), times = 3)
-pd$Group <- c("Survivor", "Nonsurvivor")[1 + (grepl(pattern = "merge", x = pd$parameter))] #Values with [merge] belong to Nonsurvivors
+pd$Group <- c("Septic-S", "Septic-NS")[1 + (grepl(pattern = "merge", x = pd$parameter))] #Values with [merge] belong to Nonsurvivors
 pd$parameter <- stri_replace(str = pd$parameter, replacement = "", fixed = "[merge]")
 pd$parameter <- stri_extract(str = pd$parameter, regex = "\\[.+\\]")
 n_par <- length(unique(pd$parameter))
 pd_mn <- lapply(unique(pd$parameter), function(par){ ss <- subset(x = pd, parameter == par); ss$value <- ss$value / mean(ss$value); return(ss) })
 pd_mn <- Reduce("rbind", pd_mn)
-p <- ggplot(data = subset(pd, Run %in% seq(2, 100, by = 2)), mapping = aes(x = Day, y = value, color = Group)) + 
-  facet_wrap(facets = ~ parameter, ncol = 6, nrow = 2, scale = "free_y") +
+p <- ggplot(data = pd, mapping = aes(x = Day, y = value, color = Group)) + 
+  facet_wrap(facets = ~ parameter, ncol = 6, nrow = 3, scale = "free_y") +
   geom_hline(mapping = aes(yintercept = lower_bound)) +
   geom_hline(mapping = aes(yintercept = upper_bound)) +
   stat_summary(geom = "line", fun.data = mean_se) +
   stat_summary(geom = "errorbar", fun.data = mean_se, position = position_dodge(width = 0.2)) +
   scale_y_log10() +
   scale_x_continuous(breaks = 0:2) +
-  ylab("value +/- 1 SEM") +
+  ylab("Concentration mean +/- SEM") +
   theme_bw() + 
   theme(panel.grid = element_blank())
 ggsave(filename = "kin_mitomod_Vmax_S_vs_NS_repeated.png", plot = p, path = out_dir, width = 8, height = 4, units = "in")
@@ -304,8 +302,8 @@ ggsave(filename = "kin_mitomod_Vmax_S_vs_NS_repeated.png", plot = p, path = out_
 mpd <- dcast(pd, Day + Run + parameter ~ Group, value.var = "value")
 l <- ggplot(data = mpd, mapping = aes(x = Nonsurvivor, y = Survivor)) + 
   facet_grid(Day ~ parameter) + 
-  #geom_point(size = 0.7, alpha = 0.1) +
-  stat_bin_hex(bins = 20) + 
+  geom_point(size = 0.7, alpha = 0.1) +
+  #stat_bin_hex(bins = 20) + 
   geom_smooth(formula = y ~ x, method = "lm", se = FALSE) +
   scale_x_log10() +
   scale_y_log10() +
@@ -313,17 +311,17 @@ l <- ggplot(data = mpd, mapping = aes(x = Nonsurvivor, y = Survivor)) +
   theme(panel.grid = element_blank(), axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
 ggsave(plot = l, file = "kin_mitomod_rel_Vm.png", path = out_dir, width = 10, height = 4, units = "in")
 
-c1pd <- dcast(pd, Day + Run + Group ~ parameter)
-c2pd <- dcast(pd, Day + Run ~ parameter + Group)
-pc1 <- prcomp(as.matrix(c1pd[c1pd$Day == 0, -1:-3]), scale. = TRUE)
-pc2 <- prcomp(as.matrix(c2pd[c2pd$Day == 0, -1:-2]), scale. = TRUE)
-
 h <- ggplot(data = obj, mapping = aes(x = Value)) +
   facet_wrap(Day ~ ., scale = "free_x") +
   geom_histogram(bins = 10) +
   theme_bw() + 
   theme(panel.grid = element_blank())
 ggsave(plot = h, filename = "kin_mitomod_obj_val.png", path = out_dir, width = 8, height = 4, units = "in")
+
+c1pd <- dcast(pd, Day + Run + Group ~ parameter)
+c2pd <- dcast(pd, Day + Run ~ parameter + Group)
+try(pc1 <- prcomp(as.matrix(c1pd[c1pd$Day == 0, -1:-3]), scale. = TRUE))
+try(pc2 <- prcomp(as.matrix(c2pd[c2pd$Day == 0, -1:-2]), scale. = TRUE))
 
 #Remove COPASI models from memory
 unloadAllModels()
