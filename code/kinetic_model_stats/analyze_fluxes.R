@@ -7,6 +7,7 @@ library(matrixStats)
 library(CoRC)
 library(tictoc)
 library(parallel)
+library(cowplot)
 
 source("../function_definitions.R")
 
@@ -61,6 +62,11 @@ p_vmax <- ggplot(data = pd_sub, mapping = aes(x = Day, y = value, color = Group)
   theme(panel.grid = element_blank(), legend.direction = "horizontal", legend.position = "bottom", text = element_text(size = rsize), strip.text = element_text(size = rsize), legend.text = element_text(size = rsize, margin = margin(r = 10)), legend.title = element_blank())
 ggsave(filename = "kin_mitomod_Vmax_S_vs_NS_repeated_subset.png", plot = p_vmax, path = out_dir, width = 9, height = 5, units = "in")
 ggsave(filename = "kin_mitomod_Vmax_S_vs_NS_repeated_subset.svg", plot = p_vmax, path = out_dir, width = 9, height = 5, units = "in")
+
+p_rat_conc_ratio <- readRDS(file = "../../results/data_stats_rat_surv_vs_nonsurv/rat_ratio_ci_liver_plasma_plot_object.RData")
+
+panel7 <- plot_grid(p_vmax, p_rat_conc_ratio, ncol = 1, axis = "lr", align = "rl", rel_heights = c(1, 2), labels = "AUTO")
+ggsave(plot = panel7, filename = "kinetic_model_result_subset_and_rat_ratios.png", path = out_dir, width = 9, height = 9, units = "in")
 
 models_list <- list.files(path = models_dir, pattern = ".{+}\\.cps", full.names = TRUE)
 file_list <- list.files(path = models_dir, pattern = ".{+}\\.cps", full.names = FALSE)
