@@ -1179,6 +1179,7 @@ rat_ratio_ci_melt$time <- sapply(lapply(tissue_time_type, unlist), `[[`, 2)
 rat_ratio_ci_melt$type <- sapply(lapply(tissue_time_type, unlist), `[[`, 3)
 rat_ratio_ci_re <- dcast(rat_ratio_ci_melt, metabolite + time + tissue ~ type, value.var = "value")
 rat_ratio_ci_re$time <- factor(rat_ratio_ci_re$time, levels = unique(rat_ratio_ci_re$time)[2:1])
+####For Plasma and Liver
 rrcr_liver_plasma <- subset(rat_ratio_ci_re, metabolite %in% c("C0", "C2", "C4", "C4:1", "C3-DC (C4-OH)", "C6 (C4:1-DC)", "C5-DC (C6-OH)", "C6:1", "C8", "C10", "C10:1", "C12", "C12:1", "C12-OH", "C14", "C14:1", "C14-OH", "C16", "C16:1", "C16-OH") & tissue %in% c("liver", "plasma"))
 rsize <- rel(4)
 p <- ggplot(data = rrcr_liver_plasma, mapping = aes(y = estimate, ymin = lower, ymax = upper, x = metabolite, color = tissue, fill = tissue)) +
@@ -1195,6 +1196,24 @@ ggsave(plot = p, filename = "rat_S_vs_NS_ac_ratios_liver_vs_plasma_bar.png", pat
 
 saveRDS(object = p, file = paste0(out_dir, "rat_ratio_ci_liver_plasma_plot_object.RData"))
 
+####For all materials
+rrcr_all_mats <- subset(rat_ratio_ci_re, metabolite %in% c("C0", "C2", "C4", "C4:1", "C3-DC (C4-OH)", "C6 (C4:1-DC)", "C5-DC (C6-OH)", "C6:1", "C8", "C10", "C10:1", "C12", "C12:1", "C12-OH", "C14", "C14:1", "C14-OH", "C16", "C16:1", "C16-OH"))
+rsize <- rel(4)
+p <- ggplot(data = rrcr_all_mats, mapping = aes(y = estimate, ymin = lower, ymax = upper, x = metabolite, color = tissue, fill = tissue)) +
+  facet_wrap(. ~ time, ncol = 1, strip.position = "right") +
+  geom_col(position = "dodge") +
+  geom_errorbar(size = 0.3, position = "dodge", color = "black") +
+  guides(fill = guide_legend(title = "Tissue"), color = "none") +
+  xlab("") +
+  ylab("Rat Septic-S to Septic-NS ratio\n+ 95% Confidence Interval") + 
+  scale_color_brewer(type = "qual", aesthetics = c("color", "fill")) +
+  theme_bw() +
+  theme(panel.grid = element_blank(), axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1), legend.position = "top", legend.direction = "horizontal", text = element_text(size = rsize), legend.text = element_text(size = rsize))
+ggsave(plot = p, filename = "rat_S_vs_NS_ac_ratios_all_mats_bar.png", path = out_dir, width = 9, height = 5, units = "in")
+
+saveRDS(object = p, file = paste0(out_dir, "rat_ratio_ci_all_mats_plot_object.RData"))
+
+####For heart and plasma
 rrcr_heart_plasma <- subset(rat_ratio_ci_re, metabolite %in% c("C0", "C2", "C4", "C4:1", "C3-DC (C4-OH)", "C6 (C4:1-DC)", "C5-DC (C6-OH)", "C6:1", "C8", "C10", "C10:1", "C12", "C12:1", "C12-OH", "C14", "C14:1", "C14-OH", "C16", "C16:1", "C16-OH") & tissue %in% c("heart", "plasma"))
 p <- ggplot(data = rrcr_heart_plasma, mapping = aes(y = estimate, ymin = lower, ymax = upper, x = metabolite, color = tissue, fill = tissue)) +
   facet_wrap(. ~ time, ncol = 1) +
@@ -1208,6 +1227,7 @@ p <- ggplot(data = rrcr_heart_plasma, mapping = aes(y = estimate, ymin = lower, 
 ggsave(plot = p, filename = "rat_S_vs_NS_ac_ratios_heart_vs_plasma_bar.png", path = out_dir, width = 9, height = 4, units = "in")
 ggsave(plot = p, filename = "rat_S_vs_NS_ac_ratios_heart_vs_plasma_bar.svg", path = out_dir, width = 9, height = 4, units = "in")
 
+####For heart and liver
 rrcr_heart_liver <- subset(rat_ratio_ci_re, metabolite %in% c("C0", "C2", "C4", "C4:1", "C3-DC (C4-OH)", "C6 (C4:1-DC)", "C5-DC (C6-OH)", "C6:1", "C8", "C10", "C10:1", "C12", "C12:1", "C12-OH", "C14", "C14:1", "C14-OH", "C16", "C16:1", "C16-OH") & tissue %in% c("heart", "liver"))
 p <- ggplot(data = rrcr_heart_liver, mapping = aes(y = estimate, ymin = lower, ymax = upper, x = metabolite, color = tissue, fill = tissue)) +
   facet_wrap(. ~ time, ncol = 1) +
