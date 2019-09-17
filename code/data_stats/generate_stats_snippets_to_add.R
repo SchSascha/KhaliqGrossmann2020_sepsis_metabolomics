@@ -486,9 +486,7 @@ for (met_group in setdiff(unique(human_data_legend$group[metab_sel]), "sugar")){
   ap_metab_group[[met_group]] <- ap_metab_group[[met_group]] +
     human_col_scale(aesthetics = c("colour", "fill")) +
     guides(colour = "none", fill = "none", group = "none") +
-    ggtitle(met_group) +
-    theme_bw() + 
-    theme(panel.grid = element_blank())
+    ggtitle(met_group)
   gobj <- ggplot_build(ap_metab_group[[met_group]])
   xmax <- gobj$layout$panel_params[[1]]$x.range[2]
   xmin <- gobj$layout$panel_params[[1]]$x.range[1]
@@ -501,14 +499,20 @@ for (met_group in setdiff(unique(human_data_legend$group[metab_sel]), "sugar")){
     scale_x_continuous(limits = c(xmin, xmax) * 1.1) + 
     scale_y_continuous(limits = c(ymin, ymax * 1.4)) +
     geom_text(x = 1.15 * xmin, y = 1.2 * ymax, label = paste0(text_v, collapse = "\n"), size = 3, hjust = "left")
-    
   #ggsave(filename = paste0("PCA_biplot_", met_group, "_all_samples.png"), path = out_dir, plot = ap, width = 6, height = 5, units = "in")
 }
-ap_metab_group[[met_group]] <- ap_metab_group[[met_group]] + 
+for (met_group in seq_along(ap_metab_group)[-length(ap_metab_group)]){
+  ap_metab_group[[met_group]] <- ap_metab_group[[met_group]] + 
+    theme_bw() +
+    theme(panel.grid = element_blank())
+}
+ap_metab_group[[length(ap_metab_group)]] <- ap_metab_group[[length(ap_metab_group)]] + 
   guides(colour = guide_legend(title = "Group"), fill = "none", group = "none") +
-  theme_update(legend.direction = "horizontal", legend.position = "bottom")
+  theme_bw() +
+  theme(panel.grid = element_blank(), legend.direction = "horizontal", legend.position = "bottom", legend.title = element_blank())
 ap_metab_group_supp_panel <- plot_grid(plotlist = ap_metab_group, ncol = 2, nrow = 3, labels = "AUTO", align = "hv", axis = "tblr")
 ggsave(plot = ap_metab_group_supp_panel, filename = "PCA_biplot_met_group_panel.png", path = out_dir, width = 9, height = 4.5 * 3, units = "in")
+ggsave(plot = ap_metab_group_supp_panel, filename = "PCA_biplot_met_group_panel.svg", path = out_dir, width = 9, height = 4.5 * 3, units = "in")
 toc()
 
 ###Actual plot of sepsis samples, clinical params
