@@ -16,6 +16,7 @@ library(nlme)
 library(multcomp)
 library(pheatmap)
 library(scales)
+library(xlsx)
 
 #Import central functions
 source("../function_definitions.R")
@@ -451,6 +452,73 @@ p <- ggplot(data = dev_score_m, mapping = aes(fill = group, x = value)) +
   theme_bw() +
   theme(panel.grid = element_blank())
 ggsave(plot = p, filename = paste0("generalized_safe_corridor_minmax.png"), path = out_dir, width = 6, height = 6, units = "in")
+
+####################
+#Table output
+####################
+
+##XLSX table with all p and q values
+anova.ptabc <- list()
+for (n in seq_along(anova.car.c.pre.ps)){
+  anova.ptabc[[n]] <- as.data.frame(t(anova.car.c.pre.ps[[n]]))
+  colnames(anova.ptabc[[n]]) <- paste0("p of ", colnames(anova.ptabc[[n]]))
+}
+anova.ptabc[[length(anova.ptabc) + 1]] <- as.data.frame(t(anova.car.c.pheno.pre.ps))
+colnames(anova.ptabc[[length(anova.ptabc)]]) <- paste0("p of ", colnames(anova.ptabc[[length(anova.ptabc)]]))
+anova.ptabs <- list()
+for (n in seq_along(anova.car.s.pre.ps)){
+  anova.ptabs[[n]] <- as.data.frame(t(anova.car.s.pre.ps[[n]]))
+  colnames(anova.ptabs[[n]]) <- paste0("p of ", colnames(anova.ptabs[[n]]))
+}
+anova.ptabs[[length(anova.ptabs) + 1]] <- as.data.frame(t(anova.car.s.pheno.pre.ps))
+colnames(anova.ptabs[[length(anova.ptabs)]]) <- paste0("p of ", colnames(anova.ptabs[[length(anova.ptabs)]]))
+anova.qtabc <- list()
+for (n in seq_along(anova.car.c.ps)){
+  anova.qtabc[[n]] <- as.data.frame(t(anova.car.c.ps[[n]]))
+  colnames(anova.qtabc[[n]]) <- paste0("q of ", colnames(anova.qtabc[[n]]))
+}
+anova.qtabc[[length(anova.qtabc) + 1]] <- as.data.frame(t(anova.car.c.pheno.ps))
+colnames(anova.qtabc[[length(anova.qtabc)]]) <- paste0("p of ", colnames(anova.qtabc[[length(anova.qtabc)]]))
+anova.qtabs <- list()
+for (n in seq_along(anova.car.s.ps)){
+  anova.qtabs[[n]] <- as.data.frame(t(anova.car.s.ps[[n]]))
+  colnames(anova.qtabs[[n]]) <- paste0("q of ", colnames(anova.qtabs[[n]]))
+}
+anova.qtabs[[length(anova.qtabs) + 1]] <- as.data.frame(t(anova.car.s.pheno.ps))
+colnames(anova.qtabs[[length(anova.qtabs)]]) <- paste0("q of ", colnames(anova.qtabs[[length(anova.qtabs)]]))
+anova.pqtabc <- lapply(seq_along(anova.ptabc), function(n) cbind(anova.ptabc[[n]], anova.qtabc[[n]]))
+anova.pqtabs <- lapply(seq_along(anova.ptabs), function(n) cbind(anova.ptabs[[n]], anova.qtabs[[n]]))
+anova.pqtaball <- c(anova.pqtabc, anova.pqtabs)
+sheetnames <- c(names(rat.sig.anova.car.c.class), "biochem.")
+sheetnames <- paste0(rep(sheetnames, times = 2), ", ", rep(c("Sham vs Septic", "Septic-S vs Septic-NS"), each = 4))
+pqtab_xlsx_file <- paste0(out_dir, "rat_ANOVA_pq.xlsx")
+pqtab_workbook <- createWorkbook(type = "xlsx")
+for (n in seq_along(anova.pqtaball)){
+  sheet <- createSheet(wb = pqtab_workbook, sheetName = sheetnames[n])
+  for (col in 1:10){
+    setColumnWidth(sheet = sheet, colIndex = col, colWidth = 20)
+  }
+  sheet <- addDataFrame(x = anova.pqtaball[[n]], 
+                        sheet = sheet, 
+                        col.names = TRUE, 
+                        row.names = TRUE, 
+                        colnamesStyle = CellStyle(wb = pqtab_workbook, 
+                                                  font = Font(wb = pqtab_workbook, isBold = TRUE), 
+                                                  alignment = Alignment(horizontal = "ALIGN_CENTER")))
+}
+sheet <- createSheet(wb = pqtab_workbook, sheetName = "legend")
+for (col in 1:10){
+  setColumnWidth(sheet = sheet, colIndex = col, colWidth = 30)
+}
+legend_df <- read.xlsx(file = "../../data/measurements/Summary rat sample data 61 edit.xlsx", sheetIndex = 2)
+colnames(legend_df)[c(1, 5)] <- ""
+sheet <- addDataFrame(x = legend_df,
+                      sheet = sheet, 
+                      row.names = FALSE,
+                      colnamesStyle = CellStyle(wb = pqtab_workbook, 
+                                                font = Font(wb = pqtab_workbook, isBold = TRUE), 
+                                                alignment = Alignment(horizontal = "ALIGN_CENTER")))
+saveWorkbook(wb = pqtab_workbook, file = pqtab_xlsx_file)
 
 ####################
 #Plot data
