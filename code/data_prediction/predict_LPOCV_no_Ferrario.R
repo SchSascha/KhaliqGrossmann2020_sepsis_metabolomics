@@ -184,7 +184,7 @@ p <- ggplot(data = rg_AUC_data_long, mapping = aes(x = variable, y = value, colo
   stat_summary(fun.y = median, geom = "line") + 
   ylim(0, 1) + 
   ylab("Median AUC") +
-  xlab("Nubmer of features") +
+  xlab("Number of features") +
   ggtitle("RF: Test and Validation AUC of nested TLPOCV-RFE") +
   theme_bw()
 ggsave(filename = "RF_TLPOCV_RFE_AUC.png", path = out_dir_pred, plot = p, width = 10, height = 5, units = "in")
@@ -219,7 +219,7 @@ p_roc_rg_2feat <- ggplot(data = rg_ROC_data, mapping = aes(x = FPR, y = TPR, col
   geom_line(data = rg_ext_ROC_data, size = rel(1.5)) +
   geom_segment(x = 0, y = 0, xend = 1, yend = 1, size = 0.5, inherit.aes = FALSE) +
   geom_text(x = 0.95, y = 0.15, hjust = "right", color = scales::hue_pal()(2)[1], size = rel(4.5),
-            label = paste0("Training AUC = ", format(mean(subset(rg_AUC_data_long, variable == 2 & Stage == "Test data", "value")[[1]]), digits = 3))) +
+            label = paste0("Test AUC = ", format(mean(subset(rg_AUC_data_long, variable == 2 & Stage == "Test data", "value")[[1]]), digits = 3))) +
   geom_text(x = 0.95, y = 0.10, hjust = "right", color = scales::hue_pal()(2)[2], size = rel(4.5),
             label = paste0("Validation AUC = ", format(subset(rg_AUC_data_long, variable == 2 & Stage == "Validation data", "value"), digits = 3))) +
   scale_x_continuous(limits = c(-0.01, 1.01), expand = c(0, 0)) +
@@ -283,7 +283,7 @@ p_roc_svm_2feat <- ggplot(data = sv_ROC_data, mapping = aes(x = FPR, y = TPR, co
   geom_line(data = sv_ext_ROC_data, size = rel(1.5)) +
   geom_segment(x = 0, y = 0, xend = 1, yend = 1, size = 0.5, inherit.aes = FALSE) +
   geom_text(x = 0.95, y = 0.15, hjust = "right", color = scales::hue_pal()(2)[1], size = rel(4.5),
-            label = paste0("Training AUC = ", format(mean(subset(sv_AUC_data_long, variable == 2 & Stage == "Test data", "value")[[1]]), digits = 3))) +
+            label = paste0("Test AUC = ", format(mean(subset(sv_AUC_data_long, variable == 2 & Stage == "Test data", "value")[[1]]), digits = 3))) +
   geom_text(x = 0.95, y = 0.10, hjust = "right", color = scales::hue_pal()(2)[2], size = rel(4.5),
             label = paste0("Validation AUC = ", format(subset(sv_AUC_data_long, variable == 2 & Stage == "Validation data", "value"), digits = 3))) +
   scale_x_continuous(limits = c(-0.01, 1.01), expand = c(0, 0)) +

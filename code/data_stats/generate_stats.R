@@ -2103,7 +2103,7 @@ p <- ggplot(data = dev_score, mapping = aes(fill = Group, x = score)) +
   theme_bw() +
   theme(panel.grid = element_blank(), legend.direction = "horizontal", legend.position = "bottom")
 ggsave(plot = p, filename = "generalized_safe_corridor_minmax.png", path = out_dir, width = 8, height = 4, units = "in")
-dev_score$x <- factor("This study")
+dev_score$x <- factor("Our study")
 pbox <- ggplot(data = subset(dev_score, Group %in% c("Septic-NS", "non-Septic-NS")), mapping = aes(fill = Group, x = score, y = x, colour = Group)) +
   geom_dotplot(stackdir = "center", binaxis = "x") + 
   human_col_scale(aesthetics = c("fill", "colour")) +
@@ -2195,7 +2195,7 @@ p <- ggplot(data = dev_score, mapping = aes(fill = Survival, x = score)) +
   theme(panel.grid = element_blank())
 ggsave(plot = p, filename = "generalized_safe_corridor_Ferrario_minmax.png", path = out_dir, width = 6, height = 3, units = "in")
 dev_score_vd_minmax <- dev_score
-dev_score_vd_minmax$x <- factor("Ferrario et al.")
+dev_score_vd_minmax$x <- factor("Ferrario et al., 2016")
 dev_score_vd_minmax$Group <- paste0("Septic-", dev_score_vd_minmax$Survival)
 dev_score_cb_minmax <- rbind(dev_score_UK_minmax, dev_score_vd_minmax)
 dev_score_cb_minmax$x <- factor(dev_score_cb_minmax$x)
@@ -2203,8 +2203,8 @@ pbox <- ggplot(data = subset(dev_score_cb_minmax, Survival == "NS"), mapping = a
   geom_dotplot(stackdir = "center", binaxis = "y", dotsize = 0.7) + 
   human_col_scale(aesthetics = c("fill", "colour")) +
   scale_x_discrete(limits = levels(dev_score_cb_minmax$x)[2:1]) +
-  geom_path(inherit.aes = FALSE, data = data.frame(y = min(subset(p_thresh_sig_UK_minmax, include == 1)$score) - 1, x = 1 + c(0.6, 1.4)), mapping = aes(x, y), linetype = 2) +
-  geom_path(inherit.aes = FALSE, data = data.frame(y = mean(p_thresh), x = c(0.6, 1.4)), mapping = aes(x, y), linetype = 2) +
+  #geom_path(inherit.aes = FALSE, data = data.frame(y = min(subset(p_thresh_sig_UK_minmax, include == 1)$score) - 1, x = 1 + c(0.6, 1.4)), mapping = aes(x, y), linetype = 2) +
+  #geom_path(inherit.aes = FALSE, data = data.frame(y = mean(p_thresh), x = c(0.6, 1.4)), mapping = aes(x, y), linetype = 2) +
   geom_rect(data = data.frame(xmin = 0.4, xmax = 1.3, ymin = 56, ymax = 70), mapping = aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax), fill = "white", colour = "black", inherit.aes = FALSE) +
   coord_flip() +
   ylab("Number of metabolites outside of the safe corridor per patient") +
