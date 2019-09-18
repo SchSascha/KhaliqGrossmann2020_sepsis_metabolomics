@@ -219,13 +219,13 @@ p_roc_rg_2feat <- ggplot(data = rg_ROC_data, mapping = aes(x = FPR, y = TPR, col
   geom_line(data = rg_ext_ROC_data, size = rel(1.5)) +
   geom_segment(x = 0, y = 0, xend = 1, yend = 1, size = 0.5, inherit.aes = FALSE) +
   geom_text(x = 0.95, y = 0.15, hjust = "right", color = scales::hue_pal()(2)[1], size = rel(4.5),
-            label = paste0("Test AUC = ", format(mean(subset(rg_AUC_data_long, variable == 2 & Stage == "Test data", "value")[[1]]), digits = 3))) +
+            label = paste0("Test AUC = ", format(mean(subset(rg_AUC_data_long, variable == 2 & Stage == "Test data", "value")[[1]]), digits = 3, nsmall = 3))) +
   geom_text(x = 0.95, y = 0.10, hjust = "right", color = scales::hue_pal()(2)[2], size = rel(4.5),
-            label = paste0("Validation AUC = ", format(subset(rg_AUC_data_long, variable == 2 & Stage == "Validation data", "value"), digits = 3))) +
+            label = paste0("Validation AUC = ", format(subset(rg_AUC_data_long, variable == 2 & Stage == "Validation data", "value"), digits = 3, nsmall = 3))) +
   scale_x_continuous(limits = c(-0.01, 1.01), expand = c(0, 0)) +
   scale_y_continuous(limits = c(-0.01, 1.01), expand = c(0, 0)) +
   #ggtitle("RF: Test and Validation ROC of nested TLPOCV RFE\nbest 2 feature set") +
-  geom_text(label = "ROC curves\nRandom Forest\n2 features", x = 0.5, y = 0.85, size = rel(4.5), inherit.aes = FALSE) +
+  geom_text(label = "ROC curve\nRandom Forest\n2 features", x = 0.5, y = 0.85, size = rel(4.5), inherit.aes = FALSE) +
   theme_bw() + 
   theme(panel.grid = element_blank(), legend.position = "none", text = element_text(size = rsize), plot.margin = margin(r = 10, l = 10))
 ggsave(filename = "RF_TLPOCV_RFE_ROC_2feat.png", path = out_dir_pred, plot = p_roc_rg_2feat, width = 6, height = 5, units = "in")
@@ -283,9 +283,9 @@ p_roc_svm_2feat <- ggplot(data = sv_ROC_data, mapping = aes(x = FPR, y = TPR, co
   geom_line(data = sv_ext_ROC_data, size = rel(1.5)) +
   geom_segment(x = 0, y = 0, xend = 1, yend = 1, size = 0.5, inherit.aes = FALSE) +
   geom_text(x = 0.95, y = 0.15, hjust = "right", color = scales::hue_pal()(2)[1], size = rel(4.5),
-            label = paste0("Test AUC = ", format(mean(subset(sv_AUC_data_long, variable == 2 & Stage == "Test data", "value")[[1]]), digits = 3))) +
+            label = paste0("Test AUC = ", format(mean(subset(sv_AUC_data_long, variable == 2 & Stage == "Test data", "value")[[1]]), digits = 3, nsmall = 3))) +
   geom_text(x = 0.95, y = 0.10, hjust = "right", color = scales::hue_pal()(2)[2], size = rel(4.5),
-            label = paste0("Validation AUC = ", format(subset(sv_AUC_data_long, variable == 2 & Stage == "Validation data", "value"), digits = 3))) +
+            label = paste0("Validation AUC = ", format(subset(sv_AUC_data_long, variable == 2 & Stage == "Validation data", "value"), digits = 3, nsmall = 3))) +
   scale_x_continuous(limits = c(-0.01, 1.01), expand = c(0, 0)) +
   scale_y_continuous(limits = c(-0.01, 1.01), expand = c(0, 0)) +
   #ggtitle("SVM: Test and Validation ROC of nested TLPOCV RFE\nbest 2 feature set") +
@@ -343,7 +343,7 @@ sv_nonsep_roc <- ggplot(data = sv_nonsep_melt_roc, mapping = aes(x = FPR, y = TP
   theme(panel.grid = element_blank())
 ggsave(plot = sv_nonsep_roc, filename = "SVM_train_sep_test_nonsep_roc.png", width = 5, height = 4, units = "in", path = out_dir_pred)
 
-#TODO: make figure panel including heatmap of significant differences in metabolites & biochemical parameters (Fig 2A)
+#make figure panel including heatmap of significant differences in metabolites & biochemical parameters (Fig 2A)
 phm <- readRDS(file = "../data_stats/sig_feat_all_pats_heatmap.RData")
 phm$gtable$grobs[[7]]$label <- "Metab.\ngroup"
 phm$gtable$grobs[[7]]$gp$lineheight <- 0.7
