@@ -2199,19 +2199,27 @@ dev_score_vd_minmax$x <- factor("Ferrario et al., 2016")
 dev_score_vd_minmax$Group <- paste0("Septic-", dev_score_vd_minmax$Survival)
 dev_score_cb_minmax <- rbind(dev_score_UK_minmax, dev_score_vd_minmax)
 dev_score_cb_minmax$x <- factor(dev_score_cb_minmax$x)
+if (t.test(x = subset(dev_score_UK_minmax, Group == "Septic-NS", "score"), y = subset(dev_score_UK_minmax, Group == "non-Septic-NS", "score"))$p.value > 0.05){
+  dev_score_cb_minmax <- subset(dev_score_cb_minmax, Group != "non-Septic-NS")
+  xmax <- 0.9
+  legx <- 0.12
+} else {
+  xmax <- 1.3
+  legx <- 0.2
+}
 pbox <- ggplot(data = subset(dev_score_cb_minmax, Survival == "NS"), mapping = aes(fill = Group, x = x, y = score, colour = Group)) +
   geom_dotplot(stackdir = "center", binaxis = "y", dotsize = 0.7) + 
   human_col_scale(aesthetics = c("fill", "colour")) +
   scale_x_discrete(limits = levels(dev_score_cb_minmax$x)[2:1]) +
   #geom_path(inherit.aes = FALSE, data = data.frame(y = min(subset(p_thresh_sig_UK_minmax, include == 1)$score) - 1, x = 1 + c(0.6, 1.4)), mapping = aes(x, y), linetype = 2) +
   #geom_path(inherit.aes = FALSE, data = data.frame(y = mean(p_thresh), x = c(0.6, 1.4)), mapping = aes(x, y), linetype = 2) +
-  geom_rect(data = data.frame(xmin = 0.4, xmax = 1.3, ymin = 56, ymax = 70), mapping = aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax), fill = "white", colour = "black", inherit.aes = FALSE) +
+  geom_rect(data = data.frame(xmin = 0.4, xmax = xmax, ymin = 56, ymax = 70), mapping = aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax), fill = "white", colour = "black", inherit.aes = FALSE) +
   coord_flip() +
   ylab("Number of metabolites outside of the safe corridor per patient") +
   xlab("") +
   scale_y_continuous(limits = c(0, 70), expand = c(0,0)) +
   theme_bw() +
-  theme(panel.grid = element_blank(), panel.grid.major.y = element_line(color = "grey80"), legend.direction = "vertical", legend.position = c(0.9, 0.2), legend.title = element_blank(), legend.background = element_blank())
+  theme(panel.grid = element_blank(), panel.grid.major.y = element_line(color = "grey80"), legend.direction = "vertical", legend.position = c(0.9, legx), legend.title = element_blank(), legend.background = element_blank())
 ggsave(plot = pbox, filename = "generalized_safe_corridor_minmax_box_UK_Ferrario.png", path = out_dir, width = 7, height = 2, units = "in")
 ggsave(plot = pbox, filename = "generalized_safe_corridor_minmax_box_UK_Ferrario.svg", path = out_dir, width = 7, height = 2, units = "in")
 print(paste0("Contribution of high deviation and low deviation to score is ", sum(udev), " and ", sum(ldev), " respectively."))
