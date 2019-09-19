@@ -50,7 +50,7 @@ pd_bounds <- melt(pd_bounds, id.vars = c("parameter"))
 pd_bounds$Group <- "Upper/Lower bound"
 rsize <- rel(4)
 p_vmax <- ggplot(data = pd_sub, mapping = aes(x = Day, y = value, color = Group)) + 
-  facet_wrap(facets = ~ parameter, ncol = 4, nrow = 1, scale = "free_y") +
+  facet_wrap(facets = ~ parameter, ncol = 2, nrow = 2, scale = "free_y") +
   geom_hline(data = pd_bounds, mapping = aes(yintercept = value, color = Group), size = rel(1)) +
   stat_summary(data = pd_sub, geom = "line", fun.data = mean_se, size = rel(1)) +
   stat_summary(data = pd_sub, geom = "errorbar", fun.data = mean_se, size = rel(1), width = 0.5) +
@@ -63,12 +63,15 @@ p_vmax <- ggplot(data = pd_sub, mapping = aes(x = Day, y = value, color = Group)
 ggsave(filename = "kin_mitomod_Vmax_S_vs_NS_repeated_subset.png", plot = p_vmax, path = out_dir, width = 9, height = 5, units = "in")
 ggsave(filename = "kin_mitomod_Vmax_S_vs_NS_repeated_subset.svg", plot = p_vmax, path = out_dir, width = 9, height = 5, units = "in")
 
+<<<<<<< Updated upstream
 p_rat_conc_ratio <- readRDS(file = "../../results/data_stats_rat_surv_vs_nonsurv/rat_ratio_ci_liver_plasma_plot_object.RData")
 
 panel7 <- plot_grid(p_rat_conc_ratio, p_vmax, ncol = 1, axis = "lr", align = "rl", rel_heights = c(1, 0.6), labels = "AUTO")
 ggsave(plot = panel7, filename = "kinetic_model_result_subset_and_rat_ratios.png", path = out_dir, width = 9, height = 9, units = "in")
 ggsave(plot = panel7, filename = "kinetic_model_result_subset_and_rat_ratios.svg", path = out_dir, width = 9, height = 9, units = "in")
 
+=======
+>>>>>>> Stashed changes
 models_list <- list.files(path = models_dir, pattern = ".{+}\\.cps", full.names = TRUE)
 file_list <- list.files(path = models_dir, pattern = ".{+}\\.cps", full.names = FALSE)
 
@@ -151,3 +154,20 @@ p <- ggplot(data = mfluxes, mapping = aes(x = Day, y = value, color = Group)) +
   theme(panel.grid = element_blank(), legend.direction = "horizontal", legend.position = "bottom")
 ggsave(filename = "kin_mitomod_flux_S_vs_NS_repeated.png", plot = p, path = out_dir, width = 9, height = 11, units = "in")
 ggsave(filename = "kin_mitomod_flux_S_vs_NS_repeated.svg", plot = p, path = out_dir, width = 9, height = 11, units = "in")
+
+p_sink_fluxes <- ggplot(data = subset(mfluxes, variable %in% c("vnadhsink", "vfadhsink", "vacesink")), mapping = aes(x = Day, y = value, color = Group)) + 
+  facet_wrap(facets = ~ variable, ncol = 3, nrow = 1, scale = "free_y") +
+  stat_summary(geom = "line", fun.data = mean_se) +
+  stat_summary(geom = "errorbar", fun.data = mean_se, position = position_dodge(width = 0.2)) +
+  scale_y_continuous(labels = function(x) scales::scientific(x, digits = 2)) +
+  ylab("Flux mean +/- SEM,\nµmol/min") +
+  theme_bw() + 
+  theme(panel.grid = element_blank(), legend.direction = "horizontal", legend.position = "bottom")
+
+p_rat_conc_ratio <- readRDS(file = "../../results/data_stats_rat_surv_vs_nonsurv/rat_ratio_ci_all_mats_plot_object.RData")
+p_betaoxid <- ggdraw() + draw_image("../../results/data_stats/beta_oxidation_scheme.svg")
+
+panel7 <- plot_grid(plot_grid(plot_grid(p_sink_fluxes, p_betaoxid, labels = c("C", "D")), p_vmax, rel_widths = c(2, 3)), p_rat_conc_ratio, ncol = 1, axis = "lr", align = "rl", rel_heights = c(1, 2), labels = c("A", "B"))
+ggsave(plot = panel7, filename = "kinetic_model_result_subset_and_rat_ratios.png", path = out_dir, width = 9, height = 12, units = "in")
+
+save.image()
