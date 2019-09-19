@@ -14,6 +14,7 @@ library(forcats)
 library(car)
 library(nlme)
 library(multcomp)
+library(mratios)
 library(pheatmap)
 library(scales)
 library(xlsx)
@@ -85,6 +86,24 @@ rrci[c("material", "time", "metabolite")] <- tstrsplit(rrci$L1, split = ".", fix
 rrci <- dcast(data = rrci, metabolite ~ material + time + L2)
 #rrci <- rrci[, -which(colnames(rrci) == "L1")]
 rat_ratio_ci <- rrci
+rosdm$plasma_ref <- sapply(1:nrow(rosdm), 
+                           function(x) rat_ratio_ci[rosdm$variable[x], paste(rosdm$material[x], rosdm$`time point`[x], "estimate", sep = "_")])
+ttratio_stat <- unique(rosdm[c("material", "variable", "time point")])
+agg_ttratio <- lapply(X = as.data.frame(t(ttratio_stat)), 
+                      FUN = function(x){
+                        x <- as.character(x)
+                        data <- subset(rosdm, material == x[1] & variable == x[2] & `time point` == x[3])
+                        ref <- subset(rosdm, material == "plasma" & variable == x[2] & `time point` == x[3])
+                        ttestratio(y = data$value[data$group == "Septic-NS"], 
+                                   x = data$value[data$group == "Septic-S"], 
+                                   rho = mean(ref$value[ref$group == "Septic-S"]) / mean(ref$value[ref$group == "Septic-NS"]))
+                        })
+ttratio_stat[["Septic-S to Septic-NS ratio"]] <- sapply(lapply(X = agg_ttratio, FUN = `[[`, "estimate"), FUN = `[`, 3)
+ttratio_stat[["ratio in plasma"]] <- sapply(X = agg_ttratio, FUN = `[[`, "null.value")
+colnames(ttratio_stat)[1:3] <- c("tissue", "metabolite", "time point")
+ttratio_stat$p <- sapply(X = agg_ttratio, FUN = `[[`, "p.value")
+ttratio_stat$p0 <- 1 - ttratio_stat$p
+ttratio_stat_kin_mod <- subset(ttratio_stat, tissue != "plasma" & metabolite %in% c("C0", "C2", "C4", "C4:1", "C3-DC (C4-OH)", "C6 (C4:1-DC)", "C5-DC (C6-OH)", "C6:1", "C8", "C10", "C10:1", "C12", "C12:1", "C12-OH", "C14", "C14:1", "C14-OH", "C16", "C16:1", "C16-OH"))
 
 #Get data overview
 ##Get overview of sample distribution along days
@@ -457,7 +476,7 @@ ggsave(plot = p, filename = paste0("generalized_safe_corridor_minmax.png"), path
 #Table output
 ####################
 
-##XLSX table with all p and q values
+##XLSX table with all p and q values from ANOVA
 anova.ptabc <- list()
 for (n in seq_along(anova.car.c.pre.ps)){
   anova.ptabc[[n]] <- as.data.frame(t(anova.car.c.pre.ps[[n]]))
@@ -519,6 +538,35 @@ sheet <- addDataFrame(x = legend_df,
                                                 font = Font(wb = pqtab_workbook, isBold = TRUE), 
                                                 alignment = Alignment(horizontal = "ALIGN_CENTER")))
 saveWorkbook(wb = pqtab_workbook, file = pqtab_xlsx_file)
+
+##XLSX table with all p values from the Septic-S to Septic-NS ratio comparison
+ratiotab_xlsx_file <- paste0(out_dir, "rat_ratio_p.xlsx")
+ratiotab_workbook <- createWorkbook(type = "xlsx")
+sheet <- createSheet(wb = ratiotab_workbook, sheetName = "Rat Septic-S to Septic-NS ratios")
+for (col in 1:8){
+  setColumnWidth(sheet = sheet, colIndex = col, colWidth = 25)
+}
+sheet <- addDataFrame(x = ttratio_stat_kin_mod, 
+                      sheet = sheet, 
+                      col.names = TRUE, 
+                      row.names = FALSE, 
+                      colnamesStyle = CellStyle(wb = ratiotab_workbook, 
+                                                font = Font(wb = ratiotab_workbook, isBold = TRUE), 
+                                                alignment = Alignment(horizontal = "ALIGN_CENTER")))
+sheet <- createSheet(wb = ratiotab_workbook, sheetName = "legend")
+for (col in 1:10){
+  setColumnWidth(sheet = sheet, colIndex = col, colWidth = 30)
+}
+legend_df <- read.xlsx(file = "../../data/measurements/Summary rat sample data 61 edit.xlsx", sheetIndex = 2)
+legend_df <- legend_df[legend_df[, 1] %in% c("C0", "C2", "C4", "C4:1", "C3-DC (C4-OH)", "C6 (C4:1-DC)", "C5-DC (C6-OH)", "C6:1", "C8", "C10", "C10:1", "C12", "C12:1", "C12-OH", "C14", "C14:1", "C14-OH", "C16", "C16:1", "C16-OH"), ]
+colnames(legend_df)[c(1, 5)] <- ""
+sheet <- addDataFrame(x = legend_df,
+                      sheet = sheet, 
+                      row.names = FALSE,
+                      colnamesStyle = CellStyle(wb = ratiotab_workbook, 
+                                                font = Font(wb = ratiotab_workbook, isBold = TRUE), 
+                                                alignment = Alignment(horizontal = "ALIGN_CENTER")))
+saveWorkbook(wb = ratiotab_workbook, file = ratiotab_xlsx_file)
 
 ####################
 #Plot data
