@@ -56,22 +56,18 @@ p_vmax <- ggplot(data = pd_sub, mapping = aes(x = Day, y = value, color = Group)
   stat_summary(data = pd_sub, geom = "errorbar", fun.data = mean_se, size = rel(1), width = 0.5) +
   scale_y_continuous(trans = "log2", breaks = c(10^(-5:2), 0.5 * 10^(-5:2), 0.25 * 10^(-5:2))) +
   scale_x_continuous(breaks = 0:2) +
-  ylab("Concentration mean\n+/- SEM, µM") +
+  ylab("Concentration mean ± SEM\nµM") +
   human_col_scale(levels = c("Septic-NS", "", "Septic-S", "", "Upper/Lower bound"), black_color = "black") +
   theme_bw() + 
-  theme(panel.grid = element_blank(), legend.direction = "horizontal", legend.position = "bottom", text = element_text(size = rsize), strip.text = element_text(size = rsize), legend.text = element_text(size = rsize, margin = margin(r = 10)))
+  theme(panel.grid = element_blank(), legend.direction = "horizontal", legend.position = "bottom", text = element_text(size = rsize), strip.text = element_text(size = rel(3)), legend.text = element_text(size = rsize, margin = margin(r = 10)))
 ggsave(filename = "kin_mitomod_Vmax_S_vs_NS_repeated_subset.png", plot = p_vmax, path = out_dir, width = 9, height = 5, units = "in")
 ggsave(filename = "kin_mitomod_Vmax_S_vs_NS_repeated_subset.svg", plot = p_vmax, path = out_dir, width = 9, height = 5, units = "in")
 
-<<<<<<< Updated upstream
-p_rat_conc_ratio <- readRDS(file = "../../results/data_stats_rat_surv_vs_nonsurv/rat_ratio_ci_liver_plasma_plot_object.RData")
+p_model_legend <- get_legend(plot = p_vmax)
 
-panel7 <- plot_grid(p_rat_conc_ratio, p_vmax, ncol = 1, axis = "lr", align = "rl", rel_heights = c(1, 0.6), labels = "AUTO")
-ggsave(plot = panel7, filename = "kinetic_model_result_subset_and_rat_ratios.png", path = out_dir, width = 9, height = 9, units = "in")
-ggsave(plot = panel7, filename = "kinetic_model_result_subset_and_rat_ratios.svg", path = out_dir, width = 9, height = 9, units = "in")
+p_vmax <- p_vmax + 
+  guides(color = "none")
 
-=======
->>>>>>> Stashed changes
 models_list <- list.files(path = models_dir, pattern = ".{+}\\.cps", full.names = TRUE)
 file_list <- list.files(path = models_dir, pattern = ".{+}\\.cps", full.names = FALSE)
 
@@ -155,19 +151,25 @@ p <- ggplot(data = mfluxes, mapping = aes(x = Day, y = value, color = Group)) +
 ggsave(filename = "kin_mitomod_flux_S_vs_NS_repeated.png", plot = p, path = out_dir, width = 9, height = 11, units = "in")
 ggsave(filename = "kin_mitomod_flux_S_vs_NS_repeated.svg", plot = p, path = out_dir, width = 9, height = 11, units = "in")
 
-p_sink_fluxes <- ggplot(data = subset(mfluxes, variable %in% c("vnadhsink", "vfadhsink", "vacesink")), mapping = aes(x = Day, y = value, color = Group)) + 
+rsize <- rel(4)
+mfluxes_sink <- subset(mfluxes, variable %in% c("vnadhsink", "vfadhsink", "vacesink"))
+mfluxes_sink$variable[mfluxes_sink$variable == "vacesink"] <- "Acetyl-CoA"
+mfluxes_sink$variable[mfluxes_sink$variable == "vfadhsink"] <- "FADH2"
+mfluxes_sink$variable[mfluxes_sink$variable == "vnadhsink"] <- "NADH+H"
+p_sink_fluxes <- ggplot(data = mfluxes_sink, mapping = aes(x = Day, y = value, color = Group)) + 
   facet_wrap(facets = ~ variable, ncol = 3, nrow = 1, scale = "free_y") +
-  stat_summary(geom = "line", fun.data = mean_se) +
-  stat_summary(geom = "errorbar", fun.data = mean_se, position = position_dodge(width = 0.2)) +
+  stat_summary(geom = "line", fun.data = mean_se, size = rel(1)) +
+  stat_summary(geom = "errorbar", fun.data = mean_se, position = position_dodge(width = 0.2), size = rel(1)) +
   scale_y_continuous(labels = function(x) scales::scientific(x, digits = 2)) +
-  ylab("Flux mean +/- SEM,\nµmol/min") +
+  guides(color = "none") +
+  ylab("Synthesis ± SEM\nµmol/min") +
   theme_bw() + 
-  theme(panel.grid = element_blank(), legend.direction = "horizontal", legend.position = "bottom")
+  theme(panel.grid = element_blank(), legend.direction = "horizontal", legend.position = "bottom", text = element_text(size = rsize), strip.text = element_text(size = rel(3)))
 
 p_rat_conc_ratio <- readRDS(file = "../../results/data_stats_rat_surv_vs_nonsurv/rat_ratio_ci_all_mats_plot_object.RData")
-p_betaoxid <- ggdraw() + draw_image("../../results/data_stats/beta_oxidation_scheme.svg")
+p_betaoxid <- ggdraw(xlim = c(-0.05, 1.05)) + draw_image("../../results/data_stats/kinetNetwork_v2.svg")
 
-panel7 <- plot_grid(plot_grid(plot_grid(p_sink_fluxes, p_betaoxid, labels = c("C", "D")), p_vmax, rel_widths = c(2, 3)), p_rat_conc_ratio, ncol = 1, axis = "lr", align = "rl", rel_heights = c(1, 2), labels = c("A", "B"))
-ggsave(plot = panel7, filename = "kinetic_model_result_subset_and_rat_ratios.png", path = out_dir, width = 9, height = 12, units = "in")
-
-save.image()
+p_sub_sink_beta <- plot_grid(p_sink_fluxes, p_betaoxid, labels = c("C", "D"), nrow = 2, rel_heights = c(1, 0.6))
+p_sub_model <- plot_grid(p_vmax, p_sub_sink_beta, ncol = 2, rel_widths = c(2, 3))
+panel7 <- plot_grid(p_rat_conc_ratio, p_sub_model, p_model_legend, ncol = 1, axis = "lr", align = "rl", rel_heights = c(1.1, 1, 0.1), labels = c("A", "B"))
+ggsave(plot = panel7, filename = "kinetic_model_result_subset_and_rat_ratios.png", path = out_dir, width = 9, height = 9, units = "in")
