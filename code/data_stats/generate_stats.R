@@ -2242,6 +2242,28 @@ dev_mets_out_all$PatCount_Ferrario[dev_mets_out_all$Name %in% sig.anova.car.val.
 dev_mets_out_all$PatCount_Ferrario[!(dev_mets_out_all$Name %in% colnames(human_sepsis_val_data))] <- "-" #not 0 because metabolite not in data set
 fwrite(x = dev_mets_out_all, file = paste0(out_dir, "generalized_safe_corridor_minmax_dev_mets.csv"))
 
+###Find number of deviations by chance per metabolite and overlap by chance between Ferrario et al and our study
+n_possible_overlap <- length(intersect(colnames(vd)[-1:-2], colnames(pat_dev_score)[-1:-6]))
+n_overlap <- length(intersect(names(uk_minmax_mtab), names(mtab)))
+chisq.test(x = c(n_overlap, n_possible_overlap - n_overlap), y = c(3, 1)) #3 out of 4 SMs
+chisq.test(x = c(n_overlap, n_possible_overlap - n_overlap), y = c(5, 2)) #5 out of 7 LysoPCs
+chisq.test(x = c(n_overlap, n_possible_overlap - n_overlap), y = c(2, 1)) #2 out of 3 ACs
+#All p-values = 1 ...
+
+###Plot all metabolites we mention in the text
+mets_mentioned <- c("C18:1-OH", paste0("PC ae ", c("C34:2", "C38:0", "C38:5", "C38:6", "C42:0", "C42:2", "C42:3", "C40:1", "C40:2")), "PC aa C36:0", "lysoPC a C18:2", "lysoPC a C24:0")
+p_dev_metabs_pats <- ggplot(data = subset(dev_mets_out_all, Name %in% mets_mentioned)) +
+  geom_point(mapping = aes(x = Name, y = factor(2), size = PatCount_UK)) + 
+  geom_point(mapping = aes(x = Name, y = factor(1), size = PatCount_Ferrario)) +
+  xlab("") +
+  ylab("") +
+  guides(size = guide_legend(title = "Number of Patients", ncol = 2)) +
+  scale_y_discrete(labels = c("Ferrario et al., 2016", "Our study")) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1), panel.grid = element_blank(), panel.grid.major.y = element_line(color = "grey80"), legend.direction = "vertical", legend.position = "right", legend.background = element_blank())
+ggsave(plot = p_dev_metabs_pats, filename = "safe_corridor_minmax_metabs_UK_Ferrario.png", path = out_dir, width = 9, height = 2.5, units = "in")
+ggsave(plot = p_dev_metabs_pats, filename = "safe_corridor_minmax_metabs_UK_Ferrario.svg", path = out_dir, width = 9, height = 2.5, units = "in")
+
 ##Compare C4, lysoPC a C28:0, -:1 and SM C22:3 S-vs-NS in Ferrario et al. visually
 hsvd <- subset(human_sepsis_val_data, C4 < 300, select = c("Survival28", "Day", "C4", "lysoPC a C28:1", "SM C22:3"))
 hsvd$Day <- paste0("Day ", hsvd$Day)
