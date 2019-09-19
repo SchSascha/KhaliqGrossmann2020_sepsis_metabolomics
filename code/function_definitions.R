@@ -321,7 +321,7 @@ sim_dev_mat <- function(number = 1, n, d, dev_idx, sample_groups){
   dev_min <- colMins(mat[-dev_idx, ])
   udev <- mat > matrix(dev_max, ncol = d, nrow = n, byrow = TRUE)
   ldev <- mat < matrix(dev_min, ncol = d, nrow = n, byrow = TRUE)
-  met_dev <- aggregate(t(udev | ldev), by = list(Metabolite = sample_groups), FUN = max) #count same metabolite at different time points as one deviation
+  met_dev <- aggregate(udev | ldev, by = list(group = sample_groups), FUN = max) #count same metabolite at different time points as one deviation
 }
 
 #' Scale values in a matrix or data.frame by dividing through their column-wise maximum. No min-max scaling, unless the minimum value in each column is 0!

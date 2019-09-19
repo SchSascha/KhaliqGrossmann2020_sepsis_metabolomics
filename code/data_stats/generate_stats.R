@@ -2264,6 +2264,16 @@ p_dev_metabs_pats <- ggplot(data = subset(dev_mets_out_all, Name %in% mets_menti
 ggsave(plot = p_dev_metabs_pats, filename = "safe_corridor_minmax_metabs_UK_Ferrario.png", path = out_dir, width = 9, height = 2.5, units = "in")
 ggsave(plot = p_dev_metabs_pats, filename = "safe_corridor_minmax_metabs_UK_Ferrario.svg", path = out_dir, width = 9, height = 2.5, units = "in")
 
+###Find out what number of deviating metabolites we find by chance
+{
+  set.seed(1014)
+  m <- human_data[, -pheno_sel]
+  m <- m[, !(colnames(m) %in% sig.anova.car.s.class)]
+  di <- which(m$Survival == "NS")
+  dev_rep_res <- sapply(X = 1:10, FUN = sim_dev_mat, n = nrow(m), d = ncol(m) - 1, dev_idx = di, sample_groups = m$Survival)
+}
+sapply(dev_rep_res, `[[`)
+
 ##Compare C4, lysoPC a C28:0, -:1 and SM C22:3 S-vs-NS in Ferrario et al. visually
 hsvd <- subset(human_sepsis_val_data, C4 < 300, select = c("Survival28", "Day", "C4", "lysoPC a C28:1", "SM C22:3"))
 hsvd$Day <- paste0("Day ", hsvd$Day)
