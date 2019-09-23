@@ -2123,6 +2123,18 @@ dev_mets_out_UK$PatCount <- colSums(sdev[, names(mtab)])
 uk_minmax_mtab <- mtab
 min_met_set_for_dev <- subset(sdev, Patient %in% human_sepsis_data$Patient[human_sepsis_data$Group == "Septic-NS"])
 min_met_set_for_dev <- min_met_set_for_dev[, c(1, 1 + which(colAnys(as.matrix(min_met_set_for_dev[, -1]))))]
+{
+  set.seed(2005)
+  m <- subset(human_data, Day %in% tanova_day_set)
+  m <- m[, -pheno_sel]
+  m <- m[, !(colnames(m) %in% sig.anova.car.s.class)]
+  di <- which(m$Survival == "NS")
+  dev_rep_res <- sapply(X = 1:1000, FUN = sim_dev_met, n = nrow(m), d = ncol(m) - 6, dev_idx = di, sample_groups = m$Patient)
+}
+dev_met_p_tab <- 1 - cumsum(table(as.numeric(dev_rep_res))) / sum(table(as.numeric(dev_rep_res)))
+print(paste0("p of number of patients with as many deviations:"))
+print(dev_met_p_tab)
+#TODO: put p-values into manuscript
 ###Find minimal combination of features to seperate sNS from sS
 pat_dev_idx_per_met <- lapply(lapply(min_met_set_for_dev[, -1], as.logical), which)
 pat_dev_idx_met_crossover <- lapply(pat_dev_idx_per_met, function(e) lapply(pat_dev_idx_per_met, union, e))

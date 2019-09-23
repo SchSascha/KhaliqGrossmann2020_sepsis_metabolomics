@@ -315,13 +315,27 @@ sim_dev <- function(number = 1, n, d, dev_idx, sample_groups){
   return(res)
 }
 
-sim_dev_mat <- function(number = 1, n, d, dev_idx, sample_groups){
+#' Simulate measurements and count deviations in a group of interest for each column. Deviation means a value outside of the range defined by another group of samples.
+#'
+#' @param number dummy variable for lapply
+#' @param n number of samples
+#' @param d number of features per sample
+#' @param dev_idx index to samples to count deviations for
+#' @param sample_groups which samples belong together, e.g. to the same patient
+#'
+#' @return numeric vector of deviating sample group counts per column. Has length = d
+#' @export
+#'
+#' @examples
+sim_dev_met <- function(number = 1, n, d, dev_idx, sample_groups){
   mat <- matrix(rlnorm(n = n * d), nrow = n, ncol = d)
   dev_max <- colMaxs(mat[-dev_idx, ])
   dev_min <- colMins(mat[-dev_idx, ])
   udev <- mat > matrix(dev_max, ncol = d, nrow = n, byrow = TRUE)
   ldev <- mat < matrix(dev_min, ncol = d, nrow = n, byrow = TRUE)
-  met_dev <- aggregate(udev | ldev, by = list(group = sample_groups), FUN = max) #count same metabolite at different time points as one deviation
+  met_dev <- aggregate(udev | ldev, by = list(Sample = sample_groups), FUN = max) #count same metabolite at different time points as one deviation
+  samples_per_met_dev <- sapply(met_dev[, -1], function(met) c(sum(met > 0), sum(met == 0)))
+  return(samples_per_met_dev[1, ])
 }
 
 #' Scale values in a matrix or data.frame by dividing through their column-wise maximum. No min-max scaling, unless the minimum value in each column is 0!
