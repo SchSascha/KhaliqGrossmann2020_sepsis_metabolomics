@@ -2128,18 +2128,23 @@ min_met_set_for_dev <- subset(sdev, Patient %in% human_sepsis_data$Patient[human
   m <- subset(human_data, Day %in% tanova_day_set)
   m <- m[, -pheno_sel]
   m <- m[, !(colnames(m) %in% sig.anova.car.s.class)]
-  di <- which(m$Survival == "NS")
+  di <- which(m$Group == "Septic-NS")
   dev_rep_res <- sapply(X = 1:1000, FUN = sim_dev_met, n = nrow(m), d = ncol(m) - 6, dev_idx = di, sample_groups = m$Patient)
+  set.seed(2005)
+  di_nns <- which(m$Group == "non-Septic-NS")
+  dev_rep_res_nns <- sapply(X = 1:1000, FUN = sim_dev_met, n = nrow(m), d = ncol(m) - 6, dev_idx = di_nns, sample_groups = m$Patient)
 }
 dev_met_p_template <- rev(cumsum(rev(table(as.numeric(dev_rep_res)))) / sum(table(as.numeric(dev_rep_res)))) #rev()'ed to sum up from the extreme end
-print(paste0("p of number of patients with as many deviations:"))
+print(paste0("p of number of Septic-NS patients with as many deviations:"))
 print(dev_met_p_template)
 dev_met_p_tab <- colSums(min_met_set_for_dev[, -1])
 dev_met_p_tab <- dev_met_p_template[match(dev_met_p_tab, names(dev_met_p_template))]
 dev_met_q_tab <- p.adjust(dev_met_p_tab, method = "fdr")
 names(dev_met_q_tab) <- colnames(min_met_set_for_dev)[-1]
-print("metabolites where number of patients with deviation has q <= 0.05")
+print("metabolites where number of Septic-NS patients with deviation has q <= 0.05")
 print(which(dev_met_q_tab <= 0.05))
+dev_met_p_template_nns <- rev(cumsum(rev(table(as.numeric(dev_rep_res_nns)))) / sum(table(as.numeric(dev_rep_res_nns)))) #rev()'ed to sum up from the extreme end
+
 ###Find minimal combination of features to seperate sNS from sS
 min_met_set_for_dev <- min_met_set_for_dev[, c(1, 1 + which(colAnys(as.matrix(min_met_set_for_dev[, -1]))))]
 pat_dev_idx_per_met <- lapply(lapply(min_met_set_for_dev[, -1], as.logical), which)
@@ -2148,6 +2153,7 @@ full_idx <- Reduce("rbind", lapply(lapply(pat_dev_idx_met_crossover, lapply, len
 xy <- which.xy(full_idx)
 colnames(min_met_set_for_dev[, -1])[c(xy$x[1], xy$y[1])]
 colnames(min_met_set_for_dev[, -1])[c(xy$x[2], xy$y[2])]
+###Simulate how likely this is by chance
 {
   set.seed(2145)
   m <- subset(human_data, Day %in% tanova_day_set)
@@ -2155,7 +2161,11 @@ colnames(min_met_set_for_dev[, -1])[c(xy$x[2], xy$y[2])]
   m <- m[, !(colnames(m) %in% sig.anova.car.s.class)]
   di <- which(m$Survival == "NS")
   dev_rep_res <- sapply(X = 1:1000, FUN = sim_dev_triple, n = nrow(m), d = ncol(m) - 6, dev_idx = di, sample_groups = m$Patient)
-}#TODO: finish - like put p-value into manuscript
+}
+dev_rep_tab <- table(dev_rep_res)
+print("P-value of having three metabolites whose deviations cover all Septic-NS patients")
+print(sum(dev_rep_tab[-1]) / sum(dev_rep_tab))
+###
 
 sink(file = paste0(out_dir, "devs_UK_sNS_met_counts.csv"))
 print("Test if lysoPC a C24:0, PC aa C36:0 and lysoPC a C18:2 provide enough deviations to cover all sNS patients")
