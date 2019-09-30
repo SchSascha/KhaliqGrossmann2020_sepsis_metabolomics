@@ -2302,14 +2302,21 @@ dev_mets_out_all_pie[dev_mets_out_all_pie == "-"] <- 1
 dev_mets_out_all_pie$PatCount_UK <- as.numeric(dev_mets_out_all_pie$PatCount_UK)
 dev_mets_out_all_pie$PatCount_Ferrario <- as.numeric(dev_mets_out_all_pie$PatCount_Ferrario)
 dev_mets_out_all_pie$Pos <- 1:nrow(dev_mets_out_all_pie)
-#TODO: turn into df(Pos, Name, y, Deviating NS Patients, Nondeviating NS Patients)
-p_dev_metabs_pats <- ggplot(data = dev_mets_out_all_pie) +
-  geom_scatterpie(mapping = aes(x = Pos, y = 2), data = dev_mets_out_all_pie, cols = c("PatCount_UK", "IPatCount_UK")) + 
-  geom_scatterpie(mapping = aes(x = Pos, y = 1), data = dev_mets_out_all_pie, cols = c("PatCount_Ferrario", "IPatCount_Ferrario")) +
+dev_mets_out_all_pie_m <- melt(dev_mets_out_all_pie, id.vars = c("Name", "Pos", "Group", "rFerrario"))
+dev_mets_out_all_pie_m$source <- stri_extract(str = dev_mets_out_all_pie_m$variable, regex = "UK|Ferrario")
+dev_mets_out_all_pie_m$variable <- as.character(dev_mets_out_all_pie_m$variable)
+dev_mets_out_all_pie_m$variable[stri_startswith(str = dev_mets_out_all_pie_m$variable, fixed = "I")] <- "Nondeviating"
+dev_mets_out_all_pie_m$variable[stri_startswith(str = dev_mets_out_all_pie_m$variable, fixed = "P")] <- "Deviating"
+dev_mets_out_all_pie_m <- dcast(data = dev_mets_out_all_pie_m, formula = Pos + Name + Group + rFerrario + source ~ variable)
+dev_mets_out_all_pie_m$y <- (1:2)[1 + stri_detect(str = dev_mets_out_all_pie_m$source, fixed = "UK")]
+#TODO: add column for radius where r=0 for Ferrario non-present metabolites
+p_dev_metabs_pats <- ggplot(data = dev_mets_out_all_pie_m) +
+  geom_scatterpie(mapping = aes(x = Pos, y = y), data = dev_mets_out_all_pie_m, cols = c("Deviating", "Nondeviating"), legend_name = "Fraction") + 
+  coord_fixed() +
   xlab("") +
   ylab("") + 
   guides(type = guide_legend(title = "Fraction of Patients", ncol = 2)) +
-  scale_y_continuous(labels = c("Ferrario et al., 2016", "Our study"), breaks = 2:1) +
+  scale_y_continuous(labels = c("Our study", "Ferrario et al., 2016"), breaks = 2:1) +
   scale_x_continuous(labels = dev_mets_out_all_pie$Name, breaks = dev_mets_out_all_pie$Pos) +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1), panel.grid = element_blank(), panel.grid.major.y = element_line(color = "grey80"), legend.direction = "vertical", legend.position = "right", legend.background = element_blank())
