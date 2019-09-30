@@ -6,6 +6,7 @@ library(scales)
 library(ggplot2)
 library(gridExtra)
 library(cowplot)
+library(scatterpie)
 library(pheatmap)
 library(matrixStats)
 library(heatmaply)
@@ -2251,14 +2252,28 @@ chisq.test(x = c(n_overlap, n_possible_overlap - n_overlap), y = c(2, 1)) #2 out
 #All p-values = 1 ...
 
 ###Plot all metabolites we mention in the text
+#jump
+dev_mets_out_all_pie <- dev_mets_out_all
 mets_mentioned <- c("C18:1-OH", paste0("PC ae ", c("C34:2", "C38:0", "C38:5", "C38:6", "C42:0", "C42:2", "C42:3", "C40:1", "C40:2")), "PC aa C36:0", "lysoPC a C18:2", "lysoPC a C24:0")
-p_dev_metabs_pats <- ggplot(data = subset(dev_mets_out_all, Name %in% mets_mentioned)) +
-  geom_point(mapping = aes(x = Name, y = factor(2), size = PatCount_UK)) + 
-  geom_point(mapping = aes(x = Name, y = factor(1), size = PatCount_Ferrario)) +
+dev_mets_out_all_pie <- subset(dev_mets_out_all_pie, Name %in% mets_mentioned)
+dev_mets_out_all_pie$IPatCount_UK <- sum(human_data$Survival[!duplicated(human_data$Patient)] == "NS") - as.numeric(dev_mets_out_all_pie$PatCount_UK)
+dev_mets_out_all_pie$IPatCount_Ferrario <- sum(vd$Survival28[!duplicated(vd$Patient)] == "NS") - as.numeric(dev_mets_out_all_pie$PatCount_Ferrario)
+dev_mets_out_all_pie$rFerrario <- 1
+dev_mets_out_all_pie$rFerrario[dev_mets_out_all_pie$PatCount_Ferrario == "-"] <- 0
+dev_mets_out_all_pie[is.na(dev_mets_out_all_pie)] <- 0
+dev_mets_out_all_pie[dev_mets_out_all_pie == "-"] <- 1
+dev_mets_out_all_pie$PatCount_UK <- as.numeric(dev_mets_out_all_pie$PatCount_UK)
+dev_mets_out_all_pie$PatCount_Ferrario <- as.numeric(dev_mets_out_all_pie$PatCount_Ferrario)
+dev_mets_out_all_pie$Pos <- 1:nrow(dev_mets_out_all_pie)
+#TODO: turn into df(Pos, Name, y, Deviating NS Patients, Nondeviating NS Patients)
+p_dev_metabs_pats <- ggplot(data = dev_mets_out_all_pie) +
+  geom_scatterpie(mapping = aes(x = Pos, y = 2), data = dev_mets_out_all_pie, cols = c("PatCount_UK", "IPatCount_UK")) + 
+  geom_scatterpie(mapping = aes(x = Pos, y = 1), data = dev_mets_out_all_pie, cols = c("PatCount_Ferrario", "IPatCount_Ferrario")) +
   xlab("") +
-  ylab("") +
-  guides(size = guide_legend(title = "Number of Patients", ncol = 2)) +
-  scale_y_discrete(labels = c("Ferrario et al., 2016", "Our study")) +
+  ylab("") + 
+  guides(type = guide_legend(title = "Fraction of Patients", ncol = 2)) +
+  scale_y_continuous(labels = c("Ferrario et al., 2016", "Our study"), breaks = 2:1) +
+  scale_x_continuous(labels = dev_mets_out_all_pie$Name, breaks = dev_mets_out_all_pie$Pos) +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1), panel.grid = element_blank(), panel.grid.major.y = element_line(color = "grey80"), legend.direction = "vertical", legend.position = "right", legend.background = element_blank())
 ggsave(plot = p_dev_metabs_pats, filename = "safe_corridor_minmax_metabs_UK_Ferrario.png", path = out_dir, width = 9, height = 2.5, units = "in")
