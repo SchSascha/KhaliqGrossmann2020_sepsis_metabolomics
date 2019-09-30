@@ -33,8 +33,8 @@ merge_gcvals <- rbind(base_gcvals, merge_gcvals)
 #Set optimization endpoints and mappings - stays the same for all optimization steps
 #col_keep <- c("C0", "C10", "C10:1", "C12", "C12:1", "C14", "C14:1", "C16", "C16:1", "C16-OH", "C2", "C4", "C4:1", "C3-DC (C4-OH)", "C6 (C4:1-DC)", "C6:1", "C5-DC (C6-OH)", "C8", "Day")
 #ratio_quant_map <- c("Car_ratio", "C10AcylCoA_ratio", "C10EnoylCoA_ratio", "C12AcylCoA_ratio", "C12EnoylCoA_ratio", "C14AcylCoA_ratio", "C14EnoylCoA_ratio", "C16AcylCoA_ratio", "C16EnoylCoA_ratio", "C16HydroxyacylCoA_ratio", "AcetylCoA_ratio", "C4AcylCoA_ratio", "C4EnoylCoA_ratio", "C4HydroxyacylCoA_ratio", "C6AcylCoA_ratio", "C6EnoylCoA_ratio", "C6HydroxyacylCoA_ratio", "C8AcylCoA_ratio", "Time")
-col_keep <- c("C0", "C10", "C10:1", "C12:1", "C4:1", "C3-DC (C4-OH)", "C6 (C4:1-DC)", "C6:1", "C5-DC (C6-OH)", "C8", "Day")
-ratio_quant_map <- c("Car_ratio", "C10AcylCoA_ratio", "C10EnoylCoA_ratio", "C12EnoylCoA_ratio", "C4EnoylCoA_ratio", "C4HydroxyacylCoA_ratio", "C6AcylCoA_ratio", "C6EnoylCoA_ratio", "C6HydroxyacylCoA_ratio", "C8AcylCoA_ratio", "Time")
+col_keep <- c("C0", "C10", "C10:1", "C4:1", "C3-DC (C4-OH)", "C6 (C4:1-DC)", "C6:1", "C5-DC (C6-OH)", "C8", "Day")
+ratio_quant_map <- c("Car_ratio", "C10AcylCoA_ratio", "C10EnoylCoA_ratio", "C4EnoylCoA_ratio", "C4HydroxyacylCoA_ratio", "C6AcylCoA_ratio", "C6EnoylCoA_ratio", "C6HydroxyacylCoA_ratio", "C8AcylCoA_ratio", "Time")
 ratio_quant_map <- paste0("{Values[", ratio_quant_map, "]}")
 #Set kinetic parameter names to estimate - also the same for all optimization steps
 react_pars <- c("Vfcact", "Vcpt1", "Vcpt2", "Vcrot", "Vmcad", "Vmckat", "Vmschad", "Vmtp", "Vscad", "Vvlcad", "Ksacesink", "Ksfadhsink", "Ksnadhsink")
