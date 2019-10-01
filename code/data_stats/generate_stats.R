@@ -2289,7 +2289,6 @@ chisq.test(x = c(n_overlap, n_possible_overlap - n_overlap), y = c(2, 1)) #2 out
 #All p-values = 1 ...
 
 ###Plot all metabolites we mention in the text
-#jump
 dev_mets_out_all_pie <- dev_mets_out_all
 mets_mentioned <- c("C18:1-OH", paste0("PC ae ", c("C34:2", "C38:0", "C38:5", "C38:6", "C42:0", "C42:2", "C42:3", "C40:1", "C40:2")), "PC aa C36:0", "lysoPC a C18:2", "lysoPC a C24:0")
 dev_mets_out_all_pie <- subset(dev_mets_out_all_pie, Name %in% mets_mentioned)
@@ -2309,15 +2308,16 @@ dev_mets_out_all_pie_m$variable[stri_startswith(str = dev_mets_out_all_pie_m$var
 dev_mets_out_all_pie_m$variable[stri_startswith(str = dev_mets_out_all_pie_m$variable, fixed = "P")] <- "Deviating"
 dev_mets_out_all_pie_m <- dcast(data = dev_mets_out_all_pie_m, formula = Pos + Name + Group + rFerrario + source ~ variable)
 dev_mets_out_all_pie_m$y <- (1:2)[1 + stri_detect(str = dev_mets_out_all_pie_m$source, fixed = "UK")]
-#TODO: add column for radius where r=0 for Ferrario non-present metabolites
+dev_mets_out_all_pie_m$rFerrario[dev_mets_out_all_pie_m$source == "UK"] <- 1
 p_dev_metabs_pats <- ggplot(data = dev_mets_out_all_pie_m) +
-  geom_scatterpie(mapping = aes(x = Pos, y = y), data = dev_mets_out_all_pie_m, cols = c("Deviating", "Nondeviating"), legend_name = "Fraction") + 
+  geom_scatterpie(mapping = aes(x = Pos, y = y, r = rFerrario/4), data = dev_mets_out_all_pie_m, cols = c("Deviating", "Nondeviating"), legend_name = "Fraction") + 
   coord_fixed() +
   xlab("") +
   ylab("") + 
   guides(type = guide_legend(title = "Fraction of Patients", ncol = 2)) +
   scale_y_continuous(labels = c("Our study", "Ferrario et al., 2016"), breaks = 2:1) +
   scale_x_continuous(labels = dev_mets_out_all_pie$Name, breaks = dev_mets_out_all_pie$Pos) +
+  scale_fill_manual(breaks = c("Deviating", "Nondeviating"), values = c("black", "white")) +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1), panel.grid = element_blank(), panel.grid.major.y = element_line(color = "grey80"), legend.direction = "vertical", legend.position = "right", legend.background = element_blank())
 ggsave(plot = p_dev_metabs_pats, filename = "safe_corridor_minmax_metabs_UK_Ferrario.png", path = out_dir, width = 9, height = 2.5, units = "in")
