@@ -105,6 +105,36 @@ ttratio_stat$p <- sapply(X = agg_ttratio, FUN = `[[`, "p.value")
 ttratio_stat$p0 <- 1 - ttratio_stat$p
 ttratio_stat_kin_mod <- subset(ttratio_stat, tissue != "plasma" & metabolite %in% c("C0", "C2", "C4", "C4:1", "C3-DC (C4-OH)", "C6 (C4:1-DC)", "C5-DC (C6-OH)", "C6:1", "C8", "C10", "C10:1", "C12", "C12:1", "C12-OH", "C14", "C14:1", "C14-OH", "C16", "C16:1", "C16-OH"))
 
+#Calculate concentration ratios for sham/survivors
+rat_sham_sepns_data <- subset(rat_sepsis_data, group != "Septic-NS", c(1:9, 11:30, 32:44))
+rossnsm <- na.omit(melt(rat_sham_sepns_data, id.vars = 1:4))
+#rosdm$variable <- as.character(rosdm$variable)
+rat_ratio_ci_sham <- pairwiseCI(formula = value ~ group, by = c("material", "time point", "variable"), data = rossnsm, method = "Param.ratio")
+rrcis <- melt(rat_ratio_ci_sham$byout)
+rrcis <- subset(rrcis, !L2 %in% c("method", "compnames"))
+rrcis[c("material", "time", "metabolite")] <- tstrsplit(rrcis$L1, split = ".", fixed = TRUE)
+rrcis <- dcast(data = rrcis, metabolite ~ material + time + L2)
+#rrci <- rrci[, -which(colnames(rrci) == "L1")]
+rat_ratio_ci_sham <- rrcis
+rossnsm$plasma_ref <- sapply(1:nrow(rossnsm), 
+                           function(x) rat_ratio_ci_sham[rossnsm$variable[x], paste(rossnsm$material[x], rossnsm$`time point`[x], "estimate", sep = "_")])
+ttratio_stat_sham <- unique(rossnsm[c("material", "variable", "time point")])
+agg_ttratio_sham <- lapply(X = as.data.frame(t(ttratio_stat_sham)), 
+                      FUN = function(x){
+                        x <- as.character(x)
+                        data <- subset(rossnsm, material == x[1] & variable == x[2] & `time point` == x[3])
+                        ref <- subset(rossnsm, material == "plasma" & variable == x[2] & `time point` == x[3])
+                        ttestratio(y = data$value[data$group == "Sham"], 
+                                   x = data$value[data$group == "Septic-S"], 
+                                   rho = mean(ref$value[ref$group == "Sham"]) / mean(ref$value[ref$group == "Septic-S"]))
+                      })
+ttratio_stat_sham[["Sham to Septic-S ratio"]] <- sapply(lapply(X = agg_ttratio_sham, FUN = `[[`, "estimate"), FUN = `[`, 3)
+ttratio_stat_sham[["ratio in plasma"]] <- sapply(X = agg_ttratio_sham, FUN = `[[`, "null.value")
+colnames(ttratio_stat_sham)[1:3] <- c("tissue", "metabolite", "time point")
+ttratio_stat_sham$p <- sapply(X = agg_ttratio_sham, FUN = `[[`, "p.value")
+ttratio_stat_sham$p0 <- 1 - ttratio_stat_sham$p
+ttratio_stat_sham_kin_mod <- subset(ttratio_stat_sham, tissue != "plasma" & metabolite %in% c("C0", "C2", "C4", "C4:1", "C3-DC (C4-OH)", "C6 (C4:1-DC)", "C5-DC (C6-OH)", "C6:1", "C8", "C10", "C10:1", "C12", "C12:1", "C12-OH", "C14", "C14:1", "C14-OH", "C16", "C16:1", "C16-OH"))
+
 #Get data overview
 ##Get overview of sample distribution along days
 rat_plasma_sig_diff_res <- rat_sig_diffs_along_time(subset(rat_sepsis_data, material == "plasma" & group %in% c("Septic-S", "Septic-NS")), corr_fdr = T)
@@ -1314,6 +1344,7 @@ saveRDS(object = p, file = paste0(out_dir, "rat_ratio_ci_liver_plasma_plot_objec
 
 ####For all materials
 rrcr_all_mats <- subset(rat_ratio_ci_re, metabolite %in% c("C0", "C2", "C4", "C4:1", "C3-DC (C4-OH)", "C6 (C4:1-DC)", "C5-DC (C6-OH)", "C6:1", "C8", "C10", "C10:1", "C12", "C12:1", "C12-OH", "C14", "C14:1", "C14-OH", "C16", "C16:1", "C16-OH"))
+rrcr_all_mats$metabolite <- sub(" (", "\n(", rrcr_all_mats$metabolite, fixed = TRUE)
 rsize <- rel(4)
 p <- ggplot(data = rrcr_all_mats, mapping = aes(y = estimate, ymin = lower, ymax = upper, x = metabolite, color = tissue, fill = tissue)) +
   facet_wrap(. ~ time, ncol = 1, strip.position = "right") +
@@ -1357,7 +1388,30 @@ p <- ggplot(data = rrcr_heart_liver, mapping = aes(y = estimate, ymin = lower, y
 ggsave(plot = p, filename = "rat_S_vs_NS_ac_ratios_heart_vs_liver_bar.png", path = out_dir, width = 9, height = 4, units = "in")
 ggsave(plot = p, filename = "rat_S_vs_NS_ac_ratios_heart_vs_liver_bar.svg", path = out_dir, width = 9, height = 4, units = "in")
 
-#TODO: add comparisons of sham rat vs septic S rat ratios, maybe also sham vs septic NS
+##comparisons of sham rat vs septic S rat ratios
+rat_ratio_ci_sham_melt <- melt(rat_ratio_ci_sham, id.vars = "metabolite")
+tissue_time_type <- lapply(as.character(rat_ratio_ci_sham_melt$variable), strsplit, split = "_", fixed = TRUE)
+rat_ratio_ci_sham_melt$tissue <- sapply(lapply(tissue_time_type, unlist), `[[`, 1)
+rat_ratio_ci_sham_melt$time <- sapply(lapply(tissue_time_type, unlist), `[[`, 2)
+rat_ratio_ci_sham_melt$type <- sapply(lapply(tissue_time_type, unlist), `[[`, 3)
+rat_ratio_ci_sham_re <- dcast(rat_ratio_ci_sham_melt, metabolite + time + tissue ~ type, value.var = "value")
+rat_ratio_ci_sham_re$time <- factor(rat_ratio_ci_sham_re$time, levels = unique(rat_ratio_ci_sham_re$time)[c(2:1, 3)])
+###Plot comparison for all metabs
+rrcsr_all_mats <- subset(rat_ratio_ci_sham_re, metabolite %in% c("C0", "C2", "C4", "C4:1", "C3-DC (C4-OH)", "C6 (C4:1-DC)", "C5-DC (C6-OH)", "C6:1", "C8", "C10", "C10:1", "C12", "C12:1", "C12-OH", "C14", "C14:1", "C14-OH", "C16", "C16:1", "C16-OH"))
+rrcsr_all_mats <- subset(rrcsr_all_mats, !(grepl("C4-OH", metabolite, fixed = TRUE) & tissue == "heart" & !time == "72h")) #filter points with huge CI
+rrcsr_all_mats$metabolite <- sub(" (", "\n(", rrcsr_all_mats$metabolite, fixed = TRUE)
+rsize <- rel(4)
+p <- ggplot(data = rrcsr_all_mats, mapping = aes(y = estimate, ymin = lower, ymax = upper, x = metabolite, color = tissue, fill = tissue)) +
+  facet_wrap(. ~ time, ncol = 1, strip.position = "right") +
+  geom_col(position = "dodge") +
+  geom_errorbar(size = 0.3, position = "dodge", color = "black") +
+  guides(fill = guide_legend(title = "Tissue"), color = "none") +
+  xlab("") +
+  ylab("Rat Sham to Septic-S ratio\n+ 95% Confidence Interval") + 
+  scale_color_brewer(type = "qual", aesthetics = c("color", "fill")) +
+  theme_bw() +
+  theme(panel.grid = element_blank(), axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1), legend.position = "top", legend.direction = "horizontal", text = element_text(size = rsize), legend.text = element_text(size = rsize))
+ggsave(plot = p, filename = "rat_Sham_vs_sS_ac_ratios_all_mats_bar.png", path = out_dir, width = 9, height = 8, units = "in")
 
 ml_human_best_feat_set <- c("C4", "lysoPC a C28:0", "lysoPC a C28:1", "SM C22:3")
 data_feat_set <- subset(rat_sepsis_data, material %in% c("liver", "plasma") & `time point` %in% c("6h", "24h") & group != "Sham" )
