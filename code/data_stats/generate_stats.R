@@ -2144,7 +2144,20 @@ dev_met_q_tab <- p.adjust(dev_met_p_tab, method = "fdr")
 names(dev_met_q_tab) <- colnames(min_met_set_for_dev)[-1]
 print("metabolites where number of Septic-NS patients with deviation has q <= 0.05")
 print(which(dev_met_q_tab <= 0.05))
-dev_met_p_template_nns <- rev(cumsum(rev(table(as.numeric(dev_rep_res_nns)))) / sum(table(as.numeric(dev_rep_res_nns)))) #rev()'ed to sum up from the extreme end
+dev_rep_res_sns_nns <- dev_rep_res
+dev_rep_res_sns_nns[dev_rep_res_nns > 0] <- 0
+dev_met_p_template_sns_nns <- rev(cumsum(rev(table(as.numeric(dev_rep_res_sns_nns)))) / sum(table(as.numeric(dev_rep_res_sns_nns)))) #rev()'ed to sum up from the extreme end
+print("p of number of Septic-NS patients deviating with as many deviations while no non-Septic-NS patient deviating:")
+print(dev_met_p_template_sns_nns)
+dev_met_sns_nns_p_tab <- colSums(min_met_set_for_dev[, -1])
+dev_met_sns_nns_p_tab <- dev_met_p_template_sns_nns[match(dev_met_sns_nns_p_tab, names(dev_met_p_template_sns_nns))]
+dev_met_sns_nns_q_tab <- p.adjust(dev_met_sns_nns_p_tab, method = "fdr")
+names(dev_met_sns_nns_q_tab) <- colnames(min_met_set_for_dev)[-1]
+#TODO: find out how likely you get 7/8 patients deviating for at least one AC or PC #jump
+dev_sel_ac <- which(human_sepsis_legend$group[-union(c(1:6, pheno_sel), match(sig.anova.car.s.class, human_sepsis_legend[, 1]))] == "acylcarnitine")
+dev_sel_pc <- which(human_sepsis_legend$group[-union(c(1:6, pheno_sel), match(sig.anova.car.s.class, human_sepsis_legend[, 1]))] == "phosphatidylcholine")
+
+
 
 ###Find minimal combination of features to seperate sNS from sS
 min_met_set_for_dev <- min_met_set_for_dev[, c(1, 1 + which(colAnys(as.matrix(min_met_set_for_dev[, -1]))))]
