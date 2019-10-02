@@ -125,7 +125,7 @@ model_fit_function <- function(number = 1, base_model_dir, out_dir, ss_conc, mer
 model_fit_function_with_prepared_models <- function(number = 1, base_model_dir, out_dir, ss_conc, merge_gcvals = merge_gcvals, react_pars = react_pars){
   set.seed(number)
   ##Load and clean model for day 0
-  new_model_day0 <- loadModel(path = paste0(base_model_dir, "human_beta_oxidation_twin_model_day0_var_sink_var_vcpt1_var_cact.cps"))
+  new_model_day0 <- loadModel(path = paste0(base_model_dir, "human_beta_oxidation_twin_model_day0_var_sink_var_vcpt1_var_cact_restr_mets.cps"))
   #clearParameterEstimationParameters(model = new_model_day0)
   ##Set concentrations to steady state of original model
   setSpecies(key = ss_conc$key, initial_concentration = ss_conc$concentration, model = new_model_day0)
@@ -161,7 +161,7 @@ model_fit_function_with_prepared_models <- function(number = 1, base_model_dir, 
   saveModel(model = new_model_day0, filename = paste0(out_dir, "fitted_model_pilot_number_", number, "_day0.cps"), overwrite = TRUE)
   
   ##Load and clean model for day 1
-  new_model_day1 <- loadModel(path = paste0(base_model_dir, "human_beta_oxidation_twin_model_day1_var_sink_var_vcpt1_var_cact.cps"))
+  new_model_day1 <- loadModel(path = paste0(base_model_dir, "human_beta_oxidation_twin_model_day1_var_sink_var_vcpt1_var_cact_restr_mets.cps"))
   #clearParameterEstimationParameters(model = new_model_day0)
   ##Set concentrations to levels of day 0 model at t=1440 but keep boundaries as in day 0
   tc_d0 <- runTimeCourse(model = new_model_day0, duration = 100, dt = 0.1, save_result_in_memory = TRUE, update_model = TRUE)
@@ -199,7 +199,7 @@ model_fit_function_with_prepared_models <- function(number = 1, base_model_dir, 
   saveModel(model = new_model_day1, filename = paste0(out_dir, "fitted_model_pilot_number_", number, "_day1.cps"), overwrite = TRUE)
   
   ##Load and clean model for day 2
-  new_model_day2 <- loadModel(path = paste0(base_model_dir, "human_beta_oxidation_twin_model_day2_var_sink_var_vcpt1_var_cact.cps"))
+  new_model_day2 <- loadModel(path = paste0(base_model_dir, "human_beta_oxidation_twin_model_day2_var_sink_var_vcpt1_var_cact_restr_mets.cps"))
   #clearParameterEstimationParameters(model = new_model_day0)
   ##Set concentrations to levels of day 0 model at t=1440 but keep boundaries as in day 0
   tc_d1 <- runTimeCourse(model = new_model_day1, duration = 100, dt = 0.1, save_result_in_memory = TRUE, update_model = TRUE)
@@ -299,17 +299,17 @@ p <- ggplot(data = pd, mapping = aes(x = Day, y = value, color = Group)) +
 ggsave(filename = "kin_mitomod_Vmax_S_vs_NS_repeated.png", plot = p, path = out_dir, width = 8, height = 4, units = "in")
 
 #TODO: fix
-mpd <- dcast(pd, Day + Run + parameter ~ Group, value.var = "value")
-l <- ggplot(data = mpd, mapping = aes(x = Nonsurvivor, y = Survivor)) + 
-  facet_grid(Day ~ parameter) + 
-  geom_point(size = 0.7, alpha = 0.1) +
-  #stat_bin_hex(bins = 20) + 
-  geom_smooth(formula = y ~ x, method = "lm", se = FALSE) +
-  scale_x_log10() +
-  scale_y_log10() +
-  theme_bw() + 
-  theme(panel.grid = element_blank(), axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
-ggsave(plot = l, file = "kin_mitomod_rel_Vm.png", path = out_dir, width = 10, height = 4, units = "in")
+#mpd <- dcast(pd, Day + Run + parameter ~ Group, value.var = "value")
+#l <- ggplot(data = mpd, mapping = aes(x = Nonsurvivor, y = Survivor)) + 
+#  facet_grid(Day ~ parameter) + 
+#  geom_point(size = 0.7, alpha = 0.1) +
+#  #stat_bin_hex(bins = 20) + 
+#  geom_smooth(formula = y ~ x, method = "lm", se = FALSE) +
+#  scale_x_log10() +
+#  scale_y_log10() +
+#  theme_bw() + 
+#  theme(panel.grid = element_blank(), axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+#ggsave(plot = l, file = "kin_mitomod_rel_Vm.png", path = out_dir, width = 10, height = 4, units = "in")
 
 h <- ggplot(data = obj, mapping = aes(x = Value)) +
   facet_wrap(Day ~ ., scale = "free_x") +
