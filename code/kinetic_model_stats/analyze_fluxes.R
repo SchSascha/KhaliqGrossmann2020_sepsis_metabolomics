@@ -167,7 +167,8 @@ p_sink_fluxes <- ggplot(data = mfluxes_sink, mapping = aes(x = Day, y = value, c
   theme(panel.grid = element_blank(), legend.direction = "horizontal", legend.position = "bottom", text = element_text(size = rsize), strip.text = element_text(size = rel(3)))
 
 p_rat_conc_ratio <- readRDS(file = "../../results/data_stats_rat_surv_vs_nonsurv/rat_ratio_ci_all_mats_plot_object.RData")
-p_betaoxid <- ggdraw(xlim = c(-0.05, 1.05)) + draw_image("../../results/data_stats/kinetNetwork_v2.svg")
+p_betaoxid <- ggdraw(xlim = c(-0.05, 1.05)) + 
+draw_image("../../results/data_stats/kinetNetwork_v2.pdf")
 
 p_sub_sink_beta <- plot_grid(p_sink_fluxes, p_betaoxid, labels = c("C", "D"), nrow = 2, rel_heights = c(1, 0.6))
 p_sub_model <- plot_grid(p_vmax, p_sub_sink_beta, ncol = 2, rel_widths = c(2, 3))
