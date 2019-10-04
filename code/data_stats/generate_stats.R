@@ -2142,10 +2142,10 @@ sink(file = paste0(out_dir, "safety_corridor_deviation_count_p_values.txt"))
 dev_met_p_template <- rev(cumsum(rev(table(as.numeric(dev_rep_res)))) / sum(table(as.numeric(dev_rep_res)))) #rev()'ed to sum up from the extreme end
 print(paste0("p of number of Septic-NS patients with as many deviations:"))
 print(dev_met_p_template)
-dev_met_p_tab <- colSums(subset(sdev, Patient %in% human_data$Patient[human_sepsis_data$Group == "Septic-NS"], -1))
+dev_met_p_tab <- colSums(subset(sdev, Patient %in% human_data$Patient[human_data$Group == "Septic-NS"], -1))
 dev_met_p_tab <- dev_met_p_template[match(dev_met_p_tab, names(dev_met_p_template))]
 dev_met_q_tab <- p.adjust(dev_met_p_tab, method = "fdr")
-names(dev_met_q_tab) <- colnames(subset(sdev, Patient %in% human_data$Patient[human_sepsis_data$Group == "Septic-NS"], -1))[-1]
+names(dev_met_q_tab) <- colnames(subset(sdev, Patient %in% human_data$Patient[human_data$Group == "Septic-NS"], -1))[-1]
 print("metabolites where at least number of Septic-NS patients with deviation has q <= 0.05")
 print(dev_met_q_tab[names(which(dev_met_q_tab <= 0.05))])
 ###Find out how likely a number of deviations in Septic-NS is when no non-Septic-NS patient deviates
