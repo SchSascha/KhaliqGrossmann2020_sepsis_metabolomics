@@ -168,9 +168,10 @@ p_sink_fluxes <- ggplot(data = mfluxes_sink, mapping = aes(x = Day, y = value, c
 
 p_rat_conc_ratio <- readRDS(file = "../../results/data_stats_rat_surv_vs_nonsurv/rat_ratio_ci_all_mats_plot_object.RData")
 p_betaoxid <- ggdraw(xlim = c(-0.05, 1.05)) + 
-draw_image("../../results/data_stats/kinetNetwork_v2.pdf")
+draw_image(magick::image_read_pdf("../../results/data_stats/kinetNetwork_v2.pdf", density = 300))
 
 p_sub_sink_beta <- plot_grid(p_sink_fluxes, p_betaoxid, labels = c("C", "D"), nrow = 2, rel_heights = c(1, 0.6))
 p_sub_model <- plot_grid(p_vmax, p_sub_sink_beta, ncol = 2, rel_widths = c(2, 3))
 panel7 <- plot_grid(p_rat_conc_ratio, p_sub_model, p_model_legend, ncol = 1, axis = "lr", align = "rl", rel_heights = c(1.1, 1, 0.1), labels = c("A", "B"))
 ggsave(plot = panel7, filename = "kinetic_model_result_subset_and_rat_ratios.png", path = out_dir, width = 9, height = 9, units = "in")
+ggsave(plot = panel7, filename = "kinetic_model_result_subset_and_rat_ratios.svg", path = out_dir, width = 9, height = 9, units = "in")
