@@ -2122,7 +2122,6 @@ dev_mets_out_UK <- data.frame(Name = names(mtab), stringsAsFactors = FALSE)
 dev_mets_out_UK$Group <- human_sepsis_legend$group[match(names(mtab), human_sepsis_legend[, 1])]
 dev_mets_out_UK$PatCount <- colSums(sdev[, names(mtab)])
 uk_minmax_mtab <- mtab
-min_met_set_for_dev <- subset(sdev, Patient %in% human_sepsis_data$Patient[human_sepsis_data$Group == "Septic-NS"])
 ###Find out p-values for number of patients per deviation
 {
   set.seed(2005)
@@ -2134,32 +2133,41 @@ min_met_set_for_dev <- subset(sdev, Patient %in% human_sepsis_data$Patient[human
   set.seed(2005)
   di_nns <- which(m$Group == "non-Septic-NS")
   dev_rep_res_nns <- sapply(X = 1:1000, FUN = sim_dev_met, n = nrow(m), d = ncol(m) - 6, dev_idx = di_nns, sample_groups = m$Patient)
+  set.seed(2005)
+  m <- m[, c(1:6, which(colnames(m) %in% human_sepsis_legend[human_sepsis_legend$group %in% c("acylcarnitine", "lysophosphatidylcholine"), 1]))]
+  dev_rep_res_ac_lpc <- sapply(X = 1:1000, FUN = sim_dev, n = nrow(m), d = ncol(m) - 6, dev_idx = di, sample_groups = m$Patient)
 }
+sink(file = paste0(out_dir, "safety_corridor_deviation_count_p_values.txt"))
+###Find out how likely a number of deviations in Septic-NS is
 dev_met_p_template <- rev(cumsum(rev(table(as.numeric(dev_rep_res)))) / sum(table(as.numeric(dev_rep_res)))) #rev()'ed to sum up from the extreme end
 print(paste0("p of number of Septic-NS patients with as many deviations:"))
 print(dev_met_p_template)
-dev_met_p_tab <- colSums(min_met_set_for_dev[, -1])
+dev_met_p_tab <- colSums(subset(sdev, Patient %in% human_sepsis_data$Patient[human_sepsis_data$Group == "Septic-NS"], -1))
 dev_met_p_tab <- dev_met_p_template[match(dev_met_p_tab, names(dev_met_p_template))]
 dev_met_q_tab <- p.adjust(dev_met_p_tab, method = "fdr")
-names(dev_met_q_tab) <- colnames(min_met_set_for_dev)[-1]
+names(dev_met_q_tab) <- colnames(subset(sdev, Patient %in% human_sepsis_data$Patient[human_sepsis_data$Group == "Septic-NS"], -1))[-1]
 print("metabolites where number of Septic-NS patients with deviation has q <= 0.05")
 print(which(dev_met_q_tab <= 0.05))
+###Find out how likely a number of deviations in Septic-NS is when no non-Septic-NS patient deviates
 dev_rep_res_sns_nns <- dev_rep_res
 dev_rep_res_sns_nns[dev_rep_res_nns > 0] <- 0
 dev_met_p_template_sns_nns <- rev(cumsum(rev(table(as.numeric(dev_rep_res_sns_nns)))) / sum(table(as.numeric(dev_rep_res_sns_nns)))) #rev()'ed to sum up from the extreme end
 print("p of number of Septic-NS patients deviating with as many deviations while no non-Septic-NS patient deviating:")
 print(dev_met_p_template_sns_nns)
-dev_met_sns_nns_p_tab <- colSums(min_met_set_for_dev[, -1])
+dev_met_sns_nns_p_tab <- colSums(subset(sdev, Patient %in% human_sepsis_data$Patient[human_sepsis_data$Group == "Septic-NS"], -1))
+dev_met_sns_nns_p_tab[colSums(subset(sdev, Patient %in% human_sepsis_data$Patient[human_sepsis_data$Group == "non-Septic-NS"], -1)) >= 1] <- 0
 dev_met_sns_nns_p_tab <- dev_met_p_template_sns_nns[match(dev_met_sns_nns_p_tab, names(dev_met_p_template_sns_nns))]
 dev_met_sns_nns_q_tab <- p.adjust(dev_met_sns_nns_p_tab, method = "fdr")
-names(dev_met_sns_nns_q_tab) <- colnames(min_met_set_for_dev)[-1]
-#TODO: find out how likely you get 7/8 patients deviating for at least one AC or PC #jump
-dev_sel_ac <- which(human_sepsis_legend$group[-union(c(1:6, pheno_sel), match(sig.anova.car.s.class, human_sepsis_legend[, 1]))] == "acylcarnitine")
-dev_sel_pc <- which(human_sepsis_legend$group[-union(c(1:6, pheno_sel), match(sig.anova.car.s.class, human_sepsis_legend[, 1]))] == "phosphatidylcholine")
-
-
+names(dev_met_sns_nns_q_tab) <- colnames(subset(sdev, Patient %in% human_sepsis_data$Patient[human_sepsis_data$Group == "Septic-NS"], -1))
+print("metabolites where the number of Septic-NS patients with deviation is above this and no non-Septic-NS patient deviates:")
+print(dev_met_sns_nns_q_tab[names(which(dev_met_sns_nns_q_tab <= 0.05))])
+###Find out how likely you get 7/8 patients deviating for at least one AC or PC #jump
+dev_met_p_template_7_8 <- rev(cumsum(rev(table(as.numeric(dev_rep_res_7_8))))) / sum(table(as.numeric(dev_rep_res_7_8)))
+print("p of number of Septic-NS patients deviating in at least this many ACs or PCs:")
+print(dev_met_p_template_7_8)
 
 ###Find minimal combination of features to seperate sNS from sS
+min_met_set_for_dev <- subset(sdev, Patient %in% human_sepsis_data$Patient[human_sepsis_data$Group == "Septic-NS"])
 min_met_set_for_dev <- min_met_set_for_dev[, c(1, 1 + which(colAnys(as.matrix(min_met_set_for_dev[, -1]))))]
 pat_dev_idx_per_met <- lapply(lapply(min_met_set_for_dev[, -1], as.logical), which)
 pat_dev_idx_met_crossover <- lapply(pat_dev_idx_per_met, function(e) lapply(pat_dev_idx_per_met, union, e))
