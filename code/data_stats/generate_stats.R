@@ -631,7 +631,7 @@ anova.pqtaball <- c(anova.pqtabc, anova.pqtabs)
 sheetnames <- c("metab.", "biochem.")
 sheetnames <- paste0(rep(sheetnames, times = 2), ", ", rep(c("non-Septic vs Septic", "Septic-S vs Septic-NS"), each = 2))
 sheetnames <- sheetnames[-2]
-pqtab_xlsx_file <- paste0(out_dir, "patient_ANOVA_pq.xlsx")
+pqtab_xlsx_file <- paste0(out_dir, "patient_ANOVA_pq_first_suppl.xlsx")
 pqtab_workbook <- createWorkbook(type = "xlsx")
 for (n in seq_along(anova.pqtaball)){
   sheet <- createSheet(wb = pqtab_workbook, sheetName = sheetnames[n])
@@ -659,6 +659,54 @@ sheet <- addDataFrame(x = legend_df,
                                                 font = Font(wb = pqtab_workbook, isBold = TRUE), 
                                                 alignment = Alignment(horizontal = "ALIGN_CENTER")))
 saveWorkbook(wb = pqtab_workbook, file = pqtab_xlsx_file)
+
+##Another XLSX table with all the ANOVA p- and q-values but for non-Septic-NS vs non-Septic-S and Septic-NS
+anova.ptabc <- list()
+anova.ptabc[[1]] <- as.data.frame(t(anova.car.cnscs.pre.ps))
+colnames(anova.ptabc[[1]]) <- paste0("p of ", colnames(anova.ptabc[[1]]))
+anova.ptabs <- list()
+anova.ptabs[[1]] <- as.data.frame(t(anova.car.nssepnon.pre.ps))
+colnames(anova.ptabs[[1]]) <- paste0("p of ", colnames(anova.ptabs[[1]]))
+anova.qtabc <- list()
+anova.qtabc[[1]] <- as.data.frame(t(anova.car.cnscs.pre.ps))
+colnames(anova.qtabc[[1]]) <- paste0("q of ", colnames(anova.qtabc[[1]]))
+anova.qtabs <- list()
+anova.qtabs[[1]] <- as.data.frame(t(anova.car.nssepnon.ps))
+colnames(anova.qtabs[[1]]) <- paste0("q of ", colnames(anova.qtabs[[1]]))
+anova.pqtabc <- lapply(seq_along(anova.ptabc), function(n) cbind(anova.ptabc[[n]], anova.qtabc[[n]]))
+anova.pqtabs <- lapply(seq_along(anova.ptabs), function(n) cbind(anova.ptabs[[n]], anova.qtabs[[n]]))
+anova.pqtaball <- c(anova.pqtabc, anova.pqtabs)
+sheetnames <- c("metab.")
+sheetnames <- paste0(rep(sheetnames, times = 2), ", ", c("non-Septic-S vs non-Septic-NS", "non-Septic-NS vs Septic-NS"))
+pqtab_xlsx_file <- paste0(out_dir, "patient_ANOVA_pq_second_suppl.xlsx")
+pqtab_workbook <- createWorkbook(type = "xlsx")
+for (n in seq_along(anova.pqtaball)){
+  sheet <- createSheet(wb = pqtab_workbook, sheetName = sheetnames[n])
+  for (col in 1:10){
+    setColumnWidth(sheet = sheet, colIndex = col, colWidth = 20)
+  }
+  sheet <- addDataFrame(x = anova.pqtaball[[n]], 
+                        sheet = sheet, 
+                        col.names = TRUE, 
+                        row.names = TRUE, 
+                        colnamesStyle = CellStyle(wb = pqtab_workbook, 
+                                                  font = Font(wb = pqtab_workbook, isBold = TRUE), 
+                                                  alignment = Alignment(horizontal = "ALIGN_CENTER")))
+}
+sheet <- createSheet(wb = pqtab_workbook, sheetName = "legend")
+for (col in 1:10){
+  setColumnWidth(sheet = sheet, colIndex = col, colWidth = 30)
+}
+legend_df <- read.xlsx(file = "../../data/measurements/Summary human sample data.xlsx", sheetIndex = 2)
+colnames(legend_df)[1] <- ""
+sheet <- addDataFrame(x = legend_df,
+                      sheet = sheet, 
+                      row.names = FALSE,
+                      colnamesStyle = CellStyle(wb = pqtab_workbook, 
+                                                font = Font(wb = pqtab_workbook, isBold = TRUE), 
+                                                alignment = Alignment(horizontal = "ALIGN_CENTER")))
+saveWorkbook(wb = pqtab_workbook, file = pqtab_xlsx_file)
+
 
 ####################
 #Plot data
