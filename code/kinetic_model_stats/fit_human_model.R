@@ -125,7 +125,7 @@ model_fit_function <- function(number = 1, base_model_dir, out_dir, ss_conc, mer
 model_fit_function_with_prepared_models <- function(number = 1, base_model_dir, out_dir, ss_conc, merge_gcvals = merge_gcvals, react_pars = react_pars){
   set.seed(number)
   ##Load and clean model for day 0
-  new_model_day0 <- loadModel(path = paste0(base_model_dir, "human_beta_oxidation_twin_model_day0_var_sink_var_vcpt1_var_cact_restr_mets.cps"))
+  new_model_day0 <- loadModel(path = paste0(base_model_dir, "human_beta_oxidation_twin_model_day0_no_C2.cps"))
   #clearParameterEstimationParameters(model = new_model_day0)
   ##Set concentrations to steady state of original model
   setSpecies(key = ss_conc$key, initial_concentration = ss_conc$concentration, model = new_model_day0)
@@ -153,7 +153,7 @@ model_fit_function_with_prepared_models <- function(number = 1, base_model_dir, 
   react_params <- lapply(1:nrow(gcrefs), function(n) defineParameterEstimationParameter(ref = react_Vms[n], lower_bound = re_lb[n], upper_bound = re_ub[n], start_value = gcvals$initial_value[n]))
   dummy <- lapply(react_params, addParameterEstimationParameter, model = new_model_day0)
   ##Estimate parameters
-  setParameterEstimationSettings(model = new_model_day0, method = list(method = "SRES", number_of_generations = 150), update_model = TRUE, randomize_start_values = TRUE) #parameters are already stored in model
+  setParameterEstimationSettings(model = new_model_day0, method = list(method = "SRES", number_of_generations = 250), update_model = TRUE, randomize_start_values = TRUE) #parameters are already stored in model
   pe_res_sres_day0 <- runParameterEstimation(model = new_model_day0)
   setParameterEstimationSettings(model = new_model_day0, method = list(method = "HookeJeeves", tolerance = 1e-4), update_model = TRUE, randomize_start_values = FALSE)
   pe_res_hj_day0 <- runParameterEstimation(model = new_model_day0)
@@ -161,7 +161,7 @@ model_fit_function_with_prepared_models <- function(number = 1, base_model_dir, 
   saveModel(model = new_model_day0, filename = paste0(out_dir, "fitted_model_pilot_number_", number, "_day0.cps"), overwrite = TRUE)
   
   ##Load and clean model for day 1
-  new_model_day1 <- loadModel(path = paste0(base_model_dir, "human_beta_oxidation_twin_model_day1_var_sink_var_vcpt1_var_cact_restr_mets.cps"))
+  new_model_day1 <- loadModel(path = paste0(base_model_dir, "human_beta_oxidation_twin_model_day1_no_C2.cps"))
   #clearParameterEstimationParameters(model = new_model_day0)
   ##Set concentrations to levels of day 0 model at t=1440 but keep boundaries as in day 0
   tc_d0 <- runTimeCourse(model = new_model_day0, duration = 100, dt = 0.1, save_result_in_memory = TRUE, update_model = TRUE)
@@ -191,7 +191,7 @@ model_fit_function_with_prepared_models <- function(number = 1, base_model_dir, 
   react_params <- lapply(1:nrow(gcrefs), function(n) defineParameterEstimationParameter(ref = react_Vms[n], lower_bound = re_lb[n], upper_bound = re_ub[n], start_value = min(max(gcvals$initial_value[n], re_lb[n]), re_ub[n])))
   dummy <- lapply(react_params, addParameterEstimationParameter, model = new_model_day1)
   ##Estimate parameters
-  setParameterEstimationSettings(model = new_model_day1, method = list(method = "SRES", number_of_generations = 150), update_model = TRUE, randomize_start_values = FALSE) #parameters are already stored in model
+  setParameterEstimationSettings(model = new_model_day1, method = list(method = "SRES", number_of_generations = 250), update_model = TRUE, randomize_start_values = FALSE) #parameters are already stored in model
   pe_res_sres_day1 <- runParameterEstimation(model = new_model_day1)
   setParameterEstimationSettings(model = new_model_day1, method = list(method = "HookeJeeves", tolerance = 1e-4), update_model = TRUE, randomize_start_values = FALSE)
   pe_res_hj_day1 <- runParameterEstimation(model = new_model_day1)
@@ -199,7 +199,7 @@ model_fit_function_with_prepared_models <- function(number = 1, base_model_dir, 
   saveModel(model = new_model_day1, filename = paste0(out_dir, "fitted_model_pilot_number_", number, "_day1.cps"), overwrite = TRUE)
   
   ##Load and clean model for day 2
-  new_model_day2 <- loadModel(path = paste0(base_model_dir, "human_beta_oxidation_twin_model_day2_var_sink_var_vcpt1_var_cact_restr_mets.cps"))
+  new_model_day2 <- loadModel(path = paste0(base_model_dir, "human_beta_oxidation_twin_model_day2_no_C2.cps"))
   #clearParameterEstimationParameters(model = new_model_day0)
   ##Set concentrations to levels of day 0 model at t=1440 but keep boundaries as in day 0
   tc_d1 <- runTimeCourse(model = new_model_day1, duration = 100, dt = 0.1, save_result_in_memory = TRUE, update_model = TRUE)
@@ -229,7 +229,7 @@ model_fit_function_with_prepared_models <- function(number = 1, base_model_dir, 
   react_params <- lapply(1:nrow(gcrefs), function(n) defineParameterEstimationParameter(ref = react_Vms[n], lower_bound = re_lb[n], upper_bound = re_ub[n], start_value = min(max(gcvals$initial_value[n], re_lb[n]), re_ub[n])))
   dummy <- lapply(react_params, addParameterEstimationParameter, model = new_model_day2)
   ##Estimate parameters
-  setParameterEstimationSettings(model = new_model_day2, method = list(method = "SRES", number_of_generations = 150), update_model = TRUE, randomize_start_values = FALSE) #parameters are already stored in model
+  setParameterEstimationSettings(model = new_model_day2, method = list(method = "SRES", number_of_generations = 250), update_model = TRUE, randomize_start_values = FALSE) #parameters are already stored in model
   pe_res_sres_day2 <- runParameterEstimation(model = new_model_day2)
   setParameterEstimationSettings(model = new_model_day2, method = list(method = "HookeJeeves", tolerance = 1e-4), update_model = TRUE, randomize_start_values = FALSE)
   pe_res_hj_day2 <- runParameterEstimation(model = new_model_day2)
