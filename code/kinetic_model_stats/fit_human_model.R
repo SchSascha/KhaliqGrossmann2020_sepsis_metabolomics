@@ -125,7 +125,7 @@ model_fit_function <- function(number = 1, base_model_dir, out_dir, ss_conc, mer
 model_fit_function_with_prepared_models <- function(number = 1, base_model_dir, out_dir, ss_conc, merge_gcvals = merge_gcvals, react_pars = react_pars){
   set.seed(number)
   ##Load and clean model for day 0
-  new_model_day0 <- loadModel(path = paste0(base_model_dir, "human_beta_oxidation_twin_model_day0_no_C2.cps"))
+  new_model_day0 <- loadModel(path = paste0(base_model_dir, "human_beta_oxidation_twin_model_day0_no_C2_with_C4.cps"))
   #clearParameterEstimationParameters(model = new_model_day0)
   ##Set concentrations to steady state of original model
   setSpecies(key = ss_conc$key, initial_concentration = ss_conc$concentration, model = new_model_day0)
@@ -161,7 +161,7 @@ model_fit_function_with_prepared_models <- function(number = 1, base_model_dir, 
   saveModel(model = new_model_day0, filename = paste0(out_dir, "fitted_model_pilot_number_", number, "_day0.cps"), overwrite = TRUE)
   
   ##Load and clean model for day 1
-  new_model_day1 <- loadModel(path = paste0(base_model_dir, "human_beta_oxidation_twin_model_day1_no_C2.cps"))
+  new_model_day1 <- loadModel(path = paste0(base_model_dir, "human_beta_oxidation_twin_model_day1_no_C2_with_C4.cps"))
   #clearParameterEstimationParameters(model = new_model_day0)
   ##Set concentrations to levels of day 0 model at t=1440 but keep boundaries as in day 0
   tc_d0 <- runTimeCourse(model = new_model_day0, duration = 100, dt = 0.1, save_result_in_memory = TRUE, update_model = TRUE)
@@ -199,7 +199,7 @@ model_fit_function_with_prepared_models <- function(number = 1, base_model_dir, 
   saveModel(model = new_model_day1, filename = paste0(out_dir, "fitted_model_pilot_number_", number, "_day1.cps"), overwrite = TRUE)
   
   ##Load and clean model for day 2
-  new_model_day2 <- loadModel(path = paste0(base_model_dir, "human_beta_oxidation_twin_model_day2_no_C2.cps"))
+  new_model_day2 <- loadModel(path = paste0(base_model_dir, "human_beta_oxidation_twin_model_day2_no_C2_with_C4.cps"))
   #clearParameterEstimationParameters(model = new_model_day0)
   ##Set concentrations to levels of day 0 model at t=1440 but keep boundaries as in day 0
   tc_d1 <- runTimeCourse(model = new_model_day1, duration = 100, dt = 0.1, save_result_in_memory = TRUE, update_model = TRUE)
