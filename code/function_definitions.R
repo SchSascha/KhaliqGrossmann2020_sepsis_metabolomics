@@ -6,7 +6,7 @@
 #' @examples
 get_human_sepsis_data <- function(){
   require(matrixStats)
-  data <- read.csv(file = "../../data/measurements/Summary human sample data.csv", header = TRUE, sep = "\t", stringsAsFactors = FALSE, dec = ",", check.names = FALSE)
+  data <- read.csv(file = "../../data/measurements/Summary human sample data_2019_10_24.csv", header = TRUE, sep = "\t", stringsAsFactors = FALSE, dec = ",", check.names = FALSE)
   data <- data[, -(which(colSds(as.matrix(data[, -1:-5])) == 0) + 5)] #remove columns with fixed values
   group <- data[["CAP / FP"]] #add group column with combinations of Survival and Sepsis/Nonsepsis
   group[group == "-"] <- "non-Septic"
@@ -95,7 +95,7 @@ get_human_pheno_var_groups <- function(){
 #' @examples
 get_human_meta_data <- function(){
   library(stringi)
-  data <- read.csv(file = "../../data/measurements/Raw data Germany Human samples.csv", header = TRUE, sep = "\t", stringsAsFactors = FALSE, dec = ",", check.names = FALSE)
+  data <- read.csv(file = "../../data/measurements/Raw data Germany Human samples_2019_10_24.csv", header = TRUE, sep = "\t", stringsAsFactors = FALSE, dec = ",", check.names = FALSE)
   data$`Patient ID` <- stri_trim_both(data$`Patient ID`)
   data$Diagnosis <- stri_trim_both(data$Diagnosis)
   return(data)
