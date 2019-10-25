@@ -225,7 +225,7 @@ p_roc_rg_2feat <- ggplot(data = rg_ROC_data, mapping = aes(x = FPR, y = TPR, col
   scale_x_continuous(limits = c(-0.01, 1.01), expand = c(0, 0)) +
   scale_y_continuous(limits = c(-0.01, 1.01), expand = c(0, 0)) +
   #ggtitle("RF: Test and Validation ROC of nested TLPOCV RFE\nbest 2 feature set") +
-  geom_text(label = "ROC curve\nRandom Forest\n2 features", x = 0.5, y = 0.85, size = rel(4.5), inherit.aes = FALSE) +
+  annotate("text", label = "ROC curve\nRandom Forest\n2 features", x = 0.5, y = 0.85, size = rel(4.5)) +
   theme_bw() + 
   theme(panel.grid = element_blank(), legend.position = "none", text = element_text(size = rsize), plot.margin = margin(r = 10, l = 10), axis.text = element_text(size = rel(1)))
 ggsave(filename = "RF_TLPOCV_RFE_ROC_2feat.png", path = out_dir_pred, plot = p_roc_rg_2feat, width = 6, height = 5, units = "in")
@@ -289,7 +289,7 @@ p_roc_svm_2feat <- ggplot(data = sv_ROC_data, mapping = aes(x = FPR, y = TPR, co
   scale_x_continuous(limits = c(-0.01, 1.01), expand = c(0, 0)) +
   scale_y_continuous(limits = c(-0.01, 1.01), expand = c(0, 0)) +
   #ggtitle("SVM: Test and Validation ROC of nested TLPOCV RFE\nbest 2 feature set") +
-  geom_text(label = "ROC curve\nSupport Vector Machine\n2 features", x = 0.5, y = 0.85, size = rel(4.5), inherit.aes = FALSE) +
+  annotate("text", label = "ROC curve\nSupport Vector Machine\n2 features", x = 0.5, y = 0.85, size = rel(4.5), inherit.aes = FALSE) +
   theme_bw() +
   theme(panel.grid = element_blank(), legend.position = "bottom", legend.direction = "horizontal", legend.text = element_text(size = rsize), text = element_text(size = rsize), plot.margin = margin(r = 20, l = 10), axis.text = element_text(size = rel(1)))
 ggsave(filename = "SVM_TLPOCV_RFE_ROC_2feat.png", path = out_dir_pred, plot = p_roc_svm_2feat, width = 6, height = 5, units = "in")
@@ -356,4 +356,5 @@ panel2 <- plot_grid(phm$gtable,
                     ncol = 1, nrow = 3, rel_heights = c(1, 0.4, 0.08), labels = c("A", "B", ""))
 ggsave(file = "all_features_sig_heatmap_ROC.png", path = out_dir_pred, plot = panel2, width = 9, height = 10 + 3.5, units = "in")
 ggsave(file = "all_features_sig_heatmap_ROC.svg", path = out_dir_pred, plot = panel2, width = 9, height = 10 + 3.5, units = "in")
+ggsave(file = "all_features_sig_heatmap_ROC.pdf", path = out_dir_pred, plot = panel2, width = 9, height = 10 + 3.5, units = "in")
   

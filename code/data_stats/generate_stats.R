@@ -2211,6 +2211,7 @@ names(dev_met_sns_nns_q_tab) <- names(dev_met_sns_nns_p_tab)
 print("metabolites where the number of Septic-NS patients with deviation is above this and no non-Septic-NS patient deviates:")
 print(dev_met_sns_nns_q_tab[names(which(dev_met_sns_nns_q_tab <= 0.05))])
 ###Find out how likely you get 7/8 patients deviating for at least one AC or PC #jump
+dev_rep_res_7_8 <- colSums(dev_rep_res_ac_lpc != 0)
 dev_met_p_template_7_8 <- rev(cumsum(rev(table(as.numeric(dev_rep_res_7_8))))) / sum(table(as.numeric(dev_rep_res_7_8)))
 print("p of number of Septic-NS patients deviating in at least this many ACs or PCs:")
 print(dev_met_p_template_7_8)
