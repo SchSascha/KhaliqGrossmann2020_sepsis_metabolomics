@@ -399,15 +399,15 @@ p_betadiv <- ggplot(data = pat_pw_group_dat, mapping = aes(x = Group, y = distan
   #geom_path(data = data.frame(x = 2 + c(1, 1, 1.95, 1.95), y = c(380, 390, 390, 380)), mapping = aes(x = x, y = y), size = lsize, inherit.aes = FALSE) +
   geom_path(data = data.frame(x = 2 + c(2.05, 2.05, 3, 3), y = c(380, 390, 390, 380)), mapping = aes(x = x, y = y), size = lsize, inherit.aes = FALSE) +
   geom_path(data = data.frame(x = 2 + c(1, 1, 3, 3), y = c(440, 450, 450, 440)), mapping = aes(x = x, y = y), size = lsize, inherit.aes = FALSE) +
-  geom_path(data = data.frame(x = c(1, 1, 4, 4), y = c(500, 510, 510, 500)), mapping = aes(x = x, y = y), size = lsize, inherit.aes = FALSE) +
+  geom_path(data = data.frame(x = 1 + c(1, 1, 4, 4), y = c(500, 510, 510, 500)), mapping = aes(x = x, y = y), size = lsize, inherit.aes = FALSE) +
   geom_path(data = data.frame(x = c(1, 1, 5, 5), y = c(560, 570, 570, 560)), mapping = aes(x = x, y = y), size = lsize, inherit.aes = FALSE) +
   #geom_path(data = data.frame(x = c(2, 2, 5, 5), y = c(560, 570, 570, 560)), mapping = aes(x = x, y = y), size = lsize, inherit.aes = FALSE) +
   #geom_text(x = 1.5, y = 410, label = "q > 0.05", size = tsize, inherit.aes = FALSE) + #CNS vs CS
   #geom_text(x = 2 + 1.5, y = 410, label = "q > 0.05", size = tsize, inherit.aes = FALSE) + #C vs S
-  geom_text(x = 2 + 2.5, y = 410, label = paste0("q < ", format(bdiv_df$FDR[8], digits = 1)), size = tsize, inherit.aes = FALSE) + #S vs NS
-  geom_text(x = 2 + 2, y = 470, label = paste0("q < ", format(bdiv_df$FDR[2], digits = 2)), size = tsize, inherit.aes = FALSE) + #C vs NS
-  geom_text(x = 2.5, y = 530, label = paste0("q < ", format(bdiv_df$FDR[7], digits = 2)), size = tsize, inherit.aes = FALSE) + #CS vs S
-  geom_text(x = 3, y = 590, label = paste0("q < ", format(bdiv_df$FDR[4], digits = 2)), size = tsize, inherit.aes = FALSE) + #CS vs NS
+  annotate("text", x = 2 + 2.5, y = 410, label = paste0("q < ", format(bdiv_df$FDR[8], digits = 1)), size = tsize) + #S vs NS
+  annotate("text", x = 2 + 2, y = 470, label = paste0("q < ", format(bdiv_df$FDR[2], digits = 2)), size = tsize) + #C vs NS
+  annotate("text", x = 2.5 + 1, y = 530, label = paste0("q < ", format(bdiv_df$FDR[3], digits = 2)), size = tsize) + #CS vs S
+  annotate("text", x = 3, y = 590, label = paste0("q < ", format(bdiv_df$FDR[4], digits = 2)), size = tsize) + #CS vs NS
   #geom_text(x = 3.5, y = 590, label = "q > 0.05", size = tsize, inherit.aes = FALSE) + #CNS vs NS
   human_col_scale(levels = as.character(unique(pat_pw_group_dat$Group))[c(5, 1, 4, 2, 3)], black_color = "grey40", black_pos = 5) +
   scale_x_discrete(limits = as.character(unique(pat_pw_group_dat$Group))) +
@@ -495,10 +495,10 @@ for (met_group in setdiff(unique(human_data_legend$group[metab_sel]), "sugar")){
   arws <- make_ordination_arrows(x = p$x[, 1:2], w = subset(human_data, select = met_group_idx), xmax = xmax, xmin = xmin, ymin = ymin, ymax = ymax, shorten_arw_by = 4, scale_by = 1.1)
   ap_metab_group[[met_group]] <- ap_metab_group[[met_group]] +
     geom_path(data = arws$ph_ars_s, mapping = aes(x = PC1, y = PC2, group = Group), inherit.aes = FALSE, arrow = arrow(length = unit(0.06, "inches")), size = 0.3, color = "grey50") + 
-    geom_text(data = arws$ph_ars_names_s, mapping = aes(label = label, x = PC1, y = PC2), inherit.aes = FALSE, size = rsize, color = "grey20") +
+    geom_text_repel(data = arws$ph_ars_names_s, mapping = aes(label = label, x = PC1, y = PC2), inherit.aes = FALSE, size = rsize, color = "grey20", force = 0.5, box.padding = 0) +
     scale_x_continuous(limits = c(xmin, xmax) * 1.1) + 
     scale_y_continuous(limits = c(ymin, ymax * 1.4)) +
-    geom_text(x = 1.15 * xmin, y = 1.2 * ymax, label = paste0(text_v, collapse = "\n"), size = 3, hjust = "left")
+    annotate(geom = "text", x = 1.09 * xmin, y = 1.2 * ymax, label = paste0(text_v, collapse = "\n"), size = 3, hjust = "left")
   #ggsave(filename = paste0("PCA_biplot_", met_group, "_all_samples.png"), path = out_dir, plot = ap, width = 6, height = 5, units = "in")
 }
 for (met_group in seq_along(ap_metab_group)[-length(ap_metab_group)]){
@@ -506,11 +506,21 @@ for (met_group in seq_along(ap_metab_group)[-length(ap_metab_group)]){
     theme_bw() +
     theme(panel.grid = element_blank())
 }
-ap_metab_group[[length(ap_metab_group)]] <- ap_metab_group[[length(ap_metab_group)]] + 
+legend_dummy <- ap_metab_group[[length(ap_metab_group)]] + 
   guides(colour = guide_legend(title = "Group"), fill = "none", group = "none") +
   theme_bw() +
   theme(panel.grid = element_blank(), legend.direction = "horizontal", legend.position = "bottom", legend.title = element_blank())
-ap_metab_group_supp_panel <- plot_grid(plotlist = ap_metab_group, ncol = 2, nrow = 3, labels = "AUTO", align = "hv", axis = "tblr")
+ap_metab_group[[length(ap_metab_group)]] <- ap_metab_group[[length(ap_metab_group)]] + 
+  theme_bw() +
+  theme(panel.grid = element_blank())
+ap_metab_group_supp_legend <- get_legend(legend_dummy)
+plist <- lapply(data.frame(matrix(1:length(ap_metab_group), nrow = 2)), 
+                function(idx){
+                  pg <- plot_grid(plotlist = ap_metab_group[idx], ncol = 2, labels = LETTERS[idx], align = "hv", axis = "tblr")
+                  return(pg)
+                })
+plist[[length(plist) + 1]] <- plot_grid(ap_metab_group_supp_legend)
+ap_metab_group_supp_panel <- plot_grid(plotlist = plist, ncol = 1, nrow = 4, rel_heights = c(rep(1, each = length(plist) - 1), 0.1), align = "", axis = "")
 ggsave(plot = ap_metab_group_supp_panel, filename = "PCA_biplot_met_group_panel.png", path = out_dir, width = 9, height = 4.5 * 3, units = "in")
 ggsave(plot = ap_metab_group_supp_panel, filename = "PCA_biplot_met_group_panel.svg", path = out_dir, width = 9, height = 4.5 * 3, units = "in")
 toc()
@@ -544,10 +554,10 @@ arws <- make_ordination_arrows(x = p$x[, 1:2], w = subset(human_sepsis_data, Day
 arws$ph_ars_names_s$label[arws$ph_ars_names_s$label == "Troponin T"] <- "TnT"
 p_biochem_ap <- p_biochem_ap +
   geom_path(data = arws$ph_ars_s, mapping = aes(x = PC1, y = PC2, group = Group), inherit.aes = FALSE, arrow = arrow(length = unit(0.06, "inches")), size = 0.3, color = "grey50") + 
-  geom_text(data = arws$ph_ars_names_s, mapping = aes(label = label, x = PC1, y = PC2), inherit.aes = FALSE, size = 3, color = "grey20") +
+  geom_text_repel(data = arws$ph_ars_names_s, mapping = aes(label = label, x = PC1, y = PC2), inherit.aes = FALSE, size = 3, color = "grey20", box.padding = 0, force = 0.1) +
   scale_x_continuous(limits = c(xmin * 1.05, xmax)) +
   scale_y_continuous(limits = c(ymin, ymax * 1)) +
-  geom_text(x = 0.95 * xmin, y = 0.98 * ymin, label = paste0("S vs NS, q < ", format(ad_mg_r_df$pheno[3], digits = 3)), size = 2.5, hjust = "left")
+  annotate("text", x = 0.95 * xmin, y = 0.98 * ymin, label = paste0("S vs NS, q < ", format(ad_mg_r_df$pheno[3], digits = 3)), size = 2.5, hjust = "left")
 ggsave(filename = paste0("PCA_biplot_sepsis_pheno_gg.png"), path = out_dir, plot = p_biochem_ap, width = 4.5, height = 4, units = "in")
 
 ##Actual plot of all samples, metabolites
@@ -583,13 +593,17 @@ proj_num[length(proj_num)] <- proj_num[length(proj_num)] + 1
 newcenterxy <- linexy[proj_num, ]
 colnames(newcenterxy) <- c("PC1", "PC2")
 newcenterxy$Group <- centerxy$Group
+newcenterxy$size <- 5
+#newcenterxy$size[newcenterxy$Group == "Septic-S"] <- 3
+newcenterxy[newcenterxy$Group == "Septic-S", c("PC1", "PC2")] <- newcenterxy[newcenterxy$Group == "Septic-S", c("PC1", "PC2")] + 0.002
+newcenterxy[newcenterxy$Group == "non-Septic-S", c("PC1", "PC2")] <- newcenterxy[newcenterxy$Group == "non-Septic-S", c("PC1", "PC2")] - 0.002
 p_metab_ap <- autoplot(object = p, data = hdd, colour = "Group", frame = TRUE, frame.type = "norm", size = 1.3, frame.alpha = 0.1)
 p_metab_ap <- p_metab_ap + 
   human_col_scale(aesthetics = c("colour", "fill")) +
-  guides(colour = guide_legend(title = "Group"), fill = "none", group = "none") +
+  guides(colour = guide_legend(title = "Group"), fill = "none", group = "none", size = "none") +
   #ggtitle("PCA biplot, Canberra distance, metabolites,\nall samples") +
   theme_bw() + 
-  theme(panel.grid = element_blank(), legend.direction = "horizontal", legend.box.just = "left", legend.position = "bottom", legend.title = element_blank(), text = element_text(size = rsize), legend.text = element_text(size = rsize), plot.background = element_blank())
+  theme(panel.grid = element_blank(), legend.direction = "horizontal", legend.position = "bottom", legend.title = element_blank(), text = element_text(size = rsize), legend.text = element_text(size = rsize), plot.background = element_blank())
 gobj <- ggplot_build(p_metab_ap)
 xmax <- gobj$layout$panel_params[[1]]$x.range[2]
 xmin <- gobj$layout$panel_params[[1]]$x.range[1]
@@ -600,9 +614,9 @@ p_metab_ap <- p_metab_ap +
   geom_path(data = linexy, mapping = aes(x = PC1, y = PC2), colour = "grey50", inherit.aes = FALSE) + 
   geom_path(data = arws$ph_ars_s, mapping = aes(x = PC1, y = PC2, group = Group), inherit.aes = FALSE, arrow = arrow(length = unit(0.06, "inches")), size = 0.3, color = "grey50") + 
   geom_text(data = arws$ph_ars_names_s, mapping = aes(label = label, x = PC1, y = PC2), inherit.aes = FALSE, size = 3, color = "grey20") +
-  geom_text(x = xmin, y = 0.76 * ymax, label = paste0(text_v, collapse = "\n"), size = 2.5, hjust = "left") + 
+  annotate(geom = "text", x = xmin, y = 0.76 * ymax, label = paste0(text_v, collapse = "\n"), size = 2.5, hjust = "left") + 
   geom_point(data = newcenterxy, mapping = aes(x = PC1, y = PC2), colour = "grey50", shape = 18, size = 3, inherit.aes = FALSE) +
-  geom_point(data = newcenterxy, mapping = aes(x = PC1, y = PC2, colour = Group), shape = 3, size = 5, inherit.aes = FALSE) +
+  geom_point(data = newcenterxy, mapping = aes(x = PC1, y = PC2, colour = Group, size = size), shape = 3, inherit.aes = FALSE) +
   scale_x_continuous(limits = c(xmin * 1.1, xmax * 0.95), expand = c(0, 0)) + 
   scale_y_continuous(limits = c(ymin * 1, ymax * 0.95), expand = c(0, 0))
 ggsave(filename = "PCA_biplot_metab_all_samples_gg.png", path = out_dir, plot = p_metab_ap, width = 5, height = 4, units = "in")
