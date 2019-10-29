@@ -135,7 +135,7 @@ pub_meta_mean_table <- lapply(patient_numbers,
                            df <- data.frame(
                              n = format(nrow(d), trim = T),
                              #fp_cap = paste0(sum(d$Diagnosis == "fp"), "/", sum(d$Diagnosis == "pn")),
-                             format(t(colMeans(d[cmp_vars_cont])), digits = 2, nsmall = 1, trim = T),
+                             format(t(colMeans(d[cmp_vars_cont])), digits = 1, nsmall = 2, trim = T),
                              Gender = sum(d$Gender == "M"),
                              format(t(colSums(d[-1:-which(colnames(d) == "APACHE II")])), digits = 1, nsmall = 0, trim = T),
                              stringsAsFactors = FALSE,
@@ -147,7 +147,7 @@ pub_meta_add_table <- lapply(patient_numbers,
                                 df <- data.frame(
                                   n = format(nrow(d), trim = T),
                                   #fp_cap = "",
-                                  format(t(sapply(d[cmp_vars_cont], sd)), digits = 2, nsmall = 1, trim = T),
+                                  format(t(sapply(d[cmp_vars_cont], sd)), digits = 1, nsmall = 2, trim = T),
                                   Gender = format(sum(d$Gender == "M") / nrow(d) * 100, digits = 1, nsmall = 1),
                                   format(t(colMeans(d[-1:-which(colnames(d) == "APACHE II")])) * 100, digits = 2, nsmall = 1, trim = T),
                                   stringsAsFactors = FALSE, 
@@ -158,9 +158,9 @@ pub_meta_a_table <- Reduce("rbind", pub_meta_add_table)
 rownames(pub_meta_table) <- names(patient_numbers)
 
 #Put together mean/count and sd/percentage
-pub_meta_table[, 2:5] <- t(as.data.frame(lapply(1:nrow(pub_meta_table), function(row) paste0(pub_meta_table[row, 2:5], " \U00B1 ", pub_meta_a_table[row, 2:5])), check.names = F, optional = T))
+pub_meta_table[, 2:7] <- t(as.data.frame(lapply(1:nrow(pub_meta_table), function(row) paste0(pub_meta_table[row, 2:7], " \U00B1 ", pub_meta_a_table[row, 2:7])), check.names = F, optional = T))
 nc <- ncol(pub_meta_table)
-pub_meta_table[, 6:nc] <- t(as.data.frame(lapply(1:nrow(pub_meta_table), function(row) paste0(pub_meta_table[row, 6:nc], " (", pub_meta_a_table[row, 6:nc], ")")), check.names = F, optional = T))
+pub_meta_table[, 8:nc] <- t(as.data.frame(lapply(1:nrow(pub_meta_table), function(row) paste0(pub_meta_table[row, 8:nc], " (", pub_meta_a_table[row, 8:nc], ")")), check.names = F, optional = T))
 pub_meta_table <- t(pub_meta_table)
 #Get row indexes to put significance marks on
 mark_idx <- lapply(cmp_sig, match, table = rownames(pub_meta_table))
