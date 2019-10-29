@@ -951,7 +951,8 @@ png(filename = paste0(out_dir, "human_sepsis_S_day2_community_graph.png"), width
 plot(S_d2_community, S_d2_igraph)
 dev.off()
 
-source("generate_stats_old_plot_container.R")
+##Plot old or by now uninteresting plots - deactivated to speed up sourcing
+#source("generate_stats_old_plot_container.R")
 
 ##Human, cluster heatmap, significant metabs only
 ###Try with pheatmap
