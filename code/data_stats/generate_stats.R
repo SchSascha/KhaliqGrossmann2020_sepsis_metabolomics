@@ -1292,6 +1292,54 @@ h_time_course_sig_diff_plot <- ggplot(h_time_course_sig_diff_dat, aes(x = factor
   theme_bw()
 ggsave(plot = h_time_course_sig_diff_plot, filename = paste0("human_metab_time_course_car_rm_anova_cns_cs_sig_diff.png"), path = out_dir, width = 12, height = 0.3 + 1.5 * ceiling(n_mets/5), units = "in")
 
+##Human, metabolites significant in Septic-S vs Septic-NS *and* non-Septic-NS vs Septic-NS
+sig.anova.car.s_isect_nssepnon.class <- intersect(sig.anova.car.s.class, sig.anova.car.nssepnon.class)
+sig.anova.car.s_isect_nssepnon.class <- intersect(sig.anova.car.s_isect_nssepnon.class, c("Phe", "SM C22:3"))
+h_time_course_sig_diff_dat <- melt(full_tanova_data, id.vars = c("Patient", "Survival", "Day", "Sample ID", "CAP / FP", "Group"))
+h_time_course_sig_diff_dat <- subset(h_time_course_sig_diff_dat, variable %in% sig.anova.car.s_isect_nssepnon.class)
+n_cols <- 6
+n_mets <- length(unique(h_time_course_sig_diff_dat$variable))
+h_time_course_sig_diff_plot_poster <- ggplot(h_time_course_sig_diff_dat, aes(x = factor(Day), y = value, group = Group, color = Group)) +
+  facet_wrap(facets = ~ variable, ncol = n_cols, nrow = ceiling(n_mets/n_cols), scales = "free_y") +
+  stat_summary(fun.ymin = "min", fun.ymax = "max", fun.y = "mean", geom = "line") +
+  geom_point(position = position_dodge(width = 0.2)) +
+  human_col_scale() +
+  ylab("Concentration, µM") + 
+  xlab("Day") + 
+  theme_bw() + 
+  theme(panel.grid = element_blank())
+ggsave(plot = h_time_course_sig_diff_plot_poster, filename = paste0("human_metab_time_course_car_rm_anova_isect_sig_diff_poster.png"), path = out_dir, width = 12, height = 0.3 + 1.5 * ceiling(n_mets/5), units = "in")
+
+phe_poster_dat <- subset(h_time_course_sig_diff_dat, variable == "Phe")
+phe_poster_dat <- Reduce("rbind", lapply(setdiff(unique(phe_poster_dat$Group), "Septic-NS"), 
+                                         function(ingrp){ dat <- phe_poster_dat; dat$comparison <- ingrp; return(dat)}))
+phe_poster_dat <- phe_poster_dat[phe_poster_dat$Group == phe_poster_dat$comparison | phe_poster_dat$Group == "Septic-NS", ]
+phe <- ggplot(data = phe_poster_dat, aes(x = factor(Day), y = value, group = Group, color = Group)) +
+  facet_wrap(facets = ~ comparison, ncol = 3, nrow = 1) +
+  stat_summary(fun.ymin = "min", fun.ymax = "max", fun.y = "mean", geom = "line") +
+  geom_point(position = position_dodge(width = 0.2)) +
+  human_col_scale() +
+  ylab("Concentration, µM") + 
+  xlab("Day") + 
+  theme_bw() + 
+  theme(panel.grid = element_blank(), strip.background = element_blank(), strip.text = element_blank(), legend.position = "none")
+ggsave(plot = phe, filename = paste0("human_metab_time_course_Phe_poster.png"), path = out_dir, width = 6, height = 1.5, units = "in")
+
+smc223_poster_dat <- subset(h_time_course_sig_diff_dat, variable == "SM C22:3")
+smc223_poster_dat <- Reduce("rbind", lapply(setdiff(unique(smc223_poster_dat$Group), "Septic-NS"), 
+                                         function(ingrp){ dat <- smc223_poster_dat; dat$comparison <- ingrp; return(dat)}))
+smc223_poster_dat <- smc223_poster_dat[smc223_poster_dat$Group == smc223_poster_dat$comparison | smc223_poster_dat$Group == "Septic-NS", ]
+smc223 <- ggplot(data = smc223_poster_dat, aes(x = factor(Day), y = value, group = Group, color = Group)) +
+  facet_wrap(facets = ~ comparison, ncol = 3, nrow = 1) +
+  stat_summary(fun.ymin = "min", fun.ymax = "max", fun.y = "mean", geom = "line") +
+  geom_point(position = position_dodge(width = 0.2)) +
+  human_col_scale() +
+  ylab("Concentration, µM") + 
+  xlab("Day") + 
+  theme_bw() + 
+  theme(panel.grid = element_blank(), strip.background = element_blank(), strip.text = element_blank(), legend.position = "none")
+ggsave(plot = smc223, filename = paste0("human_metab_time_course_SM_C223_poster.png"), path = out_dir, width = 6, height = 1.5, units = "in")
+
 ##Safety corridor concept with Survivor min-max as corridor
 pat_dev_score <- subset(human_data, Day %in% tanova_day_set, select = setdiff(which(!(colnames(human_data) %in% sig.anova.car.s.class)), pheno_sel)) # select already includes cols 1:6
 colnames(pat_dev_score)[na.omit(match(human_sepsis_legend[which(human_sepsis_legend$group == "amino acid"), 1], colnames(pat_dev_score)))] <- human_sepsis_legend$name[human_sepsis_legend$group == "amino acid" & human_sepsis_legend[, 1] %in% colnames(pat_dev_score)] #assignment OK, checked manually
