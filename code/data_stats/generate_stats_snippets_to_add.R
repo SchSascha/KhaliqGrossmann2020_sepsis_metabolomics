@@ -420,6 +420,26 @@ p_betadiv <- ggplot(data = pat_pw_group_dat, mapping = aes(x = Group, y = distan
   theme(panel.grid = element_blank(), axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1), plot.background = element_blank())
 ggsave(filename = "PCA_metab_betadiv_comparison.png", path = out_dir, plot = p_betadiv, width = 2.5, height = 4, units = "in")
 
+####Make Plot for poster
+pat_pw_group_dat_poster <- subset(pat_pw_group_dat, Group != "non-Septic")
+p_betadiv_poster <- ggplot(data = pat_pw_group_dat_poster, mapping = aes(x = Group, y = distance, color = Group)) +
+  geom_boxplot() +
+  geom_path(data = data.frame(x = 1 + c(2.05, 2.05, 3, 3), y = c(380, 390, 390, 380)), mapping = aes(x = x, y = y), size = lsize, inherit.aes = FALSE) +
+  geom_path(data = data.frame(x = 1 + c(1, 1, 3, 3), y = c(440, 450, 450, 440)), mapping = aes(x = x, y = y), size = lsize, inherit.aes = FALSE) +
+  geom_path(data = data.frame(x = c(1, 1, 4, 4), y = c(500, 510, 510, 500)), mapping = aes(x = x, y = y), size = lsize, inherit.aes = FALSE) +
+  annotate("text", x = 3.5, y = 410, label = paste0("q < ", format(bdiv_df$FDR[8], digits = 1)), size = tsize) + #S vs NS
+  annotate("text", x = 3, y = 470, label = paste0("q < ", format(bdiv_df$FDR[3], digits = 2)), size = tsize) + #CS vs S
+  annotate("text", x = 2.5, y = 530, label = paste0("q < ", format(bdiv_df$FDR[4], digits = 2)), size = tsize) + #CS vs NS
+  human_col_scale(levels = as.character(unique(pat_pw_group_dat_poster$Group))[c(4, 1, 3, 2, 5)]) +
+  scale_x_discrete(limits = as.character(unique(pat_pw_group_dat_poster$Group))) +
+  guides(color = "none") +
+  ylim(0, 540) +
+  ylab("between-patient dissimilarity") +
+  xlab("") +
+  theme_bw() + 
+  theme(panel.grid = element_blank(), axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1), plot.background = element_blank())
+ggsave(filename = "PCA_metab_betadiv_comparison_poster.png", path = out_dir, plot = p_betadiv_poster, width = 4, height = 4, units = "in")
+
 ###Plot step lengths, metabolites, all patients
 pat_step_len_brkt <- data.frame(variable = "X only", x = c(1, 1, 2, 2), y = c(480, 490, 490, 480), stringsAsFactors = FALSE)
 pat_step_len_sig <- data.frame(variable = "X only", x = 1.5, y = 520, p = paste0("p = ", format(mean(ad_s2_p), digits = 2)), stringsAsFactors = FALSE)
@@ -560,6 +580,30 @@ p_biochem_ap <- p_biochem_ap +
   annotate("text", x = 0.95 * xmin, y = 0.98 * ymin, label = paste0("S vs NS, q < ", format(ad_mg_r_df$pheno[3], digits = 3)), size = 2.5, hjust = "left")
 ggsave(filename = paste0("PCA_biplot_sepsis_pheno_gg.png"), path = out_dir, plot = p_biochem_ap, width = 4.5, height = 4, units = "in")
 
+###Same plot for poster
+p_biochem_ap_poster <- autoplot(object = p, data = hsdpd, colour = "Group", label = FALSE, frame = TRUE, frame.type = "norm", size = 0.8, frame.alpha = 0.1)
+p_biochem_ap_poster <- p_biochem_ap_poster + 
+  human_col_scale() +
+  guides(shape = "none") +
+  theme_bw() + 
+  theme(panel.grid = element_blank(), legend.position = "none", text = element_text(size = rsize))
+gobj <- ggplot_build(p_biochem_ap_poster)
+xmax <- gobj$layout$panel_params[[1]]$x.range[2]
+xmin <- gobj$layout$panel_params[[1]]$x.range[1]
+ymax <- gobj$layout$panel_params[[1]]$y.range[2]
+ymin <- gobj$layout$panel_params[[1]]$y.range[1]
+arws <- make_ordination_arrows(x = p$x[, 1:2], w = subset(human_sepsis_data, Day < 4, pheno_sel), xmax = xmax, xmin = xmin, ymin = ymin, ymax = ymax, shorten_arw_by = 3)
+arws$ph_ars_names_s$label[arws$ph_ars_names_s$label == "Troponin T"] <- "TnT"
+arws$ph_ars_names_s$label <- c("TnT^'*1'", "AST^'*2'", "ALT^'*2'", "HDL^'*1'", "LDL^'*1'")
+#arws$ph_ars_names_s$label <- sapply(arws$ph_ars_names_s$label, bquote)
+p_biochem_ap_poster <- p_biochem_ap_poster +
+  geom_path(data = arws$ph_ars_s, mapping = aes(x = PC1, y = PC2, group = Group), inherit.aes = FALSE, arrow = arrow(length = unit(0.06, "inches")), size = 0.3, color = "grey50") + 
+  geom_text_repel(data = arws$ph_ars_names_s, mapping = aes(label = label, x = PC1, y = PC2), inherit.aes = FALSE, size = 3, color = "grey20", box.padding = 0, force = 0.1, parse = TRUE) +
+  scale_x_continuous(limits = c(xmin * 1.05, xmax)) +
+  scale_y_continuous(limits = c(ymin, ymax * 1)) +
+  annotate("text", x = 0.95 * xmin, y = 0.98 * ymin, label = paste0("S vs NS, q < ", format(ad_mg_r_df$pheno[3], digits = 3)), size = 2.5, hjust = "left")
+ggsave(filename = paste0("PCA_biplot_sepsis_pheno_gg_poster.png"), path = out_dir, plot = p_biochem_ap_poster, width = 4, height = 4, units = "in")
+
 ##Actual plot of all samples, metabolites
 human_data_dist <- cbind(human_data[,1:6], as.matrix(dist(x = human_data[, metab_sel], method = "canberra"))) # distance() works on a per row basis
 p <- prcomp(human_data_dist[, -1:-6])
@@ -620,6 +664,30 @@ p_metab_ap <- p_metab_ap +
   scale_x_continuous(limits = c(xmin * 1.1, xmax * 0.95), expand = c(0, 0)) + 
   scale_y_continuous(limits = c(ymin * 1, ymax * 0.95), expand = c(0, 0))
 ggsave(filename = "PCA_biplot_metab_all_samples_gg.png", path = out_dir, plot = p_metab_ap, width = 5, height = 4, units = "in")
+
+##Metabolite plot for poster
+p_metab_ap_poster <- autoplot(object = p, data = hdd, colour = "Group", frame = TRUE, frame.type = "norm", size = 1.3, frame.alpha = 0.1)
+p_metab_ap_poster <- p_metab_ap_poster + 
+  human_col_scale(aesthetics = c("colour", "fill")) +
+  guides(colour = "none", fill = "none", group = "none", size = "none") +
+  theme_bw() + 
+  theme(panel.grid = element_blank(), legend.direction = "horizontal", legend.position = "bottom", legend.title = element_blank(), text = element_text(size = rsize), legend.text = element_text(size = rsize), plot.background = element_blank())
+gobj <- ggplot_build(p_metab_ap_poster)
+xmax <- gobj$layout$panel_params[[1]]$x.range[2]
+xmin <- gobj$layout$panel_params[[1]]$x.range[1]
+ymax <- gobj$layout$panel_params[[1]]$y.range[2]
+ymin <- gobj$layout$panel_params[[1]]$y.range[1]
+#arws <- make_ordination_arrows(x = p$x[, 1:2], w = subset(human_data, select = metab_sel), xmax = xmax, xmin = xmin, ymin = ymin, ymax = ymax, shorten_arw_by = 350, scale_by = 1.1, num = 4)
+p_metab_ap_poster <- p_metab_ap_poster +
+  #geom_path(data = linexy, mapping = aes(x = PC1, y = PC2), colour = "grey50", inherit.aes = FALSE) + 
+  #geom_path(data = arws$ph_ars_s, mapping = aes(x = PC1, y = PC2, group = Group), inherit.aes = FALSE, arrow = arrow(length = unit(0.06, "inches")), size = 0.3, color = "grey50") + 
+  #geom_text(data = arws$ph_ars_names_s, mapping = aes(label = label, x = PC1, y = PC2), inherit.aes = FALSE, size = 3, color = "grey20") +
+  annotate(geom = "text", x = xmin, y = 0.76 * ymax, label = paste0(text_v[-1:-2], collapse = "\n"), size = 2.5, hjust = "left") + 
+  #geom_point(data = newcenterxy, mapping = aes(x = PC1, y = PC2), colour = "grey50", shape = 18, size = 3, inherit.aes = FALSE) +
+  #geom_point(data = newcenterxy, mapping = aes(x = PC1, y = PC2, colour = Group, size = size), shape = 3, inherit.aes = FALSE) +
+  scale_x_continuous(limits = c(xmin * 1.1, xmax * 0.95), expand = c(0, 0)) + 
+  scale_y_continuous(limits = c(ymin * 1, ymax * 0.95), expand = c(0, 0))
+ggsave(filename = "PCA_biplot_metab_all_samples_gg_poster.png", path = out_dir, plot = p_metab_ap_poster, width = 4, height = 4, units = "in")
 
 #Build PCA figure panel
 alp <- plot_grid(p_biochem_ap, p_metab_ap, p_betadiv, ncol = 3, align = "h", axis = "bt", rel_widths = c(1, 1, 0.6)) + 
