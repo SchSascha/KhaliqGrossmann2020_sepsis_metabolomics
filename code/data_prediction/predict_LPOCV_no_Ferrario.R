@@ -358,3 +358,6 @@ ggsave(file = "all_features_sig_heatmap_ROC.png", path = out_dir_pred, plot = pa
 ggsave(file = "all_features_sig_heatmap_ROC.svg", path = out_dir_pred, plot = panel2, width = 9, height = 10 + 3.5, units = "in")
 ggsave(file = "all_features_sig_heatmap_ROC.pdf", path = out_dir_pred, plot = panel2, width = 9, height = 10 + 3.5, units = "in")
   
+save.image()
+
+#TODO: add automatic xlsx output of validation against non-Septic patients
