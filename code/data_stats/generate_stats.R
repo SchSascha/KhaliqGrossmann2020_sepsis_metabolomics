@@ -173,9 +173,9 @@ anova.car.s.ps <- (apply(anova.car.s.pre.ps, 2, function(row){ p.adjust(p = row,
 #anova.car.c.ps <- matrix(p.adjust(anova.car.c.ps[3:4, ], method = "fdr"), nrow = 2)
 #anova.car.s.ps <- matrix(p.adjust(anova.car.s.ps[3:4, ], method = "fdr"), nrow = 2)
 sig.anova.car.c.class <- colnames(anova.car.c.ps)[colAnys(anova.car.c.ps[c("Survival", "Day:Survival"), ] <= 0.05)]
-sig.anova.car.c.class <- intersect(sig.anova.car.c.class, sig.anova.car.c.pre.class)
+sig.anova.car.c.class <- intersect(sig.anova.car.c.class, sig.anova.car.c.pre.class) #gives no sig. diffs with main effects model and effect-wise FDR
 sig.anova.car.s.class <- colnames(anova.car.s.ps)[colAnys(anova.car.s.ps[c("Survival", "Day:Survival"), ] <= 0.05)]
-sig.anova.car.s.class <- intersect(sig.anova.car.s.class, sig.anova.car.s.pre.class)
+sig.anova.car.s.class <- intersect(sig.anova.car.s.class, sig.anova.car.s.pre.class) #gives 40 sig. diffs with main effects model and effect-wise FDR
 insig.anova.car.c.pre.class <- colnames(anova.car.c.pre.ps)[colAlls(anova.car.c.pre.ps[c("Survival", "Day:Survival"), ] > 0.05)]
 insig.anova.car.s.pre.class <- colnames(anova.car.s.pre.ps)[colAlls(anova.car.s.pre.ps[c("Survival", "Day:Survival"), ] > 0.05)]
 insig.anova.car.c.class <- colnames(anova.car.c.ps)[colAlls(anova.car.c.ps[c("Survival", "Day:Survival"), ] >= 0.95)]
@@ -200,6 +200,16 @@ anova.car.ph.ps <- sapply(anova.car.ph.res, function(e) e$test$pvalues)
 anova.car.ph.sig.contr <- lapply(data.frame(anova.car.ph.ps), function(col) which(col <= 0.05))
 names(anova.car.ph.ps) <- names(anova.car.ph.models)
 names(anova.car.ph.sig.contr) <- names(anova.car.ph.models)
+####Test Posthoc test as substitute for mixed effects ANOVA factor test
+contr.m <- cbind(contr.m, rep(c(0, -1, 1), each = 4))
+colnames(contr.m)[ncol(contr.m)] <- "S vs NS overall"
+contr.m <- cbind(contr.m, rep(c(-2, 1, 1), each = 4))
+colnames(contr.m)[ncol(contr.m)] <- "Seps vs Comp overall"
+anova.car.ph.subst.res <- mclapply(anova.car.ph.models, function(e) summary(glht(e, linfct = mcp(DaySurv = t(contr.m)))))
+anova.car.ph.subst.ps <- sapply(anova.car.ph.subst.res, function(e) e$test$pvalues)
+anova.car.ph.subst.sig.contr <- lapply(data.frame(anova.car.ph.subst.ps), function(col) which(col <= 0.05)) #gives 51 metabs with sig. diff for septic S vs NS, 49 at single days, 35 overall, 8 for Seps vs Comp of which all are for single days
+names(anova.car.ph.subst.ps) <- names(anova.car.ph.models)
+names(anova.car.ph.subst.sig.contr) <- names(anova.car.ph.models)
 
 ###Also on phenomenological variables
 fml <- concentration ~ Day*Survival
@@ -233,6 +243,14 @@ anova.car.ph.pheno.ps <- sapply(anova.car.ph.pheno.res, function(e) e$test$pvalu
 anova.car.ph.pheno.sig.contr <- lapply(data.frame(anova.car.ph.pheno.ps), function(col) which(col <= 0.05))
 names(anova.car.ph.pheno.ps) <- names(anova.car.ph.pheno.models)
 names(anova.car.ph.pheno.sig.contr) <- names(anova.car.ph.pheno.models)
+####Test Posthoc test as substitute for mixed effects ANOVA factor test
+contr.m <- cbind(contr.m, rep(c(-1, 1), each = 4))
+colnames(contr.m)[ncol(contr.m)] <- "S vs NS overall"
+anova.car.ph.pheno.subst.res <- mclapply(anova.car.ph.pheno.models, function(e) summary(glht(e, linfct = mcp(DaySurv = t(contr.m)))))
+anova.car.ph.pheno.subst.ps <- sapply(anova.car.ph.pheno.subst.res, function(e) e$test$pvalues)
+anova.car.ph.pheno.subst.sig.contr <- lapply(data.frame(anova.car.ph.pheno.subst.ps), function(col) which(col <= 0.05))
+names(anova.car.ph.pheno.subst.ps) <- names(anova.car.ph.pheno.models)
+names(anova.car.ph.pheno.subst.sig.contr) <- names(anova.car.ph.pheno.models)
 
 #ANOVA to find where non-sepsis overlaps with either septic survivors or nonsurvivors
 fml <- concentration ~ Day*Survival
