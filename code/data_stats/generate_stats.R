@@ -1328,6 +1328,7 @@ h_time_course_sig_diff_plot_poster <- ggplot(h_time_course_sig_diff_dat, aes(x =
   theme(panel.grid = element_blank())
 ggsave(plot = h_time_course_sig_diff_plot_poster, filename = paste0("human_metab_time_course_car_rm_anova_isect_sig_diff_poster.png"), path = out_dir, width = 12, height = 0.3 + 1.5 * ceiling(n_mets/5), units = "in")
 
+##Poster plots for metabolites to Septic-NS
 phe_poster_dat <- subset(h_time_course_sig_diff_dat, variable == "Phe")
 phe_poster_dat <- Reduce("rbind", lapply(setdiff(unique(phe_poster_dat$Group), "Septic-NS"), 
                                          function(ingrp){ dat <- phe_poster_dat; dat$comparison <- ingrp; return(dat)}))
@@ -1494,6 +1495,12 @@ dev_mets_out_UK <- data.frame(Name = names(mtab), stringsAsFactors = FALSE)
 dev_mets_out_UK$Group <- human_sepsis_legend$group[match(names(mtab), human_sepsis_legend[, 1])]
 dev_mets_out_UK$PatCount <- colSums(sdev[, names(mtab)])
 uk_minmax_mtab <- mtab
+###Find out which metabolites deviate in 4 patients or more and only in Septic-NS patients
+sdev_geq4 <- sdev[, c(1, which(colnames(sdev) %in% c(subset(dev_mets_out_UK, PatCount >= 4)$Name)))]
+colnames(sdev_geq4)[1 + which(colSums(as.matrix(sdev_geq4[sdev_geq4$Patient %in% paste0("#", subset(human_data, Group == "Septic-NS")$Patient), -1])) == 0)]
+#TODO: continue to re-find metabolites 
+
+
 ###Find out p-values for number of patients per deviation
 {
   set.seed(2005)
