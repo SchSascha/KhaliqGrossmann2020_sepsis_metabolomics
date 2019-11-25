@@ -1497,7 +1497,12 @@ dev_mets_out_UK$PatCount <- colSums(sdev[, names(mtab)])
 uk_minmax_mtab <- mtab
 ###Find out which metabolites deviate in 4 patients or more and only in Septic-NS patients
 sdev_geq4 <- sdev[, c(1, which(colnames(sdev) %in% c(subset(dev_mets_out_UK, PatCount >= 4)$Name)))]
-colnames(sdev_geq4)[1 + which(colSums(as.matrix(sdev_geq4[sdev_geq4$Patient %in% paste0("#", subset(human_data, Group == "Septic-NS")$Patient), -1])) == 0)]
+ncol(sdev_geq4[, -1])
+sdev_cols_geq4_onlySepticNS <- colnames(sdev_geq4)[1 + which(colSums(as.matrix(sdev_geq4[sdev_geq4$Patient %in% subset(human_data, Group == "non-Septic-NS")$Patient, ])) == 0)]
+length(setdiff(colnames(sdev_geq4)[-1], sdev_cols_geq4_onlySepticNS))
+###Find if there are metabolites were all Septic-NS patients deviate
+sdev_only_SepticNS <- sdev[sdev$Patient %in% subset(human_data, Group == "Septic-NS")$Patient, -1]
+which.max(colSums(sdev_only_SepticNS))
 #TODO: continue to re-find metabolites 
 
 
