@@ -18,6 +18,7 @@ library(cowplot)
 #library(pROC)
 #library(caTools)
 #library(AUC)
+library(xlsx)
 
 #Import central functions
 source("../function_definitions.R")
@@ -361,3 +362,24 @@ ggsave(file = "all_features_sig_heatmap_ROC.pdf", path = out_dir_pred, plot = pa
 save.image()
 
 #TODO: add automatic xlsx output of validation against non-Septic patients
+nonsep_ROC_df <- data.frame(nf = rep(2:6, times = 2), 
+                            fa = c("lysoPC a C28:1, C4", "lysoPC a C28:0", "lysoPC a C26:1", "SM C26:0", "PC ae C42:3", "lysoPC a C28:1, lysoPC a C28:0", "lysoPC a C18:2", "PC ae C38:2", "total DMA", "SM C26:0"), 
+                            auc = c(rg_cf_auc, sv_cf_auc),
+                            met = rep(c("RF", "SVM"), each = 5))
+colnames(nonsep_ROC_df) <- c("Number of Features", "Feature added", "AUC on non-Septic patients", "Method")
+nonsep_ROC_wb <- xlsx::createWorkbook()
+sheet <- createSheet(wb = nonsep_ROC_wb)
+for (col in 1:10)
+  setColumnWidth(sheet = sheet, colIndex = col, colWidth = 30)
+sheet <- addDataFrame(x = nonsep_ROC_df,
+                      sheet = sheet,
+                      col.names = TRUE,
+                      row.names = FALSE,
+                      colnamesStyle = CellStyle(wb = nonsep_ROC_wb, 
+                                                font = Font(wb = nonsep_ROC_wb, isBold = TRUE), 
+                                                alignment = Alignment(horizontal = "ALIGN_CENTER")), 
+                      colStyle = CellStyle(wb = nonsep_ROC_wb,
+                                           font = Font(wb = nonsep_ROC_wb, isBold = FALSE), 
+                                           alignment = Alignment(horizontal = "ALIGN_CENTER"))
+                      )
+saveWorkbook(wb = nonsep_ROC_wb, file = paste0(out_dir_pred, "train_sep_test_nonsep_auc.xlsx"))

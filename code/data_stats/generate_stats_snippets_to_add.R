@@ -575,9 +575,9 @@ arws$ph_ars_names_s$label[arws$ph_ars_names_s$label == "Troponin T"] <- "TnT"
 p_biochem_ap <- p_biochem_ap +
   geom_path(data = arws$ph_ars_s, mapping = aes(x = PC1, y = PC2, group = Group), inherit.aes = FALSE, arrow = arrow(length = unit(0.06, "inches")), size = 0.3, color = "grey50") + 
   geom_text_repel(data = arws$ph_ars_names_s, mapping = aes(label = label, x = PC1, y = PC2), inherit.aes = FALSE, size = 3, color = "grey20", box.padding = 0, force = 0.1) +
-  scale_x_continuous(limits = c(xmin * 1.05, xmax)) +
-  scale_y_continuous(limits = c(ymin, ymax * 1)) +
-  annotate("text", x = 0.95 * xmin, y = 0.98 * ymin, label = paste0("S vs NS, q < ", format(ad_mg_r_df$pheno[3], digits = 3)), size = 2.5, hjust = "left")
+  scale_x_continuous(limits = c(xmin * 1.05, xmax), expand = c(0, 0)) +
+  scale_y_continuous(limits = c(ymin, ymax * 1.05), expand = c(0, 0)) +
+  annotate("text", x = 1.04 * xmin, y = 0.95 * ymin, label = paste0("Septic-S vs Septic-NS, q < ", format(ad_mg_r_df$pheno[3], nsmall = 3, digits = 1)), size = 2.5, hjust = "left")
 ggsave(filename = paste0("PCA_biplot_sepsis_pheno_gg.png"), path = out_dir, plot = p_biochem_ap, width = 4.5, height = 4, units = "in")
 
 ###Same plot for poster
@@ -658,11 +658,11 @@ p_metab_ap <- p_metab_ap +
   geom_path(data = linexy, mapping = aes(x = PC1, y = PC2), colour = "grey50", inherit.aes = FALSE) + 
   geom_path(data = arws$ph_ars_s, mapping = aes(x = PC1, y = PC2, group = Group), inherit.aes = FALSE, arrow = arrow(length = unit(0.06, "inches")), size = 0.3, color = "grey50") + 
   geom_text(data = arws$ph_ars_names_s, mapping = aes(label = label, x = PC1, y = PC2), inherit.aes = FALSE, size = 3, color = "grey20") +
-  annotate(geom = "text", x = xmin, y = 0.76 * ymax, label = paste0(text_v, collapse = "\n"), size = 2.5, hjust = "left") + 
-  geom_point(data = newcenterxy, mapping = aes(x = PC1, y = PC2), colour = "grey50", shape = 18, size = 3, inherit.aes = FALSE) +
+  annotate(geom = "text", x = xmin * 1.09, y = 0.89 * ymax, label = paste0(text_v, collapse = "\n"), size = 2.5, hjust = "left") + 
+  geom_point(data = newcenterxy, mapping = aes(x = PC1, y = PC2), colour = "white", shape = 18, size = 3, alpha = 0.5, inherit.aes = FALSE) +
   geom_point(data = newcenterxy, mapping = aes(x = PC1, y = PC2, colour = Group, size = size), shape = 3, inherit.aes = FALSE) +
   scale_x_continuous(limits = c(xmin * 1.1, xmax * 0.95), expand = c(0, 0)) + 
-  scale_y_continuous(limits = c(ymin * 1, ymax * 0.95), expand = c(0, 0))
+  scale_y_continuous(limits = c(ymin * 1, ymax * 1.1), expand = c(0, 0))
 ggsave(filename = "PCA_biplot_metab_all_samples_gg.png", path = out_dir, plot = p_metab_ap, width = 5, height = 4, units = "in")
 
 ##Metabolite plot for poster

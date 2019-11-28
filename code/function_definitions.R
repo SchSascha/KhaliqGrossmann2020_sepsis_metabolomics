@@ -350,7 +350,7 @@ sim_dev_met <- function(number = 1, n, d, dev_idx, sample_groups){
 #' @export
 #'
 #' @examples
-sim_dev_triple <- function(number = 1, n, d, dev_idx, sample_groups){
+sim_dev_tuple <- function(number = 1, n, d, dev_idx, sample_groups){
   mat <- matrix(rlnorm(n = n * d), nrow = n, ncol = d)
   dev_max <- colMaxs(mat[-dev_idx, ])
   dev_min <- colMins(mat[-dev_idx, ])
@@ -361,7 +361,7 @@ sim_dev_triple <- function(number = 1, n, d, dev_idx, sample_groups){
   dev_idx_per_met <- lapply(lapply(met_dev[, -1], as.logical), which)
   dev_idx_met_crossover <- lapply(dev_idx_per_met, function(e) lapply(dev_idx_per_met, union, e))
   full_idx <- Reduce("rbind", lapply(lapply(dev_idx_met_crossover, lapply, length), sapply, `==`, length(unique(sample_groups[dev_idx]))))
-  return(sum(full_idx) / 2)
+  return((sum(full_idx) - sum(diag(full_idx))) / 2)
 }
 
 #' Scale values in a matrix or data.frame by dividing through their column-wise maximum. No min-max scaling, unless the minimum value in each column is 0!

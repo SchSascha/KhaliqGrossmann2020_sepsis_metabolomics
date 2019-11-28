@@ -1230,14 +1230,14 @@ for (n in seq_along(ss)[sapply(ss, length) > 0]){ #only runs for sepsis
     geom_point(position = position_dodge(width = 0.2)) +
     #geom_boxplot(mapping = aes(x = factor(Day), color = Survival, y = value), inherit.aes = FALSE) + 
     stat_summary(fun.ymin = "min", fun.ymax = "max", fun.y = "mean", geom = "line") +
-    geom_text(data = h_time_course_group, mapping = aes(x = Day, y = value, label = text), inherit.aes = FALSE, size = 2.8) +
+    #geom_text(data = h_time_course_group, mapping = aes(x = Day, y = value, label = text), inherit.aes = FALSE, size = 2.8) +
     geom_point(data = h_time_course_sig_times, mapping = aes(x = Day, y = value), inherit.aes = FALSE, shape = 8, size = 2.5) +
     # ylim(c(-0.05, 1.4)) +
     # ylab("Concentration relative to max value") +
     human_col_scale() +
     ylab("Concentration, µM") + 
     xlab("Day") + 
-    ggtitle(paste0("Phenomenological variables significantly differing ", gs[n], " by repeated measures ANOVA")) + 
+    ggtitle(paste0("Biochemical parameters significantly differing ", gs[n], " by repeated measures ANOVA")) + 
     theme_bw()
   ggsave(plot = h_time_course_sig_diff_plot, filename = paste0("human_pheno_time_course_car_rm_anova_", fs[[n]], "_sig_diff.png"), path = out_dir, width = 12, height = 0.3 + 1.5 * ceiling(n_mets/5), units = "in")
 }
@@ -1395,8 +1395,8 @@ p <- ggplot(data = subset(hsd, Survival == "S"), mapping = aes(y = value, x = va
   geom_tile(mapping = aes(x = Metabolite, y = 1.45e-3), width = 1, height = 0.15, fill = minmax_corridor_met_sel$color, data = minmax_corridor_met_sel, inherit.aes = FALSE) +
   guides(color = guide_legend(title = "Patient Group", order = 1, override.aes = list(size = 2.5), direction = "vertical"),
         fill = guide_legend(title = "Metabolite\nGroup", order = 3, nrow = 2, override.aes = list(size = 8)),
-        shape = guide_legend(title = "Number of patients\nwith deviation", override.aes = list(shape = 15, size = 8, colour = sort(unique(minmax_corridor_met_sel$color), decreasing = TRUE)), order = 4, keywidth = rel(1.1), keyheight = rel(1.1), ncol = 2),
-        linetype = guide_legend(title = "NS Patient", override.aes = list(color = hue_pal()(4)[c(4, 1)[1 + (subset(hsd, !duplicated(Patient) & Survival == "NS", "Group")[[1]] == "Septic-NS")]], size = 1.25), order = 2, nrow = 3, keywidth = rel(6), direction = "vertical")) +
+        shape = guide_legend(title = "Number of patients\nwith deviation", override.aes = list(shape = 15, size = 8, colour = sort(unique(minmax_corridor_met_sel$color), decreasing = TRUE)), order = 4, keywidth = rel(1.1), keyheight = rel(1.1), nrow = 2),
+        linetype = guide_legend(title = "NS Patient", override.aes = list(color = hue_pal()(4)[c(4, 1)[1 + (subset(hsd, !duplicated(Patient) & Survival == "NS", "Group")[[1]] == "Septic-NS")]], size = 1.25), order = 2, ncol = 4, keywidth = rel(6), direction = "vertical")) +
   scale_color_discrete(drop = FALSE) +
   scale_y_log10(expand = c(0,0)) +
   ylab("Concentration, µM") +
@@ -1502,10 +1502,8 @@ sdev_cols_geq4_onlySepticNS <- colnames(sdev_geq4)[1 + which(colSums(as.matrix(s
 length(sdev_cols_geq4_onlySepticNS)
 ###Find if there are metabolites were all Septic-NS patients deviate
 sdev_only_SepticNS <- sdev[sdev$Patient %in% subset(human_data, Group == "Septic-NS")$Patient, -1]
+sapply(unique(human_sepsis_legend$group[metab_sel - 6]), function(gr) all(0 < rowSums(as.matrix(sdev_only_SepticNS[, colnames(sdev_only_SepticNS) %in% human_sepsis_legend[human_sepsis_legend$group == gr, 1]]))))
 which.max(colSums(sdev_only_SepticNS))
-#TODO: continue to re-find metabolites 
-
-
 ###Find out p-values for number of patients per deviation
 {
   set.seed(2005)
@@ -1523,7 +1521,9 @@ which.max(colSums(sdev_only_SepticNS))
 }
 sink(file = paste0(out_dir, "safety_corridor_deviation_count_p_values.txt"))
 ###Find out how likely a number of deviations in Septic-NS is
-dev_met_p_template <- rev(cumsum(rev(table(as.numeric(dev_rep_res)))) / sum(table(as.numeric(dev_rep_res)))) #rev()'ed to sum up from the extreme end
+count_tab <- table(as.numeric(dev_rep_res))
+dev_met_p_template <- rev(cumsum(rev(count_tab)) / sum(count_tab)) #rev()'ed to sum up from the extreme end
+dev_met_p_template[setdiff(as.character(0:8), names(dev_met_p_template))] <- 1 / sum(count_tab)
 print(paste0("p of number of Septic-NS patients with as many deviations:"))
 print(dev_met_p_template)
 dev_met_p_tab <- colSums(subset(sdev, Patient %in% human_data$Patient[human_data$Group == "Septic-NS"], -1))
@@ -1536,6 +1536,7 @@ print(dev_met_q_tab[names(which(dev_met_q_tab <= 0.05))])
 dev_rep_res_sns_nns <- dev_rep_res
 dev_rep_res_sns_nns[dev_rep_res_nns > 0] <- 0
 dev_met_p_template_sns_nns <- rev(cumsum(rev(table(as.numeric(dev_rep_res_sns_nns)))) / sum(table(as.numeric(dev_rep_res_sns_nns)))) #rev()'ed to sum up from the extreme end
+dev_met_p_template_sns_nns[setdiff(as.character(0:8), names(dev_met_p_template_sns_nns))] <- 1 / sum(table(dev_rep_res_sns_nns))
 print("p of number of Septic-NS patients deviating with as at least as many deviations while no non-Septic-NS patient deviating:")
 print(dev_met_p_template_sns_nns)
 dev_met_sns_nns_p_tab <- colSums(subset(sdev, Patient %in% human_data$Patient[human_data$Group == "Septic-NS"], -1))
@@ -1546,14 +1547,14 @@ names(dev_met_sns_nns_p_tab) <- colnames(subset(sdev, Patient %in% human_data$Pa
 names(dev_met_sns_nns_q_tab) <- names(dev_met_sns_nns_p_tab)
 print("metabolites where the number of Septic-NS patients with deviation is above this and no non-Septic-NS patient deviates:")
 print(dev_met_sns_nns_q_tab[names(which(dev_met_sns_nns_q_tab <= 0.05))])
-###Find out how likely you get 7/8 patients deviating for at least one AC or PC #jump
+###Find out how likely you get 7/8 patients deviating for at least one AC or PC
 dev_rep_res_7_8 <- colSums(dev_rep_res_ac_lpc != 0)
 dev_met_p_template_7_8 <- rev(cumsum(rev(table(as.numeric(dev_rep_res_7_8))))) / sum(table(as.numeric(dev_rep_res_7_8)))
 print("p of number of Septic-NS patients deviating in at least this many ACs or PCs:")
 print(dev_met_p_template_7_8)
 sink()
 
-###Find minimal combination of features to seperate sNS from sS
+###Find minimal combination of features to seperate catch all Septic-NS
 min_met_set_for_dev <- subset(sdev, Patient %in% human_sepsis_data$Patient[human_sepsis_data$Group == "Septic-NS"])
 min_met_set_for_dev <- min_met_set_for_dev[, c(1, 1 + which(colAnys(as.matrix(min_met_set_for_dev[, -1]))))]
 pat_dev_idx_per_met <- lapply(lapply(min_met_set_for_dev[, -1], as.logical), which)
@@ -1562,6 +1563,25 @@ full_idx <- Reduce("rbind", lapply(lapply(pat_dev_idx_met_crossover, lapply, len
 xy <- which.xy(full_idx)
 colnames(min_met_set_for_dev[, -1])[c(xy$x[1], xy$y[1])]
 colnames(min_met_set_for_dev[, -1])[c(xy$x[2], xy$y[2])]
+####Also get all subsets of three metabolites that do the same
+pat_dev_idx_met_crossover <- lapply(pat_dev_idx_met_crossover, lapply, function(e) lapply(pat_dev_idx_per_met, union, e))
+llu <- unlist(lapply(pat_dev_idx_met_crossover, lapply, lapply, length))
+llun <- names(llu[llu == max(llu)])
+####Use same method to catch all Septic-NS but with metabolites where no non-Septic-NS deviates
+sdev_only_nonSepticNS <- sdev[sdev$Patient %in% subset(human_data, Group == "non-Septic-NS")$Patient, -1]
+min_met_set_for_dev <- min_met_set_for_dev[, setdiff(colnames(min_met_set_for_dev), colnames(sdev_only_nonSepticNS)[colSums(as.matrix(sdev_only_nonSepticNS)) > 0])]
+#####Can there be such a combination?
+all(rowSums(min_met_set_for_dev[, -1]) > 0) #Currently, no ...
+#####Get number of non-Septic-NS patients caught with metabolite subset
+pat_dev_idx_per_met <- lapply(lapply(sdev_only_nonSepticNS[, -1], as.logical), which)
+pat_dev_idx_met_crossover <- lapply(pat_dev_idx_per_met, function(e) lapply(pat_dev_idx_per_met, union, e))
+pat_dev_idx_met_crossover <- lapply(pat_dev_idx_met_crossover, lapply, function(e) lapply(pat_dev_idx_per_met, union, e))
+llu_nonsns <- unlist(lapply(pat_dev_idx_met_crossover, lapply, lapply, length))
+llu_nonsns <- llu_nonsns[llu_nonsns > 0]
+#####Are there three-metabolite subsets with the lowest number of deviating non-Septic-NS patients?
+llun_nonsns <- names(llu_nonsns[llu_nonsns == min(llu_nonsns)])
+length(setdiff(llun, llun_nonsns)) #a few thousand ...
+
 ###Simulate how likely this is by chance
 {
   set.seed(2145)
@@ -1569,10 +1589,10 @@ colnames(min_met_set_for_dev[, -1])[c(xy$x[2], xy$y[2])]
   m <- m[, -pheno_sel]
   m <- m[, !(colnames(m) %in% sig.anova.car.s.class)]
   di <- which(m$Survival == "NS")
-  dev_rep_res <- sapply(X = 1:1000, FUN = sim_dev_triple, n = nrow(m), d = ncol(m) - 6, dev_idx = di, sample_groups = m$Patient)
+  dev_rep_res <- sapply(X = 1:1000, FUN = sim_dev_tuple, n = nrow(m), d = ncol(m) - 6, dev_idx = di, sample_groups = m$Patient)
 }
 dev_rep_tab <- table(dev_rep_res)
-print("P-value of having three metabolites whose deviations cover all Septic-NS patients")
+print("P-value of having two metabolites whose deviations cover all Septic-NS patients")
 print(sum(dev_rep_tab[-1]) / sum(dev_rep_tab))
 ###
 
@@ -1697,8 +1717,9 @@ chisq.test(x = c(n_overlap, n_possible_overlap - n_overlap), y = c(2, 1)) #2 out
 #All p-values = 1 ...
 
 ###Plot all metabolites we mention in the text
+#jump
 dev_mets_out_all_pie <- dev_mets_out_all
-mets_mentioned <- c("C18:1-OH", paste0("PC ae ", c("C34:2", "C38:0", "C38:5", "C38:6", "C42:0", "C42:2", "C42:3", "C40:1", "C40:2")), "PC aa C36:0", "lysoPC a C18:2", "lysoPC a C24:0")
+mets_mentioned <- c("C18:1-OH", paste0("PC ae ", c("C38:0", "C38:5", "C38:6", "C42:0", "C42:3", "C40:2")), "C3:1", "C14", "lysoPC a C24:0")
 dev_mets_out_all_pie <- subset(dev_mets_out_all_pie, Name %in% mets_mentioned)
 dev_mets_out_all_pie$IPatCount_UK <- sum(human_data$Survival[!duplicated(human_data$Patient)] == "NS") - as.numeric(dev_mets_out_all_pie$PatCount_UK)
 dev_mets_out_all_pie$IPatCount_Ferrario <- sum(vd$Survival28[!duplicated(vd$Patient)] == "NS") - as.numeric(dev_mets_out_all_pie$PatCount_Ferrario)
@@ -1730,6 +1751,7 @@ p_dev_metabs_pats <- ggplot(data = dev_mets_out_all_pie_m) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1), panel.grid = element_blank(), panel.grid.major.y = element_line(color = "grey80"), legend.direction = "vertical", legend.position = "right", legend.background = element_blank())
 ggsave(plot = p_dev_metabs_pats, filename = "safe_corridor_minmax_metabs_UK_Ferrario.png", path = out_dir, width = 9, height = 2.5, units = "in")
 ggsave(plot = p_dev_metabs_pats, filename = "safe_corridor_minmax_metabs_UK_Ferrario.svg", path = out_dir, width = 9, height = 2.5, units = "in")
+ggsave(plot = p_dev_metabs_pats, filename = "safe_corridor_minmax_metabs_UK_Ferrario.pdf", path = out_dir, width = 9, height = 2.5, units = "in")
 
 ###Find out what number of deviating metabolites we find by chance
 {
