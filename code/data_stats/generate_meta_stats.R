@@ -69,10 +69,10 @@ human_meta_data[diag_to_add] <- lapply(human_meta_data[diag_to_add], as.numeric)
 hmd <- human_meta_data
 hmd$Group <- human_data$Group[match(substring(hmd$`Patient ID`, 2), human_data$Patient)]
 ##Set comparisons
-cmp_pairs <- list(list("Septic-S", "Septic-NS"), 
-                  list("non-Septic-S", "Septic-S"), 
-                  list("non-Septic-S", "non-Septic-NS"),
-                  list(c("Septic-S", "Septic-NS"), c("non-Septic-S", "non-Septic-NS")))
+cmp_pairs <- list(list("Septic-S", "Septic-NS"), #a
+                  list("non-Septic-S", "non-Septic-NS"), #b
+                  list("non-Septic-NS", "Septic-NS"), #c
+                  list(c("Septic-S", "Septic-NS"), c("non-Septic-S", "non-Septic-NS"))) #d
 ##Set discrete variables to compare
 cmp_vars_disc <- colnames(human_meta_data)[which(colnames(human_meta_data) == "Diabetes"):which(colnames(human_meta_data) == "Other hospital")]
 cmp_vars_disc <- setdiff(cmp_vars_disc, "Homelessness")
