@@ -1210,6 +1210,12 @@ make_ordination_arrows <- function(x, w, num = 5, xmax, xmin, ymax, ymin, scale_
   return(list(ph_ars_names_s = ph_ars_names_s, ph_ars_s = ph_ars_s, ph_ars_len_full = ph_ars_len_full))
 }
 
+#' Load, clean and extend lipid isobar table from Biocrates
+#'
+#' @return data.frame with Biocrates annotation, isobar, isomer, LIPIDMAPS IDs, long fatty acid and short fatty acid chain length
+#' @export
+#'
+#' @examples
 get_lipid_isobars <- function(){
   library(data.table)
   library(stringi)
@@ -1239,6 +1245,6 @@ get_lipid_isobars <- function(){
                                          sub(":", ".", charvec, fixed = TRUE)))]) #sort by chain length
   lipid_table$FAshort <- sapply(comp, `[[`, 1)
   lipid_table$FAlong <- sapply(comp, `[[`, 2)
-  dup_FAs_idx <- c(which(duplicated(lipid_table, MARGIN = c(5, 6), fromLast = T)), which(duplicated(lipid_table, MARGIN = c(5, 6))))
+  # dup_FAs_idx <- c(which(duplicated(lipid_table, MARGIN = c(5, 6), fromLast = T)), which(duplicated(lipid_table, MARGIN = c(5, 6))))
   return(lipid_table)
 }
