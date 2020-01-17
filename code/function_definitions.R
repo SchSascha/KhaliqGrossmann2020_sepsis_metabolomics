@@ -1209,3 +1209,36 @@ make_ordination_arrows <- function(x, w, num = 5, xmax, xmin, ymax, ymin, scale_
   ph_ars_names_s$label <- rownames(ph_ars_names_s)
   return(list(ph_ars_names_s = ph_ars_names_s, ph_ars_s = ph_ars_s, ph_ars_len_full = ph_ars_len_full))
 }
+
+get_lipid_isobars <- function(){
+  library(data.table)
+  library(stringi)
+  #read isobars table
+  lipid_table <- fread(input = "../../data/id_maps/tabula-List-of-Isobaric-and-Isomeric-Lipid-Species_v1_2018.csv", data.table = FALSE)
+  #clean
+  lipid_table <- lipid_table[-grep(pattern = "^\\[", x = lipid_table[, 2]), ]
+  lipid_table <- lipid_table[!(rowSums(lipid_table == "") == ncol(lipid_table)), ]
+  lipid_table <- lipid_table[!duplicated(lipid_table, MARGIN = 1:ncol(lipid_table)), ]
+  #fill in blanks
+  biocrates_anno <- rle(lipid_table[, 1])
+  biocrates_anno_blanks <- which(biocrates_anno$values == "")
+  biocrates_anno$values[biocrates_anno_blanks] <- biocrates_anno$values[biocrates_anno_blanks - 1]
+  lipid_table[, 1] <- inverse.rle(biocrates_anno)
+  isobar_anno <- rle(lipid_table[, 2])
+  isobar_anno_blanks <- which(isobar_anno$values == "")
+  isobar_anno$values[isobar_anno_blanks] <- isobar_anno$values[isobar_anno_blanks - 1]
+  lipid_table[, 2] <- inverse.rle(isobar_anno)
+  #add fatty acid columns
+  comp <- stri_extract_all(regex = "[0-9]+\\:[0-9]", str = lipid_table[, 3]) #get fatty acid chains
+  nonsphingo_idx <- grep("SM", lipid_table[, 1], invert = TRUE)
+  comp[nonsphingo_idx] <- lapply(comp[nonsphingo_idx], 
+                                 function(charvec) 
+                                   charvec[
+                                     order(
+                                       as.numeric(
+                                         sub(":", ".", charvec, fixed = TRUE)))]) #sort by chain length
+  lipid_table$FAshort <- sapply(comp, `[[`, 1)
+  lipid_table$FAlong <- sapply(comp, `[[`, 2)
+  dup_FAs_idx <- c(which(duplicated(lipid_table, MARGIN = c(5, 6), fromLast = T)), which(duplicated(lipid_table, MARGIN = c(5, 6))))
+  return(lipid_table)
+}
